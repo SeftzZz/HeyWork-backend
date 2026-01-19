@@ -1,0 +1,326 @@
+<?php
+
+namespace App\Controllers\Api;
+
+use App\Controllers\BaseController;
+use App\Models\UserModel;
+use App\Models\WorkerProfileModel;
+use App\Models\SkillModel;
+use App\Models\WorkerSkillModel;
+use App\Models\WorkerExperienceModel;
+use App\Models\WorkerDocumentModel;
+use App\Models\JobApplicationModel;
+
+class WorkerController extends BaseController
+{
+    protected $user;
+    protected $profile;
+    protected $skill;
+    protected $workerSkill;
+    protected $experience;
+
+
+    public function __construct()
+    {
+        $this->user        = new UserModel();
+        $this->profile     = new WorkerProfileModel();
+        $this->skill       = new SkillModel();
+        $this->workerSkill = new WorkerSkillModel();
+        $this->experience  = new WorkerExperienceModel();
+    }
+
+    /**
+     * ============================
+     * GET PROFILE WORKER
+     * ============================
+     * GET /api/worker/profile
+     */
+    public function profile()
+    {
+        // user dari JWT
+        $jwtUser = $this->request->user;
+
+        // Optional: validasi role
+        if ($jwtUser->role !== 'worker') {
+            return $this->response
+                ->setStatusCode(403)
+                ->setJSON(['message' => 'Access denied']);
+        }
+
+        // Ambil data user dari DB
+        $user = $this->user->find($jwtUser->id);
+
+        if (!$user) {
+            return $this->response
+                ->setStatusCode(404)
+                ->setJSON(['message' => 'User not found']);
+        }
+
+        unset($user['password']); // keamanan
+
+        return $this->response->setJSON([
+            'user' => $user
+        ]);
+    }
+
+    /**
+     * ============================
+     * UPDATE PROFILE WORKER
+     * ============================
+     * PUT /api/worker/profile
+     */
+    public function updateProfile()
+    {
+        $jwtUser = $this->request->user;
+
+        if ($jwtUser->role !== 'worker') {
+            return $this->response
+                ->setStatusCode(403)
+                ->setJSON(['message' => 'Access denied']);
+        }
+
+        $data = $this->request->getJSON(true);
+
+        // Field yang boleh diupdate
+        $allowed = [
+            'name',
+            'phone',
+            'photo'
+        ];
+
+        $updateData = array_intersect_key(
+            $data,
+            array_flip($allowed)
+        );
+
+        if (empty($updateData)) {
+            return $this->response
+                ->setStatusCode(400)
+                ->setJSON(['message' => 'No data to update']);
+        }
+
+        $this->user->update($jwtUser->id, $updateData);
+
+        return $this->response->setJSON([
+            'message' => 'Profile updated successfully'
+        ]);
+    }
+
+    /**
+     * ============================
+     * CONTOH ENDPOINT TEST JWT
+     * ============================
+     * GET /api/worker/me
+     */
+    public function me()
+    {
+        return $this->response->setJSON([
+            'id'    => $this->request->user->id,
+            'email' => $this->request->user->email,
+            'role'  => $this->request->user->role
+        ]);
+    }
+
+    /**
+     * ============================
+     * LIST MASTER SKILL
+     * ============================
+     */
+    public function skills()
+    {
+        return $this->response->setJSON(
+            $this->skill->findAll()
+        );
+    }
+
+    /**
+     * ============================
+     * SET WORKER SKILLS
+     * ============================
+     */
+    public function setSkills()
+    {
+        $user = $this->request->user;
+        $data = $this->request->getJSON(true);
+
+        // hapus skill lama
+        $this->workerSkill
+            ->where('user_id', $user->id)
+            ->delete();
+
+        foreach ($data['skill_ids'] as $skillId) {
+            $this->workerSkill->insert([
+                'user_id'  => $user->id,
+                'skill_id' => $skillId
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'message' => 'Skills updated'
+        ]);
+    }
+
+    /**
+     * ============================
+     * ADD EXPERIENCE
+     * ============================
+     */
+    public function addExperience()
+    {
+        $user = $this->request->user;
+        $data = $this->request->getJSON(true);
+
+        $data['user_id'] = $user->id;
+        $this->experience->insert($data);
+
+        return $this->response->setJSON([
+            'message' => 'Experience added'
+        ]);
+    }
+
+    /**
+     * ============================
+     * LIST EXPERIENCE
+     * ============================
+     */
+    public function experiences()
+    {
+        $user = $this->request->user;
+
+        return $this->response->setJSON(
+            $this->experience
+                ->where('user_id', $user->id)
+                ->orderBy('start_date', 'DESC')
+                ->findAll()
+        );
+    }
+
+    public function uploadPhoto()
+    {
+        $user = $this->request->user;
+        $file = $this->request->getFile('photo');
+
+        if (!$file || !$file->isValid()) {
+            return $this->response
+                ->setStatusCode(400)
+                ->setJSON(['message' => 'Invalid file']);
+        }
+
+        if (!in_array($file->getMimeType(), ['image/jpeg', 'image/png'])) {
+            return $this->response
+                ->setStatusCode(400)
+                ->setJSON(['message' => 'Only JPG or PNG allowed']);
+        }
+
+        if ($file->getSize() > 2 * 1024 * 1024) {
+            return $this->response
+                ->setStatusCode(400)
+                ->setJSON(['message' => 'Max file size 2MB']);
+        }
+
+        $newName = 'profile_' . $user->id . '_' . time() . '.' . $file->getExtension();
+        $file->move('public/uploads/profiles', $newName);
+
+        // update user photo
+        $this->user->update($user->id, [
+            'photo' => 'uploads/profiles/' . $newName
+        ]);
+
+        return $this->response->setJSON([
+            'message' => 'Photo uploaded',
+            'photo'   => 'uploads/profiles/' . $newName
+        ]);
+    }
+
+    public function uploadDocument()
+    {
+        $user = $this->request->user;
+        $file = $this->request->getFile('file');
+        $type = $this->request->getPost('type'); // ktp / certificate / other
+
+        if (!$file || !$file->isValid()) {
+            return $this->response
+                ->setStatusCode(400)
+                ->setJSON(['message' => 'Invalid file']);
+        }
+
+        $allowed = ['image/jpeg','image/png','application/pdf'];
+        if (!in_array($file->getMimeType(), $allowed)) {
+            return $this->response
+                ->setStatusCode(400)
+                ->setJSON(['message' => 'Invalid file type']);
+        }
+
+        if ($file->getSize() > 5 * 1024 * 1024) {
+            return $this->response
+                ->setStatusCode(400)
+                ->setJSON(['message' => 'Max file size 5MB']);
+        }
+
+        $newName = 'doc_' . $user->id . '_' . time() . '.' . $file->getExtension();
+        $file->move('public/uploads/documents', $newName);
+
+        $docModel = new WorkerDocumentModel();
+        $docModel->insert([
+            'user_id'   => $user->id,
+            'type'      => $type ?? 'other',
+            'file_path' => 'uploads/documents/' . $newName
+        ]);
+
+        return $this->response->setJSON([
+            'message' => 'Document uploaded'
+        ]);
+    }
+
+    public function documents()
+    {
+        $user = $this->request->user;
+
+        $docModel = new WorkerDocumentModel();
+
+        return $this->response->setJSON(
+            $docModel->where('user_id', $user->id)->findAll()
+        );
+    }
+
+    public function applications()
+    {
+        $user = $this->request->user;
+
+        $model = new JobApplicationModel();
+
+        return $this->response->setJSON(
+            $model->workerHistory($user->id)
+        );
+    }
+
+    public function applicationDetail($applicationId)
+    {
+        $user = $this->request->user;
+
+        $model = new JobApplicationModel();
+
+        $data = $model
+            ->select(
+                'job_applications.id as application_id,
+                 job_applications.status as application_status,
+                 job_applications.applied_at,
+                 jobs.*'
+            )
+            ->join('jobs', 'jobs.id = job_applications.job_id')
+            ->where('job_applications.id', $applicationId)
+            ->where('job_applications.user_id', $user->id)
+            ->first();
+
+        if (!$data) {
+            return $this->response
+                ->setStatusCode(404)
+                ->setJSON(['message' => 'Application not found']);
+        }
+
+        return $this->response->setJSON($data);
+    }
+
+
+
+}

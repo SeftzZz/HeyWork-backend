@@ -16,3 +16,10 @@ application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
 /vendor/
+
+system/
+tests/
+writable/
+.env
+.htaccess
+.user.ini
