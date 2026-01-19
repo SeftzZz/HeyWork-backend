@@ -218,17 +218,24 @@ class WorkerController extends BaseController
                 ->setJSON(['message' => 'Max file size 2MB']);
         }
 
-        $newName = 'profile_' . $user->id . '_' . time() . '.' . $file->getExtension();
-        $file->move('public/uploads/profiles', $newName);
+        $uploadPath = FCPATH . 'uploads/profiles';
 
-        // update user photo
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0755, true);
+        }
+
+        $newName = 'profile_' . $user->id . '_' . time() . '.' . $file->getExtension();
+        $file->move($uploadPath, $newName);
+
+        $publicPath = 'uploads/profiles/' . $newName;
+
         $this->user->update($user->id, [
-            'photo' => 'uploads/profiles/' . $newName
+            'photo' => $publicPath
         ]);
 
         return $this->response->setJSON([
             'message' => 'Photo uploaded',
-            'photo'   => 'uploads/profiles/' . $newName
+            'photo'   => $publicPath
         ]);
     }
 
