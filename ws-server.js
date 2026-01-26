@@ -9,7 +9,7 @@ const wss = new WebSocket.Server({
   host: '0.0.0.0'
 });
 
-console.log('✅ WebSocket server running on port 3002');
+console.log('WebSocket server running on port 3002');
 
 /**
  * =========================
@@ -59,5 +59,5 @@ app.post('/emit', (req, res) => {
  * HTTP server (PORT 3003)
  */
 app.listen(3003, () => {
-  console.log('🚀 WS HTTP bridge running on port 3003');
+  console.log('WS HTTP bridge running on port 3003');
 });
