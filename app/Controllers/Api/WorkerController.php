@@ -135,9 +135,37 @@ class WorkerController extends BaseController
      */
     public function skills()
     {
-        return $this->response->setJSON(
-            $this->skill->findAll()
-        );
+        return $this->response->setJSON([
+            'data' => $this->skill
+                ->orderBy('name', 'ASC')
+                ->findAll()
+        ]);
+    }
+
+    /**
+     * ============================
+     * LIST WORKER SKILL
+     * ============================
+     */
+    public function mySkills()
+    {
+        $user = $this->request->user;
+
+        if ($user->role !== 'worker') {
+            return $this->response
+                ->setStatusCode(403)
+                ->setJSON(['message' => 'Access denied']);
+        }
+
+        $skills = $this->workerSkill
+            ->select('skills.id, skills.name')
+            ->join('skills', 'skills.id = worker_skills.skill_id')
+            ->where('worker_skills.user_id', $user->id)
+            ->findAll();
+
+        return $this->response->setJSON([
+            'data' => $skills
+        ]);
     }
 
     /**
@@ -150,20 +178,34 @@ class WorkerController extends BaseController
         $user = $this->request->user;
         $data = $this->request->getJSON(true);
 
+        if ($user->role !== 'worker') {
+            return $this->response
+                ->setStatusCode(403)
+                ->setJSON(['message' => 'Access denied']);
+        }
+
+        if (!isset($data['skill_ids']) || !is_array($data['skill_ids'])) {
+            return $this->response
+                ->setStatusCode(400)
+                ->setJSON(['message' => 'skill_ids must be an array']);
+        }
+
         // hapus skill lama
         $this->workerSkill
             ->where('user_id', $user->id)
             ->delete();
 
+        // insert skill baru
         foreach ($data['skill_ids'] as $skillId) {
             $this->workerSkill->insert([
                 'user_id'  => $user->id,
-                'skill_id' => $skillId
+                'skill_id' => $skillId,
+                'created_by' => $user->id
             ]);
         }
 
         return $this->response->setJSON([
-            'message' => 'Skills updated'
+            'message' => 'Skills updated successfully'
         ]);
     }
 

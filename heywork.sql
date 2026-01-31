@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.3
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jan 30, 2026 at 07:26 PM
--- Server version: 10.11.10-MariaDB-log
--- PHP Version: 8.3.27
+-- Host: 127.0.0.1
+-- Generation Time: Jan 31, 2026 at 10:19 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -89,7 +89,7 @@ INSERT INTO `jobs` (`id`, `hotel_id`, `position`, `job_date_start`, `job_date_en
 (1, 1, 'Room Attendant', '2026-01-19', '2026-01-20', '07:30:00', '17:30:00', 'daily_worker', 100000, 'Bogor West Java', NULL, NULL, 'open', NULL, NULL, NULL, NULL, NULL, NULL),
 (2, 1, 'Public Area', '2026-01-30', '2026-01-31', '00:00:00', '17:30:00', 'casual', 150000, 'Bogor West Java', NULL, NULL, 'open', NULL, NULL, NULL, NULL, NULL, NULL),
 (3, 1, 'Front Office', '2026-02-01', '2026-02-02', '07:30:00', '17:30:00', 'daily_worker', 200000, 'Bogor West Java', '', '', 'open', '2026-01-26 01:35:59', NULL, NULL, NULL, NULL, NULL),
-(4, 1, 'FnB Service', '2026-02-01', '2026-02-02', '07:30:00', '17:30:00', 'daily_worker', 250000, 'Bogor West Java', '', '', 'open', '2026-01-26 01:36:37', NULL, NULL, NULL, NULL, NULL),
+(4, 1, 'FnB Service', '2026-01-30', '2026-01-31', '07:30:00', '17:30:00', 'daily_worker', 250000, 'Bogor West Java', '', '', 'open', '2026-01-26 01:36:37', NULL, NULL, NULL, NULL, NULL),
 (5, 1, 'FnB Product', '2026-02-01', '2026-02-02', '07:30:00', '17:30:00', 'daily_worker', 300000, 'Bogor West Java', '', '', 'open', '2026-01-26 01:36:47', NULL, NULL, NULL, NULL, NULL),
 (6, 1, 'Security', '2026-02-01', '2026-02-02', '07:30:00', '17:30:00', 'daily_worker', 350000, 'Bogor West Java', '', '', 'open', '2026-01-26 02:07:23', NULL, NULL, NULL, NULL, NULL),
 (7, 1, 'Marketing', '2026-02-01', '2026-02-02', '07:30:00', '17:30:00', 'daily_worker', 400000, 'Bogor West Java', '', '', 'open', '2026-01-26 02:07:55', NULL, NULL, NULL, NULL, NULL);
@@ -120,9 +120,9 @@ INSERT INTO `job_applications` (`id`, `job_id`, `user_id`, `status`, `applied_at
 (3, 3, 3, 'accepted', '2026-01-19 16:53:39', NULL, NULL),
 (4, 4, 3, 'pending', '2026-01-19 16:53:39', NULL, NULL),
 (5, 4, 2, 'pending', '2026-01-19 16:53:39', NULL, NULL),
-(6, 4, 1, 'pending', '2026-01-19 16:53:39', NULL, NULL),
+(6, 4, 1, 'accepted', '2026-01-19 16:53:39', NULL, NULL),
 (7, 3, 2, 'pending', '2026-01-19 16:53:39', NULL, NULL),
-(8, 5, 1, 'pending', '2026-01-19 16:53:39', NULL, NULL),
+(8, 5, 1, 'accepted', '2026-01-19 16:53:39', NULL, NULL),
 (9, 6, 2, 'pending', '2026-01-19 16:53:39', NULL, NULL),
 (11, 7, 3, 'pending', '2026-01-29 10:31:33', NULL, NULL);
 
@@ -382,7 +382,19 @@ INSERT INTO `refresh_tokens` (`id`, `user_id`, `token`, `expires_at`, `created_a
 (186, 3, '1f00e2fa5272aea48fb3ef66d74e1ef4c6d74026fe3c5740592cee13dfa44acd8247d835d59e7609d26b443fda219f302f16df56d15312cc9f84415e3862f18e', '2026-03-01 10:57:52', '2026-01-30 10:57:52'),
 (187, 3, '38169e60aa463e0e42c23ee584d43912d4b67762b93408915bc3973b4bf0eb232c337e75d0ddc5e2c1be1e5f306f87076641b7b60cf58e07cd0a871fb58544ef', '2026-03-01 10:59:39', '2026-01-30 10:59:39'),
 (188, 3, 'c378313e2f42c3fde7e227735b91b3cbfe7fa6ad3d7c4411bf336fc0b61355a893aed962264ce3d33d091b2dfee61b71c9175f56c74d3079a44726b1bf44d51d', '2026-03-01 11:02:43', '2026-01-30 11:02:43'),
-(189, 3, '9bbbfcde113f47617eb2279f824cd281ec2d3ff16febdb7693570e0ee256bb33650cb8176e580f0863a5f562b5cd43db0bd7f629bbca49edee68b97315ccac29', '2026-03-01 11:19:40', '2026-01-30 11:19:40');
+(189, 3, '9bbbfcde113f47617eb2279f824cd281ec2d3ff16febdb7693570e0ee256bb33650cb8176e580f0863a5f562b5cd43db0bd7f629bbca49edee68b97315ccac29', '2026-03-01 11:19:40', '2026-01-30 11:19:40'),
+(190, 1, 'a12c0885a0d086c9ec00b11edf8a78ebb7fda47abd6104d4f250ec8a424d7ae202b68c2b5f0065fe0a25610c41f41d081f659f373ef64993f6119018e461bf26', '2026-03-01 09:25:48', '2026-01-30 09:25:48'),
+(191, 1, '8ee6fc4d5359936d7de6db98f7b6d700883afe6b3df8ad356b32df6d9fcae1a0e23b11d4a9982c61f24fbe6badbaff8ea2c6bfa308e5043520e9a6b2a3d84587', '2026-03-01 09:27:17', '2026-01-30 09:27:17'),
+(192, 1, '339bee1ab424270aa3553befc357df12ec75dc04cc1cbd895dc1061e1638e6009b6acee2d34ac178560ce94d2bd5844ca5002b5d036c927a69b4875dd1dc0b23', '2026-03-01 09:28:10', '2026-01-30 09:28:10'),
+(193, 1, '2314dbdc2dd2455835d2088666c920e45e35128d2c24703834f173676aa70e7727ae89c020c872b64c736b884cd9075d89a88712cb52d7acddcc965ed03c4590', '2026-03-01 09:33:34', '2026-01-30 09:33:34'),
+(194, 1, '39cca6d901285648c36b65a5aafa29fa27f0ced58446eaa5f6dec465a2f735e2f21fc8076206a767332c64f1e2c7ca3cd2ab4fbb59980b873ee02a1109f4d64a', '2026-03-01 10:21:25', '2026-01-30 10:21:25'),
+(195, 1, 'de3e3ac7d174aa1730d0e4299e9ffc9a26bdd7f67493bccc5ae69f9b21453700b3221d3d2223e95f2050a91786d13a2cc37eec4ae97d11ce9f9b56654241af42', '2026-03-02 01:25:34', '2026-01-31 01:25:34'),
+(196, 1, '896a3e704a4710c90a2c2b00ba6f6d568948c23a5d5e94d100b249a11dbd2ca2d3ce74fc1ca544dd109cfb234681cb4d834f258f278c4ea653ec882049a1c0dd', '2026-03-02 07:59:51', '2026-01-31 07:59:51'),
+(197, 1, '3b80359817a545cc9a7808a6b2ca34f1fd705765d1e42c8473236dbbe19166b8c65828ab30dac7c020de224ff7d569d41f3ba6c1c992c78e3cc50918843aaad3', '2026-03-02 08:16:18', '2026-01-31 08:16:18'),
+(198, 1, 'b9d0cd9c1643df15e6751f92dfbd98a8ed3fa185886f6bfa4440cbaf4b0c22f9d4456460d2d6885a4e5b3e310acf686cef1c09cf4737a282175bf6ef14e909d9', '2026-03-02 08:34:39', '2026-01-31 08:34:39'),
+(199, 1, 'ab5159c499264490009e783cb7da6c120ff6c00e11354be48245b963d58f6ba7121eee638bed6e3f08642fd93e8b7310e98e10c4552ac3abe30dca9aca8c5c27', '2026-03-02 09:00:18', '2026-01-31 09:00:18'),
+(200, 1, 'ee0c13f7e7585ce2bc329462c64a30b8fd9c452b57054e35fa07cb1e14fc5460348bfd9ac56dd6130bc8ec01493afb881e640f671ddcfc4fe49b139c6334a38a', '2026-03-02 09:02:55', '2026-01-31 09:02:55'),
+(201, 1, '0b06c7ff5b262979cbfceec8a10067c0ed1cbb5064ea61b62c5c76b4c6d1aa05b487116577157e726cdfad89d077f8c0dfe23fe513bfc9edf8c9382c509263f9', '2026-03-02 09:18:35', '2026-01-31 09:18:35');
 
 -- --------------------------------------------------------
 
@@ -593,6 +605,14 @@ CREATE TABLE `worker_skills` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
+-- Dumping data for table `worker_skills`
+--
+
+INSERT INTO `worker_skills` (`id`, `user_id`, `skill_id`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 1, 1, '2026-01-31 15:24:18', 1, NULL, NULL, NULL, NULL),
+(2, 1, 4, '2026-01-31 15:24:18', 1, NULL, NULL, NULL, NULL);
+
+--
 -- Indexes for dumped tables
 --
 
@@ -723,7 +743,7 @@ ALTER TABLE `ratings`
 -- AUTO_INCREMENT for table `refresh_tokens`
 --
 ALTER TABLE `refresh_tokens`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=190;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=202;
 
 --
 -- AUTO_INCREMENT for table `skills`
@@ -771,7 +791,7 @@ ALTER TABLE `worker_reviews`
 -- AUTO_INCREMENT for table `worker_skills`
 --
 ALTER TABLE `worker_skills`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

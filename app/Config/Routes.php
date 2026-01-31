@@ -32,6 +32,13 @@ $routes->group('api', ['filter' => 'jwt'], function($routes) {
     $routes->get('worker/me', 'Api\WorkerController::me');
 
     // =========================
+    // WORKER SKILLS
+    // =========================
+    $routes->get('worker/skills', 'Api\WorkerController::skills');
+    $routes->get('worker/my-skills', 'Api\WorkerController::mySkills');
+    $routes->post('worker/skills', 'Api\WorkerController::setSkills');
+
+    // =========================
     // WORKER DATA
     // =========================
     $routes->get('worker/jobs', 'Api\WorkerController::jobs');
