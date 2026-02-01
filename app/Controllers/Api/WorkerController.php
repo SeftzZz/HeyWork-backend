@@ -219,11 +219,46 @@ class WorkerController extends BaseController
         $user = $this->request->user;
         $data = $this->request->getJSON(true);
 
-        $data['user_id'] = $user->id;
-        $this->experience->insert($data);
+        // =========================
+        // VALIDASI MINIMAL
+        // =========================
+        if (empty($data['company_name'])) {
+            return $this->response->setStatusCode(422)->setJSON([
+                'message' => 'Company name is required'
+            ]);
+        }
+
+        if (empty($data['start_date'])) {
+            return $this->response->setStatusCode(422)->setJSON([
+                'message' => 'Start date is required'
+            ]);
+        }
+
+        // =========================
+        // NORMALISASI DATA
+        // =========================
+        $data['user_id']    = $user->id;
+        $data['created_by'] = $user->id;
+        $data['is_current'] = !empty($data['is_current']) ? 1 : 0;
+
+        if ($data['is_current'] == 1) {
+            $data['end_date'] = null;
+        }
+
+        // =========================
+        // INSERT
+        // =========================
+        $id = $this->experience->insert($data);
+
+        if (!$id) {
+            return $this->response->setStatusCode(500)->setJSON([
+                'message' => 'Failed to add experience'
+            ]);
+        }
 
         return $this->response->setJSON([
-            'message' => 'Experience added'
+            'message' => 'Experience added',
+            'id'      => $id
         ]);
     }
 
@@ -236,12 +271,14 @@ class WorkerController extends BaseController
     {
         $user = $this->request->user;
 
-        return $this->response->setJSON(
-            $this->experience
-                ->where('user_id', $user->id)
-                ->orderBy('start_date', 'DESC')
-                ->findAll()
-        );
+        $data = $this->experience
+            ->where('user_id', $user->id)
+            ->where('deleted_at', null)
+            ->orderBy('is_current', 'DESC')
+            ->orderBy('start_date', 'DESC')
+            ->findAll();
+
+        return $this->response->setJSON($data);
     }
 
     public function uploadPhoto()

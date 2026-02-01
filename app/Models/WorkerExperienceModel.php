@@ -8,8 +8,20 @@ class WorkerExperienceModel extends Model
 {
     protected $table = 'worker_experiences';
     protected $allowedFields = [
-        'user_id', 'company_name','position','start_date','end_date','description',
-        'created_at','created_by','updated_at','updated_by','deleted_at','deleted_by'
+        'user_id',
+        'company_name',
+        'company_business',
+        'job_title',
+        'department',
+        'location',
+        'start_date',
+        'end_date',
+        'is_current',
+        'description',
+        'sort_order',
+        'created_by',
+        'updated_by',
+        'deleted_by'
     ];
     protected $useTimestamps = true;
 }
