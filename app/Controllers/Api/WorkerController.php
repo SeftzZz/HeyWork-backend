@@ -274,14 +274,40 @@ class WorkerController extends BaseController
     {
         $user = $this->request->user;
 
-        $data = $this->experience
+        // 1️⃣ CARI EXPERIENCE YANG SEDANG AKTIF
+        $current = $this->experience
             ->where('user_id', $user->id)
             ->where('deleted_at', null)
-            ->orderBy('is_current', 'DESC')
+            ->where('is_current', 1)
             ->orderBy('start_date', 'DESC')
-            ->findAll();
+            ->first();
 
-        return $this->response->setJSON($data);
+        if ($current) {
+            return $this->response->setJSON([$current]);
+        }
+
+        // 2️⃣ JIKA TIDAK ADA, AMBIL end_date TERDEKAT
+        $ended = $this->experience
+            ->where('user_id', $user->id)
+            ->where('deleted_at', null)
+            ->where('end_date IS NOT NULL', null, false)
+            ->orderBy('end_date', 'DESC')
+            ->first();
+
+        if ($ended) {
+            return $this->response->setJSON([$ended]);
+        }
+
+        // 3️⃣ FALLBACK: start_date TERDEKAT
+        $fallback = $this->experience
+            ->where('user_id', $user->id)
+            ->where('deleted_at', null)
+            ->orderBy('start_date', 'DESC')
+            ->first();
+
+        return $this->response->setJSON(
+            $fallback ? [$fallback] : []
+        );
     }
 
     /**
@@ -346,14 +372,40 @@ class WorkerController extends BaseController
     {
         $user = $this->request->user;
 
-        $data = $this->education
+        // 1️⃣ PRIORITAS: pendidikan yang sedang berjalan
+        $current = $this->education
             ->where('user_id', $user->id)
             ->where('deleted_at', null)
-            ->orderBy('is_current', 'DESC')
+            ->where('is_current', 1)
             ->orderBy('start_date', 'DESC')
-            ->findAll();
+            ->first();
 
-        return $this->response->setJSON($data);
+        if ($current) {
+            return $this->response->setJSON([$current]);
+        }
+
+        // 2️⃣ JIKA TIDAK ADA, AMBIL end_date TERDEKAT
+        $ended = $this->education
+            ->where('user_id', $user->id)
+            ->where('deleted_at', null)
+            ->where('end_date IS NOT NULL', null, false)
+            ->orderBy('end_date', 'DESC')
+            ->first();
+
+        if ($ended) {
+            return $this->response->setJSON([$ended]);
+        }
+
+        // 3️⃣ FALLBACK: start_date TERDEKAT
+        $fallback = $this->education
+            ->where('user_id', $user->id)
+            ->where('deleted_at', null)
+            ->orderBy('start_date', 'DESC')
+            ->first();
+
+        return $this->response->setJSON(
+            $fallback ? [$fallback] : []
+        );
     }
 
     public function uploadPhoto()
