@@ -12,14 +12,29 @@ $routes->options('(:any)', function () {
 
 $routes->get('/', 'Home::index');
 
+/* =========================
+ * AUTH
+ * ========================= */
+$routes->get('login', 'Auth\Login::index');
+$routes->post('login', 'Auth\Login::auth');
+$routes->get('logout', 'Auth\Login::logout');
+
+$routes->group('admin', ['filter' => 'auth'], function($routes) {
+    $routes->get('dashboard', 'Admin\Dashboard::index');
+
+    $routes->get('hotels', 'Admin\Hotels::index', ['filter' => 'role:admin']);
+    $routes->post('hotels/datatable', 'Admin\Hotels::datatable', ['filter' => 'role:admin']);
+    $routes->post('hotels/store', 'Admin\Hotels::store');
+    $routes->post('hotels/update', 'Admin\Hotels::update');
+    $routes->post('hotels/delete', 'Admin\Hotels::delete');
+});
+
 $routes->group('api', function($routes) {
     $routes->post('auth/login', 'Api\AuthController::login');
     $routes->post('auth/google', 'Api\AuthController::google');
     $routes->post('auth/facebook', 'Api\AuthController::facebook');
     $routes->post('auth/register', 'Api\AuthController::register');
     $routes->post('auth/refresh', 'Api\AuthController::refresh');
-
-
 });
 
 $routes->group('api', ['filter' => 'jwt'], function($routes) {
