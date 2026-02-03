@@ -27,12 +27,6 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('hotels/store', 'Admin\Hotels::store');
     $routes->post('hotels/update', 'Admin\Hotels::update');
     $routes->post('hotels/delete', 'Admin\Hotels::delete');
-    
-    // $routes->get('hotels/create', 'Admin\Hotels::create', ['filter' => 'role:admin']);
-    // $routes->post('hotels/store', 'Admin\Hotels::store', ['filter' => 'role:admin']);
-    // $routes->get('hotels/edit/(:num)', 'Admin\Hotels::edit/$1', ['filter' => 'role:admin']);
-    // $routes->post('hotels/update/(:num)', 'Admin\Hotels::update/$1', ['filter' => 'role:admin']);
-    // $routes->get('hotels/delete/(:num)', 'Admin\Hotels::delete/$1', ['filter' => 'role:admin']);
 });
 
 $routes->group('api', function($routes) {
@@ -64,7 +58,8 @@ $routes->group('api', ['filter' => 'jwt'], function($routes) {
     $routes->get('worker/jobs', 'Api\WorkerController::jobs');
     $routes->post('worker/experience', 'Api\WorkerController::addExperience');
     $routes->get('worker/experience', 'Api\WorkerController::experiences');
-    $routes->post('worker/skills', 'Api\WorkerController::setSkills');
+    $routes->post('worker/education', 'Api\WorkerController::addEducation');
+    $routes->get('worker/education', 'Api\WorkerController::educations');
 
     $routes->post('worker/upload/photo', 'Api\WorkerController::uploadPhoto');
     $routes->post('worker/upload/document', 'Api\WorkerController::uploadDocument');
@@ -78,7 +73,7 @@ $routes->group('api', ['filter' => 'jwt'], function($routes) {
     $routes->get('worker/applications/(:num)', 'Api\WorkerController::applicationDetail/$1');
 
     // =========================
-    // ATTENDANCE 🔥 (FIXED)
+    // ATTENDANCE (FIXED)
     // =========================
 
     // list attendance (schedule)

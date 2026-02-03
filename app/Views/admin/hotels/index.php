@@ -7,6 +7,7 @@
 						                    <thead>
 						                      	<tr>
 							                        <th></th>
+							                        <th>No.</th>
 							                        <th>Hotel Name</th>
 							                        <th>Address</th>
 							                        <th>Latitude</th>
@@ -51,6 +52,7 @@
 						                },
 						                columns: [
 						                    { data: null },          // responsive control
+						                    { data: 'no_urut' },
 						                    { data: 'hotel_name' },
 						                    { data: 'location' },
 						                    { data: 'latitude' },
@@ -70,9 +72,14 @@
 						                            return '';
 						                        }
 						                    },
+						                    {
+									          	targets: 1,
+									          	orderable: false,
+									          	searchable: false
+									        },
 					                    	{
 					                    		// Hotel name
-								          		targets: 1,
+								          		targets: 2,
 								          		responsivePriority: 1,
 								          		render: function (data, type, full) {
 									            	var $user_img = full['logo'],
@@ -116,7 +123,7 @@
 						                        searchable: false
 						                    }
 					                	],
-					                	order: [[1, 'asc']],
+					                	order: [[2, 'asc']],
 					                	dom:
 					                    	'<"card-header flex-column flex-md-row"' +
 					                        '<"head-label text-center">' +
@@ -143,25 +150,25 @@
 						                                extend: 'print',
 						                                text: '<i class="ti ti-printer me-1"></i>Print',
 						                                className: 'dropdown-item',
-						                                exportOptions: { columns: [1, 2, 3, 4, 5] }
+						                                exportOptions: { columns: [1,2,3,4,5,6] }
 						                            },
 						                            {
 						                                extend: 'csv',
 						                                text: '<i class="ti ti-file-text me-1"></i>Csv',
 						                                className: 'dropdown-item',
-						                                exportOptions: { columns: [1, 2, 3, 4, 5] }
+						                                exportOptions: { columns: [1,2,3,4,5,6] }
 						                            },
 						                            {
 						                                extend: 'excel',
 						                                text: '<i class="ti ti-file-spreadsheet me-1"></i>Excel',
 						                                className: 'dropdown-item',
-						                                exportOptions: { columns: [1, 2, 3, 4, 5] }
+						                                exportOptions: { columns: [1,2,3,4,5,6] }
 						                            },
 						                            {
 						                                extend: 'pdf',
 						                                text: '<i class="ti ti-file-description me-1"></i>Pdf',
 						                                className: 'dropdown-item',
-						                                exportOptions: { columns: [1, 2, 3, 4, 5] }
+						                                exportOptions: { columns: [1,2,3,4,5,6] }
 						                            }
 						                        ]
 						                    },

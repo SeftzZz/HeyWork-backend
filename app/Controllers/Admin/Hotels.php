@@ -37,6 +37,7 @@ class Hotels extends BaseAdminController
         $columns = [
             null,
             'id',
+            'no_urut',
             'hotel_name',
             'location',
             'latitude',
@@ -82,6 +83,7 @@ class Hotels extends BaseAdminController
 
         foreach ($data as $row) {
             $result[] = [
+                'no_urut'    => $no++.'.',
                 'hotel_name' => esc($row['hotel_name']),
                 'location'   => esc($row['location']),
                 'latitude'   => $row['latitude'],

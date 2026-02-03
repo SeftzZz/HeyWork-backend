@@ -56,7 +56,7 @@ app.post('/emit', (req, res) => {
 });
 
 /**
- * HTTP server (PORT 30035)
+ * HTTP server (PORT 3005)
  */
 app.listen(3005, () => {
   console.log('WS HTTP bridge running on port 3005');
