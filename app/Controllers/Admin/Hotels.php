@@ -137,12 +137,15 @@ class Hotels extends BaseAdminController
 
         $data = [
             'hotel_name' => $this->request->getPost('hotel_name'),
+            'founded'    => $this->request->getPost('founded'),
+            'size'       => $this->request->getPost('tot_employees'),
             'location'   => $this->request->getPost('location'),
             'latitude'   => $this->request->getPost('latitude'),
             'longitude'  => $this->request->getPost('longitude'),
             'website'    => $this->request->getPost('website'),
             'description'=> $this->request->getPost('desc'),
-            'created_by' => session()->get('user_id')
+            'created_by' => session()->get('user_id'),
+            'updated_by' => session()->get('user_id')
         ];
 
         $file = $this->request->getFile('logo');
@@ -202,6 +205,8 @@ class Hotels extends BaseAdminController
 
         $data = [
             'hotel_name' => $this->request->getPost('hotel_name'),
+            'founded'    => $this->request->getPost('founded'),
+            'size'       => $this->request->getPost('tot_employees'),
             'location'   => $this->request->getPost('location'),
             'latitude'   => $this->request->getPost('latitude'),
             'longitude'  => $this->request->getPost('longitude'),

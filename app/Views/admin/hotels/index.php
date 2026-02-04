@@ -20,7 +20,7 @@
 						                </table>
 					                </div>
 
-					                //add modal
+					                <!-- add modal form -->
 					                <div class="modal fade" id="modalAddHotel" tabindex="-1" aria-hidden="true">
 									    <div class="modal-dialog modal-lg modal-dialog-centered">
 									        <div class="modal-content">
@@ -31,17 +31,26 @@
 									                </div>
 
 									                <div class="modal-body">
-
-									                    <div class="mb-3">
-									                        <label class="form-label">Hotel Name</label>
-									                        <input type="text" class="form-control" name="hotel_name" required>
+									                	<div class="row">
+									                        <div class="col-md-6 mb-3">
+									                            <label class="form-label">Hotel Name</label>
+									                        	<input type="text" class="form-control" name="hotel_name" required>
+									                        </div>
+									                        <div class="col-md-6 mb-3">
+									                            <label class="form-label">Founded</label>
+									                        	<input type="text" class="form-control" name="founded" required>
+									                        </div>
 									                    </div>
-
-									                    <div class="mb-3">
-									                        <label class="form-label">Address</label>
-									                        <input type="text" class="form-control" name="location" id="add_location" readonly>
+									                    <div class="row">
+									                        <div class="col-md-6 mb-3">
+									                            <label class="form-label">Total Employees</label>
+									                        	<input type="text" class="form-control" name="tot_employees" required>
+									                        </div>
+									                        <div class="col-md-6 mb-3">
+									                            <label class="form-label">Address</label>
+									                        	<input type="text" class="form-control" name="location" id="add_location" required>
+									                        </div>
 									                    </div>
-
 									                    <div class="row">
 									                        <div class="col-md-6 mb-3">
 									                            <input type="hidden" name="latitude" id="add_latitude">
@@ -50,26 +59,21 @@
 									                            <input type="hidden" name="longitude" id="add_longitude">
 									                        </div>
 									                    </div>
-
 									                    <!-- Search Map insert hotel -->
 									                    <div class="mb-2">
 									                        <input type="text" id="searchAddLocation" class="form-control" placeholder="Search location...">
-									                        <div id="searchAddResult" class="list-group position-absolute w-100" style="z-index:1055"></div>
+									                        <div id="searchAddResult" class="list-group position-absolute w-100" style="z-index:1055;"></div>
 									                    </div>
-
 									                    <!-- Map insert hotel-->
-									                    <div id="mapAddHotel" style="height:350px" class="mb-3 rounded"></div>
-									                    
+									                    <div id="mapAddHotel" style="height:300px" class="mb-3 rounded"></div>
 									                    <div class="mb-3">
 									                        <label class="form-label">Website</label>
 									                        <input type="text" class="form-control" name="website">
 									                    </div>
-
 									                    <div class="mb-3">
 									                        <label class="form-label">Description</label>
 									                        <textarea class="form-control" name="desc" rows="3"></textarea>
 									                    </div>
-
 									                    <!-- LOGO -->
 									                    <div class="mb-3">
 									                        <label class="form-label">Logo</label>
@@ -87,7 +91,7 @@
 									    </div>
 									</div>
 
-					                //edit modal
+					                <!-- edit modal form -->
 					                <div class="modal fade" id="modalEditHotel" tabindex="-1" aria-hidden="true">
 										<div class="modal-dialog modal-lg modal-dialog-centered">
 										    <div class="modal-content">
@@ -99,17 +103,26 @@
 
 											        <div class="modal-body">
 											          	<input type="hidden" name="id" id="edit_id">
-
-											          	<div class="mb-3">
-											            	<label class="form-label" for="edit_hotel_name">Hotel Name</label>
-											            	<input type="text" class="form-control" name="hotel_name" id="edit_hotel_name" required>
-											          	</div>
-
-											          	<div class="mb-3">
-											            	<label class="form-label" for="edit_location">Address</label>
-											            	<input type="text" class="form-control" name="location" id="edit_location" required>
-											          	</div>
-
+											          	<div class="row">
+									                        <div class="col-md-6 mb-3">
+									                            <label class="form-label" for="edit_hotel_name">Hotel Name</label>
+											            		<input type="text" class="form-control" name="hotel_name" id="edit_hotel_name" required>
+									                        </div>
+									                        <div class="col-md-6 mb-3">
+									                            <label class="form-label" for="edit_founded">Founded</label>
+									                        	<input type="text" class="form-control" name="founded" id="edit_founded" required>
+									                        </div>
+									                    </div>
+									                    <div class="row">
+									                        <div class="col-md-6 mb-3">
+									                            <label class="form-label" for="edit_tot_employees">Total Employees</label>
+									                        	<input type="text" class="form-control" name="tot_employees" id="edit_tot_employees" required>
+									                        </div>
+									                        <div class="col-md-6 mb-3">
+									                            <label class="form-label" for="edit_location">Address</label>
+											            		<input type="text" class="form-control" name="location" id="edit_location" required>
+									                        </div>
+									                    </div>
 											        	<div class="mb-3 position-relative">
 														    <label class="form-label" for="searchLocation">Search Location</label>
 														    <input type="text" id="searchLocation" class="form-control" placeholder="Type the place or address..." autocomplete="off"
@@ -349,17 +362,26 @@
 
 							// Map untuk insert data
 							let mapAdd, markerAdd;
-							$(document).on('click', '.btn-add-hotel', function () {
+							$('#modalAddHotel').on('shown.bs.modal', function () {
 							    $('#formAddHotel')[0].reset();
-							    $('#modalAddHotel').modal('show');
-							    setTimeout(() => {
-							        initAddMap(-6.597147, 106.806039); // default Bogor
-							    }, 300);
+							    initAddMap(-6.597147, 106.806039); // Bogor default
+							});
+
+							$('#modalAddHotel').on('hidden.bs.modal', function () {
+							    if (mapAdd) {
+							        mapAdd.remove();
+							        mapAdd = null;
+							    };
+							    $('#searchAddLocation').val('');
+    							$('#searchAddResult').empty();
 							});
 
 							// INIT MAP + REVERSE GEOCODE untuk insert data
 							function initAddMap(lat, lng) {
-							    if (mapAdd) mapAdd.remove();
+							    if (mapAdd) {
+							        mapAdd.remove();
+							    }
+
 							    mapAdd = L.map('mapAddHotel').setView([lat, lng], 14);
 
 							    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -380,7 +402,7 @@
 							        updateAddLocation(e.latlng.lat, e.latlng.lng);
 							    });
 
-							    mapAdd.invalidateSize();
+							    mapAdd.invalidateSize(true);
 							}
 
 							// ambil kota atau provinsi untuk insert data
@@ -422,19 +444,81 @@
 							    );
 							}
 
+							// Cari Map untuk insert data
+							let searchAddTimeout = null;
+							$('#searchAddLocation').on('input', function () {
+							    const q = $(this).val();
+
+							    if (q.length < 3) {
+							        $('#searchAddResult').empty();
+							        return;
+							    }
+
+							    clearTimeout(searchAddTimeout);
+
+							    searchAddTimeout = setTimeout(() => {
+							        $.getJSON(
+							            'https://nominatim.openstreetmap.org/search',
+							            {
+							                q: q,
+							                format: 'json',
+							                addressdetails: 1,
+							                limit: 5
+							            },
+							            function (data) {
+							                $('#searchAddResult').empty();
+
+							                if (!data.length) {
+							                    $('#searchAddResult').append(
+							                        '<div class="list-group-item disabled">Location not found</div>'
+							                    );
+							                    return;
+							                }
+
+							                data.forEach(item => {
+							                    $('#searchAddResult').append(`
+							                        <button
+							                            type="button"
+							                            class="list-group-item list-group-item-action"
+							                            data-lat="${item.lat}"
+							                            data-lng="${item.lon}"
+							                    		data-name="${item.display_name.trim()}"
+							                        >
+							                            ${item.display_name}
+							                        </button>
+							                    `);
+							                });
+							            }
+							        );
+							    }, 500);
+							});
+
+							$(document).on('click', '#searchAddResult button', function () {
+							    const lat = parseFloat($(this).data('lat'));
+							    const lng = parseFloat($(this).data('lng'));
+							    const name = $(this).data('name');
+
+							    $('#searchAddLocation').val(name);
+    							$('#searchAddResult').empty();
+
+							    markerAdd.setLatLng([lat, lng]);
+							    mapAdd.setView([lat, lng], 17);
+
+							    updateAddLocation(lat, lng);
+							});
+
 							// Submit form insert data
 							$('#formAddHotel').on('submit', function (e) {
 							    e.preventDefault();
-
 							    let formData = new FormData(this);
 							    formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
-
 							    Swal.fire({
 							        title: 'Add new hotel?',
 							        icon: 'question',
 							        showCancelButton: true,
+							        reverseButtons: true,
 							        confirmButtonText: 'Yes, save',
-							        cancelButtonText: 'Cancel'
+							        cancelButtonText: 'No'
 							    }).then(result => {
 							        if (result.isConfirmed) {
 							            $.ajax({
@@ -502,7 +586,7 @@
 							    }, 300);
 							}
 
-							// Cari Map
+							// Cari Map untuk edit data
 							let searchTimeout = null;
 							$('#searchLocation').on('input', function () {
 							    const q = $(this).val();
@@ -620,14 +704,12 @@
 							// Edit form
 							$(document).on('click', '.btn-edit', function () {
 							    const id = $(this).data('id');
-
 							    $('#edit_logo').on('change', function () {
 								    const file = this.files[0];
 								    if (file) {
 								        $('#preview_logo').attr('src', URL.createObjectURL(file));
 								    }
 								});
-
 							    $.post("<?= base_url('admin/hotels/get') ?>", {
 							        id: id,
 							        '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
@@ -635,6 +717,8 @@
 							        if (res.status) {
 							            $('#edit_id').val(res.data.id);
 							            $('#edit_hotel_name').val(res.data.hotel_name);
+							            $('#edit_founded').val(res.data.founded);
+							            $('#edit_tot_employees').val(res.data.size);
 							            $('#edit_location').val(res.data.location);
 							            $('#edit_latitude').val(res.data.latitude);
 							            $('#edit_longitude').val(res.data.longitude);
