@@ -39,21 +39,38 @@ class Users extends BaseAdminController
         $start  = (int) $request->getPost('start');
 
         $order = $request->getPost('order');
-        $orderColumns = [null, null, 'hotel_name', 'location', 'latitude', 'longitude', 'website', null];
+        $orderColumns = [null, null, 'name', 'hotel_id', 'role', 'email', 'phone', 'is_active', null];
 
-        // =============================
+        // mapping SEARCH LABEL → ROLE
+        $roleSearchMap = [
+            'admin hw'   => 'admin',
+            'mitra'      => 'worker',
+            'user hr'    => 'hotel_hr',
+            'user fo'    => 'hotel_fo',
+            'user hk'    => 'hotel_hk',
+            'user fnbs'  => 'hotel_fnb_service',
+            'user fnbp'  => 'hotel_fnb_production',
+        ];
+
         // QUERY FILTERED (COUNT)
-        // =============================
-        $countQuery = $this->hotelModel->where('deleted_at', null);
+        $countQuery = $this->userModel
+            ->join('hotels', 'hotels.id = users.hotel_id', 'left')
+            ->where('users.deleted_at', null);
 
         if ($searchValue) {
+            $keyword = strtolower(trim($searchValue));
+
             $countQuery->groupStart()
-                ->like('hotel_name', $searchValue)
-                ->orLike('location', $searchValue)
-                ->orLike('website', $searchValue)
-                ->orLike('latitude', $searchValue)
-                ->orLike('longitude', $searchValue)
-            ->groupEnd();
+                ->like('users.name', $searchValue)
+                ->orLike('users.email', $searchValue)
+                ->orLike('users.phone', $searchValue);
+
+            // CARI ROLE DARI LABEL
+            if (isset($roleSearchMap[$keyword])) {
+                $countQuery->orWhere('users.role', $roleSearchMap[$keyword]);
+            }
+
+            $countQuery->groupEnd();
         }
 
         $recordsFiltered = $countQuery->countAllResults();
@@ -61,23 +78,31 @@ class Users extends BaseAdminController
         // =============================
         // QUERY TOTAL
         // =============================
-        $recordsTotal = $this->hotelModel
+        $recordsTotal = $this->userModel
             ->where('deleted_at', null)
             ->countAllResults();
 
         // =============================
         // QUERY DATA (NEW BUILDER!)
         // =============================
-        $dataQuery = $this->hotelModel->where('deleted_at', null);
+        $dataQuery = $this->userModel
+            ->select('users.*, hotels.hotel_name')
+            ->join('hotels', 'hotels.id = users.hotel_id', 'left')
+            ->where('users.deleted_at', null);
 
         if ($searchValue) {
+            $keyword = strtolower(trim($searchValue));
+
             $dataQuery->groupStart()
-                ->like('hotel_name', $searchValue)
-                ->orLike('location', $searchValue)
-                ->orLike('website', $searchValue)
-                ->orLike('latitude', $searchValue)
-                ->orLike('longitude', $searchValue)
-            ->groupEnd();
+                ->like('users.name', $searchValue)
+                ->orLike('users.email', $searchValue)
+                ->orLike('users.phone', $searchValue);
+
+            if (isset($roleSearchMap[$keyword])) {
+                $dataQuery->orWhere('users.role', $roleSearchMap[$keyword]);
+            }
+
+            $dataQuery->groupEnd();
         }
 
         if ($order) {
@@ -97,16 +122,35 @@ class Users extends BaseAdminController
         // =============================
         $result = [];
         $no = $start + 1;
-
+        
         foreach ($data as $row) {
+            $roleMap = [
+                'admin'                  => 'Admin HW',
+                'worker'                 => 'Mitra',
+                'hotel_hr'               => 'User HR',
+                'hotel_fo'               => 'User FO',
+                'hotel_hk'               => 'User HK',
+                'hotel_fnb_service'      => 'User FnBS',
+                'hotel_fnb_production'   => 'User FnBP',
+            ];
+            $role = $row['role'];
+
+            $status = strtolower($row['is_active']);
+            $badgeStatus = match ($status) {
+                'active'   => '<span class="badge bg-success">Active</span>',
+                'inactive' => '<span class="badge bg-danger">Inactive</span>',
+                default    => '<span class="badge bg-secondary">' . ucfirst(esc($status)) . '</span>',
+            };
+
             $result[] = [
-                'no_urut'    => $no++.'.',
-                'hotel_name' => esc($row['hotel_name']),
-                'location'   => esc($row['location']),
-                'latitude'   => $row['latitude'],
-                'longitude'  => $row['longitude'],
-                'website'    => esc($row['website']),
-                'logo'       => esc($row['logo']),
+                'no_urut'       => $no++.'.',
+                'name_user'     => esc($row['name']),
+                'hotel_name'    => esc($row['hotel_name'] ?? '-'),
+                'role_user'     => $roleMap[$role] ?? ucfirst(esc($role)),
+                'email_user'    => esc($row['email']),
+                'hp_user'       => esc($row['phone']),
+                'status_user'   => $badgeStatus,
+                'photo_user'    => esc($row['photo']),
                 'action' => '
                     <div class="d-flex gap-2">
                         <button class="btn btn-sm btn-icon btn-primary btn-edit" data-id="'.$row['id'].'" title="Edit">
@@ -117,7 +161,6 @@ class Users extends BaseAdminController
                         </button>
                     </div>
                 '
-
             ];
         }
 
