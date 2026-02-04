@@ -7,12 +7,11 @@
 						                    <thead>
 						                      	<tr>
 							                        <th></th>
-							                        <th>No.</th>
-							                        <th>Hotel Name</th>
+							                        <th>hotel name</th>
 							                        <th>Address</th>
-							                        <th>Latitude</th>
-							                        <th>Longitude</th>
-							                        <th>Website</th>
+							                        <th>latitude</th>
+							                        <th>longitude</th>
+							                        <th>website</th>
 							                        <th>Action</th>
 						                      	</tr>
 						                    </thead>
@@ -32,15 +31,22 @@
 		                <script src="<?= base_url('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') ?>"></script>
 
 		                <script>
-						    // DataTables Hotels
+						    /**
+						     * DataTables Basic (Hotels)
+						     */
+
 						    'use strict';
+
 						    $(function () {
-						        let dt_tableHotel = $('.dtHotel'), dt_hotel;
-						        if (dt_tableHotel.length) {
-						        	dt_hotel = dt_tableHotel.DataTable({
-						        		processing: true,
-					                	serverSide: true,
-					                	responsive: true,
+						        let dt_basic_table = $('.dtHotel'),
+						            dt_basic;
+
+						        if (dt_basic_table.length) {
+						            dt_basic = dt_basic_table.DataTable({
+						                processing: true,
+						                serverSide: true,
+						                responsive: true,
+
 						                ajax: {
 						                    url: "<?= base_url('admin/hotels/datatable') ?>",
 						                    type: "POST",
@@ -48,9 +54,9 @@
 						                        d['<?= csrf_token() ?>'] = '<?= csrf_hash() ?>';
 						                    }
 						                },
+
 						                columns: [
 						                    { data: null },          // responsive control
-						                    { data: 'no_urut' },
 						                    { data: 'hotel_name' },
 						                    { data: 'location' },
 						                    { data: 'latitude' },
@@ -58,6 +64,7 @@
 						                    { data: 'website' },
 						                    { data: 'action' }       // actions (HTML from backend)
 						                ],
+
 						                columnDefs: [
 						                    {
 						                        // Responsive control
@@ -71,48 +78,26 @@
 						                        }
 						                    },
 						                    {
-									          	targets: 1,
-									          	orderable: false,
-									          	searchable: false
+						                    	// Hotel name
+									          targets: 1,
+									          responsivePriority: 1,
+									          render: function (data, type, full) {
+									            var name = full.hotel_name;
+									            var initials = name.match(/\b\w/g) || [];
+									            initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+
+									            return `
+									              <div class="d-flex align-items-center">
+									                <div class="avatar me-2">
+									                  <span class="avatar-initial rounded-circle bg-label-primary">${initials}</span>
+									                </div>
+									                <div class="d-flex flex-column">
+									                  <span class="fw-medium">${name}</span>
+									                </div>
+									              </div>
+									            `;
+									          }
 									        },
-					                    	{
-					                    		// Hotel name
-								          		targets: 2,
-								          		responsivePriority: 1,
-								          		render: function (data, type, full) {
-									            	var $user_img = full['logo'],
-									              	$name = full['hotel_name'];
-									            	if ($user_img) {
-									              		// For Avatar image
-									             		var $output = '<img src="' + "../" + $user_img + '" class="rounded-circle">';
-									            	} else {
-									              		// For Avatar badge
-									              		var stateNum = Math.floor(Math.random() * 6);
-									              		var states = ['success', 'danger', 'warning', 'info', 'primary', 'secondary'];
-									              		var $state = states[stateNum],
-									                	$name = full['hotel_name'],
-									                	$initials = $name.match(/\b\w/g) || [];
-									              		$initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
-									              		$output = '<span class="avatar-initial rounded-circle bg-label-' + $state + '">' + $initials + '</span>';
-									            	}
-									            	
-									            	// Creates full output for row
-									            	var $row_output =
-									              		'<div class="d-flex justify-content-start align-items-center user-name">' +
-									              		'<div class="avatar-wrapper">' +
-									              		'<div class="avatar me-2">' +
-									              		$output +
-									              		'</div>' +
-									              		'</div>' +
-									              		'<div class="d-flex flex-column">' +
-									              		'<span class="emp_name text-truncate">' +
-									              		$name +
-									              		'</span>' +
-									              		'</div>' +
-									              		'</div>';
-									            	return $row_output;
-									          	}
-								        	},
 						                    {
 						                        // Actions
 						                        targets: -1,
@@ -120,24 +105,28 @@
 						                        orderable: false,
 						                        searchable: false
 						                    }
-					                	],
-					                	order: [[2, 'asc']],
-					                	dom:
-					                    	'<"card-header flex-column flex-md-row"' +
-					                        '<"head-label text-center">' +
-					                        '<"dt-action-buttons text-end pt-3 pt-md-0"B>' +
-					                    	'>' +
-					                    	'<"row"' +
-					                        '<"col-sm-12 col-md-6"l>' +
-					                        '<"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>' +
-					                    	'>' +
-					                    	't' +
-					                    	'<"row"' +
-					                        '<"col-sm-12 col-md-6"i>' +
-					                        '<"col-sm-12 col-md-6"p>' +
-					                    	'>',
-					                    displayLength: 10,
+						                ],
+
+						                order: [[1, 'asc']],
+
+						                dom:
+						                    '<"card-header flex-column flex-md-row"' +
+						                        '<"head-label text-center">' +
+						                        '<"dt-action-buttons text-end pt-3 pt-md-0"B>' +
+						                    '>' +
+						                    '<"row"' +
+						                        '<"col-sm-12 col-md-6"l>' +
+						                        '<"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>' +
+						                    '>' +
+						                    't' +
+						                    '<"row"' +
+						                        '<"col-sm-12 col-md-6"i>' +
+						                        '<"col-sm-12 col-md-6"p>' +
+						                    '>',
+
+						                displayLength: 10,
 						                lengthMenu: [10, 25, 50, 100],
+
 						                buttons: [
 						                    {
 						                        extend: 'collection',
@@ -148,33 +137,40 @@
 						                                extend: 'print',
 						                                text: '<i class="ti ti-printer me-1"></i>Print',
 						                                className: 'dropdown-item',
-						                                exportOptions: { columns: [1,2,3,4,5,6] }
+						                                exportOptions: { columns: [1, 2, 3, 4, 5] }
 						                            },
 						                            {
 						                                extend: 'csv',
 						                                text: '<i class="ti ti-file-text me-1"></i>Csv',
 						                                className: 'dropdown-item',
-						                                exportOptions: { columns: [1,2,3,4,5,6] }
+						                                exportOptions: { columns: [1, 2, 3, 4, 5] }
 						                            },
 						                            {
 						                                extend: 'excel',
 						                                text: '<i class="ti ti-file-spreadsheet me-1"></i>Excel',
 						                                className: 'dropdown-item',
-						                                exportOptions: { columns: [1,2,3,4,5,6] }
+						                                exportOptions: { columns: [1, 2, 3, 4, 5] }
 						                            },
 						                            {
 						                                extend: 'pdf',
 						                                text: '<i class="ti ti-file-description me-1"></i>Pdf',
 						                                className: 'dropdown-item',
-						                                exportOptions: { columns: [1,2,3,4,5,6] }
+						                                exportOptions: { columns: [1, 2, 3, 4, 5] }
+						                            },
+						                            {
+						                                extend: 'copy',
+						                                text: '<i class="ti ti-copy me-1"></i>Copy',
+						                                className: 'dropdown-item',
+						                                exportOptions: { columns: [1, 2, 3, 4, 5] }
 						                            }
 						                        ]
 						                    },
 						                    {
-						                        text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-sm-inline-block">Add New Hotel</span>',
+						                        text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-none d-sm-inline-block">Add New Hotel</span>',
 						                        className: 'create-new btn btn-primary waves-effect waves-light'
 						                    }
 						                ],
+
 						                responsive: {
 						                    details: {
 						                        display: $.fn.dataTable.Responsive.display.modal({
@@ -200,54 +196,12 @@
 						                        }
 						                    }
 						                }
-						        	});
-									$('div.head-label').html('<h5 class="card-title mb-0">Hotels List</h5>');
+						            });
+
+						            $('div.head-label').html('<h5 class="card-title mb-0">Hotels Data</h5>');
 						        }
 						    });
-
-							// Soft Delete
-							$(document).on('click', '.btn-delete', function () {
-							    const id = $(this).data('id');
-
-							    Swal.fire({
-							        title: 'Are you sure!!!',
-							        text: 'Data will be deleted',
-							        icon: 'warning',
-							        showCancelButton: true,
-							        confirmButtonText: 'Yes, delete it!',
-							        cancelButtonText: 'Cancel',
-							        reverseButtons: true
-							    }).then((result) => {
-							        if (result.isConfirmed) {
-							            $.ajax({
-							                url: "<?= base_url('admin/hotels/delete') ?>",
-							                type: "POST",
-							                dataType: "json",
-							                data: {
-							                    id: id,
-							                    '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
-							                },
-							                success: function (res) {
-							                    if (res.status) {
-							                        Swal.fire({
-							                            icon: 'success',
-							                            title: 'Berhasil',
-							                            text: res.message,
-							                            timer: 1500,
-							                            showConfirmButton: false
-							                        });
-
-							                        $('.dtHotel').DataTable().ajax.reload(null, false);
-							                    } else {
-							                        Swal.fire('Gagal', res.message, 'error');
-							                    }
-							                },
-							                error: function () {
-							                    Swal.fire('Error', 'Terjadi kesalahan server', 'error');
-							                }
-							            });
-							        }
-							    });
-							});
 						</script>
+
+
                         <?= $this->endSection() ?>

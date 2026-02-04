@@ -34,149 +34,135 @@ class Hotels extends BaseAdminController
     {
         $request = service('request');
 
-        $columns = [
-            null,
-            'id',
-            'hotel_name',
-            'location',
-            'latitude',
-            'longitude',
-            'website',
-            null
-        ];
+        $searchValue = $request->getPost('search')['value'] ?? null;
+        $length = (int) $request->getPost('length');
+        $start  = (int) $request->getPost('start');
 
-        $builder = $this->hotelModel
-            ->where('deleted_at', null);
+        $order = $request->getPost('order');
+        $orderColumns = [null, null, 'hotel_name', 'location', 'latitude', 'longitude', 'website', null];
 
-        // SEARCH
-        $search = $request->getPost('search')['value'] ?? null;
-        if ($search) {
-            $builder->groupStart()
-                ->like('hotel_name', $search)
-                ->orLike('location', $search)
-                ->orLike('website', $search)
+        // =============================
+        // QUERY FILTERED (COUNT)
+        // =============================
+        $countQuery = $this->hotelModel->where('deleted_at', null);
+
+        if ($searchValue) {
+            $countQuery->groupStart()
+                ->like('hotel_name', $searchValue)
+                ->orLike('location', $searchValue)
+                ->orLike('website', $searchValue)
+                ->orLike('latitude', $searchValue)
+                ->orLike('longitude', $searchValue)
             ->groupEnd();
         }
 
-        // ORDER
-        $order = $request->getPost('order');
+        $recordsFiltered = $countQuery->countAllResults();
+
+        // =============================
+        // QUERY TOTAL
+        // =============================
+        $recordsTotal = $this->hotelModel
+            ->where('deleted_at', null)
+            ->countAllResults();
+
+        // =============================
+        // QUERY DATA (NEW BUILDER!)
+        // =============================
+        $dataQuery = $this->hotelModel->where('deleted_at', null);
+
+        if ($searchValue) {
+            $dataQuery->groupStart()
+                ->like('hotel_name', $searchValue)
+                ->orLike('location', $searchValue)
+                ->orLike('website', $searchValue)
+                ->orLike('latitude', $searchValue)
+                ->orLike('longitude', $searchValue)
+            ->groupEnd();
+        }
+
         if ($order) {
-            $col = $columns[$order[0]['column']];
-            if ($col) {
-                $builder->orderBy($col, $order[0]['dir']);
+            $idx = (int) $order[0]['column'];
+            if (!empty($orderColumns[$idx])) {
+                $dataQuery->orderBy($orderColumns[$idx], $order[0]['dir']);
             }
         }
 
-        // COUNT
-        $recordsFiltered = (clone $builder)->countAllResults();
-        $recordsTotal    = $this->hotelModel->where('deleted_at', null)->countAllResults();
+        $data = $dataQuery
+            ->limit($length, $start)
+            ->get()
+            ->getResultArray();
 
-        // PAGINATION
-        $length = (int) ($request->getPost('length') ?? 10);
-        $start  = (int) ($request->getPost('start') ?? 0);
-        $data = $builder->limit($length, $start)->get()->getResultArray();
-
+        // =============================
+        // FORMAT DATA
+        // =============================
         $result = [];
         $no = $start + 1;
 
         foreach ($data as $row) {
             $result[] = [
+                'no_urut'    => $no++.'.',
                 'hotel_name' => esc($row['hotel_name']),
                 'location'   => esc($row['location']),
                 'latitude'   => $row['latitude'],
                 'longitude'  => $row['longitude'],
                 'website'    => esc($row['website']),
-                'action'     => '
-                    <button class="btn btn-sm btn-primary btn-edit" data-id="'.$row['id'].'">Edit</button>
-                    <button class="btn btn-sm btn-danger btn-delete" data-id="'.$row['id'].'">Delete</button>
+                'logo'       => esc($row['logo']),
+                'action' => '
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-primary btn-edit" data-id="'.$row['id'].'">
+                            Edit
+                        </button>
+                        <button class="btn btn-sm btn-danger btn-delete" data-id="'.$row['id'].'">
+                            Delete
+                        </button>
+                    </div>
                 '
+
             ];
         }
 
-
         return $this->response->setJSON([
-            'draw' => intval($request->getPost('draw')),
-            'recordsTotal' => $recordsTotal,
+            'draw'            => (int) $request->getPost('draw'),
+            'recordsTotal'    => $recordsTotal,
             'recordsFiltered' => $recordsFiltered,
-            'data' => $result
+            'data'            => $result
         ]);
     }
 
+    public function delete()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(404);
+        }
 
-    // public function datatable()
-    // {
-    //     $request = service('request');
-    //     $db      = db_connect();
-    //     $builder = $db->table('hotels');
+        $id = $this->request->getPost('id');
 
-    //     // -----------------------
-    //     // SELECT
-    //     // -----------------------
-    //     $builder->select('*');
+        if (!$id) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'ID not valid'
+            ]);
+        }
 
-    //     // -----------------------
-    //     // SEARCH
-    //     // -----------------------
-    //     $search = $request->getPost('search')['value'] ?? null;
-    //     if ($search) {
-    //         $builder->groupStart()
-    //             ->like('name', $search)
-    //             ->orLike('address', $search)
-    //             ->orLike('website', $search)
-    //         ->groupEnd();
-    //     }
+        $data = [
+            'updated_by'  => session()->get('user_id'),
+            'deleted_at'  => date('Y-m-d H:i:s'),
+            'deleted_by'  => session()->get('user_id')
+        ];
 
-    //     // -----------------------
-    //     // ORDER
-    //     // -----------------------
-    //     $columns = [
-    //         null, 
-    //         'id',
-    //         'name',
-    //         'address',
-    //         'latitude',
-    //         'longitude',
-    //         'website',
-    //         'founded_year',
-    //         'size',
-    //         null 
-    //     ];
+        $deleted = $this->hotelModel->update($id, $data); // SOFT DELETE
 
-    //     $orderColumnIndex = $request->getPost('order')[0]['column'] ?? 1;
-	// 	$orderDir         = $request->getPost('order')[0]['dir'] ?? 'desc';
+        if ($deleted) {
+            return $this->response->setJSON([
+                'status'  => true,
+                'message' => 'Data deleted successfully'
+            ]);
+        }
 
-	// 	if (!empty($columns[$orderColumnIndex])) {
-	// 	    $builder->orderBy($columns[$orderColumnIndex], $orderDir);
-	// 	}
+        return $this->response->setJSON([
+            'status'  => false,
+            'message' => 'Failed to delete data'
+        ]);
+    }
 
-    //     // -----------------------
-    //     // COUNT FILTERED
-    //     // -----------------------
-    //     $recordsFiltered = $builder->countAllResults(false);
-
-    //     // -----------------------
-    //     // PAGINATION
-    //     // -----------------------
-    //     $length = $request->getPost('length') ?? 10;
-    //     $start  = $request->getPost('start') ?? 0;
-
-    //     $builder->limit($length, $start);
-
-    //     $data = $builder->get()->getResultArray();
-
-    //     // -----------------------
-    //     // TOTAL RECORDS
-    //     // -----------------------
-    //     $recordsTotal = $db->table('hotels')->countAllResults();
-
-    //     // -----------------------
-    //     // RESPONSE FORMAT DATATABLE
-    //     // -----------------------
-    //     return $this->response->setJSON([
-    //         'draw'            => intval($request->getPost('draw')),
-    //         'recordsTotal'    => $recordsTotal,
-    //         'recordsFiltered' => $recordsFiltered,
-    //         'data'            => $data
-    //     ]);
-    // }
 }
