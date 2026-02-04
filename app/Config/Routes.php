@@ -32,7 +32,8 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('hotels/delete', 'Admin\Hotels::delete', ['filter' => 'role:admin']);
 
     $routes->get('attendance', 'Admin\Attendance::index', ['filter' => 'role:admin']);
-    
+    $routes->post('attendance/datatable', 'Admin\Attendance::datatable', ['filter' => 'role:admin']);
+    $routes->post('attendance/detail', 'Admin\Attendance::detail', ['filter' => 'role:admin']);
 });
 
 $routes->group('api', function($routes) {
