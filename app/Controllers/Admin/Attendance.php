@@ -22,7 +22,7 @@ class Attendance extends BaseAdminController
     public function index()
     {
         return view('admin/attendance/index', [
-            'title' => 'Attendance'
+            'title'     => 'Attendance'
         ]);
     }
 
@@ -224,6 +224,8 @@ class Attendance extends BaseAdminController
         return $this->response->setJSON([
             'status' => true,
             'data'   => [
+                'user_id'        => $userId,
+                'job_id'         => $jobId,
                 'date'           => date('Y-m-d', strtotime($rows[0]['created_at'])),
                 'worker'         => $rows[0]['worker'],
                 'hotel'          => $rows[0]['hotel'],
@@ -239,4 +241,66 @@ class Attendance extends BaseAdminController
             ]
         ]);
     }
+
+    public function submitRating()
+    {
+        // hanya hotel_hr & admin
+        if (!in_array(session('user_role'), ['hotel_hr', 'admin'])) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Unauthorized'
+            ]);
+        }
+
+        $req = $this->request;
+
+        $data = [
+            'user_id'     => $req->getPost('user_id'),
+            'job_id'      => $req->getPost('job_id'),
+            'date'        => $req->getPost('date'),
+            'punctuality' => (int) $req->getPost('punctuality'),
+            'apperance'   => (int) $req->getPost('apperance'),
+            'knowledge'   => (int) $req->getPost('knowledge'),
+            'durability'  => (int) $req->getPost('durability'),
+            'ethics'      => (int) $req->getPost('ethics'),
+            'comments'    => $req->getPost('comments'),
+            'created_at'  => date('Y-m-d H:i:s'),
+            'created_by'  => session('user_id')
+        ];
+
+        // validasi minimal
+        foreach (['punctuality','apperance','knowledge','durability','ethics'] as $f) {
+            if ($data[$f] < 1 || $data[$f] > 5) {
+                return $this->response->setJSON([
+                    'status' => false,
+                    'message' => 'All ratings must be filled'
+                ]);
+            }
+        }
+
+        $db = \Config\Database::connect();
+
+        // ❗ cegah rating dobel (user + job + date)
+        $exists = $db->table('worker_ratings')
+            ->where('user_id', $data['user_id'])
+            ->where('job_id', $data['job_id'])
+            ->where('date', $data['date'])
+            ->where('deleted_at', null)
+            ->countAllResults();
+
+        if ($exists > 0) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'This worker has already been rated'
+            ]);
+        }
+
+        $db->table('worker_ratings')->insert($data);
+
+        return $this->response->setJSON([
+            'status' => true,
+            'message' => 'Rating submitted successfully'
+        ]);
+    }
+
 }

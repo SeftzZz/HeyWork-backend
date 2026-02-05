@@ -34,6 +34,7 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->get('attendance', 'Admin\Attendance::index', ['filter' => 'role:admin']);
     $routes->post('attendance/datatable', 'Admin\Attendance::datatable', ['filter' => 'role:admin']);
     $routes->post('attendance/detail', 'Admin\Attendance::detail', ['filter' => 'role:admin']);
+    $routes->post('attendance/rate', 'Admin\Attendance::submitRating');
 
     $routes->get('users', 'Admin\Users::index', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('users/datatable', 'Admin\Users::datatable', ['filter' => 'role:admin,hotel_hr']);
@@ -41,6 +42,16 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('users/get', 'Admin\Users::getById', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('users/update', 'Admin\Users::update', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('users/delete', 'Admin\Users::delete', ['filter' => 'role:admin,hotel_hr']);
+
+    $routes->get('application', 'Admin\Application::index', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('application/datatable', 'Admin\Application::datatable', ['filter' => 'role:admin,hotel_hr']);
+    $routes->get('application/worker/(:num)', 'Admin\Application::workerDetail/$1', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('application/update-status', 'Admin\Application::updateStatus', ['filter' => 'role:admin,hotel_hr']);
+
+    $routes->get('job-vacancies', 'Admin\JobVacancies::index', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('job-vacancies/datatable', 'Admin\JobVacancies::datatable', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('job-vacancies/store', 'Admin\JobVacancies::store', ['filter' => 'role:admin,hotel_hr']);
+    $routes->get('job-vacancies/skills', 'Admin\JobVacancies::skills', ['filter' => 'role:admin,hotel_hr']);
 });
 
 $routes->group('api', function($routes) {
