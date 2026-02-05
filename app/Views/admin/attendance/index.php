@@ -1,6 +1,29 @@
                         <?= $this->extend('layouts/main') ?>
                         <?= $this->section('content') ?>
+                        <style>
+                            .star-rating {
+                                display: inline-flex;
+                                flex-direction: row-reverse;
+                                font-size: 1.5rem;
+                            }
 
+                            .star-rating input {
+                                display: none;
+                            }
+
+                            .star-rating label {
+                                color: #ddd;
+                                cursor: pointer;
+                                transition: color 0.2s;
+                            }
+
+                            .star-rating input:checked ~ label,
+                            .star-rating label:hover,
+                            .star-rating label:hover ~ label {
+                                color: #f5b301;
+                            }
+
+                        </style>
                         <div class="container-xxl flex-grow-1 container-p-y">
                             <div class="card">
                                 <div class="card-datatable table-responsive pt-0">
@@ -15,8 +38,9 @@
                                                 <th>Job</th>
                                                 <th>Check In</th>
                                                 <th>Check Out</th>
-                                                <th>Duration</th>
+                                                <th>Duration (Hours)</th>
                                                 <th>10 Min Count</th>
+                                                <!-- <th>Fee</th> -->
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
@@ -91,6 +115,56 @@
                                                 <div id="mapAttendanceDetail" style="height:300px" class="rounded"></div>
                                             </div>
                                         </div>
+
+                                        <?php if (in_array(session('user_role'), ['hotel_hr', 'admin'])): ?>
+                                        <hr>
+
+                                        <div id="workerRatingFormWrapper">
+                                            <h6 class="mb-3">Worker Rating</h6>
+
+                                            <form id="formWorkerRating">
+                                                <?= csrf_field() ?>
+
+                                                <input type="hidden" name="user_id" id="wr_user_id">
+                                                <input type="hidden" name="job_id" id="wr_job_id">
+                                                <input type="hidden" name="date" id="wr_date">
+
+                                                <div class="row g-4">
+                                                    <?php
+                                                    $ratings = [
+                                                        'punctuality' => 'Punctuality',
+                                                        'apperance'   => 'Appearance',
+                                                        'knowledge'   => 'Knowledge',
+                                                        'durability'  => 'Durability',
+                                                        'ethics'      => 'Ethics'
+                                                    ];
+                                                    foreach ($ratings as $name => $label):
+                                                    ?>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label"><?= $label ?></label>
+                                                        <div class="star-rating">
+                                                            <?php for ($i=5; $i>=1; $i--): ?>
+                                                                <input type="radio" name="<?= $name ?>" value="<?= $i ?>" id="<?= $name ?>_<?= $i ?>">
+                                                                <label for="<?= $name ?>_<?= $i ?>">★</label>
+                                                            <?php endfor ?>
+                                                        </div>
+                                                    </div>
+                                                    <?php endforeach ?>
+
+                                                    <div class="col-md-12">
+                                                        <label class="form-label">Comments</label>
+                                                        <textarea name="comments" class="form-control" rows="3"></textarea>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mt-4 text-end">
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <i class="ti ti-star"></i> Submit Rating
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <?php endif ?>
                                     </div>
 
                                     <div class="modal-footer">
@@ -138,7 +212,7 @@
                                         },
 
                                         columns: [
-                                            { data: null },      // responsive control
+                                            { defaultContent: '' },
                                             { data: 'no' },
                                             { data: 'date' },
                                             { data: 'worker' },
@@ -279,6 +353,10 @@
 
                                     $('#detail_checkin_photo').attr('src', d.checkin_photo ? "<?= base_url() ?>/" + d.checkin_photo : '');
                                     $('#detail_checkout_photo').attr('src', d.checkout_photo ? "<?= base_url() ?>/" + d.checkout_photo : '');
+                                    // set hidden value
+                                    $('#wr_user_id').val(d.user_id);
+                                    $('#wr_job_id').val(d.job_id);
+                                    $('#wr_date').val(d.date);
 
                                     $('#modalAttendanceDetail').modal('show');
 
@@ -297,6 +375,35 @@
 
                                 }, 'json');
                             });
-
                         </script>
+
+                        <script>
+                            $(document).on('submit', '#formWorkerRating', function (e) {
+                                e.preventDefault();
+
+                                const form = $(this);
+
+                                $.post(
+                                    "<?= base_url('admin/attendance/rate') ?>",
+                                    form.serialize(),
+                                    function (res) {
+                                        if (!res.status) {
+                                            alert(res.message);
+                                            return;
+                                        }
+
+                                        alert(res.message);
+
+                                        // lock form setelah submit
+                                        $('#formWorkerRating input, #formWorkerRating textarea, #formWorkerRating button')
+                                            .prop('disabled', true);
+
+                                        $('#formWorkerRating button[type=submit]')
+                                            .text('Already Rated');
+                                    },
+                                    'json'
+                                );
+                            });
+                        </script>
+
                         <?= $this->endSection() ?>
