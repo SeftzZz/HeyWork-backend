@@ -67,9 +67,8 @@
 
                                     <!-- Website -->
                                     <?php if (!empty($hotelWebsite)): ?>
-                                        <a href="<?= 'https://' . esc($hotelWebsite) ?>" target="_blank"
-                                           class="ms-2 text-muted d-none d-lg-inline">
-                                            <i class="ti ti-world"></i> <?= esc($hotelWebsite) ?>
+                                        <a href="<?= 'https://' . esc($hotelWebsite) ?>" target="_blank" class="ms-2 text-body d-none d-lg-inline">
+                                            <i class="ti ti-world ti-md"></i><?= esc($hotelWebsite) ?>
                                         </a>
                                     <?php endif; ?>
                                 </div>
@@ -77,6 +76,24 @@
                             <!-- /Info hotel -->
 
                             <ul class="navbar-nav flex-row align-items-center ms-auto">
+                                <!-- Amount -->
+                                <?php if ((int) session()->get('hotel_id') !== 0): ?>
+                                    <li class="nav-item me-2 me-xl-1">
+                                        <div id="amount-rotator">
+                                            <span class="amount-item active">
+                                                <i class="ti ti-coin ti-md me-1"></i>
+                                                Balance: <strong>Rp.0</strong>
+                                            </span>
+
+                                            <span class="amount-item">
+                                                <i class="ti ti-cash ti-md me-1"></i>
+                                                Usage Amt: <strong>Rp.0</strong>
+                                            </span>
+                                        </div>
+                                    </li>
+                                <?php endif; ?>
+                                <!--/ Amount -->
+
                                 <!-- Language -->
                                 <!-- <li class="nav-item dropdown-language dropdown me-2 me-xl-0">
                                     <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">

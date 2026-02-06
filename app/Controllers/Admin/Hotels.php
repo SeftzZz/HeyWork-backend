@@ -45,9 +45,28 @@ class Hotels extends BaseAdminController
         $orderColumns = [null, null, 'hotel_name', 'location', 'latitude', 'longitude', 'website', null];
 
         // =============================
+        // ROLE & SESSION
+        // =============================
+        $userRole = session()->get('user_role');
+        $hotelId  = session()->get('hotel_id');
+
+        /**
+         * Helper filter hotel by role
+         */
+        $applyHotelFilter = function ($builder) use ($userRole, $hotelId) {
+            $builder->where('deleted_at', null);
+
+            if ($userRole === 'hotel_hr') {
+                $builder->where('id', $hotelId);
+            }
+
+            return $builder;
+        };
+
+        // =============================
         // QUERY FILTERED (COUNT)
         // =============================
-        $countQuery = $this->hotelModel->where('deleted_at', null);
+        $countQuery = $applyHotelFilter($this->hotelModel);
 
         if ($searchValue) {
             $countQuery->groupStart()
@@ -64,14 +83,13 @@ class Hotels extends BaseAdminController
         // =============================
         // QUERY TOTAL
         // =============================
-        $recordsTotal = $this->hotelModel
-            ->where('deleted_at', null)
-            ->countAllResults();
+        $totalQuery = $applyHotelFilter($this->hotelModel);
+        $recordsTotal = $totalQuery->countAllResults();
 
         // =============================
-        // QUERY DATA (NEW BUILDER!)
+        // QUERY DATA
         // =============================
-        $dataQuery = $this->hotelModel->where('deleted_at', null);
+        $dataQuery = $applyHotelFilter($this->hotelModel);
 
         if ($searchValue) {
             $dataQuery->groupStart()
@@ -102,25 +120,32 @@ class Hotels extends BaseAdminController
         $no = $start + 1;
 
         foreach ($data as $row) {
+            // kondisi tombol delete jika session sama dengan hotel_id
+            $loginHotelId = session()->get('hotel_id');
+            $actionBtn = '
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-icon btn-primary btn-edit" data-id="'.$row['id'].'" title="Edit">
+                        <i class="ti ti-pencil"></i>
+                    </button>
+            ';
+            if ($loginHotelId != $row['id']) {
+                $actionBtn .= '
+                    <button class="btn btn-sm btn-icon btn-danger btn-delete" data-id="'.$row['id'].'" title="Delete">
+                        <i class="ti ti-trash"></i>
+                    </button>
+                ';
+            }
+            $actionBtn .= '</div>';
+        
             $result[] = [
-                'no_urut'    => $no++.'.',
+                'no_urut'    => $no++ . '.',
                 'hotel_name' => esc($row['hotel_name']),
                 'location'   => esc($row['location']),
                 'latitude'   => $row['latitude'],
                 'longitude'  => $row['longitude'],
                 'website'    => esc($row['website']),
                 'logo'       => esc($row['logo']),
-                'action' => '
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-icon btn-primary btn-edit" data-id="'.$row['id'].'" title="Edit">
-                            <i class="ti ti-pencil"></i>
-                        </button>
-                        <button class="btn btn-sm btn-icon btn-danger btn-delete" data-id="'.$row['id'].'" title="Delete">
-                            <i class="ti ti-trash"></i>
-                        </button>
-                    </div>
-                '
-
+                'action'     => $actionBtn
             ];
         }
 
@@ -131,6 +156,7 @@ class Hotels extends BaseAdminController
             'data'            => $result
         ]);
     }
+
 
     public function store()
     {

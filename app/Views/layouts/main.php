@@ -99,6 +99,20 @@
         <!-- Vendors JS -->
         <script src="<?= base_url('assets/vendor/libs/sweetalert2/sweetalert2new.js') ?>"></script>
         <?= $this->renderSection('scripts') ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              let amountIndex = 0;
+              const amountItems = document.querySelectorAll('#amount-rotator .amount-item');
+
+              if (!amountItems.length) return;
+
+              setInterval(() => {
+                amountItems[amountIndex].classList.remove('active');
+                amountIndex = (amountIndex + 1) % amountItems.length;
+                amountItems[amountIndex].classList.add('active');
+              }, 5000);
+            });
+        </script>
 
         <!-- Page JS -->
     </body>
