@@ -134,7 +134,7 @@
                                             Cancel
                                           </button>
                                           <button type="submit" class="btn btn-primary">
-                                            Save Job
+                                            Save & Publish
                                           </button>
                                         </div>
 
