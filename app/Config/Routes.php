@@ -26,15 +26,15 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
 
     $routes->get('hotels', 'Admin\Hotels::index', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('hotels/datatable', 'Admin\Hotels::datatable', ['filter' => 'role:admin,hotel_hr']);
-    $routes->post('hotels/store', 'Admin\Hotels::store', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('hotels/store', 'Admin\Hotels::store', ['filter' => 'role:admin']);
     $routes->post('hotels/get', 'Admin\Hotels::getById', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('hotels/update', 'Admin\Hotels::update', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('hotels/delete', 'Admin\Hotels::delete', ['filter' => 'role:admin']);
 
-    $routes->get('attendance', 'Admin\Attendance::index', ['filter' => 'role:admin']);
-    $routes->post('attendance/datatable', 'Admin\Attendance::datatable', ['filter' => 'role:admin']);
-    $routes->post('attendance/detail', 'Admin\Attendance::detail', ['filter' => 'role:admin']);
-    $routes->post('attendance/rate', 'Admin\Attendance::submitRating');
+    $routes->get('attendance', 'Admin\Attendance::index', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('attendance/datatable', 'Admin\Attendance::datatable', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('attendance/detail', 'Admin\Attendance::detail', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('attendance/rate', 'Admin\Attendance::submitRating', ['filter' => 'role:admin,hotel_hr']);
 
     $routes->get('users', 'Admin\Users::index', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('users/datatable', 'Admin\Users::datatable', ['filter' => 'role:admin,hotel_hr']);

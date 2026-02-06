@@ -146,7 +146,7 @@
 																    <?php endforeach; ?>
 																</select>
 																<small id="hotelHelpEdit" class="text-muted d-none">
-																    Hotel otomatis mengikuti account HR
+																    Hotel auto follows HR account
 																</small>
 									                        </div>
 									                    </div>
@@ -446,6 +446,31 @@
 							            $(selectEl).val('');
 							        }
 							    }
+
+							    // RESET FORM ADD USER jika di tutup
+							    $('#modalAddUser').on('hidden.bs.modal', function () {
+							        const $form = $('#formAddUser');
+
+							        // reset form native
+							        $form[0].reset();
+
+							        // reset role select
+							        const $roleSelect = $('#modalAddUser select[name="role_user"]');
+							        $roleSelect.val('').trigger('change');
+
+							        // reset hotel select2
+							        const $hotelSelect = $('#add_hotel_user');
+							        if ($hotelSelect.hasClass('select2-hidden-accessible')) {
+							            $hotelSelect.val('').trigger('change');
+							        }
+
+							        // unlock hotel select (untuk admin)
+							        unlockAddHotel();
+
+							        // hapus error / validation jika ada
+							        $form.find('.is-invalid').removeClass('is-invalid');
+							        $form.find('.invalid-feedback').remove();
+							    });
 
 							    $('#modalAddUser').on('shown.bs.modal', function () {
 							        initHotelSelect2('#add_hotel_user', $(this));

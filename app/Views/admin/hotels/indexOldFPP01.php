@@ -291,66 +291,46 @@
 					                    	'>',
 					                    displayLength: 10,
 						                lengthMenu: [10, 25, 50, 100],
-						                buttons: (sessionHotelId === 0) ? [
-										    {
-										        extend: 'collection',
-										        className: 'btn btn-label-primary dropdown-toggle me-2 waves-effect waves-light',
-										        text: '<i class="ti ti-file-export me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span>',
-										        buttons: [
-										            {
-										                extend: 'print',
-										                text: '<i class="ti ti-printer me-1"></i>Print',
-										                className: 'dropdown-item',
-										                exportOptions: { columns: [1,2,3,4,5,6] }
-										            },
-										            {
-										                extend: 'csv',
-										                text: '<i class="ti ti-file-text me-1"></i>Csv',
-										                className: 'dropdown-item',
-										                exportOptions: { columns: [1,2,3,4,5,6] }
-										            },
-										            {
-										                extend: 'pdf',
-										                text: '<i class="ti ti-file-description me-1"></i>Pdf',
-										                className: 'dropdown-item',
-										                exportOptions: { columns: [1,2,3,4,5,6] }
-										            }
-										        ]
-										    },
-										    {
-										        text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-sm-inline-block">Add New Hotel</span>',
-										        className: 'create-new btn btn-primary waves-effect waves-light',
-										        action: function () {
+						                buttons: [
+						                    {
+						                        extend: 'collection',
+						                        className: 'btn btn-label-primary dropdown-toggle me-2 waves-effect waves-light',
+						                        text: '<i class="ti ti-file-export me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span>',
+						                        buttons: [
+						                            {
+						                                extend: 'print',
+						                                text: '<i class="ti ti-printer me-1"></i>Print',
+						                                className: 'dropdown-item',
+						                                exportOptions: { columns: [1,2,3,4,5,6] }
+						                            },
+						                            {
+						                                extend: 'csv',
+						                                text: '<i class="ti ti-file-text me-1"></i>Csv',
+						                                className: 'dropdown-item',
+						                                exportOptions: { columns: [1,2,3,4,5,6] }
+						                            },
+						                            {
+						                                extend: 'excel',
+						                                text: '<i class="ti ti-file-spreadsheet me-1"></i>Excel',
+						                                className: 'dropdown-item',
+						                                exportOptions: { columns: [1,2,3,4,5,6] }
+						                            },
+						                            {
+						                                extend: 'pdf',
+						                                text: '<i class="ti ti-file-description me-1"></i>Pdf',
+						                                className: 'dropdown-item',
+						                                exportOptions: { columns: [1,2,3,4,5,6] }
+						                            }
+						                        ]
+						                    },
+						                    {
+						                        text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-sm-inline-block">Add New Hotel</span>',
+						                        className: 'create-new btn btn-primary waves-effect waves-light',
+						                        action: function () {
 										            $('#modalAddHotel').modal('show');
 										        }
-										    }
-										] : [
-										    {
-										        extend: 'collection',
-										        className: 'btn btn-label-primary dropdown-toggle me-2 waves-effect waves-light',
-										        text: '<i class="ti ti-file-export me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span>',
-										        buttons: [
-										            {
-										                extend: 'print',
-										                text: '<i class="ti ti-printer me-1"></i>Print',
-										                className: 'dropdown-item',
-										                exportOptions: { columns: [1,2,3,4,5,6] }
-										            },
-										            {
-										                extend: 'csv',
-										                text: '<i class="ti ti-file-text me-1"></i>Csv',
-										                className: 'dropdown-item',
-										                exportOptions: { columns: [1,2,3,4,5,6] }
-										            },
-										            {
-										                extend: 'pdf',
-										                text: '<i class="ti ti-file-description me-1"></i>Pdf',
-										                className: 'dropdown-item',
-										                exportOptions: { columns: [1,2,3,4,5,6] }
-										            }
-										        ]
-										    }
-										],
+						                    }
+						                ],
 						                responsive: {
 						                    details: {
 						                        display: $.fn.dataTable.Responsive.display.modal({

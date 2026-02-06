@@ -233,7 +233,7 @@
                                                 targets: 10,
                                                 render: function (data) {
                                                     let badge = data === 'Complete' ? 'success' : 'warning';
-                                                    return `<span class="badge bg-${badge}">${data}</span>`;
+                                                    return `<span class="badge bg-label-${badge}">${data}</span>`;
                                                 }
                                             },
                                             { targets: -1, orderable: false, searchable: false }
@@ -348,7 +348,7 @@
                                     $('#detail_checkout').text(d.checkout_time ?? '-');
                                     $('#detail_duration').text(d.duration);
                                     $('#detail_status').html(
-                                        `<span class="badge bg-${d.status === 'Complete' ? 'success' : 'warning'}">${d.status}</span>`
+                                        `<span class="badge bg-label-${d.status === 'Complete' ? 'success' : 'warning'}">${d.status}</span>`
                                     );
 
                                     $('#detail_checkin_photo').attr('src', d.checkin_photo ? "<?= base_url() ?>/" + d.checkin_photo : '');

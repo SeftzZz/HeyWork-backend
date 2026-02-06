@@ -193,7 +193,7 @@ class Users extends BaseAdminController
                 'hotel_name'    => esc($row['hotel_name'] ?? '-'),
                 'role_user'     => $roleMap[$role] ?? ucfirst(esc($role)),
                 'email_user'    => esc($row['email']),
-                'hp_user'       => esc($row['phone']),
+                'hp_user'       => '+62' . esc($row['phone']),
                 'status_user'   => $badgeStatus,
                 'photo_user'    => esc($row['photo']),
                 'action'        => $actionBtn
