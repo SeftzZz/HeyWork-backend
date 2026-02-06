@@ -21,8 +21,8 @@ $routes->get('logout', 'Auth\Login::logout');
 
 $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->get('dashboard', 'Admin\Dashboard::index');
-    $routes->get('dashboard/calendar', 'Admin\Dashboard::calendar', ['filter' => 'role:admin']);
-    $routes->get('dashboard/calendar-attendance/(:num)', 'Admin\Dashboard::attendanceByJob/$1', ['filter' => 'role:admin']);
+    $routes->get('dashboard/calendar', 'Admin\Dashboard::calendar', ['filter' => 'role:admin,hotel_hr']);
+    $routes->get('dashboard/calendar-attendance/(:num)', 'Admin\Dashboard::attendanceByJob/$1', ['filter' => 'role:admin,hotel_hr']);
 
     $routes->get('hotels', 'Admin\Hotels::index', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('hotels/datatable', 'Admin\Hotels::datatable', ['filter' => 'role:admin,hotel_hr']);
