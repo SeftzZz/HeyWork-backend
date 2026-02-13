@@ -215,30 +215,16 @@ class Users extends BaseAdminController
         }
 
         $sessionRole = session()->get('user_role');
-        $hotelId     = $this->request->getPost('hotel_id');
-        $email       = $this->request->getPost('email_user');
+        $hotelId    = $this->request->getPost('hotel_id');
 
         if ($sessionRole === 'hotel_hr') {
-            $hotelId = session()->get('hotel_id');
-        }
-
-        // CEK EMAIL SUDAH ADA DAN BELUM DI DELETE
-        $existingEmail = $this->userModel
-            ->where('email', $email)
-            ->where('deleted_at', null)
-            ->first();
-
-        if ($existingEmail) {
-            return $this->response->setJSON([
-                'status' => false,
-                'message' => 'Email has been registered'
-            ]);
+            $hotelId = session()->get('hotel_id'); // paksa dari session
         }
 
         $data = [
             'name'       => $this->request->getPost('name_user'),
             'hotel_id'   => $hotelId,
-            'email'      => $email,
+            'email'      => $this->request->getPost('email_user'),
             'phone'      => $this->request->getPost('hp_user'),
             'role'       => $this->request->getPost('role_user'),
             'is_active'  => $this->request->getPost('status_user'),
@@ -247,7 +233,6 @@ class Users extends BaseAdminController
             'updated_by' => session()->get('user_id')
         ];
 
-        // upload foto
         $file = $this->request->getFile('foto_user');
         if ($file && $file->isValid()) {
             $name = $file->getRandomName();
