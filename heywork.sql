@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 06, 2026 at 05:39 PM
+-- Generation Time: Feb 13, 2026 at 04:21 PM
 -- Server version: 10.11.10-MariaDB-log
 -- PHP Version: 8.3.27
 
@@ -56,6 +56,66 @@ INSERT INTO `hotels` (`id`, `hotel_name`, `location`, `latitude`, `longitude`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `hotel_balances`
+--
+
+CREATE TABLE `hotel_balances` (
+  `id` int(1) NOT NULL,
+  `hotel_id` int(11) NOT NULL,
+  `balance` decimal(15,2) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` int(1) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` int(1) DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` int(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hotel_transactions`
+--
+
+CREATE TABLE `hotel_transactions` (
+  `id` int(1) NOT NULL,
+  `hotel_id` int(11) NOT NULL,
+  `type` enum('debit','credit') NOT NULL DEFAULT 'credit',
+  `amount` decimal(15,2) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `reference_id` varchar(50) NOT NULL,
+  `reference_type` varchar(50) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` int(1) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` int(1) DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` int(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `hotel_transactions`
+--
+
+INSERT INTO `hotel_transactions` (`id`, `hotel_id`, `type`, `amount`, `description`, `reference_id`, `reference_type`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 1, 'credit', 1500000.00, 'Topup Monday', 'TOPUP-20260113-001', 'topup', '2026-02-13 09:00:00', 1, NULL, NULL, NULL, NULL),
+(2, 1, 'debit', 300000.00, 'Worker Payment', 'PAY-20260113-001', 'payroll', '2026-02-13 18:00:00', 1, NULL, NULL, NULL, NULL),
+(3, 1, 'credit', 1000000.00, 'Topup Tuesday', 'TOPUP-20260114-001', 'topup', '2026-02-14 09:00:00', 1, NULL, NULL, NULL, NULL),
+(4, 1, 'debit', 500000.00, 'Worker Payment', 'PAY-20260114-001', 'payroll', '2026-02-14 18:00:00', 1, NULL, NULL, NULL, NULL),
+(5, 1, 'credit', 2000000.00, 'Topup Wednesday', 'TOPUP-20260115-001', 'topup', '2026-02-15 09:00:00', 1, NULL, NULL, NULL, NULL),
+(6, 1, 'debit', 800000.00, 'Worker Payment', 'PAY-20260115-001', 'payroll', '2026-02-15 18:00:00', 1, NULL, NULL, NULL, NULL),
+(7, 1, 'credit', 500000.00, 'Topup Thursday', 'TOPUP-20260116-001', 'topup', '2026-02-16 09:00:00', 1, NULL, NULL, NULL, NULL),
+(8, 1, 'debit', 700000.00, 'Worker Payment', 'PAY-20260116-001', 'payroll', '2026-02-16 18:00:00', 1, NULL, NULL, NULL, NULL),
+(9, 1, 'credit', 2500000.00, 'Topup Friday', 'TOPUP-20260117-001', 'topup', '2026-02-17 09:00:00', 1, NULL, NULL, NULL, NULL),
+(10, 1, 'debit', 1200000.00, 'Worker Payment', 'PAY-20260117-001', 'payroll', '2026-02-17 18:00:00', 1, NULL, NULL, NULL, NULL),
+(11, 1, 'credit', 1000000.00, 'Topup Saturday', 'TOPUP-20260118-001', 'topup', '2026-02-18 09:00:00', 1, NULL, NULL, NULL, NULL),
+(12, 1, 'debit', 400000.00, 'Worker Payment', 'PAY-20260118-001', 'payroll', '2026-02-18 18:00:00', 1, NULL, NULL, NULL, NULL),
+(13, 1, 'credit', 800000.00, 'Topup Sunday', 'TOPUP-20260119-001', 'topup', '2026-02-19 09:00:00', 1, NULL, NULL, NULL, NULL),
+(14, 1, 'debit', 300000.00, 'Worker Payment', 'PAY-20260119-001', 'payroll', '2026-02-19 18:00:00', 1, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `jobs`
 --
 
@@ -94,10 +154,10 @@ INSERT INTO `jobs` (`id`, `hotel_id`, `position`, `job_date_start`, `job_date_en
 (6, 1, 'Security', '2026-02-01', '2026-02-02', '07:30:00', '17:30:00', 'daily_worker', 350000, 'Bogor West Java', '', '', 'open', '2026-01-26 02:07:23', NULL, NULL, NULL, NULL, NULL),
 (7, 1, 'Marketing', '2026-02-01', '2026-02-02', '07:30:00', '17:30:00', 'daily_worker', 400000, 'Bogor West Java', '', '', 'open', '2026-01-26 02:07:55', NULL, NULL, NULL, NULL, NULL),
 (8, 1, 'Bellboy', '2026-02-06', '2026-02-06', '07:30:00', '20:30:00', 'daily_worker', 400000, 'Bogor West Java', '', '', 'open', '2026-01-26 02:07:55', NULL, NULL, NULL, NULL, NULL),
-(9, 0, 'Barista', '2026-02-07', '2026-02-14', '07:30:00', '17:30:00', 'daily_worker', 120000, 'Bogor, Jawa Barat', 'Melayani dan memasak untuk tamu hotel', '', 'open', '2026-02-05 20:21:58', 3, NULL, NULL, NULL, NULL),
-(10, 0, 'Bartender', '2026-02-07', '2026-02-14', '07:30:00', '17:30:00', 'daily_worker', 120000, 'Bogor, Jawa Barat', 'Melayani dan memasak untuk tamu hotel', '', 'open', '2026-02-05 20:21:58', 3, NULL, NULL, NULL, NULL),
-(11, 0, 'Cook', '2026-02-07', '2026-02-14', '07:30:00', '17:30:00', 'daily_worker', 120000, 'Bogor, Jawa Barat', 'Melayani dan memasak untuk tamu hotel', '', 'open', '2026-02-05 20:21:58', 3, NULL, NULL, NULL, NULL),
-(12, 0, 'Cook Helper', '2026-02-07', '2026-02-14', '07:30:00', '17:30:00', 'daily_worker', 120000, 'Bogor, Jawa Barat', 'Melayani dan memasak untuk tamu hotel', '', 'open', '2026-02-05 20:21:58', 3, NULL, NULL, NULL, NULL),
+(9, 1, 'Barista', '2026-02-07', '2026-02-14', '07:30:00', '17:30:00', 'daily_worker', 120000, 'Bogor, Jawa Barat', 'Melayani dan memasak untuk tamu hotel', '', 'open', '2026-02-05 20:21:58', 3, NULL, NULL, NULL, NULL),
+(10, 1, 'Bartender', '2026-02-07', '2026-02-14', '07:30:00', '17:30:00', 'daily_worker', 120000, 'Bogor, Jawa Barat', 'Melayani dan memasak untuk tamu hotel', '', 'open', '2026-02-05 20:21:58', 3, NULL, NULL, NULL, NULL),
+(11, 1, 'Cook', '2026-02-07', '2026-02-14', '07:30:00', '17:30:00', 'daily_worker', 120000, 'Bogor, Jawa Barat', 'Melayani dan memasak untuk tamu hotel', '', 'open', '2026-02-05 20:21:58', 3, NULL, NULL, NULL, NULL),
+(12, 1, 'Cook Helper', '2026-02-07', '2026-02-14', '07:30:00', '17:30:00', 'daily_worker', 120000, 'Bogor, Jawa Barat', 'Melayani dan memasak untuk tamu hotel', '', 'open', '2026-02-05 20:21:58', 3, NULL, NULL, NULL, NULL),
 (13, 1, 'Accounting Staff', '2026-02-16', '2026-02-16', '08:00:00', '17:00:00', 'daily_worker', 100000, NULL, 'Okee', NULL, 'open', '2026-02-06 13:59:21', 3, NULL, NULL, NULL, NULL),
 (14, 1, 'Food & Beverage Manager', '2026-02-17', '2026-02-17', '07:00:00', '18:00:00', 'daily_worker', 200000, NULL, 'okeee', NULL, 'open', '2026-02-06 14:10:31', 3, NULL, NULL, NULL, NULL),
 (15, 1, 'Chef de Partie', '2026-02-18', '2026-02-18', '07:00:00', '17:30:00', 'daily_worker', 100000, NULL, 'Okeeee', NULL, 'open', '2026-02-06 14:12:27', 3, NULL, NULL, NULL, NULL);
@@ -165,8 +225,10 @@ CREATE TABLE `job_attendances` (
 --
 
 INSERT INTO `job_attendances` (`id`, `job_id`, `application_id`, `user_id`, `type`, `latitude`, `longitude`, `photo_path`, `device_info`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 2, 2, 3, 'checkin', -6.6015006, 106.7942450, 'uploads/attendance/checkin_3_3_1769943711.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 07:28:45', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0),
-(2, 2, 2, 3, 'checkout', -6.6013100, 106.7891102, 'uploads/attendance/checkin_4_3_1770289595.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 17:38:10', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0);
+(1, 5, 8, 1, 'checkin', -6.6015006, 106.7942450, 'uploads/attendance/checkin_3_3_1769943711.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 07:28:45', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0),
+(2, 5, 8, 1, 'checkout', -6.6013100, 106.7891102, 'uploads/attendance/checkin_4_3_1770289595.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 17:38:10', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0),
+(8, 4, 5, 2, 'checkin', -6.6015006, 106.7942450, 'uploads/attendance/checkin_3_3_1769943711.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 07:28:45', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0),
+(9, 4, 5, 2, 'checkout', -6.6013100, 106.7891102, 'uploads/attendance/checkin_4_3_1770289595.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 17:38:10', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -489,7 +551,9 @@ INSERT INTO `refresh_tokens` (`id`, `user_id`, `token`, `expires_at`, `created_a
 (282, 1, 'c113714dc2b251deac48ec9de45ff286ca201467421260c232d64e4e32a97886cbf64720ad1c45bfad0604561ceb2672905e2ed904704523bd15f6ec553b8804', '2026-03-08 16:31:57', '2026-02-06 16:31:57'),
 (283, 1, '7152a6fe651687457335b96def78f2dbbc5b55eb15ab526638ae8aeb34962ec8b72075b3a53dcad277eabeea51e98679324a38101025969b285d89862d1f39cf', '2026-03-08 16:32:19', '2026-02-06 16:32:19'),
 (284, 1, '6c3a3e8bb9fb9d39e15aa987a4a881a7ced6effdc22db0b0ee400e83aadf86388e5d6ec6ad558cfa0b856429ca33724c902327289446320c7004bffa93ab9f97', '2026-03-08 16:33:08', '2026-02-06 16:33:08'),
-(285, 1, 'b30005d41c3c301f2400f674c95eb020b6219e840b8be4595e908ac0aede4174f2a7c30da4575dc1ca26e97225f13787d5671c8921aa37c841a88bd79896b2cf', '2026-03-08 16:33:55', '2026-02-06 16:33:55');
+(285, 1, 'b30005d41c3c301f2400f674c95eb020b6219e840b8be4595e908ac0aede4174f2a7c30da4575dc1ca26e97225f13787d5671c8921aa37c841a88bd79896b2cf', '2026-03-08 16:33:55', '2026-02-06 16:33:55'),
+(286, 3, 'c4b879cc0a18d48e25937aabf8422c3c8827220c62f2a994df419b81855f4873028423061e7fda11ab7fc7c27a41008585b0c7971710f4560633e63d16d6e9dc', '2026-03-08 17:05:33', '2026-02-06 17:05:33'),
+(287, 3, 'cd1caec3cb4a2ef3b6b9f17509d78a73b92ca0de7f98773b3680684a8342697be47b3f8c7cab1ab76804844bb2046417cc54c4375a8e3f5c5abe2c4c6084c7ea', '2026-03-10 20:39:36', '2026-02-08 20:39:36');
 
 -- --------------------------------------------------------
 
@@ -592,7 +656,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `hotel_id`, `role`, `name`, `email`, `phone`, `password`, `provider`, `provider_id`, `photo`, `is_verified`, `is_active`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
 (1, 0, 'worker', 'Mick Jagger', 'admin@admin.com', '0812', '$2y$10$TYZN8k0YxaB.jxCtqA4sl.JnllEeN3/UF9oGYK5.LTvbGlCe7HE82', 'local', NULL, NULL, 0, 'active', '2026-01-18 12:25:53', 1, NULL, NULL, NULL, NULL),
 (2, 1, 'hotel_hr', 'Arya Seftian', 'yerblues6@gmail.com', '895330907220', '$2y$10$ziaDpWwWk3gBjVGu6XqmoebCqmePQwtuwaRGY5ggXBpOI/.Wubhq.', 'local', NULL, 'uploads/profiles/profile_2_1768811928.png', 0, 'active', '2026-01-18 18:59:55', NULL, '2026-01-19 08:38:48', NULL, NULL, NULL),
-(3, 1, 'admin', 'Muhammad', 'muhammad@gmail.com', '99988776', '$2y$10$relLlluCofLYvJKJDW65zuxFadTF4X4A.mCur9V2uEbiZVW8vGhaa', 'local', NULL, 'uploads/profiles/profile_3_1768820480.png', 0, 'active', '2026-01-19 10:53:08', NULL, '2026-02-03 10:39:03', NULL, NULL, NULL),
+(3, 1, 'hotel_hr', 'Muhammad', 'muhammad@gmail.com', '99988776', '$2y$10$relLlluCofLYvJKJDW65zuxFadTF4X4A.mCur9V2uEbiZVW8vGhaa', 'local', NULL, 'uploads/profiles/profile_3_1768820480.png', 0, 'active', '2026-01-19 10:53:08', NULL, '2026-02-03 10:39:03', NULL, NULL, NULL),
 (4, 1, 'hotel_fnb_service', 'Muhammad', 'worker@gmail.com', '99988776', '$2y$10$relLlluCofLYvJKJDW65zuxFadTF4X4A.mCur9V2uEbiZVW8vGhaa', 'local', NULL, 'uploads/profiles/profile_3_1768820480.png', 0, 'active', '2026-01-19 10:53:08', NULL, '2026-02-03 10:39:03', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
@@ -829,6 +893,21 @@ ALTER TABLE `hotels`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `hotel_balances`
+--
+ALTER TABLE `hotel_balances`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hotel_transactions`
+--
+ALTER TABLE `hotel_transactions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_hotel` (`hotel_id`),
+  ADD KEY `idx_type` (`type`),
+  ADD KEY `idx_created` (`created_at`);
+
+--
 -- Indexes for table `jobs`
 --
 ALTER TABLE `jobs`
@@ -937,6 +1016,18 @@ ALTER TABLE `hotels`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `hotel_balances`
+--
+ALTER TABLE `hotel_balances`
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `hotel_transactions`
+--
+ALTER TABLE `hotel_transactions`
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
@@ -952,7 +1043,7 @@ ALTER TABLE `job_applications`
 -- AUTO_INCREMENT for table `job_attendances`
 --
 ALTER TABLE `job_attendances`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `ratings`
@@ -964,7 +1055,7 @@ ALTER TABLE `ratings`
 -- AUTO_INCREMENT for table `refresh_tokens`
 --
 ALTER TABLE `refresh_tokens`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=286;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=288;
 
 --
 -- AUTO_INCREMENT for table `skills`
