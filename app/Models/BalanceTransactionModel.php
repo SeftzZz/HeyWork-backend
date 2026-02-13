@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class BalanceTransactionModel extends Model
 {
-    protected $table         = 'balance_transactions';
+    protected $table         = 'hotel_transactions';
     protected $primaryKey    = 'id';
     protected $returnType    = 'array';
     protected $useTimestamps = false;
@@ -19,7 +19,11 @@ class BalanceTransactionModel extends Model
         'reference_id',
         'reference_type',
         'created_at',
-        'created_by'
+        'created_by',
+        'updated_at',
+        'updated_by',
+        'deleted_at',
+        'deleted_by'
     ];
 
     public function getByHotel($hotelId, $limit = 50)

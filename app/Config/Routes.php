@@ -58,7 +58,11 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('balance/topup', 'Admin\Balance::topup', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('balance/debit', 'Admin\Balance::debit', ['filter' => 'role:admin,hotel_hr']);
     $routes->get('balance/history', 'Admin\Balance::history', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('balance/datatable', 'Admin\Balance::datatable', ['filter' => 'role:admin,hotel_hr']);
     $routes->get('balance/monthly-jobs', 'Admin\Balance::monthlyJobStats', ['filter' => 'role:admin,hotel_hr']);
+
+    $routes->get('transactions', 'Admin\Transactions::index', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('transactions/datatable', 'Admin\Transactions::datatable', ['filter' => 'role:admin,hotel_hr']);
 });
 
 $routes->group('api', function($routes) {

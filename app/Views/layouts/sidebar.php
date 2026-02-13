@@ -66,10 +66,10 @@
                             </a>
                         </li>
 
-                        <li class="menu-item <?= ($uri=='balance-history')?'active':'' ?>">
-                            <a href="<?= base_url('admin/balance/history') ?>" class="menu-link">
+                        <li class="menu-item <?= ($uri=='transactions')?'active':'' ?>">
+                            <a href="<?= base_url('admin/transactions') ?>" class="menu-link">
                               <i class="menu-icon tf-icons ti ti-history"></i>
-                              <div>Transactions</div>
+                              <div data-i18n="Transactions">Transactions</div>
                             </a>
                         </li>
 

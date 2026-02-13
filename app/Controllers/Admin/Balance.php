@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Models\JobAttendanceModel;
+use App\Models\BalanceTransactionModel;
 use CodeIgniter\Controller;
 
 class Balance extends BaseAdminController
@@ -16,6 +17,7 @@ class Balance extends BaseAdminController
     ) {
         parent::initController($request, $response, $logger);
         $this->db = \Config\Database::connect();
+        $this->btModel = new BalanceTransactionModel();
     }
 
     /**
@@ -118,27 +120,6 @@ class Balance extends BaseAdminController
         return $this->response->setJSON([
             'status'  => true,
             'message' => 'Balance deducted successfully'
-        ]);
-    }
-
-    /**
-     * =========================================
-     * HISTORY TRANSACTIONS
-     * =========================================
-     */
-    public function history()
-    {
-        $hotelId = session()->get('hotel_id');
-
-        $rows = $this->db->table('hotel_transactions')
-            ->where('hotel_id', $hotelId)
-            ->orderBy('created_at', 'DESC')
-            ->get()
-            ->getResultArray();
-
-        return $this->response->setJSON([
-            'status' => true,
-            'data'   => $rows
         ]);
     }
 
