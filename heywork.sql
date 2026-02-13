@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 13, 2026 at 04:21 PM
+-- Generation Time: Feb 13, 2026 at 05:58 PM
 -- Server version: 10.11.10-MariaDB-log
 -- PHP Version: 8.3.27
 
@@ -111,7 +111,8 @@ INSERT INTO `hotel_transactions` (`id`, `hotel_id`, `type`, `amount`, `descripti
 (11, 1, 'credit', 1000000.00, 'Topup Saturday', 'TOPUP-20260118-001', 'topup', '2026-02-18 09:00:00', 1, NULL, NULL, NULL, NULL),
 (12, 1, 'debit', 400000.00, 'Worker Payment', 'PAY-20260118-001', 'payroll', '2026-02-18 18:00:00', 1, NULL, NULL, NULL, NULL),
 (13, 1, 'credit', 800000.00, 'Topup Sunday', 'TOPUP-20260119-001', 'topup', '2026-02-19 09:00:00', 1, NULL, NULL, NULL, NULL),
-(14, 1, 'debit', 300000.00, 'Worker Payment', 'PAY-20260119-001', 'payroll', '2026-02-19 18:00:00', 1, NULL, NULL, NULL, NULL);
+(14, 1, 'debit', 300000.00, 'Worker Payment', 'PAY-20260119-001', 'payroll', '2026-02-19 18:00:00', 1, NULL, NULL, NULL, NULL),
+(15, 1, 'debit', 500000.00, 'Worker Payment', 'PAY-20260120-001', 'payroll', '2026-02-20 18:00:00', 1, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -229,6 +230,66 @@ INSERT INTO `job_attendances` (`id`, `job_id`, `application_id`, `user_id`, `typ
 (2, 5, 8, 1, 'checkout', -6.6013100, 106.7891102, 'uploads/attendance/checkin_4_3_1770289595.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 17:38:10', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0),
 (8, 4, 5, 2, 'checkin', -6.6015006, 106.7942450, 'uploads/attendance/checkin_3_3_1769943711.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 07:28:45', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0),
 (9, 4, 5, 2, 'checkout', -6.6013100, 106.7891102, 'uploads/attendance/checkin_4_3_1770289595.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 17:38:10', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `job_extend_attendances`
+--
+
+CREATE TABLE `job_extend_attendances` (
+  `id` int(11) NOT NULL,
+  `extend_request_id` int(11) NOT NULL,
+  `job_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `application_id` int(11) NOT NULL,
+  `type` enum('checkin','checkout') NOT NULL,
+  `latitude` decimal(10,7) NOT NULL,
+  `longitude` decimal(10,7) NOT NULL,
+  `photo_path` varchar(250) NOT NULL,
+  `device_info` varchar(250) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `job_extend_attendances`
+--
+
+INSERT INTO `job_extend_attendances` (`id`, `extend_request_id`, `job_id`, `user_id`, `application_id`, `type`, `latitude`, `longitude`, `photo_path`, `device_info`, `created_at`) VALUES
+(1, 1, 5, 1, 8, 'checkin', -6.6015006, 106.7942450, 'uploads/attendance/checkin_3_3_1769943711.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 17:38:10'),
+(2, 1, 5, 1, 8, 'checkout', -6.6015006, 106.7942450, 'uploads/attendance/checkin_3_3_1769943711.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 21:30:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `job_extend_requests`
+--
+
+CREATE TABLE `job_extend_requests` (
+  `id` int(11) NOT NULL,
+  `job_id` int(11) NOT NULL,
+  `application_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `requested_by` int(11) NOT NULL,
+  `original_end_time` datetime NOT NULL,
+  `requested_end_time` datetime NOT NULL,
+  `requested_minutes` int(11) NOT NULL,
+  `estimated_fee` decimal(15,2) DEFAULT 0.00,
+  `final_fee` decimal(15,2) DEFAULT NULL,
+  `status` enum('pending','approved','rejected','expired') DEFAULT 'pending',
+  `responded_at` datetime DEFAULT NULL,
+  `responded_by` int(11) DEFAULT NULL,
+  `reason` text DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `job_extend_requests`
+--
+
+INSERT INTO `job_extend_requests` (`id`, `job_id`, `application_id`, `user_id`, `requested_by`, `original_end_time`, `requested_end_time`, `requested_minutes`, `estimated_fee`, `final_fee`, `status`, `responded_at`, `responded_by`, `reason`, `created_at`, `updated_at`) VALUES
+(1, 5, 8, 1, 3, '2026-01-30 17:38:10', '2026-01-30 21:30:00', 231, 115000.00, 115000.00, 'approved', '2026-02-13 16:29:14', 1, 'Kami butuh jam kerja lebih', '2026-02-13 16:26:24', '2026-02-13 16:29:22');
 
 -- --------------------------------------------------------
 
@@ -927,6 +988,23 @@ ALTER TABLE `job_attendances`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `job_extend_attendances`
+--
+ALTER TABLE `job_extend_attendances`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_extend` (`extend_request_id`),
+  ADD KEY `idx_user` (`user_id`);
+
+--
+-- Indexes for table `job_extend_requests`
+--
+ALTER TABLE `job_extend_requests`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_worker` (`user_id`),
+  ADD KEY `idx_job` (`job_id`),
+  ADD KEY `idx_status` (`status`);
+
+--
 -- Indexes for table `ratings`
 --
 ALTER TABLE `ratings`
@@ -1025,7 +1103,7 @@ ALTER TABLE `hotel_balances`
 -- AUTO_INCREMENT for table `hotel_transactions`
 --
 ALTER TABLE `hotel_transactions`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -1044,6 +1122,18 @@ ALTER TABLE `job_applications`
 --
 ALTER TABLE `job_attendances`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `job_extend_attendances`
+--
+ALTER TABLE `job_extend_attendances`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `job_extend_requests`
+--
+ALTER TABLE `job_extend_requests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `ratings`
