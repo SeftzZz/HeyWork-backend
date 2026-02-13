@@ -54,6 +54,25 @@
                               <div data-i18n="Attendances">Attendances</div>
                             </a>
                         </li>
+                        
+                        <li class="menu-header small text-uppercase">
+                          <span class="menu-header-text">Finance</span>
+                        </li>
+
+                        <li class="menu-item <?= ($uri=='balance')?'active':'' ?>">
+                            <a href="<?= base_url('admin/balance') ?>" class="menu-link">
+                              <i class="menu-icon tf-icons ti ti-wallet"></i>
+                              <div>Check Balance</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item <?= ($uri=='balance-history')?'active':'' ?>">
+                            <a href="<?= base_url('admin/balance/history') ?>" class="menu-link">
+                              <i class="menu-icon tf-icons ti ti-history"></i>
+                              <div>Transactions</div>
+                            </a>
+                        </li>
+
                         <li class="menu-item">
                             <a href="<?= base_url('logout') ?>" class="menu-link">
                                 <i class="menu-icon tf-icons ti ti-logout"></i>
