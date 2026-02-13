@@ -16,13 +16,13 @@
 
                             <div class="container-xxl flex-grow-1 container-p-y">
                               <div class="row">
-                                <!-- Earning Reports -->
+                                <!-- Productivity Ratio -->
                                 <div class="col-lg-12 mb-4">
                                   <div class="card h-100">
                                     <div class="card-header pb-0 d-flex justify-content-between mb-lg-n4">
                                       <div class="card-title mb-0">
-                                        <h5 class="mb-0">Earning Reports</h5>
-                                        <small class="text-muted">Weekly Earnings Overview</small>
+                                        <h5 class="mb-0">Productivity Ratio</h5>
+                                        <small class="badge rounded bg-label-success">Weekly Earnings Overview</small>
                                       </div>
                                       <div class="dropdown">
                                         <button
@@ -58,15 +58,12 @@
                                         <div class="row gap-4 gap-sm-0">
                                           <div class="col-12 col-sm-4">
                                             <div class="d-flex gap-2 align-items-center">
-                                              <div class="badge rounded bg-label-primary p-1">
-                                                <i class="ti ti-currency-dollar ti-sm"></i>
-                                              </div>
-                                              <h6 class="mb-0">Earnings</h6>
+                                              <h6 class="mb-0">Month To Date</h6>
                                             </div>
                                             <h4 class="my-2 pt-1 earning-value">0</h4>
                                             <div class="progress w-75" style="height: 4px">
                                               <div
-                                                class="progress-bar"
+                                                class="progress-bar earning-progress"
                                                 role="progressbar"
                                                 style="width: 65%"
                                                 aria-valuenow="65"
@@ -76,13 +73,12 @@
                                           </div>
                                           <div class="col-12 col-sm-4">
                                             <div class="d-flex gap-2 align-items-center">
-                                              <div class="badge rounded bg-label-info p-1"><i class="ti ti-chart-pie-2 ti-sm"></i></div>
                                               <h6 class="mb-0">Profit</h6>
                                             </div>
                                             <h4 class="my-2 pt-1 profit-value">0</h4>
                                             <div class="progress w-75" style="height: 4px">
                                               <div
-                                                class="progress-bar bg-info"
+                                                class="progress-bar bg-info profit-progress"
                                                 role="progressbar"
                                                 style="width: 50%"
                                                 aria-valuenow="50"
@@ -92,15 +88,12 @@
                                           </div>
                                           <div class="col-12 col-sm-4">
                                             <div class="d-flex gap-2 align-items-center">
-                                              <div class="badge rounded bg-label-danger p-1">
-                                                <i class="ti ti-brand-paypal ti-sm"></i>
-                                              </div>
                                               <h6 class="mb-0">Expense</h6>
                                             </div>
                                             <h4 class="my-2 pt-1 expense-value">0</h4>
                                             <div class="progress w-75" style="height: 4px">
                                               <div
-                                                class="progress-bar bg-danger"
+                                                class="progress-bar bg-danger expense-progress"
                                                 role="progressbar"
                                                 style="width: 65%"
                                                 aria-valuenow="65"
@@ -113,13 +106,13 @@
                                     </div>
                                   </div>
                                 </div>
-                                <!--/ Earning Reports -->
+                                <!--/ Productivity Ratio -->
 
-                                <!-- Total Earning -->
+                                <!-- Monthly Growth -->
                                 <div class="col-lg-6 mb-4">
                                   <div class="card">
                                     <div class="card-header d-flex justify-content-between pb-1">
-                                      <h5 class="mb-0 card-title">Total Earning</h5>
+                                      <h5 class="mb-0 card-title">Monthly Growth</h5>
                                       <div class="dropdown">
                                         <button
                                           class="btn p-0"
@@ -149,8 +142,8 @@
                                         </div>
                                         <div class="d-flex justify-content-between w-100 gap-2 align-items-center">
                                           <div class="me-2">
-                                            <h6 class="mb-0">Total Sales</h6>
-                                            <small class="text-muted">Refund</small>
+                                            <h6 class="mb-0">Total DW Cost</h6>
+                                            <small class="text-muted">Cost</small>
                                           </div>
                                           <p class="mb-0 text-success">+$98</p>
                                         </div>
@@ -170,15 +163,15 @@
                                     </div>
                                   </div>
                                 </div>
-                                <!--/ Total Earning -->
+                                <!--/ Monthly Growth -->
 
-                                <!-- Monthly Campaign State -->
+                                <!-- Departement -->
                                 <div class="col-lg-6 mb-4">
                                   <div class="card h-100">
                                     <div class="card-header d-flex justify-content-between">
                                       <div class="card-title mb-0">
-                                        <h5 class="mb-0">Monthly Campaign State</h5>
-                                        <small class="text-muted">8.52k Social Visiters</small>
+                                        <h5 class="mb-0">Departement</h5>
+                                        <small class="text-muted">8.52k Daily Worker</small>
                                       </div>
                                       <div class="dropdown">
                                         <button
@@ -265,7 +258,7 @@
                                     </div>
                                   </div>
                                 </div>
-                                <!--/ Monthly Campaign State -->
+                                <!--/ Departement -->
                               </div>
                             </div>
                         <?= $this->endSection() ?>
@@ -320,61 +313,292 @@
                             // ==============================
                             // FETCH BALANCE DATA
                             // ==============================
-
                             $.get("<?= base_url('admin/balance/history') ?>", function(res) {
 
-                              if (!res.status) return;
+                              if (!res || !res.status || !Array.isArray(res.data)) {
+                                console.log('Balance data invalid');
+                                return;
+                              }
 
-                              let credit = 0;
-                              let debit  = 0;
+                              const earningCard = $('.card-title:contains("Productivity Ratio")')
+                                                    .closest('.card');
 
-                              let weeklyData = [0,0,0,0,0,0,0]; // Mo–Su
+                              const infoText = earningCard.find('small');
+                              const badge    = earningCard.find('.badge');
 
+                              // =========================
+                              // INITIAL VALUE
+                              // =========================
+                              let balanceCredit = 0;
+                              let balanceDebit  = 0;
+                              let earnings = 0;
+                              let expense  = 0;
+
+                              let weeklyRevenue = [0,0,0,0,0,0,0];
+                              let weeklyExpense = [0,0,0,0,0,0,0];
+                              let todayRevenue = 0;
+                              let todayExpense = 0;
+
+                              // =========================
+                              // MAIN LOOP
+                              // =========================
                               res.data.forEach(row => {
 
                                 const amount = parseFloat(row.amount) || 0;
-                                const date   = new Date(row.created_at);
+                                if (!row.created_at) return;
 
-                                let day = date.getDay(); // 0=Sun
-                                day = (day === 0) ? 6 : day - 1; // Monday index 0
+                                const date = new Date(row.created_at);
+                                if (isNaN(date)) return;
 
-                                if (row.type === 'credit') {
-                                  credit += amount;
-                                  weeklyData[day] += amount;
+                                let day = date.getDay();
+                                day = (day === 0) ? 6 : day - 1;
+
+                                // =========================
+                                // TODAY DATE
+                                // =========================
+                                const today = new Date();
+                                const todayDateStr =
+                                  today.getFullYear() + '-' +
+                                  String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                                  String(today.getDate()).padStart(2, '0');
+
+                                const rowDateStr =
+                                  date.getFullYear() + '-' +
+                                  String(date.getMonth() + 1).padStart(2, '0') + '-' +
+                                  String(date.getDate()).padStart(2, '0');
+
+                                // =========================
+                                // BALANCE (lifetime)
+                                // =========================
+                                if (row.type === 'credit') balanceCredit += amount;
+                                if (row.type === 'debit')  balanceDebit  += amount;
+
+                                // =========================
+                                // TOTAL (untuk earning/profit chart)
+                                // =========================
+                                if (row.category === 'revenue') {
+                                  earnings += amount;
+                                  weeklyRevenue[day] += amount;
                                 }
 
-                                if (row.type === 'debit') {
-                                  debit += amount;
-                                  weeklyData[day] -= amount;
+                                if (row.category === 'payroll' || row.category === 'extend') {
+                                  expense += amount;
+                                  weeklyExpense[day] += amount;
+                                }
+
+                                // =========================
+                                // TODAY ONLY (angka besar atas)
+                                // =========================
+                                if (rowDateStr === todayDateStr) {
+
+                                  if (row.category === 'revenue') {
+                                    todayRevenue = amount; // bukan +=
+                                  }
+
+                                  if (row.category === 'payroll' || row.category === 'extend') {
+                                    todayExpense += amount;
+                                  }
+
                                 }
 
                               });
 
-                              const balance = credit - debit;
-                              const percent = credit > 0 
-                                  ? Math.round((balance / credit) * 100) 
-                                  : 0;
+                              // =========================
+                              // REVENUE GROWTH
+                              // =========================
+                              let revenueByDate = {};
 
-                              const earnings = credit;
-                              const expense  = debit;
-                              const profit   = balance;
+                              // group revenue per date
+                              res.data.forEach(row => {
 
+                                if (row.category === 'revenue' && row.created_at) {
+
+                                  const date = new Date(row.created_at);
+
+                                  const key =
+                                    date.getFullYear() + '-' +
+                                    String(date.getMonth() + 1).padStart(2, '0') + '-' +
+                                    String(date.getDate()).padStart(2, '0');
+
+                                  if (!revenueByDate[key]) revenueByDate[key] = 0;
+
+                                  revenueByDate[key] += parseFloat(row.amount) || 0;
+                                }
+                              });
+
+                              // ambil 2 hari terakhir
+                              const sortedDates = Object.keys(revenueByDate).sort().reverse();
+
+                              let growthPercent = 0;
+                              let isGrowthUp = true;
+
+                              if (sortedDates.length >= 2) {
+
+                                const currentRevenue = revenueByDate[sortedDates[0]];
+                                const lastRevenue    = revenueByDate[sortedDates[1]];
+
+                                if (lastRevenue > 0) {
+                                  growthPercent = ((currentRevenue - lastRevenue) / lastRevenue) * 100;
+                                  isGrowthUp = growthPercent >= 0;
+                                }
+                              }
+
+                              let secondaryPercent = 0;
+
+                              if (sortedDates.length >= 3) {
+
+                                const prevRevenue     = revenueByDate[sortedDates[1]];
+                                const prevPrevRevenue = revenueByDate[sortedDates[2]];
+
+                                if (prevPrevRevenue > 0) {
+                                  secondaryPercent = ((prevRevenue - prevPrevRevenue) / prevPrevRevenue) * 100;
+                                }
+                              }
+
+                              const secondaryRounded = Math.abs(secondaryPercent).toFixed(2);
+                              const isSecondaryUp = secondaryPercent >= 0;
+
+
+                              const growthRounded = Math.abs(growthPercent).toFixed(2);
+
+                              // =========================
+                              // UPDATE Monthly Growth CARD
+                              // =========================
+
+                              const totalCard = $('.card-title:contains("Monthly Growth")')
+                                                  .closest('.card');
+
+                              // ===== MAIN GROWTH (h1) =====
+                              totalCard.find('.d-flex.align-items-center h1')
+                                .text(growthRounded + '%');
+
+                              // ===== ARROW ICON =====
+                              const arrowIcon = totalCard.find('.d-flex.align-items-center i.ti');
+                              const percentText = totalCard.find('.d-flex.align-items-center p');
+
+                              // ===== MAIN ARROW =====
+                              if (isGrowthUp) {
+                                arrowIcon.removeClass('ti-chevron-down text-danger')
+                                         .addClass('ti-chevron-up text-success');
+                              } else {
+                                arrowIcon.removeClass('ti-chevron-up text-success')
+                                         .addClass('ti-chevron-down text-danger');
+                              }
+
+                              // ===== SECONDARY PERCENT (history sebelumnya) =====
+                              percentText
+                                .text(secondaryRounded + '%')
+                                .removeClass('text-success text-danger')
+                                .addClass(isSecondaryUp ? 'text-success' : 'text-danger');
+
+                              // ===== Total DW Cost (Expense) =====
+                              totalCard.find('h6:contains("Total DW Cost")')
+                                .closest('.d-flex')
+                                .find('p')
+                                .text('-Rp ' + expense.toLocaleString('id-ID'))
+                                .removeClass('text-success')
+                                .addClass('text-danger');
+
+                              // ===== Total Revenue (Earnings) =====
+                              totalCard.find('h6:contains("Total Revenue")')
+                                .closest('.d-flex')
+                                .find('p')
+                                .text('+Rp ' + earnings.toLocaleString('id-ID'))
+                                .removeClass('text-danger')
+                                .addClass('text-success');
+
+
+                              // =========================
+                              // LAST REVENUE DATE
+                              // =========================
+                              let lastRevenueDate = null;
+
+                              res.data.forEach(row => {
+                                if (row.category === 'revenue' && row.created_at) {
+                                  const date = new Date(row.created_at);
+                                  if (!isNaN(date)) {
+                                    if (!lastRevenueDate || date > lastRevenueDate) {
+                                      lastRevenueDate = date;
+                                    }
+                                  }
+                                }
+                              });
+
+                              if (lastRevenueDate) {
+
+                                const day   = lastRevenueDate.toLocaleDateString('id-ID', {
+                                  day: '2-digit',
+                                  month: 'short',
+                                  year: 'numeric'
+                                });
+
+                                const time  = lastRevenueDate.toLocaleTimeString('id-ID', {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                  hour12: false
+                                });
+
+                                infoText.text('Last today revenue update: ' + day + ' - ' + time + ' WIB');
+
+                              } else {
+                                infoText.text('No revenue recorded yet');
+                              }
+
+                              // =========================
+                              // CALCULATION
+                              // =========================
+                              const balance = balanceCredit - balanceDebit;
+                              const profit  = earnings - expense;
                               const totalFlow = earnings + expense;
 
-                              // ==============================
-                              // UPDATE EARNING REPORTS CARD
-                              // ==============================
+                              const dwRatio = todayRevenue > 0
+                                ? (todayExpense / todayRevenue) * 100
+                                : 0;
+                              const dwRounded = dwRatio.toFixed(2);
 
-                              const earningCard = $('.card-title:contains("Earning Reports")')
-                                                    .closest('.card');
+                              // =========================
+                              // UPDATE CARD
+                              // =========================
+                              const todayNet = todayRevenue - todayExpense;
 
-                              earningCard.find('h1')
-                                .text('Rp ' + balance.toLocaleString('id-ID'));
+                              earningCard.find('h1').html(`
+                                <span id="editableRevenue" style="cursor:pointer">
+                                  Rp ${todayRevenue.toLocaleString('id-ID')}
+                                </span>
+                              `);
 
-                              earningCard.find('.badge')
-                                .text(percent + '%');
+                              badge.text(dwRounded + '%');
+                              badge.removeClass('bg-label-success bg-label-warning bg-label-danger bg-label-info');
 
-                              // update breakdown
+                              let ratioLabel = '';
+                              let ratioClass = '';
+
+                              if (dwRatio >= 6 && dwRatio <= 10) {
+                                ratioLabel = 'GOOD';
+                                ratioClass = 'text-success';
+                                badge.addClass('bg-label-success');
+                              } 
+                              else if (dwRatio > 10 && dwRatio <= 12) {
+                                ratioLabel = 'AVERAGE';
+                                ratioClass = 'text-warning';
+                                badge.addClass('bg-label-warning');
+                              } 
+                              else if (dwRatio > 12 && dwRatio <= 15) {
+                                ratioLabel = 'BAD';
+                                ratioClass = 'text-danger';
+                                badge.addClass('bg-label-danger');
+                              } 
+                              else if (dwRatio > 15) {
+                                ratioLabel = 'NOT OPTIMAL MAN POWER';
+                                ratioClass = 'text-danger';
+                                badge.addClass('bg-label-danger');
+                              } 
+                              else {
+                                ratioLabel = 'UNDER TARGET';
+                                ratioClass = 'text-info';
+                                badge.addClass('bg-label-info');
+                              }
+
                               earningCard.find('.earning-value')
                                 .text('Rp ' + earnings.toLocaleString('id-ID'));
 
@@ -384,62 +608,47 @@
                               earningCard.find('.expense-value')
                                 .text('Rp ' + expense.toLocaleString('id-ID'));
 
-                              // progress %
+                              earningCard.find('.card-title small')
+                                .removeClass('text-muted text-success text-warning text-danger text-info')
+                                .addClass(ratioClass)
+                                .text(ratioLabel);
+
+                              // =========================
+                              // PROGRESS BAR
+                              // =========================
                               const earningPercent = totalFlow > 0 
-                                  ? Math.round((earnings / totalFlow) * 100) 
-                                  : 0;
+                                ? Math.round((earnings / totalFlow) * 100) 
+                                : 0;
 
                               const profitPercent = earnings > 0 
-                                  ? Math.round((profit / earnings) * 100) 
-                                  : 0;
+                                ? Math.round((profit / earnings) * 100) 
+                                : 0;
 
                               const expensePercent = totalFlow > 0 
-                                  ? Math.round((expense / totalFlow) * 100) 
-                                  : 0;
+                                ? Math.round((expense / totalFlow) * 100) 
+                                : 0;
 
                               earningCard.find('.earning-progress')
-                                .css('width', earningPercent + '%')
-                                .attr('aria-valuenow', earningPercent);
+                                .css('width', earningPercent + '%');
 
                               earningCard.find('.profit-progress')
-                                .css('width', profitPercent + '%')
-                                .attr('aria-valuenow', profitPercent);
+                                .css('width', profitPercent + '%');
 
                               earningCard.find('.expense-progress')
-                                .css('width', expensePercent + '%')
-                                .attr('aria-valuenow', expensePercent);
+                                .css('width', expensePercent + '%');
 
-
-                              // ==============================
-                              // UPDATE TOTAL EARNING CARD
-                              // ==============================
-
-                              const totalCard = $('.card-title:contains("Total Earning")')
-                                                  .closest('.card');
-
-                              totalCard.find('h1')
-                                .text(percent + '%');
-
-                              totalCard.find('h6:contains("Total Sales")')
-                                .closest('.d-flex')
-                                .find('p')
-                                .text('+Rp ' + earnings.toLocaleString('id-ID'));
-
-                              totalCard.find('h6:contains("Total Revenue")')
-                                .closest('.d-flex')
-                                .find('p')
-                                .text('+Rp ' + profit.toLocaleString('id-ID'));
-
-
-                              // ==============================
-                              // WEEKLY CHART
-                              // ==============================
-
+                              // =========================
+                              // WEEKLY CHART (SAFE)
+                              // =========================
                               const weeklyEl = document.querySelector('#weeklyEarningReports');
 
                               if (weeklyEl) {
 
-                                new ApexCharts(weeklyEl, {
+                                if (window.weeklyChartInstance) {
+                                  window.weeklyChartInstance.destroy();
+                                }
+
+                                window.weeklyChartInstance = new ApexCharts(weeklyEl, {
                                   chart: {
                                     height: 202,
                                     type: 'bar',
@@ -462,26 +671,32 @@
                                     config.colors_label.primary,
                                     config.colors_label.primary
                                   ],
-                                  series: [{ data: weeklyData }],
+                                  series: [{
+                                    data: weeklyRevenue.map((val, i) => val - (weeklyExpense[i] || 0))
+                                  }],
                                   xaxis: {
                                     categories: ['Mo','Tu','We','Th','Fr','Sa','Su'],
                                     labels: { style: { colors: labelColor } }
                                   },
                                   yaxis: { labels: { show: false } },
                                   dataLabels: { enabled: false }
-                                }).render();
+                                });
+
+                                window.weeklyChartInstance.render();
                               }
 
-
-                              // ==============================
+                              // =========================
                               // TOTAL STACKED CHART
-                              // ==============================
-
+                              // =========================
                               const totalChartEl = document.querySelector('#totalEarningChart');
 
                               if (totalChartEl) {
 
-                                new ApexCharts(totalChartEl, {
+                                if (window.totalChartInstance) {
+                                  window.totalChartInstance.destroy();
+                                }
+
+                                window.totalChartInstance = new ApexCharts(totalChartEl, {
                                   series: [
                                     { name: 'Credit', data: [earnings] },
                                     { name: 'Debit',  data: [-expense] }
@@ -501,7 +716,7 @@
                                   colors: [config.colors.primary, grayColor],
                                   tooltip: {
                                     y: {
-                                      formatter: val => 
+                                      formatter: val =>
                                         'Rp ' + Math.abs(val).toLocaleString('id-ID')
                                     }
                                   },
@@ -513,20 +728,20 @@
                                   dataLabels: { enabled: false },
                                   legend: { show: false },
                                   grid: { show: false }
-                                }).render();
-                              }
+                                });
 
+                                window.totalChartInstance.render();
+                              }
                             }, 'json');
 
                             // ==============================
-                            // MONTHLY CAMPAIGN STATE
+                            // Departement
                             // ==============================
-
                             $.get("<?= base_url('admin/balance/monthly-jobs') ?>", function(res){
 
                               if(!res.status) return;
 
-                              const container = $('.card-title:contains("Monthly Campaign State")')
+                              const container = $('.card-title:contains("Departement")')
                                                 .closest('.card')
                                                 .find('ul');
 
@@ -556,8 +771,43 @@
                                   </li>
                                 `);
                               });
-
                             }, 'json');
+
+                            $(document).on('click', '#editableRevenue', function(){
+
+                                const current = $(this).text().replace(/[^0-9]/g,'');
+
+                                const input = `
+                                    <input type="number" 
+                                           id="revenueInput" 
+                                           class="form-control"
+                                           value="${current}" />
+                                    <button class="btn btn-sm btn-primary mt-2" id="saveRevenue">
+                                        Save
+                                    </button>
+                                `;
+
+                                $(this).parent().html(input);
+                            });
+
+                            $(document).on('click', '#saveRevenue', function(){
+
+                                const amount = $('#revenueInput').val();
+
+                                $.post("<?= base_url('admin/balance/update-revenue') ?>", {
+                                    revenue: amount,
+                                    '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
+                                }, function(res){
+
+                                    if(!res.status){
+                                        alert(res.message);
+                                        return;
+                                    }
+
+                                    location.reload();
+
+                                }, 'json');
+                            });
 
                           })();
                         </script>

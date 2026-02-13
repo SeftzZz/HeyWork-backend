@@ -166,4 +166,87 @@ class Balance extends BaseAdminController
             'data'   => $rows
         ]);
     }
+
+    /* =======================================================
+     * UPDATE DAILY REVENUE (CREDIT + CATEGORY REVENUE)
+     * ======================================================= */
+    public function updateRevenue()
+    {
+        if (!in_array(session('user_role'), ['hotel_hr', 'admin'])) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Unauthorized'
+            ]);
+        }
+
+        $hotelId = session()->get('hotel_id');
+        $amount  = (float) $this->request->getPost('revenue');
+        $today   = date('Y-m-d');
+
+        if ($amount < 0) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Invalid revenue amount'
+            ]);
+        }
+
+        // Cari revenue hari ini berdasarkan category
+        $existing = $this->db->table('hotel_transactions')
+            ->where('hotel_id', $hotelId)
+            ->where('type', 'credit')
+            ->where('category', 'revenue')
+            ->where('DATE(created_at)', $today)
+            ->get()
+            ->getRowArray();
+
+        if ($existing) {
+
+            $this->db->table('hotel_transactions')
+                ->where('id', $existing['id'])
+                ->update([
+                    'amount'     => $amount,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'updated_by' => session('user_id')
+                ]);
+
+        } else {
+
+            $this->db->table('hotel_transactions')->insert([
+                'hotel_id'   => $hotelId,
+                'type'       => 'credit',
+                'category'   => 'revenue',
+                'amount'     => $amount,
+                'description'=> 'Daily Revenue',
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => session('user_id')
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'status'  => true,
+            'message' => 'Revenue updated successfully'
+        ]);
+    }
+
+    /* =======================================================
+     * GET TODAY REVENUE
+     * ======================================================= */
+    public function getTodayRevenue()
+    {
+        $hotelId = session()->get('hotel_id');
+        $today   = date('Y-m-d');
+
+        $row = $this->db->table('hotel_transactions')
+            ->where('hotel_id', $hotelId)
+            ->where('type', 'credit')
+            ->where('category', 'revenue')
+            ->where('DATE(created_at)', $today)
+            ->get()
+            ->getRowArray();
+
+        return $this->response->setJSON([
+            'status'  => true,
+            'revenue' => (float) ($row['amount'] ?? 0)
+        ]);
+    }
 }

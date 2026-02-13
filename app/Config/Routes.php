@@ -35,6 +35,7 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('attendance/datatable', 'Admin\Attendance::datatable', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('attendance/detail', 'Admin\Attendance::detail', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('attendance/rate', 'Admin\Attendance::submitRating', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('attendance/extend-request', 'Admin\Attendance::extendRequest', ['filter' => 'role:admin,hotel_hr']);
 
     $routes->get('users', 'Admin\Users::index', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('users/datatable', 'Admin\Users::datatable', ['filter' => 'role:admin,hotel_hr']);
@@ -60,9 +61,11 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->get('balance/history', 'Admin\Balance::history', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('balance/datatable', 'Admin\Balance::datatable', ['filter' => 'role:admin,hotel_hr']);
     $routes->get('balance/monthly-jobs', 'Admin\Balance::monthlyJobStats', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('balance/update-revenue', 'Admin\Balance::updateRevenue', ['filter' => 'role:admin,hotel_hr']);
+    $routes->get('balance/today-revenue', 'Admin\Balance::getTodayRevenue', ['filter' => 'role:admin,hotel_hr']);
 
     $routes->get('transactions', 'Admin\Transactions::index', ['filter' => 'role:admin,hotel_hr']);
-    $routes->post('transactions/datatable', 'Admin\Transactions::datatable', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('transactions/datatable', 'Admin\Transactions::datatable', ['filter' => 'role:admin,hotel_hr']); 
 });
 
 $routes->group('api', function($routes) {
