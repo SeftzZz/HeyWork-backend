@@ -62,7 +62,7 @@
                         <li class="menu-item <?= ($uri=='balance')?'active':'' ?>">
                             <a href="<?= base_url('admin/balance') ?>" class="menu-link">
                               <i class="menu-icon tf-icons ti ti-wallet"></i>
-                              <div>Check Balance</div>
+                              <div>Productivity Ratio</div>
                             </a>
                         </li>
 

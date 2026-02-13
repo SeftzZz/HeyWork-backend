@@ -50,14 +50,14 @@ class Transactions extends BaseAdminController
 
         $order = $request->getPost('order');
         $orderColumns = [
-            null,
-            null,
-            'hotels.hotel_name',
-            'hotel_transactions.type',
-            'hotel_transactions.amount',
-            'hotel_transactions.description',
-            'hotel_transactions.created_at',
-            null
+            null,                                   // 0 control
+            null,                                   // 1 no urut
+            'hotels.hotel_name',                    // 2 hotel
+            'hotel_transactions.created_at',        // 3 DATE (INI YANG BENAR)
+            'hotel_transactions.type',              // 4 kredit
+            'hotel_transactions.type',              // 5 debit
+            'hotel_transactions.amount',            // 6 amount
+            'hotel_transactions.description'        // 7 description
         ];
 
         // =============================
@@ -173,4 +173,34 @@ class Transactions extends BaseAdminController
             'data'            => $result
         ]);
     }
+
+    public function lastPayroll()
+    {
+        $hotelId  = session()->get('hotel_id');
+        $userRole = session()->get('user_role');
+
+        if (!$hotelId) {
+            return $this->response->setJSON(['amount' => 0]);
+        }
+
+        $builder = $this->transactionModel
+            ->where('type', 'debit')
+            ->where('category', 'payroll')
+            ->where('deleted_at', null);
+
+        if ($userRole === 'hotel_hr') {
+            $builder->where('hotel_id', $hotelId);
+        }
+
+        $lastPayroll = $builder
+            ->orderBy('created_at', 'DESC')
+            ->first();
+
+        $amount = $lastPayroll ? $lastPayroll['amount'] : 0;
+
+        return $this->response->setJSON([
+            'amount' => (float) $amount
+        ]);
+    }
+
 }

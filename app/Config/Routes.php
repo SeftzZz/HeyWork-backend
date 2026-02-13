@@ -66,6 +66,7 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
 
     $routes->get('transactions', 'Admin\Transactions::index', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('transactions/datatable', 'Admin\Transactions::datatable', ['filter' => 'role:admin,hotel_hr']); 
+    $routes->get('transactions/last-payroll', 'Admin\Transactions::lastPayroll', ['filter' => 'role:admin,hotel_hr']); 
 });
 
 $routes->group('api', function($routes) {

@@ -95,7 +95,7 @@
 									          	}
 								        	}
 					                	],
-					                	order: [[2, 'asc']],
+					                	order: [[3, 'asc']],
 					                	dom:
 					                    	'<"card-header flex-column flex-md-row"' +
 					                        '<"head-label text-center">' +

@@ -80,14 +80,14 @@
                                 <?php if ((int) session()->get('hotel_id') !== 0): ?>
                                     <li class="nav-item me-2 me-xl-1">
                                         <div id="amount-rotator">
-                                            <span class="amount-item active">
+                                            <!-- <span class="amount-item active">
                                                 <i class="ti ti-coin ti-md me-1"></i>
                                                 Balance: <strong>Rp.0</strong>
-                                            </span>
+                                            </span> -->
 
-                                            <span class="amount-item">
+                                            <span class="amount-item active">
                                                 <i class="ti ti-cash ti-md me-1"></i>
-                                                Usage Amt: <strong>Rp.0</strong>
+                                                Usage Amt: <strong id="usage-amount">Rp.0</strong>
                                             </span>
                                         </div>
                                     </li>
@@ -314,3 +314,21 @@
                                 <i class="ti ti-x ti-sm search-toggler cursor-pointer"></i>
                         </div>
                     </nav>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+
+                            fetch("<?= base_url('admin/transactions/last-payroll') ?>")
+                                .then(response => response.json())
+                                .then(data => {
+                                    const amount = data.amount || 0;
+
+                                    const formatted = new Intl.NumberFormat('id-ID').format(amount);
+
+                                    document.getElementById('usage-amount').innerText = "Rp." + formatted;
+                                })
+                                .catch(error => {
+                                    console.error('Failed to load payroll:', error);
+                                });
+
+                        });
+                    </script>
