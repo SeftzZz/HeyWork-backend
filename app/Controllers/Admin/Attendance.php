@@ -61,8 +61,27 @@ class Attendance extends BaseAdminController
                 jobs.start_time,
                 jobs.end_time,
                 jobs.fee,
+
                 MIN(CASE WHEN job_attendances.type = 'checkin' THEN job_attendances.created_at END) AS checkin_time,
                 MAX(CASE WHEN job_attendances.type = 'checkout' THEN job_attendances.created_at END) AS checkout_time,
+
+                -- EXTEND AGGREGATE
+                (
+                    SELECT MIN(CASE WHEN type='checkin' THEN created_at END)
+                    FROM job_extend_attendances jea
+                    WHERE jea.user_id = job_attendances.user_id
+                      AND jea.job_id = job_attendances.job_id
+                      AND DATE(jea.created_at) = DATE(job_attendances.created_at)
+                ) AS ex_checkin,
+
+                (
+                    SELECT MAX(CASE WHEN type='checkout' THEN created_at END)
+                    FROM job_extend_attendances jea
+                    WHERE jea.user_id = job_attendances.user_id
+                      AND jea.job_id = job_attendances.job_id
+                      AND DATE(jea.created_at) = DATE(job_attendances.created_at)
+                ) AS ex_checkout,
+
                 job_attendances.user_id,
                 job_attendances.job_id
             ")
@@ -109,6 +128,7 @@ class Attendance extends BaseAdminController
         $no = $start + 1;
 
         foreach ($rows as $row) {
+
             $checkin  = $row['checkin_time'];
             $checkout = $row['checkout_time'];
 
@@ -116,20 +136,43 @@ class Attendance extends BaseAdminController
             $tenMinutesCnt = '-';
             $status        = 'Incomplete';
             $rate          = '-';
+            $extendBadge   = '';
 
             if ($checkin && $checkout) {
 
-                $seconds = strtotime($checkout) - strtotime($checkin);
-                $minutesWorked = floor($seconds / 60);
-
-                // ✅ FIX DI SINI
-                $duration = gmdate('H:i', $seconds);
-                $status   = 'Complete';
-
-                $tenMinutesCnt = floor($minutesWorked / 10);
+                // ==========================
+                // NORMAL WORK
+                // ==========================
+                $secondsNormal = strtotime($checkout) - strtotime($checkin);
+                $minutesNormal = floor($secondsNormal / 60);
 
                 // ==========================
-                // HITUNG TOTAL SLOT JOB
+                // EXTEND WORK
+                // ==========================
+                $extendMinutes = 0;
+
+                if ($row['ex_checkin'] && $row['ex_checkout']) {
+
+                    $extendSeconds = strtotime($row['ex_checkout']) - strtotime($row['ex_checkin']);
+                    $extendMinutes = floor($extendSeconds / 60);
+
+                    if ($extendMinutes > 0) {
+                        $extendBadge = ' <span class="badge bg-label-info">EXT</span>';
+                    }
+                }
+
+                // ==========================
+                // TOTAL WORK
+                // ==========================
+                $totalMinutes = $minutesNormal + $extendMinutes;
+                $totalSeconds = $totalMinutes * 60;
+
+                $duration = gmdate('H:i', $totalSeconds);
+                $status   = 'Complete';
+                $tenMinutesCnt = floor($totalMinutes / 10);
+
+                // ==========================
+                // RATE CALCULATION
                 // ==========================
                 $jobStart = strtotime($row['start_time']);
                 $jobEnd   = strtotime($row['end_time']);
@@ -143,20 +186,19 @@ class Attendance extends BaseAdminController
                 }
             }
 
-
             $data[] = [
-                'no'          => $no++.'.',
-                'date'        => date('d-m-Y', strtotime($row['work_date'])),
-                'worker'      => esc($row['worker_name']),
-                // 'hotel'       => esc($row['hotel_name']),
-                'job'         => esc($row['position']),
-                'checkin'     => $checkin ? date('H:i', strtotime($checkin)) : '-',
-                'checkout'    => $checkout ? date('H:i', strtotime($checkout)) : '-',
-                'duration'    => $duration,
-                'ten_minutes' => $tenMinutesCnt,
-                'rate'        => $rate !== '-' ? number_format($rate, 0, ',', '.') : '-',
-                'status'      => $status,
-                'action'      => '
+                'no'                => $no++.'.',
+                'date'              => date('d-m-Y', strtotime($row['work_date'])),
+                'worker'            => esc($row['worker_name']),
+                'job'               => esc($row['position']) . $extendBadge,
+                'checkin'           => $checkin ? date('H:i', strtotime($checkin)) : '-',
+                'checkout'          => $checkout ? date('H:i', strtotime($checkout)) : '-',
+                'duration'          => $duration,
+                'ten_minutes'       => $tenMinutesCnt,
+                'rate'              => $rate !== '-' ? number_format($rate, 0, ',', '.') : '-',
+                'status'            => $status,
+                'extend_duration'   => $extendMinutes > 0 ? gmdate('H:i', $extendMinutes * 60) : '-',
+                'action'            => '
                     <button 
                         class="btn btn-sm btn-info btn-detail"
                         data-user="'.$row['user_id'].'"
@@ -207,6 +249,23 @@ class Attendance extends BaseAdminController
             ->orderBy('ja.created_at', 'ASC')
             ->get()
             ->getResultArray();
+
+        $extend = $db->table('job_extend_requests')
+            ->where('user_id', $userId)
+            ->where('job_id', $jobId)
+            ->where('DATE(original_end_time)', $date)
+            ->orderBy('id', 'DESC')
+            ->get()
+            ->getRowArray();
+
+        $extendAttendance = $db->table('job_extend_attendances')
+            ->where('user_id', $userId)
+            ->where('job_id', $jobId)
+            ->where('DATE(created_at)', $date)
+            ->orderBy('created_at', 'ASC')
+            ->get()
+            ->getResultArray();
+
 
         if (!$rows) {
             return $this->response->setJSON([
@@ -260,7 +319,9 @@ class Attendance extends BaseAdminController
                 'latitude'       => $lat,
                 'longitude'      => $lng,
                 'checkin_photo'  => $photoIn,
-                'checkout_photo' => $photoOut
+                'checkout_photo' => $photoOut,
+                'extend'         => $extend,
+                'extend_attendance' => $extendAttendance
             ]
         ]);
     }
@@ -323,6 +384,138 @@ class Attendance extends BaseAdminController
         return $this->response->setJSON([
             'status' => true,
             'message' => 'Rating submitted successfully'
+        ]);
+    }
+
+    public function extendRequest()
+    {
+        // hanya HR / admin
+        if (!in_array(session('user_role'), ['hotel_hr', 'admin'])) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Unauthorized'
+            ]);
+        }
+
+        $req = $this->request;
+        $db  = \Config\Database::connect();
+
+        $userId = $req->getPost('user_id');
+        $jobId  = $req->getPost('job_id');
+        $date   = $req->getPost('date');
+        $requestedTime = $req->getPost('requested_time');
+        $reason = $req->getPost('reason');
+
+        if (!$requestedTime) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Extend time is required'
+            ]);
+        }
+
+        $application = $db->table('job_applications')
+            ->select('id')
+            ->where('job_id', $jobId)
+            ->where('user_id', $userId)
+            ->where('deleted_at', null)
+            ->get()
+            ->getRowArray();
+
+        if (!$application) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Application not found'
+            ]);
+        }
+
+        $applicationId = $application['id'];
+
+        // Ambil checkout terakhir hari itu
+        $attendance = $db->table('job_attendances')
+            ->select('MAX(created_at) as checkout_time')
+            ->where('user_id', $userId)
+            ->where('job_id', $jobId)
+            ->where('DATE(created_at)', $date)
+            ->where('type', 'checkout')
+            ->get()
+            ->getRowArray();
+
+        if (!$attendance || !$attendance['checkout_time']) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Worker has not checked out yet'
+            ]);
+        }
+
+        $originalCheckout = $attendance['checkout_time'];
+
+        $requestedDateTime = date('Y-m-d H:i:s', strtotime($date . ' ' . $requestedTime));
+        $originalDateTime  = date('Y-m-d H:i:s', strtotime($originalCheckout));
+
+        if (strtotime($requestedDateTime) <= strtotime($originalDateTime)) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Extend time must be greater than checkout time'
+            ]);
+        }
+
+        $minutes = floor((strtotime($requestedDateTime) - strtotime($originalDateTime)) / 60);
+
+        // Cegah double pending
+        $pending = $db->table('job_extend_requests')
+            ->where('user_id', $userId)
+            ->where('job_id', $jobId)
+            ->where('DATE(original_end_time)', $date)
+            ->where('status', 'pending')
+            ->countAllResults();
+
+        if ($pending > 0) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'There is already a pending extend request'
+            ]);
+        }
+
+        // =============================
+        // HITUNG ESTIMATED FEE
+        // =============================
+
+        $job = $db->table('jobs')
+            ->select('start_time, end_time, fee')
+            ->where('id', $jobId)
+            ->get()
+            ->getRowArray();
+
+        $jobStart = strtotime($job['start_time']);
+        $jobEnd   = strtotime($job['end_time']);
+
+        $jobMinutes = ($jobEnd - $jobStart) / 60;
+        $jobTenMin  = floor($jobMinutes / 10);
+
+        $ratePer10Min = $jobTenMin > 0 ? $job['fee'] / $jobTenMin : 0;
+
+        $extendTenMin = floor($minutes / 10);
+
+        $estimatedFee = round($extendTenMin * $ratePer10Min);
+
+        $db->table('job_extend_requests')->insert([
+            'job_id'            => $jobId,
+            'user_id'           => $userId,
+            'application_id'    => $applicationId,
+            'requested_by'      => session('user_id'),
+            'original_end_time' => $originalDateTime,
+            'requested_end_time'=> $requestedDateTime,
+            'requested_minutes' => $minutes,
+            'estimated_fee'     => $estimatedFee,
+            'final_fee'         => $estimatedFee,
+            'status'            => 'pending',
+            'reason'            => $reason,
+            'created_at'        => date('Y-m-d H:i:s')
+        ]);
+
+        return $this->response->setJSON([
+            'status'  => true,
+            'message' => 'Extend request sent to worker'
         ]);
     }
 

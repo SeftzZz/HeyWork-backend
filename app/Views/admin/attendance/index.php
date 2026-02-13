@@ -40,8 +40,9 @@
                                                 <th>Check Out</th>
                                                 <th>Duration (Hours)</th>
                                                 <th>10 Min Count</th>
-                                                <th>Rate</th>
+                                                <th>Rate (Rp)</th>
                                                 <th>Status</th>
+                                                <th>Extend</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -99,7 +100,7 @@
                                                 </tbody>
                                             </table>
 
-                                            <div class="row g-3">
+                                            <div class="row g-3 mt-1">
                                                 <div class="col-md-6">
                                                     <h6>Check In Photo</h6>
                                                     <img id="detail_checkin_photo" class="img-fluid rounded">
@@ -118,6 +119,38 @@
 
                                         <?php if (in_array(session('user_role'), ['hotel_hr', 'admin'])): ?>
                                         <hr>
+
+                                        <div id="extendRequestWrapper">
+                                            <h6 class="mb-3">Extend Attendance</h6>
+
+                                            <form id="formExtendRequest">
+                                                <?= csrf_field() ?>
+
+                                                <input type="hidden" name="user_id" id="ex_user_id">
+                                                <input type="hidden" name="job_id" id="ex_job_id">
+                                                <input type="hidden" name="date" id="ex_date">
+
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Extend Until</label>
+                                                        <input type="time" name="requested_time" class="form-control" required>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Reason</label>
+                                                        <input type="text" name="reason" class="form-control">
+                                                    </div>
+                                                </div>
+
+                                                <div class="mt-3 text-end">
+                                                    <button type="submit" class="btn btn-warning">
+                                                        <i class="ti ti-clock-plus"></i> Request Extend
+                                                    </button>
+                                                </div>
+                                            </form>
+
+                                            <div id="extendStatus" class="mt-3"></div>
+                                        </div>
 
                                         <div id="workerRatingFormWrapper">
                                             <h6 class="mb-3">Worker Rating</h6>
@@ -224,6 +257,7 @@
                                             { data: 'ten_minutes' },
                                             { data: 'rate' },
                                             { data: 'status' },
+                                            { data: 'extend_duration' },
                                             { data: 'action' }
                                         ],
 
@@ -233,7 +267,7 @@
                                             {
                                                 targets: 9,
                                                 render: function (data) {
-                                                    return data !== '-' ? 'Rp ' + data : '-';
+                                                    return data !== '-' ? '' + data : '-';
                                                 }
                                             },
                                             {
@@ -361,6 +395,10 @@
                                     $('#detail_checkin_photo').attr('src', d.checkin_photo ? "<?= base_url() ?>/" + d.checkin_photo : '');
                                     $('#detail_checkout_photo').attr('src', d.checkout_photo ? "<?= base_url() ?>/" + d.checkout_photo : '');
                                     // set hidden value
+                                    $('#ex_user_id').val(d.user_id);
+                                    $('#ex_job_id').val(d.job_id);
+                                    $('#ex_date').val(d.date);
+
                                     $('#wr_user_id').val(d.user_id);
                                     $('#wr_job_id').val(d.job_id);
                                     $('#wr_date').val(d.date);
@@ -407,6 +445,30 @@
 
                                         $('#formWorkerRating button[type=submit]')
                                             .text('Already Rated');
+                                    },
+                                    'json'
+                                );
+                            });
+
+                            $(document).on('submit', '#formExtendRequest', function(e){
+                                e.preventDefault();
+
+                                $.post(
+                                    "<?= base_url('admin/attendance/extend-request') ?>",
+                                    $(this).serialize(),
+                                    function(res){
+                                        if(!res.status){
+                                            alert(res.message);
+                                            return;
+                                        }
+
+                                        $('#extendStatus').html(
+                                            `<span class="badge bg-label-warning">
+                                                Extend Requested (Waiting Worker Approval)
+                                             </span>`
+                                        );
+
+                                        $('#formExtendRequest button').prop('disabled', true);
                                     },
                                     'json'
                                 );

@@ -35,6 +35,7 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('attendance/datatable', 'Admin\Attendance::datatable', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('attendance/detail', 'Admin\Attendance::detail', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('attendance/rate', 'Admin\Attendance::submitRating', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('attendance/extend-request', 'Admin\Attendance::extendRequest', ['filter' => 'role:admin,hotel_hr']);
 
     $routes->get('users', 'Admin\Users::index', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('users/datatable', 'Admin\Users::datatable', ['filter' => 'role:admin,hotel_hr']);
