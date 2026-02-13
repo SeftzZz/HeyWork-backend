@@ -600,7 +600,11 @@
 							                        $('#modalAddUser').modal('hide');
 							                        $('.dtUser').DataTable().ajax.reload(null, false);
 							                    } else {
-							                        Swal.fire('Failed', res.message, 'error');
+							                        Swal.fire({
+							                            icon: 'error',
+							                            title: 'Failed',
+							                            text: res.message
+							                        });
 							                    }
 							                }
 							            });
