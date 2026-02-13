@@ -60,6 +60,8 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('balance/debit', 'Admin\Balance::debit', ['filter' => 'role:admin,hotel_hr']);
     $routes->get('balance/history', 'Admin\Balance::history', ['filter' => 'role:admin,hotel_hr']);
     $routes->get('balance/monthly-jobs', 'Admin\Balance::monthlyJobStats', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('balance/update-revenue', 'Admin\Balance::updateRevenue', ['filter' => 'role:admin,hotel_hr']);
+    $routes->get('balance/today-revenue', 'Admin\Balance::getTodayRevenue', ['filter' => 'role:admin,hotel_hr']);
 });
 
 $routes->group('api', function($routes) {

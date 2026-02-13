@@ -36,13 +36,13 @@
                                                 <th>Worker</th>
                                                 <!-- <th>Hotel</th> -->
                                                 <th>Job</th>
-                                                <th>Check In</th>
-                                                <th>Check Out</th>
+                                                <th>In</th>
+                                                <th>Out</th>
                                                 <th>Duration (Hours)</th>
                                                 <th>10 Min Count</th>
                                                 <th>Rate (Rp)</th>
                                                 <th>Status</th>
-                                                <th>Extend</th>
+                                                <th>Extend (Hours)</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>

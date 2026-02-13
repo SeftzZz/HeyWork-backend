@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 13, 2026 at 05:58 PM
+-- Generation Time: Feb 13, 2026 at 09:26 PM
 -- Server version: 10.11.10-MariaDB-log
 -- PHP Version: 8.3.27
 
@@ -56,24 +56,6 @@ INSERT INTO `hotels` (`id`, `hotel_name`, `location`, `latitude`, `longitude`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `hotel_balances`
---
-
-CREATE TABLE `hotel_balances` (
-  `id` int(1) NOT NULL,
-  `hotel_id` int(11) NOT NULL,
-  `balance` decimal(15,2) NOT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `created_by` int(1) DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `updated_by` int(1) DEFAULT NULL,
-  `deleted_at` datetime DEFAULT NULL,
-  `deleted_by` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `hotel_transactions`
 --
 
@@ -82,6 +64,7 @@ CREATE TABLE `hotel_transactions` (
   `hotel_id` int(11) NOT NULL,
   `type` enum('debit','credit') NOT NULL DEFAULT 'credit',
   `amount` decimal(15,2) NOT NULL,
+  `category` enum('topup','revenue','payroll','extend','adjustment') DEFAULT NULL,
   `description` varchar(255) NOT NULL,
   `reference_id` varchar(50) NOT NULL,
   `reference_type` varchar(50) NOT NULL,
@@ -97,22 +80,19 @@ CREATE TABLE `hotel_transactions` (
 -- Dumping data for table `hotel_transactions`
 --
 
-INSERT INTO `hotel_transactions` (`id`, `hotel_id`, `type`, `amount`, `description`, `reference_id`, `reference_type`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 1, 'credit', 1500000.00, 'Topup Monday', 'TOPUP-20260113-001', 'topup', '2026-02-13 09:00:00', 1, NULL, NULL, NULL, NULL),
-(2, 1, 'debit', 300000.00, 'Worker Payment', 'PAY-20260113-001', 'payroll', '2026-02-13 18:00:00', 1, NULL, NULL, NULL, NULL),
-(3, 1, 'credit', 1000000.00, 'Topup Tuesday', 'TOPUP-20260114-001', 'topup', '2026-02-14 09:00:00', 1, NULL, NULL, NULL, NULL),
-(4, 1, 'debit', 500000.00, 'Worker Payment', 'PAY-20260114-001', 'payroll', '2026-02-14 18:00:00', 1, NULL, NULL, NULL, NULL),
-(5, 1, 'credit', 2000000.00, 'Topup Wednesday', 'TOPUP-20260115-001', 'topup', '2026-02-15 09:00:00', 1, NULL, NULL, NULL, NULL),
-(6, 1, 'debit', 800000.00, 'Worker Payment', 'PAY-20260115-001', 'payroll', '2026-02-15 18:00:00', 1, NULL, NULL, NULL, NULL),
-(7, 1, 'credit', 500000.00, 'Topup Thursday', 'TOPUP-20260116-001', 'topup', '2026-02-16 09:00:00', 1, NULL, NULL, NULL, NULL),
-(8, 1, 'debit', 700000.00, 'Worker Payment', 'PAY-20260116-001', 'payroll', '2026-02-16 18:00:00', 1, NULL, NULL, NULL, NULL),
-(9, 1, 'credit', 2500000.00, 'Topup Friday', 'TOPUP-20260117-001', 'topup', '2026-02-17 09:00:00', 1, NULL, NULL, NULL, NULL),
-(10, 1, 'debit', 1200000.00, 'Worker Payment', 'PAY-20260117-001', 'payroll', '2026-02-17 18:00:00', 1, NULL, NULL, NULL, NULL),
-(11, 1, 'credit', 1000000.00, 'Topup Saturday', 'TOPUP-20260118-001', 'topup', '2026-02-18 09:00:00', 1, NULL, NULL, NULL, NULL),
-(12, 1, 'debit', 400000.00, 'Worker Payment', 'PAY-20260118-001', 'payroll', '2026-02-18 18:00:00', 1, NULL, NULL, NULL, NULL),
-(13, 1, 'credit', 800000.00, 'Topup Sunday', 'TOPUP-20260119-001', 'topup', '2026-02-19 09:00:00', 1, NULL, NULL, NULL, NULL),
-(14, 1, 'debit', 300000.00, 'Worker Payment', 'PAY-20260119-001', 'payroll', '2026-02-19 18:00:00', 1, NULL, NULL, NULL, NULL),
-(15, 1, 'debit', 500000.00, 'Worker Payment', 'PAY-20260120-001', 'payroll', '2026-02-20 18:00:00', 1, NULL, NULL, NULL, NULL);
+INSERT INTO `hotel_transactions` (`id`, `hotel_id`, `type`, `amount`, `category`, `description`, `reference_id`, `reference_type`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 1, 'credit', 578512.00, 'revenue', 'Daily Revenue', '', '', '2026-02-08 19:29:33', 3, NULL, NULL, NULL, NULL),
+(2, 1, 'debit', 460000.00, 'payroll', 'Payroll', '', '', '2026-02-08 19:29:33', 3, NULL, NULL, NULL, NULL),
+(3, 1, 'credit', 2270248.00, 'revenue', 'Daily Revenue', '', '', '2026-02-09 19:39:30', 3, NULL, NULL, NULL, NULL),
+(4, 1, 'debit', 460000.00, 'payroll', 'Payroll', '', '', '2026-02-09 19:29:33', 3, NULL, NULL, NULL, NULL),
+(5, 1, 'credit', 16400053.00, 'revenue', 'Daily Revenue', '', '', '2026-02-10 19:40:44', 3, NULL, NULL, NULL, NULL),
+(6, 1, 'debit', 115000.00, 'payroll', 'Payroll', '', '', '2026-02-10 19:29:33', 3, NULL, NULL, NULL, NULL),
+(7, 1, 'credit', 6983383.00, 'revenue', 'Daily Revenue', '', '', '2026-02-11 19:42:15', 3, NULL, NULL, NULL, NULL),
+(8, 1, 'debit', 460000.00, 'payroll', 'Payroll', '', '', '2026-02-11 19:29:33', 3, NULL, NULL, NULL, NULL),
+(9, 1, 'credit', 1347367.00, 'revenue', 'Daily Revenue', '', '', '2026-02-12 19:55:34', 3, NULL, NULL, NULL, NULL),
+(10, 1, 'debit', 460000.00, 'payroll', 'Payroll', '', '', '2026-02-12 19:29:33', 3, NULL, NULL, NULL, NULL),
+(11, 1, 'credit', 1066375.00, 'revenue', 'Daily Revenue', '', '', '2026-02-13 20:23:45', 3, NULL, NULL, NULL, NULL),
+(12, 1, 'debit', 330000.00, 'payroll', 'Payroll', '', '', '2026-02-13 19:29:33', 3, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -226,10 +206,10 @@ CREATE TABLE `job_attendances` (
 --
 
 INSERT INTO `job_attendances` (`id`, `job_id`, `application_id`, `user_id`, `type`, `latitude`, `longitude`, `photo_path`, `device_info`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 5, 8, 1, 'checkin', -6.6015006, 106.7942450, 'uploads/attendance/checkin_3_3_1769943711.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 07:28:45', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0),
-(2, 5, 8, 1, 'checkout', -6.6013100, 106.7891102, 'uploads/attendance/checkin_4_3_1770289595.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 17:38:10', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0),
-(8, 4, 5, 2, 'checkin', -6.6015006, 106.7942450, 'uploads/attendance/checkin_3_3_1769943711.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 07:28:45', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0),
-(9, 4, 5, 2, 'checkout', -6.6013100, 106.7891102, 'uploads/attendance/checkin_4_3_1770289595.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 17:38:10', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0);
+(1, 5, 8, 1, 'checkin', -6.6015006, 106.7942450, 'uploads/attendance/checkin_3_3_1769943711.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-02-13 07:28:45', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0),
+(2, 5, 8, 1, 'checkout', -6.6013100, 106.7891102, 'uploads/attendance/checkin_4_3_1770289595.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-02-13 17:38:10', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0),
+(8, 4, 5, 2, 'checkin', -6.6015006, 106.7942450, 'uploads/attendance/checkin_3_3_1769943711.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-02-13 07:28:45', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0),
+(9, 4, 5, 2, 'checkout', -6.6013100, 106.7891102, 'uploads/attendance/checkin_4_3_1770289595.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-02-13 17:38:10', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -256,8 +236,8 @@ CREATE TABLE `job_extend_attendances` (
 --
 
 INSERT INTO `job_extend_attendances` (`id`, `extend_request_id`, `job_id`, `user_id`, `application_id`, `type`, `latitude`, `longitude`, `photo_path`, `device_info`, `created_at`) VALUES
-(1, 1, 5, 1, 8, 'checkin', -6.6015006, 106.7942450, 'uploads/attendance/checkin_3_3_1769943711.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 17:38:10'),
-(2, 1, 5, 1, 8, 'checkout', -6.6015006, 106.7942450, 'uploads/attendance/checkin_3_3_1769943711.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-01-30 21:30:00');
+(1, 1, 5, 1, 8, 'checkin', -6.6015006, 106.7942450, 'uploads/attendance/checkin_3_3_1769943711.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-02-13 17:38:10'),
+(2, 1, 5, 1, 8, 'checkout', -6.6015006, 106.7942450, 'uploads/attendance/checkin_3_3_1769943711.jpg', 'Android 13 | Samsung A34 | Chrome Mobile', '2026-02-13 21:30:00');
 
 -- --------------------------------------------------------
 
@@ -289,7 +269,7 @@ CREATE TABLE `job_extend_requests` (
 --
 
 INSERT INTO `job_extend_requests` (`id`, `job_id`, `application_id`, `user_id`, `requested_by`, `original_end_time`, `requested_end_time`, `requested_minutes`, `estimated_fee`, `final_fee`, `status`, `responded_at`, `responded_by`, `reason`, `created_at`, `updated_at`) VALUES
-(1, 5, 8, 1, 3, '2026-01-30 17:38:10', '2026-01-30 21:30:00', 231, 115000.00, 115000.00, 'approved', '2026-02-13 16:29:14', 1, 'Kami butuh jam kerja lebih', '2026-02-13 16:26:24', '2026-02-13 16:29:22');
+(1, 5, 8, 1, 3, '2026-02-13 17:38:10', '2026-02-13 21:30:00', 231, 115000.00, 115000.00, 'approved', '2026-02-13 16:29:14', 1, 'Kami butuh jam kerja lebih', '2026-02-13 16:26:24', '2026-02-13 18:54:21');
 
 -- --------------------------------------------------------
 
@@ -670,8 +650,8 @@ INSERT INTO `skills` (`id`, `name`, `category`, `created_at`, `created_by`, `upd
 (29, 'Technician Electrical', 'Engineering', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (30, 'Technician AC', 'Engineering', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (31, 'Technician Plumbing', 'Engineering', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
-(32, 'Security Guard', 'Security', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
-(33, 'Security Supervisor', 'Security', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(32, 'Security Guard', 'Human Resources', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(33, 'Security Supervisor', 'Human Resources', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (34, 'Sales Executive', 'Sales & Marketing', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (35, 'Sales Manager', 'Sales & Marketing', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (36, 'Marketing Staff', 'Sales & Marketing', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
@@ -954,12 +934,6 @@ ALTER TABLE `hotels`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `hotel_balances`
---
-ALTER TABLE `hotel_balances`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `hotel_transactions`
 --
 ALTER TABLE `hotel_transactions`
@@ -1094,16 +1068,10 @@ ALTER TABLE `hotels`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `hotel_balances`
---
-ALTER TABLE `hotel_balances`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `hotel_transactions`
 --
 ALTER TABLE `hotel_transactions`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `jobs`
