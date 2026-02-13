@@ -123,6 +123,30 @@ class Balance extends BaseAdminController
         ]);
     }
 
+
+    /* =======================================================
+     * HISTORY TRANSACTIONS (WAJIB INCLUDE CATEGORY)
+     * ======================================================= */
+    public function history()
+    {
+        $hotelId = session()->get('hotel_id');
+
+        $rows = $this->db->table('hotel_transactions')
+            ->select('id, hotel_id, type, category, amount, description, created_at')
+            ->where('hotel_id', $hotelId)
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON([
+            'status' => true,
+            'data'   => $rows
+        ]);
+    }
+    
+    /* =======================================================
+     * BALANCE CALCULATION (SEMUA CREDIT - SEMUA DEBIT)
+     * ======================================================= */
     private function calculateBalance($hotelId)
     {
         $credit = $this->db->table('hotel_transactions')
