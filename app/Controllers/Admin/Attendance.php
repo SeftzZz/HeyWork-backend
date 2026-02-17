@@ -126,7 +126,11 @@ class Attendance extends BaseAdminController
 
         $data = [];
         $no = $start + 1;
-
+        // ==========================
+        // EXTEND WORK
+        // ==========================
+        $extendMinutes = 0;
+        
         foreach ($rows as $row) {
 
             $checkin  = $row['checkin_time'];
@@ -137,7 +141,7 @@ class Attendance extends BaseAdminController
             $status        = 'Incomplete';
             $rate          = '-';
             $extendBadge   = '';
-
+            
             if ($checkin && $checkout) {
 
                 // ==========================
@@ -145,11 +149,6 @@ class Attendance extends BaseAdminController
                 // ==========================
                 $secondsNormal = strtotime($checkout) - strtotime($checkin);
                 $minutesNormal = floor($secondsNormal / 60);
-
-                // ==========================
-                // EXTEND WORK
-                // ==========================
-                $extendMinutes = 0;
 
                 if ($row['ex_checkin'] && $row['ex_checkout']) {
 

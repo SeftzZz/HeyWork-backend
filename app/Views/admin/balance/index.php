@@ -16,6 +16,12 @@
 
                             <div class="container-xxl flex-grow-1 container-p-y">
                               <div class="row">
+                                <div class="col-lg-12 mb-4">
+                                  <button id="exportReportBtn" class="btn btn-success">
+                                    Export Full Report
+                                  </button>
+                                </div>
+
                                 <!-- Productivity Ratio -->
                                 <div class="col-lg-12 mb-4">
                                   <div class="card h-100">
@@ -108,69 +114,12 @@
                                 </div>
                                 <!--/ Productivity Ratio -->
 
-                                <!-- Monthly Growth -->
-                                <div class="col-lg-6 mb-4">
-                                  <div class="card">
-                                    <div class="card-header d-flex justify-content-between pb-1">
-                                      <h5 class="mb-0 card-title">Monthly Growth</h5>
-                                      <div class="dropdown">
-                                        <button
-                                          class="btn p-0"
-                                          type="button"
-                                          id="totalEarning"
-                                          data-bs-toggle="dropdown"
-                                          aria-haspopup="true"
-                                          aria-expanded="false">
-                                          <i class="ti ti-dots-vertical ti-sm text-muted"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="totalEarning">
-                                          <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                          <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="card-body">
-                                      <div class="d-flex align-items-center">
-                                        <h1 class="mb-0 me-2">87%</h1>
-                                        <i class="ti ti-chevron-up text-success me-1"></i>
-                                        <p class="text-success mb-0">25.8%</p>
-                                      </div>
-                                      <div id="totalEarningChart"></div>
-                                      <div class="d-flex align-items-start my-4">
-                                        <div class="badge rounded bg-label-primary p-2 me-3 rounded">
-                                          <i class="ti ti-currency-dollar ti-sm"></i>
-                                        </div>
-                                        <div class="d-flex justify-content-between w-100 gap-2 align-items-center">
-                                          <div class="me-2">
-                                            <h6 class="mb-0">Total DW Cost</h6>
-                                            <small class="text-muted">Cost</small>
-                                          </div>
-                                          <p class="mb-0 text-success">+$98</p>
-                                        </div>
-                                      </div>
-                                      <div class="d-flex align-items-start">
-                                        <div class="badge rounded bg-label-secondary p-2 me-3 rounded">
-                                          <i class="ti ti-brand-paypal ti-sm"></i>
-                                        </div>
-                                        <div class="d-flex justify-content-between w-100 gap-2 align-items-center">
-                                          <div class="me-2">
-                                            <h6 class="mb-0">Total Revenue</h6>
-                                            <small class="text-muted">Client Payment</small>
-                                          </div>
-                                          <p class="mb-0 text-success">+$126</p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <!--/ Monthly Growth -->
-
-                                <!-- Departement -->
-                                <div class="col-lg-6 mb-4">
-                                  <div class="card h-100">
+                                <!-- Last day attendances -->
+                                <div class="col-lg-3 mb-4">
+                                  <div class="card mb-4">
                                     <div class="card-header d-flex justify-content-between">
                                       <div class="card-title mb-0">
-                                        <h5 class="mb-0">Departement</h5>
+                                        <h5 class="mb-0">Last day attendances</h5>
                                         <small class="text-muted">8.52k Daily Worker</small>
                                       </div>
                                       <div class="dropdown">
@@ -257,8 +206,57 @@
                                       </ul>
                                     </div>
                                   </div>
+                                  <div class="card">
+                                    <div class="card-header d-flex justify-content-between pb-1">
+                                      <h5 class="mb-0 card-title">Monthly Growth</h5>
+                                      <div class="dropdown">
+                                        <button
+                                          class="btn p-0"
+                                          type="button"
+                                          id="totalEarning"
+                                          data-bs-toggle="dropdown"
+                                          aria-haspopup="true"
+                                          aria-expanded="false">
+                                          <i class="ti ti-dots-vertical ti-sm text-muted"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="totalEarning">
+                                          <a class="dropdown-item" href="javascript:void(0);">View More</a>
+                                          <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="card-body">
+                                      <div class="d-flex align-items-center">
+                                        <h1 class="mb-0 me-2">87%</h1>
+                                        <i class="ti ti-chevron-up text-success me-1"></i>
+                                        <p class="text-success mb-0">25.8%</p>
+                                      </div>
+                                      <div id="totalEarningChart"></div>
+                                    </div>
+                                  </div>
                                 </div>
-                                <!--/ Departement -->
+
+                                <div class="col-lg-9 mb-4">
+                                  <div class="card">
+                                    <div class="card table-responsive pt-0">
+                                      <table id="dailyReportTable" class="table table-bordered table-striped text-center">
+                                        <thead class="table-light">
+                                          <tr>
+                                            <th rowspan="2" class="text-start">Departement</th>
+                                            <th colspan="3">31-Jan-26</th>
+                                          </tr>
+                                          <tr>
+                                            <th>DW</th>
+                                            <th>COST</th>
+                                            <th>Total</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody id="dailyReportBody"></tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!--/ Last day attendances -->
                               </div>
                             </div>
                         <?= $this->endSection() ?>
@@ -308,6 +306,24 @@
                                 return (number / 1_000).toFixed(1).replace('.0','') + 'Rb';
                               }
                               return number.toString();
+                            }
+
+                            // ======================
+                            // LABEL COLOR FUNCTION
+                            // ======================
+                            function getRatioBadgeClass(label) {
+
+                              if (!label) return 'bg-label-secondary';
+
+                              label = label.toUpperCase();
+
+                              if (label === 'GOOD') return 'bg-label-success';
+                              if (label === 'AVERAGE') return 'bg-label-warning';
+                              if (label === 'BAD') return 'bg-label-danger';
+                              if (label.includes('NOT OPTIMAL')) return 'bg-label-danger';
+                              if (label === 'UNDER TARGET') return 'bg-label-info';
+
+                              return 'bg-label-secondary';
                             }
 
                             // ==============================
@@ -735,13 +751,119 @@
                             }, 'json');
 
                             // ==============================
-                            // Departement
+                            // DAILY DEPARTMENT REPORT
+                            // ==============================
+                            $.get("<?= base_url('admin/balance/daily-report') ?>", function(res){
+
+                              if(!res.status) return;
+
+                              const table = $('#dailyReportTable');
+                              const tbody = $('#dailyReportBody');
+
+                              const todayLabelClass = getRatioBadgeClass(res.today_label);
+                              const mtdLabelClass   = getRatioBadgeClass(res.mtd_label);
+
+                              // ======================
+                              // FORMAT DATE HEADER
+                              // ======================
+                              const formattedDate = new Date(res.date).toLocaleDateString('id-ID', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: '2-digit'
+                              });
+
+                              // update header date
+                              table.find('thead tr:first th:nth-child(2)').text(formattedDate);
+
+                              // ======================
+                              // RESET TABLE
+                              // ======================
+                              tbody.html('');
+
+                              // ======================
+                              // RENDER DEPARTMENTS
+                              // ======================
+                              res.departments.forEach(dep => {
+
+                                tbody.append(`
+                                  <tr>
+                                    <td class="text-start">${dep.department}</td>
+                                    <td>${dep.dw > 0 ? dep.dw : ''}</td>
+                                    <td>${dep.cost > 0 ? dep.cost.toLocaleString('id-ID') : ''}</td>
+                                  </tr>
+                                `);
+
+                              });
+
+                              // Spacer
+                              tbody.append(`
+                                <tr>
+                                  <td colspan="3"></td>
+                                </tr>
+                              `);
+
+                              // ======================
+                              // TOTAL DW COST
+                              // ======================
+                              tbody.append(`
+                                <tr class="table-secondary fw-bold">
+                                  <td class="text-start">Total DW Cost</td>
+                                  <td></td>
+                                  <td>${res.total_dw_cost.toLocaleString('id-ID')}</td>
+                                </tr>
+                              `);
+
+                              // ======================
+                              // TODAY
+                              // ======================
+                              tbody.append(`
+                                <tr class="fw-bold">
+                                  <td rowspan="2" class="text-start">Today</td>
+                                  <td>Revenue</td>
+                                  <td></td>
+                                  <td>${res.today_revenue.toLocaleString('id-ID')}</td>
+                                </tr>
+                                <tr>
+                                  <td>Rasio</td>
+                                  <td>${res.today_ratio}%</td>
+                                  <td>
+                                    <span class="badge ${todayLabelClass}">
+                                      ${res.today_label}
+                                    </span>
+                                  </td>
+                                </tr>
+                              `);
+
+                              // ======================
+                              // MONTH TO DATE
+                              // ======================
+                              tbody.append(`
+                                <tr class="fw-bold">
+                                  <td rowspan="2" class="text-start">Month To Date</td>
+                                  <td>Revenue</td>
+                                  <td></td>
+                                  <td>${res.mtd_revenue.toLocaleString('id-ID')}</td>
+                                </tr>
+                                <tr>
+                                  <td>Rasio</td>
+                                  <td>${res.mtd_ratio}%</td>
+                                  <td>
+                                    <span class="badge ${mtdLabelClass}">
+                                      ${res.mtd_label}
+                                    </span>
+                                  </td>
+                                </tr>
+                              `);
+                            }, 'json');
+
+                            // ==============================
+                            // Last day attendances
                             // ==============================
                             $.get("<?= base_url('admin/balance/monthly-jobs') ?>", function(res){
 
                               if(!res.status) return;
 
-                              const container = $('.card-title:contains("Departement")')
+                              const container = $('.card-title:contains("Last day attendances")')
                                                 .closest('.card')
                                                 .find('ul');
 
@@ -807,6 +929,15 @@
                                     location.reload();
 
                                 }, 'json');
+                            });
+
+                            $('#exportReportBtn').on('click', function(){
+
+                                const url = "<?= base_url('admin/balance/export-report') ?>";
+
+                                // langsung redirect supaya file ter-download
+                                window.location.href = url;
+
                             });
 
                           })();
