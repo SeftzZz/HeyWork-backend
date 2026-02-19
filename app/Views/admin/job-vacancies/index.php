@@ -59,6 +59,7 @@
                                                 <option value="">-- Select Category --</option>
                                                 <option value="daily_worker">Daily Worker</option>
                                                 <option value="casual">Casual</option>
+                                                <option value="coorporate">Coorporate</option>
                                               </select>
                                             </div>
 
@@ -123,6 +124,101 @@
                                           </button>
                                           <button type="submit" class="btn btn-primary">
                                             Save & Publish
+                                          </button>
+                                        </div>
+
+                                      </form>
+
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <!-- MODAL EDIT JOB -->
+                                <div class="modal fade" id="modalEditJob" tabindex="-1" aria-hidden="true">
+                                  <div class="modal-dialog modal-lg modal-dialog-centered">
+                                    <div class="modal-content">
+
+                                      <form id="formEditJob">
+                                        <?= csrf_field() ?>
+                                        <input type="hidden" name="id" id="edit_id">
+
+                                        <div class="modal-header">
+                                          <h5 class="modal-title">Edit Job Vacancy</h5>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                          <div class="row">
+
+                                            <!-- POSITION -->
+                                            <div class="col-md-6 mb-3">
+                                              <label class="form-label">Job Position</label>
+                                              <input 
+                                                type="text" 
+                                                class="form-control" 
+                                                id="edit_job_position"
+                                                disabled>
+                                            </div>
+
+                                            <!-- hidden input untuk tetap kirim value -->
+                                            <input type="hidden" name="position" id="edit_job_position_hidden">
+
+                                            <!-- CATEGORY -->
+                                            <div class="col-md-6 mb-3">
+                                              <label class="form-label">Category</label>
+                                              <select class="form-select" name="category" id="edit_category" required>
+                                                <option value="">-- Select Category --</option>
+                                                <option value="daily_worker">Daily Worker</option>
+                                                <option value="casual">Casual</option>
+                                                <option value="coorporate">Coorporate</option>
+                                              </select>
+                                            </div>
+
+                                          </div>
+
+                                          <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                              <label class="form-label">Start Date</label>
+                                              <input type="date" class="form-control" name="job_date_start" id="edit_job_date_start" required>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                              <label class="form-label">End Date</label>
+                                              <input type="date" class="form-control" name="job_date_end" id="edit_job_date_end" required>
+                                            </div>
+                                          </div>
+
+                                          <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                              <label class="form-label">Start Time</label>
+                                              <input type="time" class="form-control" name="start_time" id="edit_start_time" required>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                              <label class="form-label">End Time</label>
+                                              <input type="time" class="form-control" name="end_time" id="edit_end_time" required>
+                                            </div>
+                                          </div>
+
+                                          <div class="mb-3">
+                                            <label class="form-label">Fee</label>
+                                            <input type="number" class="form-control" name="fee" id="edit_fee" required>
+                                          </div>
+
+                                          <div class="mb-3">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control" name="description" id="edit_description" rows="3"></textarea>
+                                          </div>
+
+                                        </div>
+
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                                            Cancel
+                                          </button>
+                                          <button type="submit" class="btn btn-primary">
+                                            Update Job
                                           </button>
                                         </div>
 
@@ -311,10 +407,10 @@
                                                 $('.dtJobVacancies').DataTable().ajax.reload(null, false);
 
                                                 // toast / alert
-                                                toastr.success(res.message ?? 'Job successfully added');
+                                                // toastr.success(res.message ?? 'Job successfully added');
 
                                             } else {
-                                                toastr.error(res.message ?? 'Failed to save job');
+                                                // toastr.error(res.message ?? 'Failed to save job');
                                             }
                                         },
 
@@ -326,13 +422,94 @@
                                                 msg = xhr.responseJSON.message;
                                             }
 
-                                            toastr.error(msg);
+                                            // toastr.error(msg);
                                         },
 
                                         complete: function () {
                                             btn.prop('disabled', false).html('Save Job');
                                         }
                                     });
+                                });
+
+                                $('#formEditJob').on('submit', function (e) {
+
+                                    e.preventDefault();
+
+                                    let form = $(this);
+
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        icon: 'question',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Yes, update'
+                                    }).then((result) => {
+
+                                        if (result.isConfirmed) {
+
+                                            $.post("<?= base_url('admin/job-vacancies/update') ?>",
+                                                form.serialize(),
+                                                function (res) {
+
+                                                    if (res.status) {
+
+                                                        Swal.fire({
+                                                            icon: 'success',
+                                                            title: 'Updated',
+                                                            text: res.message,
+                                                            timer: 1500,
+                                                            showConfirmButton: false
+                                                        });
+
+                                                        $('#modalEditJob').modal('hide');
+                                                        $('.dtJobVacancies').DataTable().ajax.reload(null, false);
+
+                                                    } else {
+                                                        Swal.fire('Failed', res.message, 'error');
+                                                    }
+
+                                                }, 'json'
+                                            );
+                                        }
+
+                                    });
+
+                                });
+
+
+                                // =============================
+                                // CLICK EDIT
+                                // =============================
+                                $(document).on('click', '.btn-edit-job', function () {
+
+                                    const id = $(this).data('id');
+
+                                    $.post("<?= base_url('admin/job-vacancies/get') ?>", {
+                                        id: id,
+                                        '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
+                                    }, function (res) {
+
+                                        if (res.status) {
+
+                                            $('#edit_id').val(res.data.id);
+                                            $('#edit_category').val(res.data.category);
+                                            $('#edit_job_date_start').val(res.data.job_date_start);
+                                            $('#edit_job_date_end').val(res.data.job_date_end);
+                                            $('#edit_start_time').val(res.data.start_time);
+                                            $('#edit_end_time').val(res.data.end_time);
+                                            $('#edit_fee').val(res.data.fee);
+                                            $('#edit_description').val(res.data.description);
+
+                                            // SET POSITION
+                                            $('#edit_job_position').val(res.data.position);
+                                            $('#edit_job_position_hidden').val(res.data.position);
+
+                                            $('#modalEditJob').modal('show');
+
+                                        } else {
+                                            Swal.fire('Failed', res.message, 'error');
+                                        }
+
+                                    }, 'json');
                                 });
 
                             });
@@ -374,6 +551,31 @@
                                 $('#modalAddJob').on('hidden.bs.modal', function () {
                                     $('#add_job_position').val(null).trigger('change');
                                 });
+
+                                function initEditJobPositionSelect2() {
+
+                                    if ($('#edit_job_position').hasClass('select2-hidden-accessible')) {
+                                        $('#edit_job_position').select2('destroy');
+                                    }
+
+                                    $('#edit_job_position').select2({
+                                        placeholder: 'Select Job Position',
+                                        allowClear: true,
+                                        closeOnSelect: false,
+                                        dropdownParent: $('#modalEditJob'),
+                                        ajax: {
+                                            url: "<?= base_url('admin/job-vacancies/skills') ?>",
+                                            dataType: 'json',
+                                            delay: 250,
+                                            data: function (params) {
+                                                return { q: params.term };
+                                            },
+                                            processResults: function (data) {
+                                                return { results: data.results };
+                                            }
+                                        }
+                                    });
+                                }
 
                             });
                         </script>

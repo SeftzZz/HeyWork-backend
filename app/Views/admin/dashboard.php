@@ -680,4 +680,92 @@
                           });
                         </script>
 
+                        <script>
+                          (function () {
+
+                            let ws;
+                            let reconnectInterval = 3000;
+                            let isManuallyClosed = false;
+
+                            function connectWS() {
+
+                              const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+
+                              // GANTI domain jika beda server
+                              const wsUrl = `${protocol}://${window.location.hostname}:3004`;
+
+                              ws = new WebSocket(wsUrl);
+
+                              console.log('Connecting WS:', wsUrl);
+
+                              ws.onopen = function () {
+                                console.log('✅ WS Connected');
+                              };
+
+                              ws.onmessage = function (event) {
+
+                                try {
+                                  const data = JSON.parse(event.data);
+
+                                  console.log('📩 WS Message:', data);
+
+                                  if (!data.type) return;
+
+                                  /**
+                                   * =============================
+                                   * HANDLE EVENT TYPES
+                                   * =============================
+                                   */
+
+                                  // 🔄 Refresh Calendar
+                                  if (data.type === 'job_update' || data.type === 'job_created') {
+                                    if (typeof loadJobCalendar === 'function') {
+                                      loadJobCalendar();
+                                    }
+                                  }
+
+                                  // 🔄 Attendance Update
+                                  if (data.type === 'attendance_update') {
+
+                                    // Jika offcanvas sedang terbuka dan job sama
+                                    const currentJobId = document.getElementById('job_position')
+                                      ? document.getElementById('job_position').dataset.jobId
+                                      : null;
+
+                                    if (data.job_id && window.calendar) {
+                                      window.calendar.refetchEvents();
+                                    }
+                                  }
+                                  
+                                } catch (e) {
+                                  console.error('WS parse error', e);
+                                }
+                              };
+
+                              ws.onclose = function () {
+                                console.log('❌ WS Disconnected');
+
+                                if (!isManuallyClosed) {
+                                  setTimeout(connectWS, reconnectInterval);
+                                }
+                              };
+
+                              ws.onerror = function (err) {
+                                console.error('WS Error:', err);
+                                ws.close();
+                              };
+                            }
+
+                            // connect pertama kali
+                            connectWS();
+
+                            // optional: cleanup saat page unload
+                            window.addEventListener('beforeunload', function () {
+                              isManuallyClosed = true;
+                              if (ws) ws.close();
+                            });
+
+                          })();
+                        </script>
+
                         <?= $this->endSection() ?>

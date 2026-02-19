@@ -556,34 +556,34 @@ class WorkerController extends BaseController
                 ->setJSON(['message' => 'Access denied']);
         }
 
-        $data = $this->apply->workerHistory($user->id) ?? [];
+        $rows = $this->apply->workerHistory($user->id) ?? [];
 
-        $pending = $accepted = $completed = 0;
+        $counts = [
+            'pending'   => 0,
+            'accepted'  => 0,
+            'completed' => 0,
+            'rejected'  => 0
+        ];
 
-        foreach ($data as $row) {
+        foreach ($rows as $row) {
+
+            // pastikan hanya pakai 1 field konsisten
             $status = $row['status'] ?? $row['application_status'] ?? null;
 
-            if (!$status) continue;
-
-            switch ($status) {
-                case 'pending':
-                    $pending++;
-                    break;
-                case 'accepted':
-                    $accepted++;
-                    break;
-                case 'completed':
-                    $completed++;
-                    break;
+            if (isset($counts[$status])) {
+                $counts[$status]++;
             }
         }
 
-        return $this->response->setJSON([
-            'pending'   => $pending,
-            'accepted'  => $accepted,
-            'completed' => $completed,
-            'total'     => count($data)
-        ]);
+        $response = [
+            'pending'   => $counts['pending'],
+            'accepted'  => $counts['accepted'],
+            'completed' => $counts['completed'],
+            'rejected'  => $counts['rejected'],
+            'total'     => array_sum($counts)
+        ];
+
+        return $this->response->setJSON($response);
     }
 
     public function applicationDetail($applicationId)

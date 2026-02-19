@@ -71,7 +71,7 @@
 									                        </div>
 									                    </div>
 									                    <div class="row">
-									                        <div class="col-md-6 mb-3">
+									                        <div class="col-md-4 mb-3">
 									                            <label class="form-label">Role</label>
 									                            <select name="role_user" class="form-control required">
 									                            	<option value="">Select Role</option>
@@ -84,7 +84,18 @@
 								                                    <option value="hotel_fnb_production">User FnBP</option>
 								                                </select>
 									                        </div>
-									                        <div class="col-md-6 mb-3">
+									                        <div class="col-md-4 mb-3 d-none" id="add_job_wrapper">
+															    <label class="form-label">Job</label>
+															    <select
+															        name="job_id"
+															        id="add_job_id"
+															        class="form-select select2"
+															        data-placeholder="Select Job"
+															        style="width:100%">
+															        <option value=""></option>
+															    </select>
+															</div>
+									                        <div class="col-md-4 mb-3">
 									                            <label class="form-label">Status</label>
 									                            <select name="status_user" class="form-control required">
 									                            	<option value="">Select Status</option>
@@ -102,6 +113,55 @@
 									                        	<label class="form-label">Photo</label>
 														    	<input type="file" class="form-control" name="foto_user" accept="image/*">
 									                        </div>
+									                        <!-- WORKER CONTRACT SECTION -->
+															<div class="col-md-12 d-none" id="worker_contract_section">
+															    <hr>
+															    <h6 class="mb-3">Worker Contract Information</h6>
+
+															    <div class="row">
+															        <div class="col-md-4 mb-3">
+															            <label class="form-label">Contract Type</label>
+															            <select name="contract_type" disabled class="form-control">
+															                <option value="daily_worker">Daily Worker</option>
+															                <option value="casual">Casual</option>
+															                <option value="corporate" selected>Corporate</option>
+															                <option value="internship">Internship</option>
+															            </select>
+															        </div>
+
+															        <div class="col-md-4 mb-3">
+															            <label class="form-label">Salary Type</label>
+															            <select name="salary_type" disabled class="form-control">
+															                <option value="daily">Daily</option>
+															                <option value="monthly" selected>Monthly</option>
+															                <option value="hourly">Hourly</option>
+															            </select>
+															        </div>
+
+															        <div class="col-md-4 mb-3">
+															            <label class="form-label">Base Salary</label>
+															            <input type="number" name="base_salary" class="form-control" placeholder="120000">
+															        </div>
+															    </div>
+
+															    <div class="row">
+															        <div class="col-md-4 mb-3">
+															            <label class="form-label">Overtime Rate</label>
+															            <input type="number" name="overtime_rate" class="form-control" placeholder="15000">
+															        </div>
+
+															        <div class="col-md-4 mb-3">
+															            <label class="form-label">Start Date</label>
+															            <input type="date" name="contract_start_date" class="form-control">
+															        </div>
+
+															        <div class="col-md-4 mb-3">
+															            <label class="form-label">End Date</label>
+															            <input type="date" name="contract_end_date" class="form-control">
+															        </div>
+															    </div>
+															</div>
+
 									                    </div>
 											        </div>
 											        <div class="modal-footer">
@@ -470,6 +530,10 @@
 							        // hapus error / validation jika ada
 							        $form.find('.is-invalid').removeClass('is-invalid');
 							        $form.find('.invalid-feedback').remove();
+
+							        $('#worker_contract_section').addClass('d-none');
+									$('#worker_contract_section').find('input, select').val('');
+
 							    });
 
 							    $('#modalAddUser').on('shown.bs.modal', function () {
@@ -564,6 +628,61 @@
 							        }
 							    });
 
+							    // INIT JOB SELECT2
+								function initJobSelect2(modal) {
+
+								    if ($('#add_job_id').hasClass('select2-hidden-accessible')) {
+								        $('#add_job_id').select2('destroy');
+								    }
+
+								    $('#add_job_id').select2({
+								        placeholder: 'Select Job',
+								        allowClear: true,
+								        dropdownParent: modal,
+								        ajax: {
+								            url: "<?= base_url('admin/job-vacancies/coorporate') ?>",
+								            dataType: 'json',
+								            delay: 250,
+								            processResults: function (data) {
+								                return {
+								                    results: data.map(j => ({
+								                        id: j.id,
+								                        text: j.position + ' (' + j.job_date_start + ')'
+								                    }))
+								                };
+								            }
+								        }
+								    });
+								}
+
+								// Role Change
+								$('#modalAddUser select[name="role_user"]').on('change', function () {
+
+								    const role = $(this).val();
+
+								    if (role === 'worker') {
+
+									    $('#add_job_wrapper').removeClass('d-none');
+									    $('#worker_contract_section').removeClass('d-none');
+
+									    $('#add_job_id').prop('required', true);
+									    $('input[name="contract_start_date"]').prop('required', true);
+
+									    initJobSelect2($('#modalAddUser'));
+
+									} else {
+
+									    $('#add_job_wrapper').addClass('d-none');
+									    $('#worker_contract_section').addClass('d-none');
+
+									    $('#add_job_id').prop('required', false);
+									    $('input[name="contract_start_date"]').prop('required', false);
+
+									    $('#add_job_id').val(null).trigger('change');
+									}
+
+								});
+
 							});
 
 							// Submit form insert data
@@ -572,7 +691,7 @@
 							    let formData = new FormData(this);
 							    formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
 							    Swal.fire({
-							        title: 'Add new hotel?',
+							        title: 'Add new user?',
 							        icon: 'question',
 							        showCancelButton: true,
 							        reverseButtons: true,
