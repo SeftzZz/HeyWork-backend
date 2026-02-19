@@ -52,7 +52,10 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->get('job-vacancies', 'Admin\JobVacancies::index', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('job-vacancies/datatable', 'Admin\JobVacancies::datatable', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('job-vacancies/store', 'Admin\JobVacancies::store', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('job-vacancies/get', 'Admin\JobVacancies::get', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('job-vacancies/update', 'Admin\JobVacancies::update', ['filter' => 'role:admin,hotel_hr']);
     $routes->get('job-vacancies/skills', 'Admin\JobVacancies::skills', ['filter' => 'role:admin,hotel_hr']);
+    $routes->get('job-vacancies/coorporate', 'Admin\JobVacancies::getCoorporateJobs', ['filter' => 'role:admin,hotel_hr']);
 
     $routes->get('balance', 'Admin\Balance::index', ['filter' => 'role:admin,hotel_hr']);
     $routes->get('balance/get', 'Admin\Balance::getBalance', ['filter' => 'role:admin,hotel_hr']);

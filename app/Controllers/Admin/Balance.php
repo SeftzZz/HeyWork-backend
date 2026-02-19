@@ -542,7 +542,8 @@ class Balance extends BaseAdminController
             'today_ratio' => $todayRatio,
             'today_label' => $todayLabel,
             'mtd_revenue' => (float)$mtdRevenue,
-            'mtd_ratio' => $mtdRatio
+            'mtd_ratio' => $mtdRatio,
+            'mtd_label' => "GOOD"
         ]);
     }
 

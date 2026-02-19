@@ -198,12 +198,11 @@ class Application extends BaseAdminController
     public function updateStatus()
     {
         $db = \Config\Database::connect();
+        $db->transStart();
 
         $id     = (int) $this->request->getPost('application_id');
         $status = strtolower($this->request->getPost('status'));
-
-        // user login (admin / HR)
-        $user = session()->get('user_id');
+        $adminId = session()->get('user_id');
 
         if (!in_array($status, ['accepted', 'rejected'])) {
             return $this->response->setJSON([
@@ -212,8 +211,9 @@ class Application extends BaseAdminController
             ]);
         }
 
-        // ambil data lama
+        // Ambil data lama + job_id
         $current = $db->table('job_applications')
+            ->select('id, job_id, user_id, status')
             ->where('id', $id)
             ->get()
             ->getRowArray();
@@ -225,7 +225,6 @@ class Application extends BaseAdminController
             ]);
         }
 
-        // ❌ tidak boleh update jika sudah completed
         if ($current['status'] === 'completed') {
             return $this->response->setJSON([
                 'status'  => false,
@@ -240,7 +239,7 @@ class Application extends BaseAdminController
 
         if ($status === 'accepted') {
             $update['accepted_at'] = date('Y-m-d H:i:s');
-            $update['accepted_by'] = session()->get('user_id');
+            $update['accepted_by'] = $adminId;
         }
 
         if ($status === 'rejected') {
@@ -252,9 +251,89 @@ class Application extends BaseAdminController
             ->where('id', $id)
             ->update($update);
 
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Failed to update status'
+            ]);
+        }
+
+        /**
+         * ============================
+         * 🔢 HITUNG ULANG COUNT WORKER
+         * ============================
+         */
+        $counts = [
+            'pending'   => 0,
+            'accepted'  => 0,
+            'completed' => 0,
+            'rejected'  => 0
+        ];
+
+        $rows = $db->table('job_applications')
+            ->select('status')
+            ->where('user_id', $current['user_id'])
+            ->where('deleted_at', null)
+            ->get()
+            ->getResultArray();
+
+        foreach ($rows as $row) {
+            $s = strtolower($row['status'] ?? '');
+            if (isset($counts[$s])) {
+                $counts[$s]++;
+            }
+        }
+
+        $counts['total'] = array_sum($counts);
+
+        /**
+         * ============================
+         * 🔥 WEBSOCKET EMIT
+         * ============================
+         */
+        $payloadStatus = [
+            'type'           => 'application_status',
+            'application_id' => $id,
+            'job_id'         => $current['job_id'],
+            'user_id'        => $current['user_id'],
+            'status'         => $status
+        ];
+
+        $payloadCounts = [
+            'type'    => 'application_counts_updated',
+            'user_id' => $current['user_id'],
+            'data'    => $counts
+        ];
+
+        try {
+
+            $ch = curl_init('http://localhost:3005/emit');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 1);
+
+            // emit status update
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payloadStatus));
+            curl_exec($ch);
+
+            // emit counts update
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payloadCounts));
+            curl_exec($ch);
+
+            curl_close($ch);
+
+        } catch (\Throwable $e) {
+            // silent fail
+        }
+
         return $this->response->setJSON([
-            'status' => true
+            'status'         => true,
+            'application_id' => $id,
+            'job_id'         => $current['job_id'],
+            'new_status'     => $status
         ]);
     }
-
 }

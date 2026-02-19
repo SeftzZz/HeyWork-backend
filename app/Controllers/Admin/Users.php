@@ -214,6 +214,9 @@ class Users extends BaseAdminController
             return $this->response->setStatusCode(404);
         }
 
+        $db = \Config\Database::connect();
+        $db->transStart();
+
         $sessionRole = session()->get('user_role');
         $hotelId     = $this->request->getPost('hotel_id');
         $email       = $this->request->getPost('email_user');
@@ -222,7 +225,7 @@ class Users extends BaseAdminController
             $hotelId = session()->get('hotel_id');
         }
 
-        // CEK EMAIL SUDAH ADA DAN BELUM DI DELETE
+        // CEK EMAIL
         $existingEmail = $this->userModel
             ->where('email', $email)
             ->where('deleted_at', null)
@@ -235,19 +238,21 @@ class Users extends BaseAdminController
             ]);
         }
 
+        $role = $this->request->getPost('role_user');
+
         $data = [
             'name'       => $this->request->getPost('name_user'),
             'hotel_id'   => $hotelId,
             'email'      => $email,
             'phone'      => $this->request->getPost('hp_user'),
-            'role'       => $this->request->getPost('role_user'),
+            'role'       => $role,
             'is_active'  => $this->request->getPost('status_user'),
             'password'   => password_hash($this->request->getPost('pass_user'), PASSWORD_DEFAULT),
             'created_by' => session()->get('user_id'),
             'updated_by' => session()->get('user_id')
         ];
 
-        // upload foto
+        // Upload photo
         $file = $this->request->getFile('foto_user');
         if ($file && $file->isValid()) {
             $name = $file->getRandomName();
@@ -255,7 +260,60 @@ class Users extends BaseAdminController
             $data['photo'] = 'uploads/profiles/' . $name;
         }
 
+        // INSERT USER
         $this->userModel->insert($data);
+        $userId = $this->userModel->getInsertID();
+
+        /**
+         * ===============================
+         * AUTO INSERT APPLICATION IF WORKER
+         * ===============================
+         */
+        if ($role === 'worker') {
+
+            $jobId = $this->request->getPost('job_id');
+
+            if ($jobId) {
+
+                $db->table('job_applications')->insert([
+                    'job_id'     => $jobId,
+                    'user_id'    => $userId,
+                    'status'     => 'accepted',
+                    'applied_at' => date('Y-m-d H:i:s'),
+                    'accepted_at'=> date('Y-m-d H:i:s'),
+                    'accepted_by'=> session()->get('user_id')
+                ]);
+            }
+
+            $baseSalary = $this->request->getPost('base_salary');
+            $overtime   = $this->request->getPost('overtime_rate');
+
+            $baseSalary = is_numeric($baseSalary) ? $baseSalary : 0;
+            $overtime   = is_numeric($overtime) ? $overtime : 0;
+
+            $db->table('worker_contracts')->insert([
+                'user_id'       => $userId,
+                'contract_type' => $this->request->getPost('contract_type') ?? 'daily_worker',
+                'salary_type'   => $this->request->getPost('salary_type') ?? 'daily',
+                'base_salary'   => $baseSalary,
+                'overtime_rate' => $overtime,
+                'start_date'    => $this->request->getPost('contract_start_date'),
+                'end_date'      => $this->request->getPost('contract_end_date') ?: null,
+                'is_active'     => 1,
+                'created_at'    => date('Y-m-d H:i:s'),
+                'created_by'    => session()->get('user_id')
+            ]);
+
+        }
+
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Failed to create user'
+            ]);
+        }
 
         return $this->response->setJSON([
             'status' => true,

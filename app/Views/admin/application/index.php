@@ -505,4 +505,74 @@
                             });
 
                         </script>
+
+                        <script>
+                            (function () {
+
+                              let ws;
+                              let reconnectInterval = 3000;
+
+                              function connectWS() {
+
+                                const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+                                const wsUrl = `${protocol}://${window.location.hostname}:3004`;
+
+                                ws = new WebSocket(wsUrl);
+
+                                ws.onopen = function () {
+                                  console.log('✅ WS Connected (Application)');
+                                };
+
+                                ws.onmessage = function (event) {
+
+                                  try {
+                                    const data = JSON.parse(event.data);
+
+                                    if (!data.type) return;
+
+                                    /**
+                                     * =============================
+                                     * REALTIME APPLICATION UPDATE
+                                     * =============================
+                                     */
+                                    if (data.type === 'application_status') {
+
+                                      // Reload DataTable tanpa reset paging
+                                      if ($.fn.DataTable.isDataTable('.dtJobApplication')) {
+                                        $('.dtJobApplication').DataTable().ajax.reload(null, false);
+                                      }
+
+                                      // Jika modal sedang terbuka dan application sama
+                                      if (currentApplicationId && currentApplicationId == data.application_id) {
+
+                                        // Sembunyikan tombol action
+                                        $('#workerActionButtons').addClass('d-none');
+
+                                        // Optional: tampilkan toast
+                                        if (typeof toastr !== 'undefined') {
+                                          toastr.success('Application status updated to ' + data.status);
+                                        }
+                                      }
+                                    }
+
+                                  } catch (e) {
+                                    console.error('WS Parse Error', e);
+                                  }
+                                };
+
+                                ws.onclose = function () {
+                                  console.log('❌ WS Disconnected');
+                                  setTimeout(connectWS, reconnectInterval);
+                                };
+
+                                ws.onerror = function () {
+                                  ws.close();
+                                };
+                              }
+
+                              connectWS();
+
+                            })();
+                        </script>
+
                         <?= $this->endSection() ?>

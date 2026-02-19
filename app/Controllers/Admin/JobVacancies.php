@@ -123,11 +123,11 @@ class JobVacancies extends BaseAdminController
                 'location' => esc($row['location']),
                 'fee'      => number_format($row['fee'], 0, ',', '.'),
                 'status'   => $badgeStatus,
-                'action'   => '
+                'action' => '
                     <button 
-                        class="btn btn-sm btn-info btn-detail-job"
+                        class="btn btn-sm btn-warning btn-edit-job"
                         data-id="' . (int)$row['id'] . '">
-                        <i class="ti ti-eye"></i>
+                        <i class="ti ti-edit"></i>
                     </button>
                 '
             ];
@@ -141,6 +141,27 @@ class JobVacancies extends BaseAdminController
         ]);
     }
 
+    public function get()
+    {
+        $id = $this->request->getPost('id');
+
+        $job = $this->job->where('id', $id)
+                         ->where('deleted_at IS NULL')
+                         ->first();
+
+        if (!$job) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Job not found'
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'status' => true,
+            'data'   => $job
+        ]);
+    }
+
     public function store()
     {
         $data = $this->request->getPost();
@@ -149,8 +170,8 @@ class JobVacancies extends BaseAdminController
         // VALIDASI & KONVERSI DATE
         // =========================
         try {
-            $jobDateStart = \DateTime::createFromFormat('d-m-Y', $data['job_date_start']);
-            $jobDateEnd   = \DateTime::createFromFormat('d-m-Y', $data['job_date_end']);
+            $jobDateStart = \DateTime::createFromFormat('Y-m-d', $data['job_date_start']);
+            $jobDateEnd   = \DateTime::createFromFormat('Y-m-d', $data['job_date_end']);
 
             if (!$jobDateStart || !$jobDateEnd) {
                 throw new \Exception('Invalid date format');
@@ -221,6 +242,74 @@ class JobVacancies extends BaseAdminController
         ]);
     }
 
+    public function update()
+    {
+        $data = $this->request->getPost();
+        $id   = $data['id'] ?? null;
+
+        if (!$id) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Invalid ID'
+            ]);
+        }
+
+        $job = $this->job->find($id);
+
+        if (!$job) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Job not found'
+            ]);
+        }
+
+        // =========================
+        // VALIDASI DATE
+        // =========================
+        try {
+            $start = new \DateTime($data['job_date_start']);
+            $end   = new \DateTime($data['job_date_end']);
+
+            $jobDateStart = $start->format('Y-m-d');
+            $jobDateEnd   = $end->format('Y-m-d');
+
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Invalid date format'
+            ]);
+        }
+
+        // =========================
+        // VALIDASI TIME
+        // =========================
+        if (strtotime($data['end_time']) <= strtotime($data['start_time'])) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'End time must be greater than start time'
+            ]);
+        }
+
+        $update = [
+            'category'       => $data['category'],
+            'job_date_start' => $jobDateStart,
+            'job_date_end'   => $jobDateEnd,
+            'start_time'     => $data['start_time'],
+            'end_time'       => $data['end_time'],
+            'fee'            => $data['fee'],
+            'description'    => $data['description'] ?? null,
+            'updated_at'     => date('Y-m-d H:i:s'),
+            'updated_by'     => session()->get('user_id')
+        ];
+
+        $this->job->update($id, $update);
+
+        return $this->response->setJSON([
+            'status' => true,
+            'message' => 'Job successfully updated'
+        ]);
+    }
+
     public function skills()
     {
         $search = $this->request->getGet('q');
@@ -253,6 +342,20 @@ class JobVacancies extends BaseAdminController
         return $this->response->setJSON([
             'results' => $results
         ]);
+    }
+
+    public function getCoorporateJobs()
+    {
+        $db = \Config\Database::connect();
+
+        $jobs = $db->table('jobs')
+            ->select('id, position, job_date_start')
+            ->where('category', 'coorporate')
+            ->where('status', 'open')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON($jobs);
     }
 
 }
