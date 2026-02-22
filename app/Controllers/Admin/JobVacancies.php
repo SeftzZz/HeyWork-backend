@@ -67,6 +67,7 @@ class JobVacancies extends BaseAdminController
                 jobs.fee,
                 jobs.status
             ")
+            ->where('jobs.hotel_id', session()->get('hotel_id'))
             ->where('jobs.deleted_at IS NULL');
 
         // 🔍 SEARCH

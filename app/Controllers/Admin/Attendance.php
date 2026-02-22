@@ -94,6 +94,7 @@ class Attendance extends BaseAdminController
             )
             ->join('jobs', 'jobs.id = job_attendances.job_id', 'left')
             ->join('hotels', 'hotels.id = jobs.hotel_id', 'left')
+            ->where('jobs.hotel_id', session()->get('hotel_id'))
             ->where('(job_attendances.deleted_at IS NULL OR job_attendances.deleted_at = "0000-00-00 00:00:00")', null, false)
             ->groupBy('job_attendances.user_id, job_attendances.job_id, DATE(job_attendances.created_at)');
 

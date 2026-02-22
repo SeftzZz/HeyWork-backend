@@ -39,6 +39,7 @@ class Dashboard extends BaseController
         $jobs = $this->job
             ->where('deleted_at', null)
             ->where('status', 'open')
+            ->where('hotel_id', session()->get('hotel_id'))
             ->orderBy('job_date_start', 'ASC')
             ->findAll();
 

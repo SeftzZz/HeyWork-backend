@@ -65,6 +65,7 @@ class Application extends BaseAdminController
             ")
             ->join('users', 'users.id = job_applications.user_id AND users.deleted_at IS NULL', 'left')
             ->join('jobs', 'jobs.id = job_applications.job_id', 'left')
+            ->where('jobs.hotel_id', session()->get('hotel_id'))
             ->where('job_applications.deleted_at IS NULL');
 
         // SEARCH
