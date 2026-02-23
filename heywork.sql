@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 20, 2026 at 12:13 AM
+-- Generation Time: Feb 24, 2026 at 05:39 AM
 -- Server version: 10.11.10-MariaDB-log
 -- PHP Version: 8.3.27
 
@@ -51,7 +51,7 @@ CREATE TABLE `hotels` (
 --
 
 INSERT INTO `hotels` (`id`, `hotel_name`, `location`, `latitude`, `longitude`, `website`, `description`, `founded`, `size`, `logo`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 'Sahira Butik Hotel Paledang', 'Bogor, West Java', -6.6011188, 106.7941239, 'paledang.sahirahotelsgroup.com', 'Sahira Butik Hotel Paledang adalah hotel di lokasi yang baik, tepatnya berada di Juanda. Resepsionis siap 24 jam untuk melayani proses check-in, check-out dan kebutuhan Anda yang lain. Jangan ragu untuk menghubungi resepsionis, kami siap melayani Anda. WiFi tersedia di seluruh area publik properti untuk membantu Anda tetap terhubung dengan keluarga dan teman.', '2005', 100, 'images/sbh-color.png', '2026-01-26 07:28:33', 1, '2026-02-04 14:28:11', 3, NULL, NULL);
+(1, 'Sahira Butik Hotel Paledang', 'Bogor, West Java', -6.6011450, 106.7941260, 'www.sahirahotelsgroup.com', '', '2005', 100, 'images/sbh-color.png', '2026-02-21 07:56:34', 1, '2026-02-24 00:52:46', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -62,14 +62,14 @@ INSERT INTO `hotels` (`id`, `hotel_name`, `location`, `latitude`, `longitude`, `
 CREATE TABLE `hotel_transactions` (
   `id` int(1) NOT NULL,
   `hotel_id` int(11) NOT NULL,
-  `type` enum('debit','credit') NOT NULL DEFAULT 'credit',
+  `type` enum('debit','credit') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'credit',
   `amount` decimal(15,2) NOT NULL,
   `dw_ratio` decimal(5,2) DEFAULT NULL,
-  `dw_label` varchar(50) DEFAULT NULL,
-  `category` enum('topup','revenue','payroll','extend','adjustment') DEFAULT NULL,
-  `description` varchar(255) NOT NULL,
-  `reference_id` varchar(50) NOT NULL,
-  `reference_type` varchar(50) NOT NULL,
+  `dw_label` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `category` enum('topup','revenue','payroll','extend','adjustment') CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `description` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `reference_id` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `reference_type` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `date` date NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `created_by` int(1) DEFAULT NULL,
@@ -77,19 +77,15 @@ CREATE TABLE `hotel_transactions` (
   `updated_by` int(1) DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   `deleted_by` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `hotel_transactions`
 --
 
 INSERT INTO `hotel_transactions` (`id`, `hotel_id`, `type`, `amount`, `dw_ratio`, `dw_label`, `category`, `description`, `reference_id`, `reference_type`, `date`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 1, 'debit', 250000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-16', '2026-02-17 18:58:22', 3, NULL, NULL, NULL, NULL),
-(2, 1, 'credit', 3125000.00, 8.00, 'GOOD', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-16', '2026-02-17 18:58:22', 3, NULL, NULL, NULL, NULL),
-(3, 1, 'debit', 250000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-17', '2026-02-18 01:20:12', 3, NULL, NULL, NULL, NULL),
-(4, 1, 'credit', 740000.00, 33.78, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-17', '2026-02-18 01:20:12', 3, NULL, NULL, NULL, NULL),
-(5, 1, 'debit', 260000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-18', '2026-02-19 13:19:52', 3, NULL, NULL, NULL, NULL),
-(6, 1, 'credit', 450000.00, 57.78, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-18', '2026-02-19 13:19:52', 3, NULL, NULL, NULL, NULL);
+(6, 1, 'debit', 196428.57, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-23', '2026-02-24 02:27:43', 17, NULL, NULL, NULL, NULL),
+(7, 1, 'credit', 780000.00, 25.18, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-23', '2026-02-24 02:27:43', 17, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -100,42 +96,53 @@ INSERT INTO `hotel_transactions` (`id`, `hotel_id`, `type`, `amount`, `dw_ratio`
 CREATE TABLE `jobs` (
   `id` int(1) NOT NULL,
   `hotel_id` int(11) NOT NULL,
-  `position` varchar(100) NOT NULL,
+  `position` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `job_date_start` date NOT NULL,
   `job_date_end` date NOT NULL,
   `start_time` time NOT NULL,
   `end_time` time NOT NULL,
-  `category` enum('daily_worker','casual','coorporate') DEFAULT 'daily_worker',
+  `category` enum('daily_worker','casual','coorporate') CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT 'daily_worker',
   `fee` int(1) NOT NULL,
-  `location` varchar(255) DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  `requirement_skill` text DEFAULT NULL,
-  `status` enum('open','closed') DEFAULT 'open',
+  `location` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `description` text CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `requirement_skill` text CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `status` enum('open','closed') CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT 'open',
   `created_at` datetime DEFAULT NULL,
   `created_by` int(1) DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `updated_by` int(1) DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   `deleted_by` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `jobs`
 --
 
 INSERT INTO `jobs` (`id`, `hotel_id`, `position`, `job_date_start`, `job_date_end`, `start_time`, `end_time`, `category`, `fee`, `location`, `description`, `requirement_skill`, `status`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 1, 'Room Attendant', '2026-02-17', '2026-02-18', '07:30:00', '20:30:00', 'daily_worker', 110000, 'Bogor West Java', '', NULL, 'open', NULL, NULL, '2026-02-18 12:58:25', 3, NULL, NULL),
-(2, 1, 'Public Area', '2026-02-18', '2026-02-19', '07:30:00', '18:20:00', 'daily_worker', 150000, 'Bogor West Java', NULL, NULL, 'open', NULL, NULL, NULL, NULL, NULL, NULL),
-(3, 1, 'Front Office', '2026-02-19', '2026-02-20', '07:30:00', '19:30:00', 'daily_worker', 200000, 'Bogor West Java', '', '', 'open', '2026-01-26 01:35:59', NULL, NULL, NULL, NULL, NULL),
-(4, 1, 'FnB Service', '2026-02-20', '2026-02-21', '07:30:00', '21:30:00', 'daily_worker', 250000, 'Bogor West Java', '', '', 'open', '2026-01-26 01:36:37', NULL, NULL, NULL, NULL, NULL),
-(5, 1, 'FnB Product', '2026-02-21', '2026-02-22', '07:30:00', '17:30:00', 'daily_worker', 300000, 'Bogor West Java', '', '', 'open', '2026-01-26 01:36:47', NULL, NULL, NULL, NULL, NULL),
-(6, 1, 'Security', '2026-02-22', '2026-02-23', '07:30:00', '17:30:00', 'daily_worker', 350000, 'Bogor West Java', '', '', 'open', '2026-01-26 02:07:23', NULL, NULL, NULL, NULL, NULL),
-(7, 1, 'Marketing', '2026-02-23', '2026-02-24', '07:30:00', '17:30:00', 'daily_worker', 400000, 'Bogor West Java', '', '', 'open', '2026-01-26 02:07:55', NULL, NULL, NULL, NULL, NULL),
-(8, 1, 'Bellboy', '2026-02-24', '2026-02-25', '07:30:00', '20:30:00', 'daily_worker', 400000, 'Bogor West Java', '', '', 'open', '2026-01-26 02:07:55', NULL, NULL, NULL, NULL, NULL),
-(9, 1, 'Barista', '2026-02-25', '2026-02-26', '07:30:00', '17:30:00', 'daily_worker', 120000, 'Bogor, Jawa Barat', 'Melayani dan memasak untuk tamu hotel', '', 'open', '2026-02-05 20:21:58', 3, NULL, NULL, NULL, NULL),
-(10, 1, 'Bartender', '2026-02-26', '2026-02-27', '07:30:00', '17:30:00', 'daily_worker', 120000, 'Bogor, Jawa Barat', 'Melayani dan memasak untuk tamu hotel', '', 'open', '2026-02-05 20:21:58', 3, NULL, NULL, NULL, NULL),
-(11, 1, 'Cook', '2026-02-27', '2026-02-28', '07:30:00', '17:30:00', 'daily_worker', 120000, 'Bogor, Jawa Barat', 'Melayani dan memasak untuk tamu hotel', '', 'open', '2026-02-05 20:21:58', 3, NULL, NULL, NULL, NULL),
-(14, 1, 'Food & Beverage Manager', '2026-02-01', '2026-04-30', '07:00:00', '17:00:00', 'coorporate', 120000, NULL, 'Mengontrol urusan F&B Hotel', NULL, 'open', '2026-02-19 21:55:46', 3, NULL, NULL, NULL, NULL);
+(1, 1, 'Information Technology', '2025-09-05', '2026-09-04', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', 'Pengelolaan infrastruktur, pengembangan perangkat lunak, keamanan data dan dukungan teknis untuk memastikan operasional perusahaan berjalan lancar', 'Network configuration, Hardware deployment & Operating system knowledge', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(2, 1, 'HK Attandent', '2025-11-19', '2026-11-18', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', 'cleans, sanitizes, and organizes guest rooms and public areas to meet high hospitality standards', 'high physical stamina, exceptional attention to detail and strong time-management skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(3, 1, 'FB Manager', '2025-11-20', '2026-11-19', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', 'oversees all dining operations, including restaurants, bars, banquets, and room service, to ensure high-quality service, profitability, and compliance with health regulations', 'cost control, menu engineering, inventory management, and high-level customer service', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(4, 1, 'Executive Housekeeper', '2025-11-20', '2026-11-19', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', 'manages all housekeeping operations, staff, and budgets to maintain spotless guest rooms and public areas, ensuring high hygiene and comfort standards', 'strong leadership, organizational, and financial management skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(5, 1, 'Director of sales marketing', '2025-11-24', '2026-11-23', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', 'leads, develops, and implements strategic plans to drive revenue growth, enhance brand awareness, and increase market share', 'proficiency in CRM software, data analysis, revenue growth strategies, and excellent communication skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(6, 1, 'Graphics design', '2025-11-24', '2026-11-23', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', 'creates visual concepts using computer software or by hand to communicate ideas that inspire, inform, or captivate consumers', 'technical proficiency in software (Adobe Creative Suite, Figma) with core design principles like typography, color theory, and layout composition', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(7, 1, 'Senior Waiter', '2025-11-26', '2026-11-25', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', 'leads the service team to ensure exceptional dining experiences, acting as a mentor to junior staff and a point of escalation for guest concerns', 'advanced technical skills with strong leadership', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(8, 1, 'Supervisor Housekeeping', '2025-11-28', '2026-11-27', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(9, 1, 'AR/AP', '2025-12-02', '2026-12-01', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(10, 1, 'Chief Accounting', '2025-12-04', '2026-12-03', '00:00:00', '00:55:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(11, 1, 'Head Chef', '2025-12-04', '2026-12-03', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(12, 1, 'Front Office Manager', '2025-12-11', '2026-12-10', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(13, 1, 'Engineering', '2025-12-14', '2026-12-13', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(14, 1, 'Chief Engineering', '2025-12-23', '2026-12-22', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(15, 1, 'HR Manager', '2025-12-27', '2026-12-26', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(16, 1, 'Chef De Partie', '2025-12-28', '2026-12-27', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(17, 1, 'Sales Executive', '2026-01-05', '2027-01-04', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(18, 1, 'Senior Sales Marketing', '2026-01-07', '2027-01-06', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(19, 1, 'Cook', '2026-01-12', '2027-01-11', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(20, 1, 'Sales Manager', '2026-01-14', '2027-01-13', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(21, 1, 'FDA', '2026-02-06', '2027-02-05', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(22, 1, 'Business Development', '2025-12-09', '2026-06-08', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(23, 1, 'Security Guard', '2025-12-02', '2026-12-01', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -147,23 +154,47 @@ CREATE TABLE `job_applications` (
   `id` int(1) NOT NULL,
   `job_id` int(1) NOT NULL,
   `user_id` int(1) NOT NULL,
-  `status` enum('pending','accepted','rejected','completed') DEFAULT 'pending',
+  `status` enum('pending','accepted','rejected','completed') CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT 'pending',
   `applied_at` datetime DEFAULT NULL,
   `accepted_at` datetime DEFAULT NULL,
   `accepted_by` int(1) DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `job_applications`
 --
 
 INSERT INTO `job_applications` (`id`, `job_id`, `user_id`, `status`, `applied_at`, `accepted_at`, `accepted_by`, `deleted_at`) VALUES
-(1, 1, 1, 'accepted', '2026-02-17 16:43:49', '2026-02-17 16:45:28', 3, NULL),
-(2, 2, 1, 'accepted', '2026-02-17 16:44:02', '2026-02-18 15:26:48', 3, NULL),
-(4, 12, 1, 'accepted', '2026-02-18 19:19:54', '2026-02-18 19:20:16', 3, NULL),
-(11, 14, 11, 'accepted', '2026-02-19 21:57:36', '2026-02-19 21:57:36', 3, NULL),
-(12, 7, 11, 'accepted', '2026-02-19 21:58:31', '2026-02-19 21:58:46', 3, NULL);
+(1, 1, 2, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(2, 2, 3, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(3, 3, 4, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(4, 4, 5, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(5, 5, 6, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(6, 6, 7, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(7, 7, 8, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(8, 8, 9, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(9, 9, 10, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(10, 10, 11, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(11, 11, 12, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(12, 12, 13, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(13, 13, 14, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(14, 13, 15, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(15, 14, 16, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(16, 15, 17, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(17, 16, 18, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(18, 17, 19, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(19, 18, 20, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(20, 19, 21, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(21, 20, 22, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(22, 21, 23, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(23, 22, 24, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(24, 6, 25, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(25, 23, 26, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(26, 23, 27, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(28, 23, 28, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(29, 23, 29, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(30, 23, 30, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -195,10 +226,8 @@ CREATE TABLE `job_attendances` (
 --
 
 INSERT INTO `job_attendances` (`id`, `job_id`, `application_id`, `user_id`, `transaction_id`, `type`, `latitude`, `longitude`, `photo_path`, `device_info`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 2, 2, 1, 0, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_2_1_1771409398.jpg', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0', '2026-02-18 07:09:58', 1, NULL, NULL, NULL, NULL),
-(2, 2, 2, 1, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-18 18:21:20', NULL, NULL, NULL, NULL, NULL),
-(3, 12, 4, 1, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_12_1_1771422651.jpg', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0', '2026-02-18 08:50:51', 1, NULL, NULL, NULL, NULL),
-(4, 12, 4, 1, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-18 18:57:47', NULL, NULL, NULL, NULL, NULL);
+(1, 10, 10, 11, 6, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_10_11_1771869199.jpg', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0', '2026-02-23 00:53:19', 11, NULL, NULL, NULL, NULL),
+(2, 10, 10, 11, 6, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 01:08:33', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -257,10 +286,43 @@ CREATE TABLE `ratings` (
   `application_id` int(1) NOT NULL,
   `worker_id` int(1) NOT NULL,
   `rating` tinyint(4) NOT NULL,
-  `review` text DEFAULT NULL,
+  `review` text CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `created_by` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratio_rules`
+--
+
+CREATE TABLE `ratio_rules` (
+  `id` int(11) NOT NULL,
+  `hotel_id` int(11) DEFAULT NULL,
+  `department_category` varchar(255) DEFAULT NULL,
+  `min_value` decimal(10,2) NOT NULL,
+  `max_value` decimal(10,2) NOT NULL,
+  `label` varchar(100) NOT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `sort_order` int(11) DEFAULT 1,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ratio_rules`
+--
+
+INSERT INTO `ratio_rules` (`id`, `hotel_id`, `department_category`, `min_value`, `max_value`, `label`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
+(1, 1, NULL, 0.00, 6.00, 'NO DATA', 1, 1, '2026-02-24 03:40:13', NULL),
+(2, 1, NULL, 6.00, 10.00, 'GOOD', 1, 2, '2026-02-24 03:40:13', NULL),
+(3, 1, NULL, 10.00, 12.00, 'AVERAGE', 1, 3, '2026-02-24 03:40:13', NULL),
+(4, 1, NULL, 12.00, 15.00, 'BAD', 1, 4, '2026-02-24 03:40:13', NULL),
+(5, 1, NULL, 15.00, 999.00, 'NOT OPTIMAL MAN POWER', 1, 5, '2026-02-24 03:40:13', NULL),
+(6, 1, 'Finance', 0.00, 7.00, 'BAD', 1, 1, '2026-02-24 03:40:13', NULL),
+(7, 1, 'Finance', 7.00, 14.00, 'AVERAGE', 1, 2, '2026-02-24 03:40:13', NULL),
+(8, 1, 'Finance', 14.00, 999.00, 'GOOD', 1, 3, '2026-02-24 03:40:13', NULL);
 
 -- --------------------------------------------------------
 
@@ -271,58 +333,27 @@ CREATE TABLE `ratings` (
 CREATE TABLE `refresh_tokens` (
   `id` int(1) NOT NULL,
   `user_id` int(1) NOT NULL,
-  `token` varchar(255) NOT NULL,
+  `token` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `expires_at` datetime NOT NULL,
   `created_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `refresh_tokens`
 --
 
 INSERT INTO `refresh_tokens` (`id`, `user_id`, `token`, `expires_at`, `created_at`) VALUES
-(1, 3, '7da6b5a3ee00c73e24db217acb53d13d5d96a5421e551c68b787a339e7b113884ee0c6ed17810208e251b099ad1c280ab68791639ac5f79795f075f467b78f00', '2026-03-19 16:41:41', '2026-02-17 16:41:41'),
-(2, 1, '995b3e6a93dc95c0b5ae3b0b958222857d0ca7457ea3bf07cc139d0f9dafa2ee415fc21df9aefc944d5ee6f441102333d227fbab12cf9c75a3e1128759822e2c', '2026-03-19 16:41:57', '2026-02-17 16:41:57'),
-(3, 1, 'c889ebd55f3cece5deaea4177c9f827716f31496815104bd987e9df9fcd5965eef67f301be8562230c0e70ffbf32d5ac85acb0b618447194cf748a6b7a8235c5', '2026-03-19 16:44:42', '2026-02-17 16:44:42'),
-(4, 1, '75a7ad9ae3310329cef4d735b468d3cedca33576a6af16c19e072cf6f04fd2a2888c334ebbc1d72a7027e2f6b41dfe283f086900b6231d79abe26c347538c336', '2026-03-19 16:45:36', '2026-02-17 16:45:36'),
-(5, 1, 'e71a1677726f040dd78ac540bad8e10e738d9d9ba736e2c2eefde9deef0180e174b7b3f4ce879167826c37c6a57fba70a48ba3b1a14cb593e2e81f3a5cbd011a', '2026-03-19 16:48:12', '2026-02-17 16:48:12'),
-(6, 1, 'b44b1978e979ab83db7e73a94475f47eef39b1716dc27672b9dfd65d6c25e993a8afc1a4a161a5eb8f95b96885a1f5b11ae4cd62cb1ffb20308a6c972beb511c', '2026-03-19 16:48:51', '2026-02-17 16:48:51'),
-(7, 1, 'a0367347ced51240acb4305e00d4ad63aedf143eb53754f3f22d93efda9911eda02751c86bc7b1b1c84d54b4dea776d42cb010bd88dada151958b5d95237befe', '2026-03-19 17:29:14', '2026-02-17 17:29:14'),
-(8, 1, '3c4ae7462cd65c011e8dedf0ef291ae792b4d548f56e47a63648bd02e69213f16d35741b0a637e7948449a375951650dc237c00de64a0232e434b2f2d7148bad', '2026-03-20 17:51:57', '2026-02-18 17:51:57'),
-(9, 1, '68f98f0097a0bc1e9e4732d00ae2c8c9b6ceb6e35822c589bd6522316daad3237f21216c0328738fcbf8c856cbca6e58f9c6097b43d17a57525f8e93df1e423e', '2026-03-20 17:52:52', '2026-02-18 17:52:52'),
-(10, 1, 'd86fcd19bd505ba442c8f5310a35db35b65d7ecfb4d288148823a75481e3ea3a3eb7664a044946dbd7375ac829177c70f9b1058fac40477fdeabec915d77dcb9', '2026-03-21 18:20:38', '2026-02-19 18:20:38'),
-(11, 1, '4e79f4a134b39f71c49f087e6039af56c9f3695d638ec24ec3716ccd52657ffa093ddc23ea662493248e26c45d03bcaea35c25bf74771cc259efc965f753d3a2', '2026-03-22 13:20:48', '2026-02-20 13:20:48'),
-(12, 1, '84640708db0887a55590d624a1889dea12fcfde7119c78c81848f5d6d6d62c861a4bf93934ba4a0edae09015718ff0027ba14ee016c85d133c3f58677622b5f4', '2026-03-22 13:21:12', '2026-02-20 13:21:12'),
-(13, 1, 'ac241bec8bc5baf71fd6f0382e5aed4b386862135afd02baf11bee9967f04c804fb806ebe158c8be7146d64db2a5bff55e7ed9674d603bc954a42c2cb8a98d62', '2026-03-22 13:21:43', '2026-02-20 13:21:43'),
-(14, 1, 'f056c80b12b7385f4b8ddce04cd439ba8942b37da7f230958349f3e1492f4f451cfdecb69c8c563ecbc55d002272b9ef81d26a624e24157c67a70c0d80ab4e69', '2026-03-20 14:05:55', '2026-02-18 14:05:55'),
-(15, 1, '03aa5c4d225d8b976efcba87f65601f45309d58d1c5eff8db22aca3e685eb0991c0526f9bcef37e5bf1c5ffdb408344a381dbf113456207b7aa4f101c3b444a3', '2026-03-20 14:31:52', '2026-02-18 14:31:52'),
-(16, 1, 'a7e225198efcc74b0024b5c1aba5d389ed8ff372112a7b8844bde6da19d9fec50672447a5ecddc2bbfd9c4aa55bb87487cc485f57eb943d9753c6b00f90585a2', '2026-03-20 14:51:04', '2026-02-18 14:51:04'),
-(17, 1, '1281ebb589b892027903bcc2f71ff9d6f799ddad0846938e3fc98a5253b4f8a5453c0443e4043c94f3a8c5364141c99417ce80cf337581808eb5b2a4e4aa23db', '2026-03-20 14:51:25', '2026-02-18 14:51:25'),
-(18, 1, '23bf6d131bd8bee24b8eb95ec4f4d307588c0390c0dccc95e10c2812566706473dd3b296b77cf126bd21e947bc9e3f73b848f117bb396e273c3c381866776446', '2026-03-20 14:52:38', '2026-02-18 14:52:38'),
-(19, 1, '5abc327c91bd78534268b896cfbdfc7652bc73260cb0456c10b57cba8ab82c0bd6cc3d10b9f0590009f51cf423bfb861964a4683f505957788a954849e743d23', '2026-03-20 15:09:55', '2026-02-18 15:09:55'),
-(20, 1, 'b8d00e7bacc5bd048d40cf8036e189b4270fab6f82b559f322520a8a5094a9f744516a092a674348b61b558b7893a34f513bc034b3359a5feb4b0cf120b1eef6', '2026-03-20 15:10:10', '2026-02-18 15:10:10'),
-(21, 1, 'fa7acc16ceb8ee6c1efb55de8e2505e6c9522954619268fcb148cf91c1800dfd7dd2fa46b1239205d6ca04c40fa3c786da478798b7224ed4895a49b6be080c9f', '2026-03-20 15:15:11', '2026-02-18 15:15:11'),
-(22, 1, '0c94843fbfac4353a210c9875b21d2ccdc11a8706956f1fed37f335c026decf9f3434f40f4c86f6f462dbf04b59fccbf5fa19e4f21aa0f0622357bdf55d75908', '2026-03-20 15:17:37', '2026-02-18 15:17:37'),
-(23, 1, '859c4a265dcd1ea36440b05f0a3bc2cff500567a7c810bdcfd98fabe72bc06fef158ba8230a488a2357c5cc68db40e5e0c89e3a231daa41b640d2810985d0c87', '2026-03-20 16:51:06', '2026-02-18 16:51:06'),
-(24, 1, '6b967314fa85d6408eb318ebb208e8a5cef7c9e5ca7a360285909fe8d840e19eae4cb512fc07de9815da38d4730eade92bf1da0e02066882afa35253380e67f9', '2026-03-20 17:09:44', '2026-02-18 17:09:44'),
-(25, 1, 'a23889f567cedd39e14ac58cecfe82bf6b641c6a1c97ab2c8ebf34bf547911767820328aefda421cd79d982b584b37588df6368483ce7a975e13501845f9239d', '2026-03-20 19:19:17', '2026-02-18 19:19:17'),
-(26, 1, 'cc7de48d0b90b036e33851cd53a9928e254b4aa5788c4b6e3594447bc718da591bac91d684ab9fb0ffd32d1443788368788cc60b7ee81505e3feebbbdd7da3b2', '2026-03-20 19:35:41', '2026-02-18 19:35:41'),
-(27, 1, 'c5e589231ff400b2e61f048039f4ce17b8a4b03ebb58ebb56c8bc9f1c116c0177d32d35b67e3149277bffe40158ebb716e7a96f75db22e4d79175db39b8dacb2', '2026-03-20 20:44:50', '2026-02-18 20:44:50'),
-(28, 1, 'c0c51c31392c87bc1f59c3db80e9ab9513629700217bd6486407a196ef818d3e83c7bb5cb34aae4e78f7a13977268222b30c8e2f581061d9046f67006e9511a5', '2026-03-20 20:49:08', '2026-02-18 20:49:08'),
-(29, 1, 'c0d548ac28c100505c135c94af000e2f151d6a2b01bc477bddc88c828836a394962204cd534102a08f6f2d52f568b1da290ef3beca64bac26797abfc582e210f', '2026-03-20 20:49:40', '2026-02-18 20:49:40'),
-(30, 1, '25fca5221f5cbb491a89fab3a58d0e71d127aeacd2273b20771a3623164aa04751868c18b95048795d312bdb30df732785d3b50680490b65ff5c1e53b5a39d55', '2026-03-20 20:50:02', '2026-02-18 20:50:02'),
-(31, 1, 'faaa841acc7940dae712cdec1f6cc46f2dd69eddf2e3f7dd40ef0996bb3c458f7b09b6c4c7634e69b0e86dbda469011a5352dbb88ca75ec2d582eb58d1335518', '2026-03-20 20:50:32', '2026-02-18 20:50:32'),
-(32, 6, '2afc963b5127aecdfd7c157656ca05c0a7d266aa0293d8c1be7fa5ea74c1988b2550a24aecf0508df9d232eb0293f8783a5f7bdca6187d97efaea35a4f381a10', '2026-03-21 19:29:46', '2026-02-19 19:29:46'),
-(33, 6, '375ff62a7be0f9b61653006720c1bfbf02b891b7ba24cb5ed0c9724d13cd38991de6778eee25788cecd2042845161339ac8482ab32f28f15fead32b6c2f4d192', '2026-03-21 19:30:26', '2026-02-19 19:30:26'),
-(34, 6, '31520709b46ec53acfd2dd2b561e03e3516cae953a53558776555d9a88301e71935ccf45403447388e529b5df6261cd748b7aae8c5e76f05e38bf288a7ba7475', '2026-03-21 19:35:29', '2026-02-19 19:35:29'),
-(35, 6, 'db46f8197f826b7bd08d7aba6df88dee6a07e1dcf4714508526ae68c844b223386421d7b329524b998d52ef8e8d043e12132ad2a74e3779d7e6170b1fe0e9e2d', '2026-03-21 19:36:19', '2026-02-19 19:36:19'),
-(36, 6, '97c5a8df86ce35b009a98d259387fe4146a429673292600642f6b024ec7cf4e8b7190cfcd4d98bb663c55b6f7ea840dc5b5707145850057ebbee74ae43d6e01f', '2026-03-21 19:37:34', '2026-02-19 19:37:34'),
-(37, 6, '1111c9fec6cb9711f619436f592384be95c227ecb4c3f5c7743add13eaedcf5e5113c69270b6d4eaf0fa21c01671738117ebd144548d0701e64d6398c035f1e7', '2026-03-21 19:38:18', '2026-02-19 19:38:18'),
-(38, 6, '495c2309fbc74b0f230c0aa9a6584262dfb54e1a3c12dcffcbdc1623a28a83bb403ac739fb808bec6565dffca03cba4ff4b469b895fae3d3899a8f5b90607200', '2026-03-21 19:39:01', '2026-02-19 19:39:01'),
-(39, 6, 'c6e5422667f407f005aebbe2fe6d7b79c972f11a9562252d0892f9bfe680958a9308aac8219f36862a8f57a115e726b4296b27f3b93579b0e8de9df89a8b3f82', '2026-03-21 19:39:41', '2026-02-19 19:39:41'),
-(40, 10, '25cdbb7b36b2bce2fca386871c33892966b8542e9b18c75294d80ea3a87208d89d5f2e2a12ba04138043f788588126316a0bdc6a14bdedbb45655791c1fa5eae', '2026-03-21 19:53:34', '2026-02-19 19:53:34'),
-(41, 11, '932b4f8126532879db7afa8d62fec3ab92bd78d955b2250c46723acc6f0e744cb4fcdaccb7299a02a0f3f1209d53ab73ff2ff464e15f25007017e11f0aa4118a', '2026-03-21 21:58:17', '2026-02-19 21:58:17'),
-(42, 11, 'b9ffde83786554890f68a0e3d9a878df059ae147b87426cf6d53d895ac3a29261753e8b90ab6d0b5323f0d62ee79a47bc59013a6f15a5d2bd15814ff0e8a8733', '2026-03-21 21:59:02', '2026-02-19 21:59:02');
+(1, 1, 'f2b96d8e451b4e87d783e42b6dd2916c6f11285da4cdd9c15ff791a7b3b09f115aee2ac56012dea0fdc281c7835df9bb5bf6fdfbdb50f5a4ba9b955854bbf5ae', '2026-03-26 00:37:13', '2026-02-24 00:37:13'),
+(2, 13, '6b676708dc588beb5686121933cb3cbde216eea99c05b1bd34c7d6872873304e6e150a219dbcacb94d4dbd923cf3467b14d37d2cf922f30e2cf292050572ff16', '2026-03-26 00:40:24', '2026-02-24 00:40:24'),
+(3, 11, '820db38a2dfaa85ee1972d8f7d809da5fcebb2e123ad9066253c4dd16dcc7c9286b277b42ad6b8ea850954ccd7a7ae3aab7d4c5f0b7d26b08d982d25c72feead', '2026-03-26 00:42:09', '2026-02-24 00:42:09'),
+(4, 15, '2f333c689897d52b22b1868cbe715ae732a2189bb1d391f760cf119f332b474ed3b41e48153f494e028ab3eb5b57344223182b6d6a5945745c7f5a42736c5335', '2026-03-26 00:43:12', '2026-02-24 00:43:12'),
+(5, 11, '8ac6a6e8df5f9390089a7b2d7726ff4ba85dae328ce81eb3b71c6b0f134521d386daf64ef5937a2c3de8d76593d2cc53b00a1d9abb1eddb15c264ef364cdf414', '2026-03-26 00:43:28', '2026-02-24 00:43:28'),
+(6, 11, '79c389cb2c58f2b803476eb7268e6b6482de08b11dcc90cc11ea26470ca549a692dbdcc6ff9b9205f10738040cace27de7f439fe1126be56f4a13844095da6f6', '2026-03-26 00:46:52', '2026-02-24 00:46:52'),
+(7, 11, 'dcf949bde9105861a1f0d91e0d70fae36f8738c22165d54c9e78f90fb048b63544b22e73669cffdadead22fea3a0afab3e289bb4912e960b30f03e2c3f336806', '2026-03-26 00:51:24', '2026-02-24 00:51:24'),
+(8, 11, '0d57205df30973e9c37bed03a598c696c432af46b34ded46c5f34a96c820afb950e851e4676eaefeaf944082a4c099b08c403e8e9dc2427075cef48931254ea4', '2026-03-26 00:52:59', '2026-02-24 00:52:59'),
+(9, 11, 'e76aa746b577fdaee4bf813a5f9375acda7648bd26253525f2d413cbd0f1ae1aba022ab4512864342e69d61f84db7df41f582d9139bc152695abc6ae7fb8486f', '2026-03-26 00:54:52', '2026-02-24 00:54:52'),
+(10, 11, '91f9b31eebb24e259faed68b4f5b37d4df157d8f7935f3c33fab6732b7f72e9b7c68c5a26626e273923d2eed71918d017b5dc404c49983fe36bb042af2d35d62', '2026-03-26 00:55:35', '2026-02-24 00:55:35'),
+(11, 11, 'f68f8572eff06202f8791d6d29e5c3471dc658993af427a9a6af224ce299a46e2d9408da81c59362422a8fb94fe81c2d2d6335eee8c265c28508c8cf46540935', '2026-03-26 00:56:13', '2026-02-24 00:56:13');
 
 -- --------------------------------------------------------
 
@@ -332,15 +363,15 @@ INSERT INTO `refresh_tokens` (`id`, `user_id`, `token`, `expires_at`, `created_a
 
 CREATE TABLE `skills` (
   `id` int(1) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `category` varchar(255) NOT NULL,
+  `name` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `category` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `created_by` int(1) DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `updated_by` int(1) DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   `deleted_by` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `skills`
@@ -389,7 +420,18 @@ INSERT INTO `skills` (`id`, `name`, `category`, `created_at`, `created_by`, `upd
 (40, 'Hotel Manager', 'Management', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (41, 'Operation Manager', 'Management', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (42, 'General Manager', 'Management', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
-(43, 'Food & Beverage Manager', 'Management', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL);
+(43, 'Food & Beverage Manager', 'Management', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(44, 'Information Technology', 'IT', '2026-02-21 00:54:00', 1, '2026-02-21 08:44:58', 1, NULL, NULL),
+(45, 'Front Office Manager', 'Management', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(46, 'Graphics Design', 'Sales & Marketing', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(47, 'Senior Waiter', 'Food & Beverage Service', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(48, 'Sales Director', 'Sales & Marketing', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(49, 'Chief Engineering', 'Engineering', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(50, 'Human Resources Manager', 'Human Resources', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(51, 'Sales Senior', 'Sales & Marketing', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(52, 'Front Desk Agent', 'Front Office', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(53, 'Business Development', 'Human Resources', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(54, 'Chief Accounting', 'Finance', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -400,34 +442,118 @@ INSERT INTO `skills` (`id`, `name`, `category`, `created_at`, `created_by`, `upd
 CREATE TABLE `users` (
   `id` int(1) NOT NULL,
   `hotel_id` int(1) NOT NULL,
-  `role` enum('worker','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production','admin') DEFAULT 'worker',
-  `name` varchar(100) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `phone` varchar(20) DEFAULT NULL,
-  `password` varchar(250) DEFAULT NULL,
-  `provider` enum('local','google','facebook') DEFAULT 'local',
-  `provider_id` varchar(100) DEFAULT NULL,
-  `photo` varchar(250) DEFAULT NULL,
+  `role` enum('worker','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production','admin') CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT 'worker',
+  `name` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `email` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `phone` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `password` varchar(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `provider` enum('local','google','facebook') CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT 'local',
+  `provider_id` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `photo` varchar(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `is_verified` tinyint(4) DEFAULT 0,
-  `is_active` enum('active','inactive') DEFAULT 'active',
+  `is_active` enum('active','inactive') CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT 'active',
   `created_at` datetime DEFAULT NULL,
   `created_by` int(1) DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `updated_by` int(1) DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   `deleted_by` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `hotel_id`, `role`, `name`, `email`, `phone`, `password`, `provider`, `provider_id`, `photo`, `is_verified`, `is_active`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 0, 'worker', 'Mick Jagger', 'admin@admin.com', '0812', '$2y$10$TYZN8k0YxaB.jxCtqA4sl.JnllEeN3/UF9oGYK5.LTvbGlCe7HE82', 'local', NULL, 'uploads/profiles/profile_2_1768811928.png', 0, 'active', '2026-01-18 12:25:53', 1, NULL, NULL, NULL, NULL),
-(2, 1, 'hotel_hr', 'Arya Seftian', 'yerblues6@gmail.com', '895330907220', '$2y$10$ziaDpWwWk3gBjVGu6XqmoebCqmePQwtuwaRGY5ggXBpOI/.Wubhq.', 'local', NULL, 'uploads/profiles/profile_2_1768811928.png', 0, 'active', '2026-01-18 18:59:55', NULL, '2026-01-19 08:38:48', NULL, NULL, NULL),
-(3, 1, 'admin', 'Muhammad', 'muhammad@gmail.com', '99988776', '$2y$10$relLlluCofLYvJKJDW65zuxFadTF4X4A.mCur9V2uEbiZVW8vGhaa', 'local', NULL, 'uploads/profiles/profile_3_1768820480.png', 0, 'active', '2026-01-19 10:53:08', NULL, '2026-02-03 10:39:03', NULL, NULL, NULL),
-(4, 1, 'hotel_fnb_service', 'Muhammad', 'worker@gmail.com', '99988776', '$2y$10$relLlluCofLYvJKJDW65zuxFadTF4X4A.mCur9V2uEbiZVW8vGhaa', 'local', NULL, 'uploads/profiles/profile_3_1768820480.png', 0, 'active', '2026-01-19 10:53:08', NULL, '2026-02-03 10:39:03', NULL, NULL, NULL),
-(11, 1, 'worker', 'ARYA', 'aryaseftzzz@gmail.com', '12345678', '$2y$10$IjZCDqrLF0sRno3N/9nhAervuBHYN8Nd/4Zomo0.Zo/V4447Wz3Ai', 'local', NULL, 'uploads/profiles/1771513056_81b7408381a221dd0232.png', 0, 'active', '2026-02-19 21:57:36', 3, '2026-02-19 21:57:36', 3, NULL, NULL);
+(1, 0, 'admin', 'Mick Jagger', 'admin@admin.com', '81234567890', '$2y$10$TYZN8k0YxaB.jxCtqA4sl.JnllEeN3/UF9oGYK5.LTvbGlCe7HE82', 'local', NULL, 'uploads/profiles/profile_2_1768811928.png', 0, 'active', '2026-01-18 12:25:53', 1, '2026-01-18 12:25:53', 1, NULL, NULL),
+(2, 1, 'worker', 'Muhamad Ridwan Munawar', 'ridwanmunawar2607@gmail.com', '85171040347', '$2y$10$cd46MWgwLtVEaT0q1cQgiOi0ixH5HS8rIRewd7ohU326D5N1OLK22', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-21 08:16:16', 1, NULL, NULL),
+(3, 1, 'worker', 'Taufik Kurnia', 'dantiratu8@gmail.com', NULL, '$2y$10$lYBxa6y7u/fsBBcis8UJVeE0/Ux/oye4cAcTb4Em.gbbX9.p0x0EC', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-21 10:11:50', 1, NULL, NULL),
+(4, 1, 'worker', 'Rahadian Perdana', 'rahadian.rivelino@gmail.com', '88802308136', '$2y$10$BtcSKJUO/fdWbm1Kb/Bb6.pPPjBWRLRksjHqDJW/tboXWJKjXVH4S', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-22 16:53:23', 1, NULL, NULL),
+(5, 1, 'worker', 'Renaldy Herlando', 'rey.herlando@gmail.com', '81255800626', '$2y$10$BtcSKJUO/fdWbm1Kb/Bb6.pPPjBWRLRksjHqDJW/tboXWJKjXVH4S', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-22 16:53:23', 1, NULL, NULL),
+(6, 1, 'worker', 'Tri Setiyawati', 'celineq683@gmail.com', '87880006558', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-22 23:21:54', 1, NULL, NULL),
+(7, 1, 'worker', 'Raafi Teguh Septianto', 'raafiteguh73@gmail.com', '895711102828', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-22 23:21:54', 1, NULL, NULL),
+(8, 1, 'worker', 'Jan Pelupessy', 'janhawajasmine14@gmail.com', '81212790875', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(9, 1, 'worker', 'Adi Alfian Surahman', 'Adialfian83@gmail.com', '83811404011', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(10, 1, 'worker', 'Dini Wulandari', 'Dinilandari18@gmail.com', '8987795834', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(11, 1, 'worker', 'Didik Febriawan', 'didikj4dul@gmail.com', '81298096880', '$2y$10$Pl4rYXHK5ew1/NhfVag9H.51rS6x07me6wXifU2chgeX4.0lacX4q', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 00:42:06', 1, NULL, NULL),
+(12, 1, 'worker', 'Muji priyanto', 'mujipriyanto445@gmail.com', '82139111259', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(13, 1, 'worker', 'Syahwal Ramadhan', 'syahwal.86@gmail.com', '87711210850', '$2y$10$/rlE/a6DkvmUtfWg9qy.AuClJjqRDSDdQdKpriutmkkYJhCWa00CW', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 00:40:20', 1, NULL, NULL),
+(14, 1, 'worker', 'Ijang Sulaeman', 'ijangsulaeman3@gmail.com', '81317087778', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(15, 1, 'worker', 'Faisal Bahri', 'salbahri43@gmail.com', '85283872224', '$2y$10$l3UXm5Y3Nh/t04IlpsXU4OfxUh4OwsFuUouss7AVpxIo7wcfT3.wm', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 00:43:07', 1, NULL, NULL),
+(16, 1, 'worker', 'Eka panji asmoro', 'panjiasmoro1786@gmail.com', '82130884044', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(17, 1, 'hotel_hr', 'Yend Hendriyana', 'yend.hendriyana@gmail.com', '81519992334', '$2y$10$YOlHspewzNL1BEGcSsUTnOOOFQNuaE93.brwNQRCxM.cM/Ege0Loi', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 01:20:19', 1, NULL, NULL),
+(18, 1, 'worker', 'M Aji Maulana', 'muhamadajimaulana557@gmail.com', '89630707971', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(19, 1, 'worker', 'Syahla Rahayu Munandar', 'syahlarahayu98@gmail.com', '85811547147', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(20, 1, 'worker', 'Rima Lestari Sonneville', 'rima.sonneville.89@gmail.com', '88211521716', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(21, 1, 'worker', 'Mohtar Bimantoro', 'sofiabimantoro1@gmail.com', '83165994287', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(22, 1, 'worker', 'Hani yuniarti', 'haniyuniarti1306@gmail.com', '85691659516', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(23, 1, 'worker', 'Qhalia putri', 'halloqhalia@gmail.com', '85775264566', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(24, 1, 'worker', 'Faishal Tri Aditama', 'faishaltriaditama@gmail.com', '81295724744', '$2y$10$lC5t.48FjdMSqR/Q0P6LKuEkvyW0iklBc2ELXi0ncdK7VeiWEnAAu', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:47:14', 1, NULL, NULL),
+(25, 1, 'worker', 'Hilwa Salsabila Ahesa', 'ahesa.hilwa@gmail.com', '87897532333', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
+(26, 1, 'worker', 'Bambang Setiawan', 'bambangsetiawan0681@gmail.com', '8996601717', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
+(27, 1, 'worker', 'Firmansyah', 'firmansyahfirmansyah934@gmail.com', '85777166572', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
+(28, 1, 'worker', 'Jarkasih', 'jarkasihuntung4@gmail.com', '85775588443', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
+(29, 1, 'worker', 'Cecep dikdik Kurniawan ', 'cecepdikdikkurniawan@gmail.com', '85719251910', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
+(30, 1, 'worker', 'Dadan Mulyana', 'cipitung78@gmail.com', '85716638004', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `worker_child`
+--
+
+CREATE TABLE `worker_child` (
+  `id` int(1) NOT NULL,
+  `user_id` int(1) NOT NULL,
+  `child` varchar(250) DEFAULT NULL,
+  `child_gender` varchar(10) DEFAULT NULL,
+  `child_birth_place` varchar(50) DEFAULT NULL,
+  `child_birth_date` date DEFAULT NULL,
+  `child_last_edu` varchar(20) DEFAULT NULL,
+  `child_job` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` int(1) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` int(1) DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` int(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `worker_child`
+--
+
+INSERT INTO `worker_child` (`id`, `user_id`, `child`, `child_gender`, `child_birth_place`, `child_birth_date`, `child_last_edu`, `child_job`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 1, 'Muhamad Sahrul Arifin', 'male', 'Bogor', '2019-12-13', NULL, NULL, '2026-02-22 22:48:31', 1, '2026-02-22 22:48:31', 1, NULL, NULL),
+(2, 5, 'Liona Putri Vallerie', 'female', NULL, '2025-11-13', NULL, NULL, '2026-02-22 22:47:38', 1, '2026-02-22 22:47:38', 1, NULL, NULL),
+(3, 6, 'Shevira mutiarani', 'female', 'Purbalingga', '2000-01-03', 'Sarjana', 'Karyawati', '2026-02-22 22:47:38', 1, '2026-02-22 22:47:38', 1, NULL, NULL),
+(4, 8, 'Felicia', 'female', NULL, NULL, NULL, NULL, '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(5, 9, 'Rafa abizar nurahman', 'male', NULL, '2019-05-24', 'Sd kelas 1', NULL, '2026-02-22 22:47:00', 1, '2026-02-22 22:47:00', 1, NULL, NULL),
+(6, 11, 'M. Firjatullah Alifiawan', 'male', 'Jakarta', '2000-05-04', 'mahasiswa', 'konten kreator', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(7, 12, 'Sasqia renay melliyani', 'female', 'Bekasi', '2007-05-14', 'Pelajar', NULL, '2026-02-22 22:47:00', 1, '2026-02-22 22:47:00', 1, NULL, NULL),
+(8, 13, 'Keenan Gilmour Arasya', 'male', 'Bogor', '2025-09-10', NULL, NULL, '2026-02-22 22:47:00', 1, '2026-02-22 22:47:00', 1, NULL, NULL),
+(9, 14, 'Ira Resi Nur Oktaviani', 'female', 'Cianjur', '2000-10-18', 'SLTA', 'Ibu Rumah Tangga', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(10, 16, 'Renaldi Apriansyah', 'male', 'Jakarta', '2005-04-13', 'SMK', 'Pegawai swasta', '2026-02-22 22:47:00', 1, '2026-02-22 22:47:00', 1, NULL, NULL),
+(11, 17, 'Hilwa Salsabila Ahesa', 'female', 'Jakarta', '2005-05-23', 'Masih Berkuliah', 'Desain Grafis supporting marcomm', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(12, 21, 'Jihan fachiroh bimantoro', 'female', 'Surabaya', '2021-09-30', 'Tk', NULL, '2026-02-22 22:47:00', 1, '2026-02-22 22:47:00', 1, NULL, NULL),
+(13, 22, 'Haikal', 'male', 'Bogor', '2019-03-25', 'Sd', NULL, '2026-02-22 22:47:00', 1, '2026-02-22 22:47:00', 1, NULL, NULL),
+(14, 11, 'M. Abril', 'male', 'Tangerang', '2007-10-19', 'SMK', 'masih sekolah', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(15, 14, 'M Aria Resa Ramadlan', 'male', 'Cianjur', '2004-07-07', 'SLTA', 'Wiraswasta', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(16, 16, 'Kiandra aldya ark', 'male', 'Jakarta', '2009-11-13', 'STM', 'Pelajar', '2026-02-22 22:47:00', 1, '2026-02-22 22:47:00', 1, NULL, NULL),
+(17, 17, 'Ukasya Hail Fattah Ahesa', 'male', 'Jakarta', '2012-01-31', 'SMP', 'Pelajar', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(18, 11, 'M. Athar Al-Farizky', 'male', 'Tangerang', '2014-09-01', 'SD', 'Pelajar', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(19, 14, 'M Revaldhi', 'male', 'Cianjur', '2012-12-29', 'SD', 'Pelajar', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(20, 16, 'Aldan panji arka', 'male', 'Jakarta', '2015-11-15', 'SD', 'Pelajar', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(21, 14, 'Akbar Maulana', 'male', 'Cianjur', '2015-06-28', 'SD', 'Pelajar', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(22, 26, 'Lutfi Setiawan ', 'male', 'Bogor', '2008-10-25', 'SMA', 'Pelajar', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(23, 27, 'CANTIKA FIRTIANSYAH', 'female', 'Bogor', '2005-11-12', 'SMA', 'Pelajar', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(24, 28, 'Amanda meydian azka', 'female', 'Bogor', '2014-05-02', NULL, 'Pelajar', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(25, 29, 'Syabila putri Kurniawan', 'female', 'Ciamis', '2018-04-24', NULL, 'Pelajar', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(26, 30, 'Muhamad Hamdan Harit Syah', 'male', 'Bogor', '2022-02-15', NULL, NULL, '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(27, 26, 'Riffat Fahlevi setiawan', 'male', 'Bogor', '2015-08-12', 'SD', 'Pelajar', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(28, 27, 'AZKA ALDRIANSYAH', 'male', 'Bogor', '2014-03-11', 'SD', 'Pelajar', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(29, 28, 'Hafizh bariq ardiazka', 'male', 'Bogor', '2018-01-20', NULL, 'Pelajar', '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL),
+(30, 28, 'Arclya zihan azkana', 'female', 'Bogor', '2022-03-03', NULL, NULL, '2026-02-22 22:48:00', 1, '2026-02-22 22:48:00', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -438,7 +564,7 @@ INSERT INTO `users` (`id`, `hotel_id`, `role`, `name`, `email`, `phone`, `passwo
 CREATE TABLE `worker_contracts` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `contract_type` enum('daily_worker','casual','corporate','internship') NOT NULL DEFAULT 'daily_worker',
+  `contract_type` enum('daily_worker','casual','coorporate','internship') NOT NULL DEFAULT 'daily_worker',
   `contract_number` varchar(100) DEFAULT NULL,
   `start_date` date NOT NULL,
   `end_date` date DEFAULT NULL,
@@ -461,7 +587,30 @@ CREATE TABLE `worker_contracts` (
 --
 
 INSERT INTO `worker_contracts` (`id`, `user_id`, `contract_type`, `contract_number`, `start_date`, `end_date`, `is_active`, `salary_type`, `base_salary`, `overtime_rate`, `contract_file`, `notes`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(3, 11, 'corporate', NULL, '2026-02-01', '2026-04-30', 1, 'monthly', 6000000.00, 0.00, NULL, NULL, '2026-02-19 21:57:36', 3, '2026-02-19 22:10:13', NULL, NULL, NULL);
+(1, 2, 'coorporate', NULL, '2024-09-05', '2025-09-04', 1, 'monthly', 5000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-21 08:16:44', NULL, NULL, NULL),
+(2, 3, 'coorporate', NULL, '2025-11-19', '2026-11-18', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-22 00:44:18', NULL, NULL, NULL),
+(3, 4, 'coorporate', NULL, '2025-11-20', '2026-11-19', 1, 'monthly', 5000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-22 00:44:18', NULL, NULL, NULL),
+(4, 5, 'coorporate', NULL, '2025-11-24', '2026-11-23', 1, 'monthly', 6000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-22 00:44:18', NULL, NULL, NULL),
+(5, 6, 'coorporate', NULL, '2025-11-24', '2026-11-23', 1, 'monthly', 6000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-22 00:44:18', NULL, NULL, NULL),
+(6, 7, 'coorporate', NULL, '2025-11-24', '2026-11-23', 1, 'monthly', 3000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-22 00:44:18', NULL, NULL, NULL),
+(7, 8, 'coorporate', NULL, '2025-11-26', '2026-11-25', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(8, 9, 'coorporate', NULL, '2025-11-28', '2026-11-27', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(9, 10, 'coorporate', NULL, '2025-12-02', '2026-12-01', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(10, 11, 'coorporate', NULL, '2025-12-04', '2026-12-03', 1, 'monthly', 5500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(11, 12, 'coorporate', NULL, '2025-12-04', '2026-12-03', 1, 'monthly', 8000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(12, 13, 'coorporate', NULL, '2025-12-11', '2026-12-10', 1, 'monthly', 4500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(13, 14, 'coorporate', NULL, '2025-12-14', '2026-12-13', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(14, 15, 'coorporate', NULL, '2025-12-15', '2026-12-14', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(15, 16, 'coorporate', NULL, '2025-12-23', '2026-12-22', 1, 'monthly', 4000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(16, 17, 'coorporate', NULL, '2025-12-27', '2027-12-26', 1, 'monthly', 5000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(17, 18, 'coorporate', NULL, '2025-12-28', '2026-12-27', 1, 'monthly', 4500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(18, 19, 'coorporate', NULL, '2026-01-05', '2027-01-04', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(19, 20, 'coorporate', NULL, '2026-01-07', '2027-01-06', 1, 'monthly', 4500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(20, 21, 'coorporate', NULL, '2026-01-12', '2027-01-11', 1, 'monthly', 3000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(21, 22, 'coorporate', NULL, '2026-01-14', '2027-01-13', 1, 'monthly', 4000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(22, 23, 'coorporate', NULL, '2026-02-06', '2027-02-05', 1, 'monthly', 3000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(23, 24, 'coorporate', NULL, '2025-12-09', '2026-12-08', 1, 'monthly', 2500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(24, 25, 'coorporate', NULL, '2026-01-12', '2027-01-11', 1, 'monthly', NULL, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -472,20 +621,11 @@ INSERT INTO `worker_contracts` (`id`, `user_id`, `contract_type`, `contract_numb
 CREATE TABLE `worker_documents` (
   `id` int(1) NOT NULL,
   `user_id` int(1) NOT NULL,
-  `type` enum('ktp','certificate','other') DEFAULT 'other',
-  `file_path` varchar(250) NOT NULL,
+  `type` enum('ktp','certificate','other') CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT 'other',
+  `file_path` varchar(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `created_by` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
---
--- Dumping data for table `worker_documents`
---
-
-INSERT INTO `worker_documents` (`id`, `user_id`, `type`, `file_path`, `created_at`, `created_by`) VALUES
-(2, 3, 'ktp', 'uploads/documents/doc_3_1770021829.jpeg', NULL, NULL),
-(3, 3, 'other', 'uploads/documents/doc_3_1770363336.pdf', NULL, NULL),
-(4, 3, 'certificate', 'uploads/documents/doc_3_1770364097.pdf', NULL, NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -497,11 +637,12 @@ CREATE TABLE `worker_educations` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `level` varchar(20) NOT NULL,
-  `title` varchar(100) NOT NULL,
+  `title` varchar(100) DEFAULT NULL,
   `instituted_name` varchar(255) NOT NULL,
-  `start_date` varchar(7) NOT NULL,
-  `end_date` varchar(7) NOT NULL,
+  `start_date` varchar(7) DEFAULT NULL,
+  `end_date` varchar(7) DEFAULT NULL,
   `is_current` tinyint(1) NOT NULL,
+  `gpa_value` decimal(4,2) DEFAULT NULL,
   `sort_order` int(1) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   `created_by` int(1) DEFAULT NULL,
@@ -515,9 +656,144 @@ CREATE TABLE `worker_educations` (
 -- Dumping data for table `worker_educations`
 --
 
-INSERT INTO `worker_educations` (`id`, `user_id`, `level`, `title`, `instituted_name`, `start_date`, `end_date`, `is_current`, `sort_order`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 3, 'S1', 'Sarjana Informatika', 'Universitas Nusa Mandiri', '2025-01', '2026-01', 0, 0, '2026-02-02 16:29:38', 3, '2026-02-02 16:41:01', 0, NULL, NULL),
-(2, 3, 'S2', 'Ilmu Komputer', 'Universitas Nusa Mandiri', '2026-01', '', 1, 0, '2026-02-02 16:29:38', 3, NULL, 0, NULL, NULL);
+INSERT INTO `worker_educations` (`id`, `user_id`, `level`, `title`, `instituted_name`, `start_date`, `end_date`, `is_current`, `gpa_value`, `sort_order`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 2, 'SD', '', 'SDN SUKAMAJU', '2003-07', '2009-06', 0, NULL, 0, '2026-02-21 08:24:31', 1, '2026-02-21 08:30:24', 1, NULL, NULL),
+(2, 2, 'SMP', '', 'SMP PGRI 1 CIAWI', '2009-07', '2012-06', 0, NULL, 0, '2026-02-21 08:24:31', 1, '2026-02-21 08:30:24', 1, NULL, NULL),
+(3, 2, 'SMK', 'Teknik Komputer dan Jaringan', 'SMK WIKRAMA BOGOR', '2012-07', '2015-06', 0, NULL, 0, '2026-02-21 08:24:31', 1, '2026-02-21 08:32:50', 1, NULL, NULL),
+(4, 3, 'SD', '', 'SDN Sukajadi', '2003-07', '2008-06', 0, NULL, 0, '2026-02-22 00:15:30', 1, '2026-02-22 00:17:08', 1, NULL, NULL),
+(5, 3, 'MTS', '', 'Mts Manarul Huda', '2009-07', '2010-06', 0, 8.50, 0, '2026-02-22 00:15:30', 1, '2026-02-22 23:07:27', 1, NULL, NULL),
+(6, 3, 'SMK', 'Akomodasi perhotelan', 'SMK perhotelan cianjur', '2013-07', '2014-06', 0, 8.50, 0, '2026-02-22 00:15:30', 1, '2026-02-22 23:07:14', 1, NULL, NULL),
+(7, 5, 'D3', 'Room Division Management', 'Sangkuriang Maritim Institute', '2023-07', '2024-06', 0, 3.45, 0, '2026-02-22 00:15:30', 1, '2026-02-22 23:06:49', 1, NULL, NULL),
+(8, 6, 'SD', NULL, 'SD negri Mangunegara 2 Purbalingga', '1982-07', '1988-06', 0, NULL, 0, '2026-02-22 00:15:30', 1, '2026-02-22 23:30:52', 1, NULL, NULL),
+(9, 6, 'SMP', NULL, 'SMP Mrebet Purbalingga', '1988-07', '1991-06', 0, NULL, 0, '2026-02-22 00:15:30', 1, '2026-02-22 23:30:56', 1, NULL, NULL),
+(10, 6, 'SMA', 'SOS', 'SMA muhammadiyah purbalingga', '1991-07', '1994-06', 0, NULL, 0, '2026-02-22 00:15:30', 1, '2026-02-22 23:31:52', 1, NULL, NULL),
+(11, 6, 'D3', NULL, 'Veteran Purwokerto', '1994-07', '1998-06', 0, NULL, 0, '2026-02-22 00:15:30', 1, '2026-02-22 23:31:52', 1, NULL, NULL),
+(12, 7, 'SD', NULL, 'SDN Pengadilan 1', '2008-07', '2014-06', 0, NULL, 0, '2026-02-22 00:15:30', 1, '2026-02-22 23:31:52', 1, NULL, NULL),
+(13, 7, 'SMP', NULL, 'SMP Negeri 7 Bogor', '2014-07', '2017-06', 0, NULL, 0, '2026-02-22 00:15:30', 1, '2026-02-22 23:57:54', 1, NULL, NULL),
+(14, 7, 'SMA', 'IPS', 'SMA Negeri 9 Bogor', '2017-07', '2000-06', 0, NULL, 0, '2026-02-22 00:15:30', 1, '2026-02-22 23:57:49', 1, NULL, NULL),
+(15, 7, 'S1', 'Ilmu Komunikasi', 'Universitas Gunadarma', '2020-07', '2024-06', 0, 3.44, 0, '2026-02-22 00:15:30', 1, '2026-02-22 23:57:49', 1, NULL, NULL),
+(16, 9, 'SD', NULL, 'Sd babakan dramaga 1', '1995-07', '2001-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:20:41', 1, NULL, NULL),
+(17, 10, 'SD', NULL, 'SDN PASIRLAJA 4', '2003-07', '2009-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:20:47', 1, NULL, NULL),
+(18, 11, 'SD', NULL, 'SDN 03pg', NULL, '1986-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:20:50', 1, NULL, NULL),
+(19, 12, 'SD', NULL, 'SDN 03 KARANGSALAM', NULL, NULL, 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:20:53', 1, NULL, NULL),
+(20, 13, 'SD', NULL, 'Sd negri tanah sareal 1', '2008-07', '2009-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:20:56', 1, NULL, NULL),
+(21, 14, 'SD', NULL, 'SDN Cintaresmi', '1989-07', '1990-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:20:59', 1, NULL, NULL),
+(22, 15, 'SD', NULL, 'SDN Balumbang jaya 03', '2002-07', '2008-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:02', 1, NULL, NULL),
+(23, 16, 'SD', NULL, 'SDN 05', NULL, NULL, 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:06', 1, NULL, NULL),
+(24, 18, 'SD', NULL, 'SDN KOPO 02', '2015-07', '2016-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:09', 1, NULL, NULL),
+(25, 19, 'SD', NULL, 'SDN CIHERANG 01', '2004-07', '2010-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:12', 1, NULL, NULL),
+(26, 20, 'SD', NULL, 'SDN POLISI 1 BOGOR', '1995-07', '2001-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:18', 1, NULL, NULL),
+(27, 22, 'SD', NULL, 'Pengadilan 1', NULL, '1996-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:21', 1, NULL, NULL),
+(28, 23, 'SD', NULL, 'Sdn sukasari kota bogor', NULL, NULL, 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:25', 1, NULL, NULL),
+(29, 9, 'SMP', NULL, 'Insan kamil', '2001-07', '2003-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:28', 1, NULL, NULL),
+(30, 10, 'SMP', NULL, 'SMP PUTRA PAKUAN BOGOR', '2010-07', '2013-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:33', 1, NULL, NULL),
+(31, 11, 'SMP', NULL, 'SMPN 173', NULL, '1989-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:37', 1, NULL, NULL),
+(32, 12, 'SMP', NULL, 'SMP N 1 SUSSKAN', '1997-07', '1999-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:40', 1, NULL, NULL),
+(33, 13, 'SMP', NULL, 'Smp negri 8 bogor', '2011-07', '2012-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:43', 1, NULL, NULL),
+(34, 14, 'SMP', NULL, 'MTS Mathiyyatul Ulum', '1993-07', '1994-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:46', 1, NULL, NULL),
+(35, 15, 'SMP', NULL, 'SMP Sejahtera 04', '2008-07', '2011-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:49', 1, NULL, NULL),
+(36, 16, 'SMP', NULL, 'SMP budaya', NULL, NULL, 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:51', 1, NULL, NULL),
+(37, 18, 'SMP', NULL, 'SMP ISLAM DARUL WASILAH', '2017-07', '2019-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:54', 1, NULL, NULL),
+(38, 19, 'SMP', NULL, 'SMP Majmaul Bahrain', '2010-07', '2013-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:21:57', 1, NULL, NULL),
+(39, 20, 'SMP', NULL, 'SMPN 7 BOGOR', '2001-07', '2004-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:00', 1, NULL, NULL),
+(40, 22, 'SMP', NULL, 'Rimba teruna', NULL, NULL, 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:06', 1, NULL, NULL),
+(41, 23, 'SMP', NULL, 'Smpn 13 kota bogor', NULL, NULL, 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:10', 1, NULL, NULL),
+(42, 9, 'SMK', 'Listrik', 'Smk pgri 2', '2004-07', '2006-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:13', 1, NULL, NULL),
+(43, 10, 'SMK', 'AKUNTANSI', 'SMK PGRI 3 BOGOR', '2013-07', '2016-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:16', 1, NULL, NULL),
+(44, 11, 'SMA', 'IPS', 'SMAN 72', NULL, '1992-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:18', 1, NULL, NULL),
+(45, 12, 'SMK', 'Mekanik otomotif', 'SMK \"75\"2 purwokerto', '1999-07', '2001-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:22', 1, NULL, NULL),
+(46, 13, 'SMK', 'Pemasaran', 'Smk negri 1 bogor', '2013-07', '2014-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:28', 1, NULL, NULL),
+(47, 14, 'MAN', 'Akuntansi', 'MAN Cianjur', '1996-07', '1997-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:31', 1, NULL, NULL),
+(48, 15, 'SMK', 'Teknik kendaraan ringan', 'SMK Negeri 1 Ciomas', '2011-07', '2014-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:34', 1, NULL, NULL),
+(49, 16, 'SMK', 'Teknik', 'SMK taruna', NULL, '2004-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:36', 1, NULL, NULL),
+(50, 18, 'SMK', 'TATA BOGA', 'SMK N 1 PUNCAK CISARUA', '2021-07', '2022-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:39', 1, NULL, NULL),
+(51, 19, 'SMA', 'Ips', 'SMA Pesat Bogor', '2013-07', '2016-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:48', 1, NULL, NULL),
+(52, 20, 'SMA', NULL, 'SMA PGRI 1 BOGOR', '2004-07', '2007-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:51', 1, NULL, NULL),
+(53, 22, 'SMK', NULL, 'Pgri 1', NULL, NULL, 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:54', 1, NULL, NULL),
+(54, 23, 'SMK', 'Farmasi', 'Smk tarum negara bogor', NULL, '2022-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:22:57', 1, NULL, NULL),
+(55, 9, 'D1', 'Perhotelan', 'Wisakti (D1)', '2008-07', '2009-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:23:01', 1, NULL, NULL),
+(56, 17, 'D3', 'Finance of Banking', 'D3 Universitas Borobudur', '1993-07', '1996-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:23:06', 1, NULL, NULL),
+(57, 19, 'D4', 'Hotel Management', 'STP Bogor BHI D4', '2016-07', '2020-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:23:09', 1, NULL, NULL),
+(58, 20, 'D1', 'ROOM DIVISION', 'DIPLOMA 1', '2007-07', '2008-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:23:12', 1, NULL, NULL),
+(59, 10, 'S1', 'MANAJEMEN KEUANGAN', 'STIE KESATUAN BOGOR', '2016-07', '2020-06', 0, 3.48, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:23:15', 1, NULL, NULL),
+(60, 24, 'SD', NULL, 'SDIP YLPI', '2008-07', '2014-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:23:15', 1, NULL, NULL),
+(61, 25, 'SD', NULL, 'Mentari Ar-ridho islamic school', '2010-07', '2016-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:23:15', 1, NULL, NULL),
+(62, 24, 'SMP', NULL, 'Insan Kamil', '2014-07', '2017-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:23:15', 1, NULL, NULL),
+(63, 25, 'SMP', NULL, 'SMPIT UMMUL QURO BOGOR', '2017-07', '2019-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:23:15', 1, NULL, NULL),
+(64, 24, 'SMA', 'IPS', 'SMAN 7 Bogor', '2017-07', '2020-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:26:48', 1, NULL, NULL),
+(65, 25, 'SMA', 'IPS', 'SMAIT UMMUL QURO BOGOR', '2020-07', '2023-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:26:48', 1, NULL, NULL),
+(66, 24, 'S1', 'Manajemen', 'Universitas Jenderal Soedirman\r\n', '2020-07', '2025-06', 0, 3.00, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:26:48', 1, NULL, NULL),
+(67, 25, 'S1', 'ILMU KOMUNIKASI', 'UNIVERSITAS PANCASILA', '2024-07', '2027-06', 0, 3.68, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:26:48', 1, NULL, NULL),
+(68, 26, 'SD', NULL, 'SDN kota batu 02', NULL, NULL, 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:26:48', 1, NULL, NULL),
+(69, 27, 'SD', NULL, 'SDN CIBALAGUNG 3 BOGOR', NULL, NULL, 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:26:48', 1, NULL, NULL),
+(70, 28, 'MI', NULL, 'Mi manbaululum', '1994-07', '2000-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:26:48', 1, NULL, NULL),
+(71, 29, 'SD', NULL, 'SDN tajur 2', '1991-07', '1997-06', 0, 30.40, 0, '2026-02-22 00:15:00', 1, '2026-02-24 01:15:01', 1, NULL, NULL),
+(72, 26, 'SMP', NULL, 'Sltpn 1 ciomas', NULL, NULL, 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:26:48', 1, NULL, NULL),
+(73, 27, 'SMP', NULL, 'SMP RIMBA TERUNA BOGOR', NULL, NULL, 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:26:48', 1, NULL, NULL),
+(74, 28, 'SMP', NULL, 'Yks 5', '2000-07', '2003-06', 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:26:48', 1, NULL, NULL),
+(75, 29, 'SMP', NULL, 'SMP negeri 2 ciawi', '1997-07', '2000-06', 0, 28.25, 0, '2026-02-22 00:15:00', 1, '2026-02-24 01:15:01', 1, NULL, NULL),
+(76, 26, 'SMA', 'IPS', 'SMA rimba madya', NULL, NULL, 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:26:48', 1, NULL, NULL),
+(77, 27, 'SMA', NULL, 'SMK TARUNA BANGSA BOGOR', NULL, NULL, 0, NULL, 0, '2026-02-22 00:15:00', 1, '2026-02-23 23:26:48', 1, NULL, NULL),
+(78, 28, 'SMA', 'SK', 'Smk yktb', '2003-07', '2006-06', 0, 28.11, 0, '2026-02-22 00:15:00', 1, '2026-02-24 01:21:55', 1, NULL, NULL),
+(79, 29, 'SMA', 'IPS', 'SMA', '2003-07', '2006-06', 0, 61.97, 0, '2026-02-22 00:15:00', 1, '2026-02-24 01:21:55', 1, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `worker_emergency`
+--
+
+CREATE TABLE `worker_emergency` (
+  `id` int(1) NOT NULL,
+  `user_id` int(1) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `address` varchar(250) DEFAULT NULL,
+  `relation` varchar(100) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `created_by` int(1) NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` int(1) DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` int(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `worker_emergency`
+--
+
+INSERT INTO `worker_emergency` (`id`, `user_id`, `name`, `phone`, `address`, `relation`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 5, 'Cindi Dewi', '81388758806', 'Jl.cibeureum sunting no.14 mulyaharja Bogor Selatan', NULL, '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(2, 6, 'Shevira Mutiarani', '87711102424', 'Jl baung No 37 Rt 04 Rw 02 kebagusan jakarta selatan', 'Anak', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(3, 7, 'Tyo', '81385089859', 'Kebun Raya Residence blok v no 11, Kabupaten Bogor, Kecamatan Ciomas, Desa Mekarjaya, 16610', 'Kakak', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(4, 7, 'Retno', NULL, 'Kebun Raya Residence blok v no 11, Kabupaten Bogor, Kecamatan Ciomas, Desa Mekarjaya, 16610', 'Ibu', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(5, 7, 'Reri', NULL, 'Panaragan Pojok', 'Kakak', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(6, 7, 'Fasha', NULL, 'Cilebut', 'Teman', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(7, 7, 'Rapip', NULL, 'kebun raya residence blok ab 3', 'Teman', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(8, 9, 'Siti nur aeni', '887433000000', 'Jalan pabuaran tengah rt04/rw06 kelurahan mulyaharja kecamatan bogor selatan kota bogor', 'istri', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(9, 10, 'Tegar Randitya', '82123231806', 'DESA CIJUJUNG TENGAH RT2 RW4, KEC SUKARAJA KAB.BOGOR', NULL, '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(10, 11, 'Fifi', '87819225260', 'idem', NULL, '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(11, 13, 'Natasyha Aprillia Sabatani', '89516217856', 'Jl. A yani 2 no. 13 rt 06/04', NULL, '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(12, 15, 'Nilam Sari', '895415000000', 'Cilubang RT 003/004 Kel. Balumbang jaya kota Bogor Barat', 'Kakak', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(13, 16, 'Novi purwaningsih', '895339000000', 'Prumahan villa mutiara Bogor 2 blok B5 no.2', NULL, '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(14, 17, 'Ida Herliza', '87818062004', 'Perumahan Bogor Raya Permai blok fd1 no4', 'Istri', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(15, 18, 'ANISA', '89649833786', 'KP CIDOKOM RT 02 RW 12 DESA KOPI KEC CISARUA', 'Kakak', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(16, 19, 'Sari mulyani', '85880301642', 'Ciherang hegarsari rt 003/001', 'Ibu', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(17, 20, 'HARRY SETIADI', '81703321786', 'Jerokutakaum RT 02/RW 16, No.5 Bondongan Bogor Selatan 16131', NULL, '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(18, 22, 'Ibu', '85882361773', 'Jl ardio gg 1', 'Ibu', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(19, 23, 'Ehen juhendi', '85780234507', 'Kp. bungur rt 3 rw 5', 'Ayah', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(20, 10, 'Angga prasetya', '89514549885', 'DESA CIJUJUNG TENGAH RT2 RW4, KEC SUKARAJA KAB.BOGOR', 'Kakak', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(21, 17, 'Hilwa Salsabila Ahesa', NULL, 'Perumahan Bogor Raya Permai', 'Anak', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(22, 23, 'Ani', NULL, 'Kp. Bungur rt 3 rw 5', 'Ibu', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(23, 23, 'Sandy', NULL, 'Kp. Bungur rt 3 rw 5', 'Saudara kandung', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(24, 15, 'Fitra Fadillah', NULL, 'Kemayoran', 'Teman', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(25, 23, 'Galang', NULL, 'Kp. Bungur rt 3 rw 5', 'Saudara kandung', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(26, 23, 'Ani', NULL, 'Kp. Bungur rt 3 rw 5', 'Ibu', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(27, 24, 'Ike', '8126764520', 'Kebun Raya Residence Blok T. No 26', 'Ibu', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(28, 26, 'Yeye irma', '89627684497', 'Jln kapten Yusuf GG bebas RT 01 RW 08 kota batu Ciapus bogor', 'Istri', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(29, 27, 'NURTASIPA', '81289844190', 'KP.CIOMAS KABANDUNGAN RT.001/006 DESA SIRNAGALIH KEC.TAMANSARI KAB.BOGOR', NULL, '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(30, 28, 'Irmawati', '81219849708', 'Kp cimanggu rt/rw 01/04', NULL, '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(31, 29, 'Titin agustina', '85693191213', 'Kp.tajur rt01rw04 desa/Kel muarasari kec.bogor selatan kab/kota kota Bogor provinsi Jawa Barat 16137', NULL, '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -535,7 +811,10 @@ CREATE TABLE `worker_experiences` (
   `location` varchar(150) DEFAULT NULL,
   `start_date` varchar(7) DEFAULT NULL,
   `end_date` varchar(7) DEFAULT NULL,
+  `salary` decimal(15,2) DEFAULT NULL,
   `is_current` tinyint(1) DEFAULT 0,
+  `supervisor_name` varchar(100) DEFAULT NULL,
+  `reason_leaving` varchar(150) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `sort_order` int(1) DEFAULT 0,
   `created_at` datetime DEFAULT current_timestamp(),
@@ -550,9 +829,88 @@ CREATE TABLE `worker_experiences` (
 -- Dumping data for table `worker_experiences`
 --
 
-INSERT INTO `worker_experiences` (`id`, `user_id`, `company_name`, `company_business`, `job_title`, `department`, `location`, `start_date`, `end_date`, `is_current`, `description`, `sort_order`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 3, 'Lorem', 'Ipsum', 'Dolor', 'Sit', 'Amet', '2026-01', NULL, 1, 'Oke', 0, '2026-02-02 09:29:15', 3, '2026-02-02 09:29:15', NULL, NULL, NULL),
-(2, 3, 'Sahira', 'Hotel', 'SE', 'IT', 'Bogor', '2025-01', '2026-01', 0, 'Oke', 0, '2026-02-02 09:29:15', 3, '2026-02-02 16:35:02', NULL, NULL, NULL);
+INSERT INTO `worker_experiences` (`id`, `user_id`, `company_name`, `company_business`, `job_title`, `department`, `location`, `start_date`, `end_date`, `salary`, `is_current`, `supervisor_name`, `reason_leaving`, `description`, `sort_order`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 2, 'The Sahira Hotel', 'Hotel', 'SPV \n', 'IT', 'Bogor, West Java', NULL, NULL, 5000000.00, 0, NULL, NULL, NULL, 0, '2026-02-21 08:30:46', 1, '2026-02-22 00:37:51', 1, NULL, NULL),
+(2, 2, 'Chevilly Resort & Camp', 'Resort', 'Staff IT', 'IT', 'Bogor, West Java', '2021-01', '2024-12', 5200000.00, 0, 'Rivan Sulung Fitriadi', NULL, NULL, 0, '2026-02-21 08:30:46', 1, '2026-02-22 23:16:28', 1, NULL, NULL),
+(3, 3, 'Sakura park hotel and residence', 'Hotel', NULL, NULL, 'Deltamas, Bekasi ', '2015-01', '2021-12', 5500000.00, 0, NULL, 'Habis kontrak', NULL, 0, '2026-02-21 08:30:46', 1, '2026-02-22 00:41:24', 1, NULL, NULL),
+(4, 5, 'Aston Bogor', 'Hotel', 'Public Area Atd', NULL, 'Bogor Nirwana Residence', '2013-01', '2025-11', 6000000.00, 0, 'Abdul Rohman', 'Break Contract', NULL, 0, '2026-02-21 08:30:46', 1, '2026-02-22 23:14:58', 1, NULL, NULL),
+(5, 5, 'Marriott Hotel', 'Hotel', 'Room atd', NULL, 'Mega kuninga, Jakarta', '2013-01', '2025-11', NULL, 0, 'Abdul Rohman', NULL, NULL, 0, '2026-02-21 08:30:46', 1, '2026-02-23 00:02:01', 1, NULL, NULL),
+(6, 6, 'PT Thamrin Bulevard Aari', NULL, 'Senior sales Manager', NULL, 'Thamrin jakarta pusat', NULL, NULL, NULL, 0, 'Ridwan', NULL, NULL, 0, '2026-02-21 08:30:46', 1, '2026-02-23 00:02:03', 1, NULL, NULL),
+(7, 6, 'Hotel Mega Anggrek', 'Hotel', 'Sales Manager', NULL, NULL, NULL, NULL, NULL, 0, 'Dona', NULL, NULL, 0, '2026-02-21 08:30:46', 1, '2026-02-23 00:02:04', 1, NULL, NULL),
+(8, 7, 'Fotografi Universitas Gunadarma', NULL, 'Assisten Lab', NULL, 'Kampus G, Universitas Gunadarma, Jl. Akses UI, Kelapa Dua – Cimanggis', '2022', '2024', 1000000.00, 0, 'Yusuf', 'periode berakhir', NULL, 0, '2026-02-21 08:30:46', 1, '2026-02-23 00:02:06', 1, NULL, NULL),
+(9, 7, 'Alan Creative', NULL, 'Social Media Specialist', NULL, 'Jl. Utama No.19, Tugu, Kec. Cimanggis, Kota Depok, Jawa Barat 16451, Depok City, West Java 11530', '2022', '2024', 1500000.00, 0, 'Ahmad Alimuddin', 'Tidak perpanjang kontrak', NULL, 0, '2026-02-21 08:30:46', 1, '2026-02-23 00:02:06', 1, NULL, NULL),
+(10, 7, 'Cherise by Azzura', NULL, 'Social Media Specialist', NULL, 'no. 21 B, Jl. Raya Pajajaran No.16153, Bantarjati, Kec. Bogor Utara, Kota Bogor, Jawa Barat 16153', '2025', '2025', 2000000.00, 0, 'Haedir', 'Tidak perpanjang kontrak', NULL, 0, '2026-02-21 08:30:46', 1, '2026-02-23 00:02:06', 1, NULL, NULL),
+(11, 10, 'MIMARU HOTEL JAKARTA', 'Hotel', 'Account Receivable', NULL, 'jl. Raya mangga besar No.144', '2024-11', '2025-10', 4200000.00, 0, 'Shariva ayuni', 'Karena jauh dari rumah', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(12, 11, 'Samarta Swarga Antara', NULL, 'audit', NULL, 'lampung', '2022-01', '2025-12', NULL, 0, 'Ali Imran R.R.', 'mengundurkan diri', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(13, 12, 'Allegra resto', 'Resto', 'Manager kitchen', NULL, 'Jl bali no 27 Gubeng suraaya', '2022-01', '2025-12', 8000000.00, 0, 'Bambang Cipto wijaya', 'Pindah yg Deket kampung halaman', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(14, 13, 'The Sahira Hotel', 'Hotel', 'Room Attendant', NULL, 'Jl. A yani no.17-23', '2015-01', '2023-12', 4200000.00, 0, 'Andin', 'Mencoba suasana baru, pengalaman baru', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(15, 14, 'PT GAIA Catering', NULL, 'Staff Engineering', NULL, 'Jl KH Ahmad Dahlan no 47 jakarta selatan', '2023-01', '2025-12', 8000000.00, 0, 'Hj Diane Crystalia', 'Resign', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(16, 15, 'Hotel Neo+ Airport Jakarta', 'Hotel', 'Mechanical engineering', NULL, 'Tower PQR, Jl. Cengkareng Business City Jl. Atang Sanjaya No.21 Lot 5, Kota Tangerang, Banten 15125', '2025-04', '2025-11', 5700000.00, 0, 'Rizky Syahrizal', 'Resign pindah kerja', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(17, 18, 'SANUBARI PT KREASI ALAM HAYATI', NULL, 'CHEF DE PARTIE', NULL, 'SARUA MAKMUR BLOK VI NO1 SARUA - CIPUTAT TANGERANG SELATAN', '2025-01', '2026-12', 4900000.00, 0, 'CHEF DUIE', 'KONTRAK HABIS', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(18, 19, 'Adira tajur 1', NULL, 'Taller', NULL, 'Jl raya tajur', '2023-01', '2026-12', 11000000.00, 0, 'Yune siskayanti', 'Pindah sahira paledang', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(19, 20, 'JAMBULUWUK RESORT & CONVENTION', 'Resort', 'sales executive', NULL, 'Jalan Raya Tapos No. 63, Ciawi, Bogor', '2022-01', '2025-12', 5800000.00, 0, 'Bp Cahyadi', 'MUST MOVE TO JAKARTA', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(20, 23, 'Ftl gym pajajaran bogor', NULL, 'Marketing', NULL, 'Pajajaran bogor', '2025-04', '2025-09', 4300000.00, 0, 'Rizal', 'Pengembangan karir', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(21, 9, 'Hotel Aston bogor', 'Hotel', 'Room attendant', NULL, 'Jl. Dreded No. 19, Bogor Nirwana Residence, Bogor, Jawa Barat 16132', NULL, NULL, 13000000.00, 0, NULL, 'Habis kontrak', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(22, 10, 'Sahira butik hotel paledang', 'Hotel', 'Account payable & general cashier', NULL, 'Jl. Paledang No.53', NULL, NULL, 3800000.00, 0, 'Didik febriawan', 'Karena dapat pekerjaan di tempat baru', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(23, 12, 'Newboss bar and resto', 'Resto', 'Head chef', NULL, 'Jl Ir Soekarno no 400,Kedung Baruk kec.rungkut Surabaya Jawa timur', NULL, NULL, 7000000.00, 0, 'Therry andreas', 'Tutup', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(24, 13, 'Asta Management Grouo', NULL, 'Sales executive', NULL, 'Jl. Padjadjaran no 21', NULL, NULL, 6000000.00, 0, 'Prabu Nur Adam', NULL, NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(25, 14, 'Sahira Butik Hotel', 'Hotel', 'Staff Engineering', NULL, 'Jl Paledang 53', NULL, NULL, 7000000.00, 0, 'H. Saleh saaf', 'Resign', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(26, 15, 'Hotel Cluster Ibisstyles & Ibis budget jakarta airport', 'Hotel', 'Technician Staff', NULL, 'Jl. Raya Bandara Soekarno-Hatta, Benda, Kec. Benda, Kota Tangerang, Banten 15125', NULL, NULL, 5000000.00, 0, 'Feri Fajri', 'Resign pindah kerja', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(27, 17, 'PT. Saung Dolken Group', NULL, 'General Manager Group', NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(28, 18, 'JEP SETATION INDOESIA', NULL, 'DAILYWORKER', NULL, 'PASIR MUNCANG KEC MEGAMENDUNG NO 5', NULL, NULL, 4800000.00, 0, 'YUSUF TAUJRI', 'KONTRAK HABIS', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(29, 23, 'Colorbox', NULL, 'Sales associate', NULL, 'Aeon sentul', NULL, NULL, 4800000.00, 0, 'Rega', 'Terlalu jauh dari rumah', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(30, 9, 'Marriot jakarta', 'Hotel', 'Room attendant', NULL, 'Jalan DR Ide Anak Agung Gde Agung Kav E.1.2 No 1&2, Kawasan Mega Kuningan, Jakarta Selatan, 12950', NULL, '2008-01', NULL, 0, NULL, NULL, NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(31, 12, 'Hotel lotus subang', 'Hotel', 'Head chef', NULL, 'Jl letjent suprapto No.31,Cigadung,kec.subang,kab.subang Jawa barat', '2015-01', '2017-12', 5000000.00, 0, 'Bu Vina', 'Pindah ke surabaya', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(32, 15, 'Ibisstyles Jakarta Tanah Abang', 'Hotel', 'Engineering staff', NULL, 'Jl. H. Fachrudin No.22, Kp. Bali, Jakarta Pusat 10250', '2019-08', '2020-05', 5000000.00, 0, 'Bayu C Prasetyo', 'Pandemic Covid 19', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(33, 23, 'Matahari department store', NULL, 'Sales associate', NULL, 'Aeon deltamas cikarang', NULL, NULL, 5200000.00, 0, 'Oky', 'Cari kerja daerah bogor', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL),
+(34, 24, 'PT Pegadaian Internship', NULL, 'Marketing', NULL, 'Jl. Jenderal Sudirman No. 299, Purwokerto.', NULL, NULL, 2000000.00, 0, 'Irma', 'Kontrak Magang Selesai', NULL, 0, '2026-02-21 08:30:00', 1, '2026-02-23 00:02:00', 1, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `worker_language`
+--
+
+CREATE TABLE `worker_language` (
+  `id` int(1) NOT NULL,
+  `user_id` int(1) NOT NULL,
+  `language` varchar(50) DEFAULT NULL,
+  `hearing` varchar(50) DEFAULT NULL,
+  `reading` varchar(50) DEFAULT NULL,
+  `speaking` varchar(50) DEFAULT NULL,
+  `writing` varchar(50) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `created_by` int(1) NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` int(1) DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` int(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `worker_language`
+--
+
+INSERT INTO `worker_language` (`id`, `user_id`, `language`, `hearing`, `reading`, `speaking`, `writing`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 3, 'Bahasa Inggris', 'Good', 'Good', 'Good', 'Good', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(2, 5, 'Bahasa Inggris', 'Good', 'Good', 'Good', 'Good', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(3, 6, 'Bahasa Inggris', 'Good', 'Good', 'Good', 'Good', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(4, 7, 'Bahasa Inggris', 'Good', 'Good', 'Good', 'Good', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(5, 9, 'Bahasa Inggris', 'Good', 'Good', 'Good', 'Good', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(6, 10, 'Bahasa Inggris', 'Good', 'Good', 'Good', 'Good', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(7, 11, 'Bahasa Inggris', 'Good', 'Good', 'Good', NULL, '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(8, 12, 'Mandarin', 'Poor', NULL, 'Poor', NULL, '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(9, 13, 'Bahasa Inggris', 'Good', 'Good', 'Good', 'Good', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(10, 15, 'Bahasa Inggris', 'Poor', 'Poor', 'Poor', 'Poor', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(11, 17, 'Bahasa Inggris', 'Good', 'Good', 'Excelent', 'Excelent', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(12, 18, 'Bahasa Inggris', 'Good', 'Good', 'Good', 'Poor', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(13, 19, 'Bahasa Inggris', 'Good', 'Good', 'Good', 'Good', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(14, 20, 'Bahasa Inggris', 'Good', 'Good', 'Good', 'Good', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(15, 23, 'Bahasa Inggris', 'Poor', 'Good', 'Poor', 'Poor', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(16, 24, 'Bahasa Inggris', 'Excelent', 'Excelent', 'Good', 'Excelent', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(17, 25, 'Bahasa Inggris', 'Good', 'Excelent', 'Excelent', 'Excelent', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(18, 28, 'Bahasa Inggris', 'Poor', 'Poor', 'Poor', 'Poor', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL),
+(19, 29, 'Bahasa Inggris', 'Good', 'Good', 'Good', 'Good', '2026-02-22 00:00:00', 1, '2026-02-22 00:00:00', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -563,22 +921,77 @@ INSERT INTO `worker_experiences` (`id`, `user_id`, `company_name`, `company_busi
 CREATE TABLE `worker_links` (
   `id` int(1) NOT NULL,
   `user_id` int(1) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `url` varchar(250) DEFAULT NULL,
+  `name` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `url` varchar(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `created_by` int(1) DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `updated_by` int(1) DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   `deleted_by` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `worker_links`
+-- Table structure for table `worker_parents`
 --
 
-INSERT INTO `worker_links` (`id`, `user_id`, `name`, `url`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 3, 'Perkenalan Diri', 'https://www.youtube.com/watch?v=gLDUZpPUcXA', '2026-02-06 14:26:13', 3, NULL, NULL, NULL, NULL);
+CREATE TABLE `worker_parents` (
+  `id` int(1) NOT NULL,
+  `user_id` int(1) NOT NULL,
+  `fathers_name` varchar(100) DEFAULT NULL,
+  `fathers_birth_place` varchar(50) DEFAULT NULL,
+  `fathers_birth_date` date DEFAULT NULL,
+  `fathers_edu` varchar(20) DEFAULT NULL,
+  `fathers_job` varchar(100) DEFAULT NULL,
+  `mothers_name` varchar(100) DEFAULT NULL,
+  `mothers_birth_place` varchar(50) DEFAULT NULL,
+  `mothers_birth_date` date DEFAULT NULL,
+  `mothers_edu` varchar(20) DEFAULT NULL,
+  `mothers_job` varchar(100) DEFAULT NULL,
+  `address_parents` text DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `created_by` int(1) NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` int(1) DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` int(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `worker_parents`
+--
+
+INSERT INTO `worker_parents` (`id`, `user_id`, `fathers_name`, `fathers_birth_place`, `fathers_birth_date`, `fathers_edu`, `fathers_job`, `mothers_name`, `mothers_birth_place`, `mothers_birth_date`, `mothers_edu`, `mothers_job`, `address_parents`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Kp. Cibolang RT/RW 01/05 Desa Banjarwangi, kecamatan Ciawi, Kabupaten Bogor 16720', '2026-02-21 10:05:18', 1, '2026-02-21 10:06:04', 1, NULL, NULL),
+(2, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Jl.didi prawira Kusumah kab Cianjur 43215', '2026-02-22 00:09:05', 1, '2026-02-22 00:09:05', 1, NULL, NULL),
+(3, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Pulogebang permai Jakarta Timur', '2026-02-22 00:09:05', 1, '2026-02-22 00:09:05', 1, NULL, NULL),
+(4, 5, 'Djuli Saebi', 'Bogor', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Jl.Golf Rt 004/008 Ciriung Cibinong', '2026-02-22 00:09:05', 1, '2026-02-22 00:09:05', 1, NULL, NULL),
+(5, 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Jl baung no 37 rt04 rw 02 kebagusan pasar minggu jakarta selatan', '2026-02-22 00:09:05', 1, '2026-02-22 00:09:05', 1, NULL, NULL),
+(6, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Kebun Raya Residence blok v no 11, Kabupaten Bogor, Kecamatan Ciomas, Desa Mekarjaya, 16610', '2026-02-22 00:09:05', 1, '2026-02-22 00:09:05', 1, NULL, NULL),
+(7, 8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Ambon', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(8, 9, 'Atang supriatna', 'Bogor', '1970-11-25', 'S1', 'Pns', 'Pipih alpiah', 'Bogor', '1972-04-16', 'SMA', 'IRT', 'Jalan pabuaran tengah rt 04/rw06 kelurahan paledang kecamatan bogor selatan kota bogor 16135', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(9, 10, 'Hasanuddin', 'Bogor', NULL, NULL, NULL, 'Rika Purnama', NULL, NULL, NULL, NULL, 'DESA CIJUJUNG TENGAH RT2 RW4, KEC SUKARAJA KAB.BOGOR', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(10, 11, 'M. Djai S.', 'Kupang', '1941-12-24', 'SMA', 'Pensiunan Pegawai Negeri', 'Djuminah', 'Semarang', '1936-06-24', 'SMA', 'IRT', 'depok', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(11, 12, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Banjarnegara desa karangsalam rt04/04 kec.susukan kab.banjar negara Jawa tengah', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(12, 13, 'Achmad gunadi', 'Palangkaraya', '1973-11-27', 'D3', 'Tdk bekerja', 'Nurleni', 'Bogor', '1976-05-13', 'Slta', 'IRT', 'Jl. A Yani 2 no.13 rt 06/04', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(13, 14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Kp Lanjung RT 003 RW 003 Sukajadi Karang Tengah Cianjur 43281', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(14, 15, 'Saniih', 'Bogor', '1964-09-20', 'SMA', 'Wirausaha', 'Rohana ', 'Bogor', '1969-03-07', 'SMA', 'IRT', 'Cilubang RT 003/004 Kel. Balumbang jaya kota Bogor Barat. 16116', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(15, 16, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Jalan kampung tanah koja 2 RT 04 RW 02 no.2 kelurahan Jatinegara kaum kec pulogadung', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(16, 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Perumahan Green Garden Jakarta Utara', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(17, 18, 'DEPE SUARDI', NULL, NULL, 'SD', 'BURUH', 'EEM', NULL, NULL, 'SD', 'IRT', 'kp anyar rt 02 rw 12 desa kopo kec cisarua', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(18, 19, 'Munandar', 'Bogor', '1972-05-02', 'SMA / SGO', 'Wiraswasta', 'Sari mulyani', 'Bogor', '1977-02-20', 'SMA', 'IRT', 'Ciherang hegarsari rt 003/001', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(19, 20, 'HASAN SONNEVILLE', 'BOGOR', '1945-07-15', 'S1', 'HR CORP SWASTA', 'SUMARYATUN', 'BOGOR', NULL, 'SMA', 'IRT', 'Jerokutakaum RT 02/RW 16, No.5 Bondongan Bogor Selatan 16131', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(20, 21, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Jl. Sawahpulo 45', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(21, 22, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Jl ardio gg 1', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(22, 23, 'Ehen juhendi', NULL, NULL, NULL, 'Wiraswasta', 'Ani anggraeni', NULL, NULL, NULL, 'IRT', 'Kp. Bungur rt 3 rw 5, desa tajur halang, kecamatan cijeruk, kabupaten bogor', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(23, 24, 'Alm. Akhmad Hanifudin', 'Purwokerto', '1968-02-23', 'S1', 'Pegawai BUMN (Pensiun)', 'Ike Wilawati', 'Pematang Siantar', '1971-08-12', 'S1', 'Ibu Rumah Tangga', 'Kebun Raya Residence Blok T No.26 004/009, kel Pasir Kuda, Bogor Barat. 16119.', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(24, 26, 'Dasta Sasmita', 'Bogor', NULL, 'SMA', NULL, 'Diah', 'Bogor', NULL, 'SMA', NULL, 'Kota batu rt01 rw08 desa kota batu kec Ciomas Bogor 16610', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(25, 27, 'ALM.BPK.SAMIN', 'Bogor', NULL, 'SMA', NULL, 'ALM.IBU ICIH', 'Bogor', '1948-05-04', NULL, NULL, 'Kp.Ciomas Kabandungan Rt.003/007 Desa Sirnagalih Kec.Tamansari Kab.Bogor Kode Pos 16610', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(26, 28, 'Acep', 'Bogor', '1954-01-22', 'SMP', 'Wirasuasta', 'Rohayeh', 'Bogor', '1960-03-07', 'SMP', 'Ibu rumah tangga', 'Kp ciampea  rt/rw 005/006', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(27, 29, 'Bambang cahyono ', 'Ciamis ', NULL, 'SMP', NULL, 'Wiwin nurliah', 'Ciamis', '1965-01-16', 'SMP', 'Ibu rumah tangga', 'Kp tajur rt01rw04 desa/Kel muarasari kec.bogor selatan kab/kota kota Bogor provinsi Jawa Barat 16137', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL),
+(28, 30, NULL, NULL, NULL, NULL, NULL, 'Nanah maryanah', 'Bogor', NULL, NULL, NULL, 'Jln A yani Gg sapin Rt 03 Rw 02 Tanah sareal Bogor 16161', '2026-02-22 00:09:00', 1, '2026-02-22 00:09:00', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -589,24 +1002,60 @@ INSERT INTO `worker_links` (`id`, `user_id`, `name`, `url`, `created_at`, `creat
 CREATE TABLE `worker_profiles` (
   `id` int(1) NOT NULL,
   `user_id` int(1) NOT NULL,
-  `gender` enum('male','female') DEFAULT NULL,
+  `gender` enum('male','female') CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `birth_place` varchar(50) DEFAULT NULL,
   `birth_date` date DEFAULT NULL,
-  `address` text DEFAULT NULL,
-  `bio` text DEFAULT NULL,
+  `address` text CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `staffing_level` int(1) DEFAULT NULL,
+  `religion` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `no_ktp` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `blood_type` varchar(2) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `citizenship` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `hobby` varchar(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `marital_status` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `bio` text CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `created_by` int(1) DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `updated_by` int(1) DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   `deleted_by` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `worker_profiles`
 --
 
-INSERT INTO `worker_profiles` (`id`, `user_id`, `gender`, `birth_date`, `address`, `bio`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 1, 'male', '2026-01-18', 'Bogor', 'Profile', '2026-01-18 16:47:54', 1, NULL, NULL, NULL, NULL);
+INSERT INTO `worker_profiles` (`id`, `user_id`, `gender`, `birth_place`, `birth_date`, `address`, `staffing_level`, `religion`, `no_ktp`, `blood_type`, `citizenship`, `hobby`, `marital_status`, `bio`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 2, 'male', 'Bogor', '2019-12-13', 'Kp. Cibolang RT/RW 01/05 Desa Banjarwangi, kecamatan Ciawi, Kabupaten Bogor \r\n16720', 5, 'Islam', '13249507000859 (SIM)', NULL, 'Indonesia', 'Futsal dan sepak bola \n', 'Menikah', NULL, '2026-02-21 08:41:24', 1, '2026-02-21 08:41:24', 1, NULL, NULL),
+(2, 3, 'male', 'Bogor', '2000-08-05', 'Jl.kh Abdul saleh cemplang kab.bogor 16630', 1, 'Islam', '3203071509950006', 'AB', 'Indonesia', 'Bermain musik metal dan vokal scream', 'Menikah', NULL, '2026-02-22 00:08:32', 1, '2026-02-22 00:08:44', 1, NULL, NULL),
+(3, 4, 'male', 'Jakarta', '1978-04-09', 'Mess Sahira Hotel Paledang', 7, 'Islam', '3175060704780007', 'AB', 'Indonesia', 'Olahraga', 'Duda', NULL, '2026-02-22 22:22:45', 1, '2026-02-22 22:22:45', 1, NULL, NULL),
+(4, 5, 'male', NULL, NULL, 'Jl.Cibeureum Sunting no.14 Mulyaharja-Bogor Selatan', 7, 'Kong Hu Chu', '3201013011920003', 'B', 'Indonesia', 'Berkebun', 'Menikah', NULL, '2026-02-22 22:22:45', 1, '2026-02-22 22:22:45', 1, NULL, NULL),
+(5, 6, 'female', 'Purbalingga', '1977-01-24', 'Jl baung no 37 rt 04 rw 02 kebagusan pasar minggu jakarta selatan', 7, 'Islam', '3175036404770009', 'O', 'Indonesia', 'Traveling', 'Janda', NULL, '2026-02-22 22:22:45', 1, '2026-02-22 22:22:45', 1, NULL, NULL),
+(6, 7, 'male', NULL, NULL, 'Kebun Raya Residence blok v no 11, Kabupaten Bogor, Kecamatan Ciomas, Desa Mekarjaya, 16610', 5, 'Islam', '3201290609010000', 'A', 'Indonesia', 'Badminton, ngedit, voice over or dubbing', 'Belum Menikah', NULL, '2026-02-22 22:22:45', 1, '2026-02-22 22:22:45', 1, NULL, NULL),
+(7, 8, 'male', NULL, NULL, 'Lenteng agung 12610', 4, 'Protestan', '3174100506860003', 'O', 'Indonesia', 'Football', 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(8, 9, 'male', NULL, NULL, 'Jalan pabuaran tengah rt 04/rw06 kelurahan paledang kecamatan bogor selatan kota bogor 16135', 5, 'Islam', '3271032906890007', 'O', 'Indonesia', 'Sepak bola', 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(9, 10, 'female', NULL, NULL, 'DESA CIJUJUNG TENGAH RT2 RW4, KEC SUKARAJA KAB.BOGOR', 5, 'Islam', '3201045807980002', 'O', 'Indonesia', 'Tidur, liburan', 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(10, 11, 'male', NULL, '1974-02-24', 'jl. anggrek V atas No.33 RT06 RW05 Benda Baru, Pamulang - TangSel', 7, 'Islam', '3674062402740004', 'O', 'Indonesia', 'Futsal', 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(11, 12, 'male', 'Banjarnegara', '1983-03-04', 'Jl gedung neros RT 02/07 kel.palefang kec.bojong neros Bogor jawabarat', 7, 'Islam', '3304010401830000', 'AB', 'Indonesia', 'Bersepeda', 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(12, 13, 'male', NULL, NULL, 'Jl. A Yani 2 no.13 rt 06/04', 7, 'Islam', '3271060802970011', 'AB', 'Indonesia', NULL, 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(13, 14, 'male', NULL, NULL, 'Jl Paledang no 53 Bogor Tengah kota Bogor 16122', 2, 'Islam', '3203070804760005', 'A', 'Indonesia', 'Berkarya', 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(14, 15, 'male', NULL, NULL, 'Cilubang RT 003/004 kel.balumbang jaya . Kota Bogor Barat 16116', 2, 'Islam', '3271040403970009', 'O', 'Indonesia', 'Hiking, Futsal', 'Belum Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(15, 16, 'male', NULL, NULL, 'Perumahan villa mutiara Bogor 2 blok 5 no 2', 7, 'Islam', '3175021708860016', 'A', 'Indonesia', 'Sepak bola', 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(16, 17, 'male', 'Jakarta', '1974-12-03', 'Perumahan Bogor Raya Permai blok FD1 No4', 7, 'Islam', '3172040312740000', 'A', 'Indonesia', 'Riding Motorcycle, Skirmish/Airsoft, Traveling', 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(17, 18, 'male', NULL, NULL, 'kp anyar RT 02 RW 12 DESA KOPO KEC CISARUA KAB BOGOR', 5, 'Islam', '3201252309020001', 'O', 'Indonesia', 'BADMINTON', 'Belum Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(18, 19, 'female', 'Bogor', '1998-01-27', 'Ciherang hegarsari rt 003/001', 5, 'Islam', '3201306701980000', 'B', 'Indonesia', 'Hunting food, travelling, movie time', 'Janda', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(19, 20, 'female', 'Bogor', '1989-09-19', 'Jerokutakaum RT 02/RW 16, No.5 Bondongan Bogor Selatan 16131', 6, 'Islam', '3271015909890010', 'AB', 'Indonesia', 'YOGA & TRAVELLING', 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(20, 21, 'male', 'JEMBER', '1997-05-21', 'Jl. Paledang 5', 2, 'Islam', '3509172105970000', 'A', 'Indonesia', 'Sepakbola', 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(21, 22, 'female', 'Bogor', '1990-06-13', 'Pwrumahan nuansa indah ciomas blokc4 no2', 6, 'Islam', '3271035306900000', 'O', 'Indonesia', 'Baking kue', 'Janda', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(22, 23, 'female', 'Bogor', '2003-12-02', 'Kp. Bungur rt 3 rw 5, desa tajur halang, kecamatan cijeruk, kabupaten bogor', 2, 'Islam', '3271035212030000', 'B', 'Indonesia', 'Renang, menulis', 'Belum Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(23, 24, 'male', 'Pekanbaru', '2002-03-07', 'Kebun Raya Residence Blok T No.26 004/009, kel Pasir Kuda, Bogor Barat. 16119.', 1, 'Islam', '1471090000000000', 'AB', 'Indonesia', 'Badminton', 'Belum Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(24, 25, 'female', 'Jakarta', '2005-05-23', 'Perumahan Bogor Raya Permain blok FD1 No4', 1, 'Islam', '3172050000000000', 'A', 'Indonesia', 'melukis, membaca buku, travelling', 'Belum Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(25, 26, 'male', NULL, NULL, 'Kota batu rt01 rw08 desa kota batu kecamatan Ciomas kab Bogor 16610', NULL, 'Islam', '3201290606810005', 'AB', 'Indonesia', NULL, 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(26, 27, 'male', NULL, NULL, 'Kp.Ciomas Kabandungan Rt.003/007 Desa.Sirnagalih Kec.Tamansari Kab.Bogor Kode Pos 16610', NULL, 'Islam', '3201311802830003', 'O', 'Indonesia', NULL, 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(27, 28, 'male', NULL, NULL, 'Kp sindang pala rt/rw 003/005', NULL, 'Islam', '3201152211880003', 'O', 'Indonesia', 'Bola dan lari', 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(28, 29, 'male', NULL, NULL, 'Kp.tajur rt01rw04 desa/Kel muarasari kec.bogor selatan kab/kota kota Bogor provinsi Jawa Barat 16137', NULL, 'Islam', '3271012805850006', 'A', 'Indonesia', 'Mancing dan lari', 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL),
+(29, 30, 'male', NULL, NULL, 'Jln A yani Gg sapin Rt 03 Rw 02 Tanah sareal Bogor kp 16161', NULL, 'Islam', '327106251076003', 'O', 'Indonesia', 'Maen Bola', 'Menikah', NULL, '2026-02-22 22:22:00', 1, '2026-02-22 22:22:00', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -655,6 +1104,43 @@ CREATE TABLE `worker_reviews` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `worker_sibling`
+--
+
+CREATE TABLE `worker_sibling` (
+  `id` int(11) NOT NULL,
+  `user_id` int(1) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `sibling_order` int(1) DEFAULT NULL,
+  `gender` enum('male','female') NOT NULL,
+  `birth_place` varchar(100) DEFAULT NULL,
+  `birth_date` date DEFAULT NULL,
+  `educations` varchar(20) DEFAULT NULL,
+  `jobs` varchar(50) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` int(1) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` int(1) DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` int(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `worker_sibling`
+--
+
+INSERT INTO `worker_sibling` (`id`, `user_id`, `name`, `sibling_order`, `gender`, `birth_place`, `birth_date`, `educations`, `jobs`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 24, 'Andika Falah Himawan', 1, 'male', 'Pekanbaru', '1997-09-16', 'S1', 'PNS', '2026-02-23 23:13:46', 1, '2026-02-23 23:13:46', 1, NULL, NULL),
+(2, 24, 'Dwi Ananda Rizqullah', 2, 'male', 'Pekanbaru', '2000-01-15', 'S1', 'Pegawai BUMN', '2026-02-23 23:13:46', 1, '2026-02-23 23:13:46', 1, NULL, NULL),
+(3, 24, 'Faishal Tri Aditama', 3, 'male', 'Pekanbaru', '2002-03-07', 'S1', 'Karyawan Swasta', '2026-02-23 23:13:46', 1, '2026-02-23 23:13:46', 1, NULL, NULL),
+(4, 24, 'Rafie Nugraha Al Hanif', 4, 'male', 'Pekanbaru', '2010-06-10', 'SMP', 'Pelajar', '2026-02-23 23:13:46', 1, '2026-02-23 23:13:46', 1, NULL, NULL),
+(5, 28, 'Ade diana', 1, 'female', 'Bogor', '1983-09-10', 'SMA', 'Ibu rumah tangga', '2026-02-23 23:13:46', 1, '2026-02-23 23:13:46', 1, NULL, NULL),
+(6, 28, 'Irwa wati', 2, 'female', 'Bogor', '1986-04-02', 'SMA', 'Ibu rumah tangga', '2026-02-23 23:13:46', 1, '2026-02-23 23:13:46', 1, NULL, NULL),
+(7, 28, 'Jarkasih', 3, 'male', 'Bogor', '1988-11-22', 'SMA', 'Karyawan swasta', '2026-02-23 23:13:46', 1, '2026-02-23 23:13:46', 1, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `worker_skills`
 --
 
@@ -668,19 +1154,88 @@ CREATE TABLE `worker_skills` (
   `updated_by` int(1) DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   `deleted_by` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `worker_skills`
 --
 
 INSERT INTO `worker_skills` (`id`, `user_id`, `skill_id`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(28, 3, 13, '2026-02-05 18:08:00', 3, '2026-02-05 18:08:00', NULL, NULL, NULL),
-(29, 3, 5, '2026-02-05 18:08:00', 3, '2026-02-05 18:08:00', NULL, NULL, NULL),
-(30, 3, 9, '2026-02-05 18:08:00', 3, '2026-02-05 18:08:00', NULL, NULL, NULL),
-(34, 1, 10, '2026-02-18 19:19:41', 1, '2026-02-18 19:19:41', NULL, NULL, NULL),
-(35, 1, 9, '2026-02-18 19:19:41', 1, '2026-02-18 19:19:41', NULL, NULL, NULL),
-(36, 1, 36, '2026-02-18 19:19:41', 1, '2026-02-18 19:19:41', NULL, NULL, NULL);
+(1, 2, 44, '2026-02-21 08:44:09', 1, '2026-02-21 08:44:09', 1, NULL, NULL),
+(2, 3, 9, '2026-02-21 08:44:09', 1, '2026-02-21 08:44:09', 1, NULL, NULL),
+(3, 4, 43, '2026-02-21 08:44:09', 1, '2026-02-21 08:44:09', 1, NULL, NULL),
+(4, 5, 8, '2026-02-21 08:44:09', 1, '2026-02-21 08:44:09', 1, NULL, NULL),
+(5, 6, 48, '2026-02-21 08:44:09', 1, '2026-02-21 08:44:09', 1, NULL, NULL),
+(6, 7, 46, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(7, 8, 47, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(8, 9, 8, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(9, 10, 38, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(10, 11, 54, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(11, 12, 24, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(12, 13, 45, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(13, 14, 28, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(14, 15, 28, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(15, 16, 49, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(16, 17, 50, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(17, 18, 22, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(18, 19, 34, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(19, 20, 51, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(20, 21, 21, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(21, 22, 35, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(22, 23, 52, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(23, 24, 53, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(24, 25, 46, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(25, 26, 32, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(26, 27, 32, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(27, 28, 32, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(28, 29, 32, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(29, 30, 32, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `worker_spouse`
+--
+
+CREATE TABLE `worker_spouse` (
+  `id` int(1) NOT NULL,
+  `user_id` int(1) NOT NULL,
+  `spouse_name` varchar(100) DEFAULT NULL,
+  `spouse_gender` enum('male','female') DEFAULT NULL,
+  `spouse_birth_place` varchar(50) DEFAULT NULL,
+  `spouse_birth_date` date DEFAULT NULL,
+  `spouse_last_edu` varchar(20) DEFAULT NULL,
+  `spouse_job` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` int(1) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` int(1) DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` int(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `worker_spouse`
+--
+
+INSERT INTO `worker_spouse` (`id`, `user_id`, `spouse_name`, `spouse_gender`, `spouse_birth_place`, `spouse_birth_date`, `spouse_last_edu`, `spouse_job`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 2, 'Siti Robiah', NULL, NULL, '2019-12-13', NULL, NULL, '2026-02-21 10:01:10', 1, '2026-02-21 10:01:18', 1, NULL, NULL),
+(2, 3, 'Ratu Paradanti', 'female', 'Bogor', '2000-08-05', 'SMA \n', 'Ibu rumah tangga', '2026-02-22 00:11:25', 1, '2026-02-22 00:11:25', 1, NULL, NULL),
+(3, 5, 'Cindi Pratama Dewi', 'female', NULL, NULL, NULL, NULL, '2026-02-22 00:11:25', 1, '2026-02-22 00:11:25', 1, NULL, NULL),
+(4, 8, 'Shafira Nur Islamytha', 'female', NULL, NULL, NULL, NULL, '2026-02-22 00:11:00', 1, '2026-02-22 00:11:00', 1, NULL, NULL),
+(5, 9, 'Siti nur aeni', 'female', NULL, NULL, NULL, NULL, '2026-02-22 00:11:00', 1, '2026-02-22 00:11:00', 1, NULL, NULL),
+(6, 10, 'Tegar Randitya', 'male', NULL, NULL, NULL, NULL, '2026-02-22 00:11:00', 1, '2026-02-22 00:11:00', 1, NULL, NULL),
+(7, 11, 'Fifi Erfiani', 'female', NULL, NULL, NULL, NULL, '2026-02-22 00:11:00', 1, '2026-02-22 00:11:00', 1, NULL, NULL),
+(8, 13, 'Natasyha Aprillia Sabatani', 'female', NULL, NULL, NULL, NULL, '2026-02-22 00:11:00', 1, '2026-02-22 00:11:00', 1, NULL, NULL),
+(9, 14, 'Ai Siti Aisyah', 'female', NULL, NULL, NULL, NULL, '2026-02-22 00:11:00', 1, '2026-02-22 00:11:00', 1, NULL, NULL),
+(10, 16, 'Novi purwaningsih', 'female', NULL, NULL, NULL, NULL, '2026-02-22 00:11:00', 1, '2026-02-22 00:11:00', 1, NULL, NULL),
+(11, 17, 'Ida Herliza Siddik', 'female', NULL, NULL, NULL, NULL, '2026-02-22 00:11:00', 1, '2026-02-22 00:11:00', 1, NULL, NULL),
+(12, 20, 'HARRY SETIADI', 'male', NULL, NULL, NULL, NULL, '2026-02-22 00:11:00', 1, '2026-02-22 00:11:00', 1, NULL, NULL),
+(13, 21, 'Sofia', 'female', NULL, NULL, NULL, NULL, '2026-02-22 00:11:00', 1, '2026-02-22 00:11:00', 1, NULL, NULL),
+(14, 26, 'Yeye irma', 'female', NULL, NULL, NULL, NULL, '2026-02-22 00:11:00', 1, '2026-02-22 00:11:00', 1, NULL, NULL),
+(15, 27, 'MULYATI', 'female', NULL, NULL, NULL, NULL, '2026-02-22 00:11:00', 1, '2026-02-22 00:11:00', 1, NULL, NULL),
+(16, 28, 'ayuna lia sari', 'female', NULL, NULL, NULL, NULL, '2026-02-22 00:11:00', 1, '2026-02-22 00:11:00', 1, NULL, NULL),
+(17, 30, 'Rifah alfiah alibasya', 'female', NULL, NULL, NULL, NULL, '2026-02-22 00:11:00', 1, '2026-02-22 00:11:00', 1, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -745,6 +1300,15 @@ ALTER TABLE `ratings`
   ADD UNIQUE KEY `application_id` (`application_id`);
 
 --
+-- Indexes for table `ratio_rules`
+--
+ALTER TABLE `ratio_rules`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_hotel` (`hotel_id`),
+  ADD KEY `idx_department` (`department_category`),
+  ADD KEY `idx_range` (`min_value`,`max_value`);
+
+--
 -- Indexes for table `refresh_tokens`
 --
 ALTER TABLE `refresh_tokens`
@@ -762,6 +1326,12 @@ ALTER TABLE `skills`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indexes for table `worker_child`
+--
+ALTER TABLE `worker_child`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `worker_contracts`
@@ -784,6 +1354,12 @@ ALTER TABLE `worker_educations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `worker_emergency`
+--
+ALTER TABLE `worker_emergency`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `worker_experiences`
 --
 ALTER TABLE `worker_experiences`
@@ -792,11 +1368,23 @@ ALTER TABLE `worker_experiences`
   ADD KEY `idx_sort` (`sort_order`);
 
 --
+-- Indexes for table `worker_language`
+--
+ALTER TABLE `worker_language`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `worker_links`
 --
 ALTER TABLE `worker_links`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `worker_parents`
+--
+ALTER TABLE `worker_parents`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `worker_profiles`
@@ -818,11 +1406,23 @@ ALTER TABLE `worker_reviews`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `worker_sibling`
+--
+ALTER TABLE `worker_sibling`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `worker_skills`
 --
 ALTER TABLE `worker_skills`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `user_id` (`user_id`,`skill_id`);
+
+--
+-- Indexes for table `worker_spouse`
+--
+ALTER TABLE `worker_spouse`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -838,25 +1438,25 @@ ALTER TABLE `hotels`
 -- AUTO_INCREMENT for table `hotel_transactions`
 --
 ALTER TABLE `hotel_transactions`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `job_applications`
 --
 ALTER TABLE `job_applications`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `job_attendances`
 --
 ALTER TABLE `job_attendances`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `job_extend_attendances`
@@ -877,58 +1477,88 @@ ALTER TABLE `ratings`
   MODIFY `id` int(1) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `ratio_rules`
+--
+ALTER TABLE `ratio_rules`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `refresh_tokens`
 --
 ALTER TABLE `refresh_tokens`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `skills`
 --
 ALTER TABLE `skills`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT for table `worker_child`
+--
+ALTER TABLE `worker_child`
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `worker_contracts`
 --
 ALTER TABLE `worker_contracts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `worker_documents`
 --
 ALTER TABLE `worker_documents`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `worker_educations`
 --
 ALTER TABLE `worker_educations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+
+--
+-- AUTO_INCREMENT for table `worker_emergency`
+--
+ALTER TABLE `worker_emergency`
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `worker_experiences`
 --
 ALTER TABLE `worker_experiences`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+
+--
+-- AUTO_INCREMENT for table `worker_language`
+--
+ALTER TABLE `worker_language`
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `worker_links`
 --
 ALTER TABLE `worker_links`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `worker_parents`
+--
+ALTER TABLE `worker_parents`
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `worker_profiles`
 --
 ALTER TABLE `worker_profiles`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `worker_ratings`
@@ -943,10 +1573,22 @@ ALTER TABLE `worker_reviews`
   MODIFY `id` int(1) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `worker_sibling`
+--
+ALTER TABLE `worker_sibling`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT for table `worker_skills`
 --
 ALTER TABLE `worker_skills`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+
+--
+-- AUTO_INCREMENT for table `worker_spouse`
+--
+ALTER TABLE `worker_spouse`
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Constraints for dumped tables

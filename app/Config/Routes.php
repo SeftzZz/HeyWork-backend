@@ -68,7 +68,9 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->get('balance/today-revenue', 'Admin\Balance::getTodayRevenue', ['filter' => 'role:admin,hotel_hr']);
     $routes->get('balance/daily-report', 'Admin\Balance::dailyReport', ['filter' => 'role:admin,hotel_hr']);
     $routes->get('balance/export-report', 'Admin\Balance::exportReportXlsx', ['filter' => 'role:admin,hotel_hr']);
-
+    $routes->get('balance/skill-ratio', 'Admin\Balance::skillRatio', ['filter' => 'role:admin,hotel_hr']);
+    $routes->get('balance/skill-ratio-by-department', 'Admin\Balance::skillRatioByDepartment', ['filter' => 'role:admin,hotel_hr']);
+    
     $routes->get('transactions', 'Admin\Transactions::index', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('transactions/datatable', 'Admin\Transactions::datatable', ['filter' => 'role:admin,hotel_hr']); 
     $routes->get('transactions/last-payroll', 'Admin\Transactions::lastPayroll', ['filter' => 'role:admin,hotel_hr']); 
