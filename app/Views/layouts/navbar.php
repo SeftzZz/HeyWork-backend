@@ -17,7 +17,7 @@
                                 if ($hotelId == 0) {
                                     $hotelName    = 'Hey Work Corp';
                                     $hotelLoc     = 'Bogor, West Java';
-                                    $hotelWebsite = 'www.heywork.com';
+                                    $hotelWebsite = 'www.heywork.id';
                                     $hotelLogo    = 'images/heywork48.png';
                                 }
 
