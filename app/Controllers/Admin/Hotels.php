@@ -23,12 +23,6 @@ class Hotels extends BaseAdminController
 
     public function index()
     {
-        // blok akses worker
-        if (session()->get('user_role') === 'worker') {
-            return redirect()->to('/dashboard')
-                ->with('error_access', 'You do not have permission to access this page');
-        }
-
         $data = [
             'title' => 'Hotels'
         ];
