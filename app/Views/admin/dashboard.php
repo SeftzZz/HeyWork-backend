@@ -1,5 +1,27 @@
                         <?= $this->extend('layouts/main') ?>
                         <?= $this->section('content') ?>
+                            <?php if (session()->getFlashdata('error_access')): ?>
+                                <script>
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Access Denied',
+                                        text: "<?= session()->getFlashdata('error_access') ?>",
+                                        confirmButtonText: 'OK'
+                                    });
+                                </script>
+                            <?php endif; ?>
+
+                            <?php if (session()->getFlashdata('success')): ?>
+                                <script>
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success',
+                                        text: '<?= session()->getFlashdata('success') ?>',
+                                        confirmButtonText: "Close"
+                                    });
+                                </script>
+                            <?php endif; ?>
+
                             <style>
                             /* tanggal sebelum hari ini */
                             .fc-day-past {
