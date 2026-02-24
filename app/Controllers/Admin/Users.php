@@ -69,8 +69,7 @@ class Users extends BaseAdminController
 
         if ($userRole === 'hotel_hr') {
             $countQuery
-                ->where('users.hotel_id', $hotelId)
-                ->where('users.role !=', 'worker');
+                ->where('users.hotel_id', $hotelId);
         }
 
         if ($searchValue) {
@@ -98,8 +97,7 @@ class Users extends BaseAdminController
 
         if ($userRole === 'hotel_hr') {
             $totalQuery
-                ->where('users.hotel_id', $hotelId)
-                ->where('users.role !=', 'worker');
+                ->where('users.hotel_id', $hotelId);
         }
 
         $recordsTotal = $totalQuery->countAllResults();
@@ -112,8 +110,7 @@ class Users extends BaseAdminController
 
         if ($userRole === 'hotel_hr') {
             $dataQuery
-                ->where('users.hotel_id', $hotelId)
-                ->where('users.role !=', 'worker');
+                ->where('users.hotel_id', $hotelId);
         }
 
         if ($searchValue) {
