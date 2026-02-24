@@ -12,6 +12,21 @@
                             .fc-day-past:hover {
                               background-color: #f5f5f5;
                             }
+
+                            .nav-align-top > .nav-pills ~ .tab-content, .nav-align-right > .nav-pills ~ .tab-content, .nav-align-bottom > .nav-pills ~ .tab-content, .nav-align-left > .nav-pills ~ .tab-content {
+                                box-shadow: none;
+                            }
+
+                            .nav-align-top > .tab-content, .nav-align-right > .tab-content, .nav-align-bottom > .tab-content, .nav-align-left > .tab-content {
+                                flex-shrink: 1;
+                                background-clip: padding-box;
+                                background: transparent;
+                            }
+
+                            .tab-content {
+                                 padding: 0rem; 
+                                border-radius: 0.375rem;
+                            }
                             </style>
 
                             <div class="container-xxl flex-grow-1 container-p-y">
@@ -23,7 +38,7 @@
                                 </div>
 
                                 <!-- Productivity Ratio -->
-                                <div class="col-lg-12 mb-4">
+                                <div class="col-lg-8 mb-4">
                                   <div class="card h-100">
                                     <div class="card-header pb-0 d-flex justify-content-between mb-lg-n4">
                                       <div class="card-title mb-0">
@@ -112,100 +127,7 @@
                                     </div>
                                   </div>
                                 </div>
-                                <!--/ Productivity Ratio -->
-
-                                <!-- Last day attendances -->
-                                <div class="col-lg-3 mb-4">
-                                  <div class="card mb-4">
-                                    <div class="card-header d-flex justify-content-between">
-                                      <div class="card-title mb-0">
-                                        <h5 class="mb-0">Last day attendances</h5>
-                                        <small class="text-muted">8.52k Daily Worker</small>
-                                      </div>
-                                      <div class="dropdown">
-                                        <button
-                                          class="btn p-0"
-                                          type="button"
-                                          id="MonthlyCampaign"
-                                          data-bs-toggle="dropdown"
-                                          aria-haspopup="true"
-                                          aria-expanded="false">
-                                          <i class="ti ti-dots-vertical ti-sm text-muted"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="MonthlyCampaign">
-                                          <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-                                          <a class="dropdown-item" href="javascript:void(0);">Download</a>
-                                          <a class="dropdown-item" href="javascript:void(0);">View All</a>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="card-body">
-                                      <ul class="p-0 m-0">
-                                        <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
-                                          <div class="badge bg-label-success rounded p-2"><i class="ti ti-mail ti-sm"></i></div>
-                                          <div class="d-flex justify-content-between w-100 flex-wrap">
-                                            <h6 class="mb-0 ms-3">Emails</h6>
-                                            <div class="d-flex">
-                                              <p class="mb-0 fw-medium">12,346</p>
-                                              <p class="ms-3 text-success mb-0">0.3%</p>
-                                            </div>
-                                          </div>
-                                        </li>
-                                        <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
-                                          <div class="badge bg-label-info rounded p-2"><i class="ti ti-link ti-sm"></i></div>
-                                          <div class="d-flex justify-content-between w-100 flex-wrap">
-                                            <h6 class="mb-0 ms-3">Opened</h6>
-                                            <div class="d-flex">
-                                              <p class="mb-0 fw-medium">8,734</p>
-                                              <p class="ms-3 text-success mb-0">2.1%</p>
-                                            </div>
-                                          </div>
-                                        </li>
-                                        <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
-                                          <div class="badge bg-label-warning rounded p-2"><i class="ti ti-click ti-sm"></i></div>
-                                          <div class="d-flex justify-content-between w-100 flex-wrap">
-                                            <h6 class="mb-0 ms-3">Clicked</h6>
-                                            <div class="d-flex">
-                                              <p class="mb-0 fw-medium">967</p>
-                                              <p class="ms-3 text-success mb-0">1.4%</p>
-                                            </div>
-                                          </div>
-                                        </li>
-                                        <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
-                                          <div class="badge bg-label-primary rounded p-2"><i class="ti ti-users ti-sm"></i></div>
-                                          <div class="d-flex justify-content-between w-100 flex-wrap">
-                                            <h6 class="mb-0 ms-3">Subscribe</h6>
-                                            <div class="d-flex">
-                                              <p class="mb-0 fw-medium">345</p>
-                                              <p class="ms-3 text-success mb-0">8.5k</p>
-                                            </div>
-                                          </div>
-                                        </li>
-                                        <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
-                                          <div class="badge bg-label-secondary rounded p-2">
-                                            <i class="ti ti-alert-triangle ti-sm text-body"></i>
-                                          </div>
-                                          <div class="d-flex justify-content-between w-100 flex-wrap">
-                                            <h6 class="mb-0 ms-3">Complaints</h6>
-                                            <div class="d-flex">
-                                              <p class="mb-0 fw-medium">10</p>
-                                              <p class="ms-3 text-success mb-0">1.5%</p>
-                                            </div>
-                                          </div>
-                                        </li>
-                                        <li class="d-flex justify-content-between align-items-center">
-                                          <div class="badge bg-label-danger rounded p-2"><i class="ti ti-ban ti-sm"></i></div>
-                                          <div class="d-flex justify-content-between w-100 flex-wrap">
-                                            <h6 class="mb-0 ms-3">Unsubscribe</h6>
-                                            <div class="d-flex">
-                                              <p class="mb-0 fw-medium">86</p>
-                                              <p class="ms-3 text-success mb-0">0.8%</p>
-                                            </div>
-                                          </div>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
+                                <div class="col-lg-4 mb-4">
                                   <div class="card">
                                     <div class="card-header d-flex justify-content-between pb-1">
                                       <h5 class="mb-0 card-title">Monthly Growth</h5>
@@ -235,28 +157,414 @@
                                     </div>
                                   </div>
                                 </div>
+                                <!--/ Productivity Ratio -->
 
-                                <div class="col-lg-9 mb-4">
-                                  <div class="card">
-                                    <div class="card table-responsive pt-0">
-                                      <table id="dailyReportTable" class="table table-bordered table-striped text-center">
-                                        <thead class="table-light">
-                                          <tr>
-                                            <th rowspan="2" class="text-start">Departement</th>
-                                            <th colspan="3">31-Jan-26</th>
-                                          </tr>
-                                          <tr>
-                                            <th>DW</th>
-                                            <th>COST</th>
-                                            <th>Total</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody id="dailyReportBody"></tbody>
-                                      </table>
+                                <div class="col-lg-12 mb-4">
+                                  <div class="nav-align-top mb-4">
+                                    <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
+                                      <li class="nav-item">
+                                        <button
+                                          type="button"
+                                          class="nav-link active"
+                                          role="tab"
+                                          data-bs-toggle="tab"
+                                          data-bs-target="#navs-pills-justified-home"
+                                          aria-controls="navs-pills-justified-home"
+                                          aria-selected="true">
+                                          <i class="tf-icons ti ti-user ti-xs me-1"></i> Daily Worker
+                                          <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-danger ms-1">3</span>
+                                        </button>
+                                      </li>
+                                      <li class="nav-item">
+                                        <button
+                                          type="button"
+                                          class="nav-link"
+                                          role="tab"
+                                          data-bs-toggle="tab"
+                                          data-bs-target="#navs-pills-justified-profile"
+                                          aria-controls="navs-pills-justified-profile"
+                                          aria-selected="false">
+                                          <i class="tf-icons ti ti-building ti-xs me-1"></i> Corporate
+                                        </button>
+                                      </li>
+                                      <li class="nav-item">
+                                        <button
+                                          type="button"
+                                          class="nav-link"
+                                          role="tab"
+                                          data-bs-toggle="tab"
+                                          data-bs-target="#navs-pills-justified-messages"
+                                          aria-controls="navs-pills-justified-messages"
+                                          aria-selected="false">
+                                          <i class="tf-icons ti ti-users ti-xs me-1"></i> All
+                                        </button>
+                                      </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                      <div class="tab-pane fade show active" id="navs-pills-justified-home" role="tabpanel">
+                                        <div class="row">
+                                          <!-- Last day attendances -->
+                                          <div class="col-lg-8 mb-4">
+                                            <div class="card">
+                                              <div class="card table-responsive pt-0">
+                                                <table id="dailyWorkerTable" class="table table-bordered table-striped text-center">
+                                                  <thead class="table-light">
+                                                    <tr>
+                                                      <th rowspan="2" class="text-start">Departement</th>
+                                                      <th colspan="3">31-Jan-26</th>
+                                                    </tr>
+                                                    <tr>
+                                                      <th>DW</th>
+                                                      <th>COST</th>
+                                                      <th>Total</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody id="dailyWorkerBody"></tbody>
+                                                </table>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                          <div class="col-lg-4 mb-4">
+                                            <div class="card mb-4">
+                                              <div class="card-header d-flex justify-content-between">
+                                                <div class="card-title mb-0">
+                                                  <h5 class="mb-0">Last day attendances</h5>
+                                                  <small class="text-muted">8.52k Daily Worker</small>
+                                                </div>
+                                                <div class="dropdown">
+                                                  <button
+                                                    class="btn p-0"
+                                                    type="button"
+                                                    id="MonthlyCampaign"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    <i class="ti ti-dots-vertical ti-sm text-muted"></i>
+                                                  </button>
+                                                  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="MonthlyCampaign">
+                                                    <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
+                                                    <a class="dropdown-item" href="javascript:void(0);">Download</a>
+                                                    <a class="dropdown-item" href="javascript:void(0);">View All</a>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="card-body">
+                                                <ul class="p-0 m-0">
+                                                  <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-success rounded p-2"><i class="ti ti-mail ti-sm"></i></div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Emails</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">12,346</p>
+                                                        <p class="ms-3 text-success mb-0">0.3%</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-info rounded p-2"><i class="ti ti-link ti-sm"></i></div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Opened</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">8,734</p>
+                                                        <p class="ms-3 text-success mb-0">2.1%</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-warning rounded p-2"><i class="ti ti-click ti-sm"></i></div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Clicked</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">967</p>
+                                                        <p class="ms-3 text-success mb-0">1.4%</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-primary rounded p-2"><i class="ti ti-users ti-sm"></i></div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Subscribe</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">345</p>
+                                                        <p class="ms-3 text-success mb-0">8.5k</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-secondary rounded p-2">
+                                                      <i class="ti ti-alert-triangle ti-sm text-body"></i>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Complaints</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">10</p>
+                                                        <p class="ms-3 text-success mb-0">1.5%</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-danger rounded p-2"><i class="ti ti-ban ti-sm"></i></div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Unsubscribe</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">86</p>
+                                                        <p class="ms-3 text-success mb-0">0.8%</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                </ul>
+                                              </div>
+                                            </div>
+                                            <div id="dailyWorkerskillRatioContainer"></div>
+                                          </div>
+                                          <!--/ Last day attendances -->
+                                        </div>
+                                      </div>
+                                      <div class="tab-pane fade" id="navs-pills-justified-profile" role="tabpanel">
+                                        <div class="row">
+                                          <!-- Last day attendances -->
+                                          <div class="col-lg-8 mb-4">
+                                            <div class="card">
+                                              <div class="card table-responsive pt-0">
+                                                <table id="companyTable" class="table table-bordered table-striped text-center">
+                                                  <thead class="table-light">
+                                                    <tr>
+                                                      <th rowspan="2" class="text-start">Departement</th>
+                                                      <th colspan="3">31-Jan-26</th>
+                                                    </tr>
+                                                    <tr>
+                                                      <th>DW</th>
+                                                      <th>COST</th>
+                                                      <th>Total</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody id="companyBody"></tbody>
+                                                </table>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                          <div class="col-lg-4 mb-4">
+                                            <div class="card mb-4">
+                                              <div class="card-header d-flex justify-content-between">
+                                                <div class="card-title mb-0">
+                                                  <h5 class="mb-0">Last day attendances</h5>
+                                                  <small class="text-muted">8.52k Daily Worker</small>
+                                                </div>
+                                                <div class="dropdown">
+                                                  <button
+                                                    class="btn p-0"
+                                                    type="button"
+                                                    id="MonthlyCampaign"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    <i class="ti ti-dots-vertical ti-sm text-muted"></i>
+                                                  </button>
+                                                  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="MonthlyCampaign">
+                                                    <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
+                                                    <a class="dropdown-item" href="javascript:void(0);">Download</a>
+                                                    <a class="dropdown-item" href="javascript:void(0);">View All</a>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="card-body">
+                                                <ul class="p-0 m-0">
+                                                  <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-success rounded p-2"><i class="ti ti-mail ti-sm"></i></div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Emails</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">12,346</p>
+                                                        <p class="ms-3 text-success mb-0">0.3%</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-info rounded p-2"><i class="ti ti-link ti-sm"></i></div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Opened</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">8,734</p>
+                                                        <p class="ms-3 text-success mb-0">2.1%</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-warning rounded p-2"><i class="ti ti-click ti-sm"></i></div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Clicked</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">967</p>
+                                                        <p class="ms-3 text-success mb-0">1.4%</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-primary rounded p-2"><i class="ti ti-users ti-sm"></i></div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Subscribe</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">345</p>
+                                                        <p class="ms-3 text-success mb-0">8.5k</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-secondary rounded p-2">
+                                                      <i class="ti ti-alert-triangle ti-sm text-body"></i>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Complaints</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">10</p>
+                                                        <p class="ms-3 text-success mb-0">1.5%</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-danger rounded p-2"><i class="ti ti-ban ti-sm"></i></div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Unsubscribe</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">86</p>
+                                                        <p class="ms-3 text-success mb-0">0.8%</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                </ul>
+                                              </div>
+                                            </div>
+                                            <div id="coorporateskillRatioContainer"></div>
+                                          </div>
+                                          <!--/ Last day attendances -->
+                                        </div>
+                                      </div>
+                                      <div class="tab-pane fade" id="navs-pills-justified-messages" role="tabpanel">
+                                        <div class="row">
+                                          <!-- Last day attendances -->
+                                          <div class="col-lg-8 mb-4">
+                                            <div class="card">
+                                              <div class="card table-responsive pt-0">
+                                                <table id="allTable" class="table table-bordered table-striped text-center">
+                                                  <thead class="table-light">
+                                                    <tr>
+                                                      <th rowspan="2" class="text-start">Departement</th>
+                                                      <th colspan="3">31-Jan-26</th>
+                                                    </tr>
+                                                    <tr>
+                                                      <th>DW</th>
+                                                      <th>COST</th>
+                                                      <th>Total</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody id="allBody"></tbody>
+                                                </table>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                          <div class="col-lg-4 mb-4">
+                                            <div class="card mb-4">
+                                              <div class="card-header d-flex justify-content-between">
+                                                <div class="card-title mb-0">
+                                                  <h5 class="mb-0">Last day attendances</h5>
+                                                  <small class="text-muted">8.52k Daily Worker</small>
+                                                </div>
+                                                <div class="dropdown">
+                                                  <button
+                                                    class="btn p-0"
+                                                    type="button"
+                                                    id="MonthlyCampaign"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    <i class="ti ti-dots-vertical ti-sm text-muted"></i>
+                                                  </button>
+                                                  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="MonthlyCampaign">
+                                                    <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
+                                                    <a class="dropdown-item" href="javascript:void(0);">Download</a>
+                                                    <a class="dropdown-item" href="javascript:void(0);">View All</a>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="card-body">
+                                                <ul class="p-0 m-0">
+                                                  <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-success rounded p-2"><i class="ti ti-mail ti-sm"></i></div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Emails</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">12,346</p>
+                                                        <p class="ms-3 text-success mb-0">0.3%</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-info rounded p-2"><i class="ti ti-link ti-sm"></i></div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Opened</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">8,734</p>
+                                                        <p class="ms-3 text-success mb-0">2.1%</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-warning rounded p-2"><i class="ti ti-click ti-sm"></i></div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Clicked</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">967</p>
+                                                        <p class="ms-3 text-success mb-0">1.4%</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-primary rounded p-2"><i class="ti ti-users ti-sm"></i></div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Subscribe</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">345</p>
+                                                        <p class="ms-3 text-success mb-0">8.5k</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="mb-4 pb-1 d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-secondary rounded p-2">
+                                                      <i class="ti ti-alert-triangle ti-sm text-body"></i>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Complaints</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">10</p>
+                                                        <p class="ms-3 text-success mb-0">1.5%</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="d-flex justify-content-between align-items-center">
+                                                    <div class="badge bg-label-danger rounded p-2"><i class="ti ti-ban ti-sm"></i></div>
+                                                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                                                      <h6 class="mb-0 ms-3">Unsubscribe</h6>
+                                                      <div class="d-flex">
+                                                        <p class="mb-0 fw-medium">86</p>
+                                                        <p class="ms-3 text-success mb-0">0.8%</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                </ul>
+                                              </div>
+                                            </div>
+                                            <div id="allskillRatioContainer"></div>
+                                          </div>
+                                          <!--/ Last day attendances -->
+                                        </div>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                                <!--/ Last day attendances -->
+                                
                               </div>
                             </div>
                         <?= $this->endSection() ?>
@@ -321,7 +629,7 @@
                               if (label === 'AVERAGE') return 'bg-label-warning';
                               if (label === 'BAD') return 'bg-label-danger';
                               if (label.includes('NOT OPTIMAL')) return 'bg-label-danger';
-                              if (label === 'UNDER TARGET') return 'bg-label-info';
+                              if (label === 'NO DATA') return 'bg-label-info';
 
                               return 'bg-label-secondary';
                             }
@@ -610,7 +918,7 @@
                                 badge.addClass('bg-label-danger');
                               } 
                               else {
-                                ratioLabel = 'UNDER TARGET';
+                                ratioLabel = 'NO DATA';
                                 ratioClass = 'text-info';
                                 badge.addClass('bg-label-info');
                               }
@@ -751,112 +1059,6 @@
                             }, 'json');
 
                             // ==============================
-                            // DAILY DEPARTMENT REPORT
-                            // ==============================
-                            $.get("<?= base_url('admin/balance/daily-report') ?>", function(res){
-
-                              if(!res.status) return;
-
-                              const table = $('#dailyReportTable');
-                              const tbody = $('#dailyReportBody');
-
-                              const todayLabelClass = getRatioBadgeClass(res.today_label);
-                              const mtdLabelClass   = getRatioBadgeClass(res.mtd_label);
-
-                              // ======================
-                              // FORMAT DATE HEADER
-                              // ======================
-                              const formattedDate = new Date(res.date).toLocaleDateString('id-ID', {
-                                day: '2-digit',
-                                month: 'short',
-                                year: '2-digit'
-                              });
-
-                              // update header date
-                              table.find('thead tr:first th:nth-child(2)').text(formattedDate);
-
-                              // ======================
-                              // RESET TABLE
-                              // ======================
-                              tbody.html('');
-
-                              // ======================
-                              // RENDER DEPARTMENTS
-                              // ======================
-                              res.departments.forEach(dep => {
-
-                                tbody.append(`
-                                  <tr>
-                                    <td class="text-start">${dep.department}</td>
-                                    <td>${dep.dw > 0 ? dep.dw : ''}</td>
-                                    <td>${dep.cost > 0 ? dep.cost.toLocaleString('id-ID') : ''}</td>
-                                  </tr>
-                                `);
-
-                              });
-
-                              // Spacer
-                              tbody.append(`
-                                <tr>
-                                  <td colspan="3"></td>
-                                </tr>
-                              `);
-
-                              // ======================
-                              // TOTAL DW COST
-                              // ======================
-                              tbody.append(`
-                                <tr class="table-secondary fw-bold">
-                                  <td class="text-start">Total DW Cost</td>
-                                  <td></td>
-                                  <td>${res.total_dw_cost.toLocaleString('id-ID')}</td>
-                                </tr>
-                              `);
-
-                              // ======================
-                              // TODAY
-                              // ======================
-                              tbody.append(`
-                                <tr class="fw-bold">
-                                  <td rowspan="2" class="text-start">Today</td>
-                                  <td>Revenue</td>
-                                  <td></td>
-                                  <td>${res.today_revenue.toLocaleString('id-ID')}</td>
-                                </tr>
-                                <tr>
-                                  <td>Rasio</td>
-                                  <td>${res.today_ratio}%</td>
-                                  <td>
-                                    <span class="badge ${todayLabelClass}">
-                                      ${res.today_label}
-                                    </span>
-                                  </td>
-                                </tr>
-                              `);
-
-                              // ======================
-                              // MONTH TO DATE
-                              // ======================
-                              tbody.append(`
-                                <tr class="fw-bold">
-                                  <td rowspan="2" class="text-start">Month To Date</td>
-                                  <td>Revenue</td>
-                                  <td></td>
-                                  <td>${res.mtd_revenue.toLocaleString('id-ID')}</td>
-                                </tr>
-                                <tr>
-                                  <td>Rasio</td>
-                                  <td>${res.mtd_ratio}%</td>
-                                  <td>
-                                    <span class="badge ${mtdLabelClass}">
-                                      ${res.mtd_label}
-                                    </span>
-                                  </td>
-                                </tr>
-                              `);
-                            }, 'json');
-
-                            // ==============================
                             // Last day attendances
                             // ==============================
                             $.get("<?= base_url('admin/balance/monthly-jobs') ?>", function(res){
@@ -938,6 +1140,253 @@
                                 // langsung redirect supaya file ter-download
                                 window.location.href = url;
 
+                            });
+
+                            function loadReport(type = 'all') {
+
+                              let tableId, bodyId;
+
+                              if (type === 'daily_worker') {
+                                tableId = '#dailyWorkerTable';
+                                bodyId  = '#dailyWorkerBody';
+                              } else if (type === 'coorporate') {
+                                tableId = '#companyTable';
+                                bodyId  = '#companyBody';
+                              } else {
+                                tableId = '#allTable';
+                                bodyId  = '#allBody';
+                              }
+
+                              $.get("<?= base_url('admin/balance/daily-report') ?>", { type: type }, function(res){
+
+                                if(!res.status) return;
+
+                                const table = $(tableId);
+                                const tbody = $(bodyId);
+
+                                const todayLabelClass = getRatioBadgeClass(res.today_label);
+                                const mtdLabelClass   = getRatioBadgeClass(res.mtd_label);
+
+                                const formattedDate = new Date(res.date).toLocaleDateString('id-ID', {
+                                  day: '2-digit',
+                                  month: 'short',
+                                  year: '2-digit'
+                                });
+
+                                table.find('thead tr:first th:nth-child(2)').text(formattedDate);
+
+                                tbody.html('');
+
+                                // ======================
+                                // Departments (Clickable)
+                                // ======================
+                                res.departments.forEach(dep => {
+
+                                  tbody.append(`
+                                    <tr class="department-row"
+                                        data-department="${dep.department}"
+                                        style="cursor:pointer">
+                                      <td class="text-start fw-semibold text-primary">
+                                        ${dep.department}
+                                      </td>
+                                      <td>${dep.dw > 0 ? dep.dw : ''}</td>
+                                      <td>${dep.cost > 0 ? dep.cost.toLocaleString('id-ID') : ''}</td>
+                                    </tr>
+                                  `);
+
+                                });
+
+                                // Spacer
+                                tbody.append(`<tr><td colspan="4"></td></tr>`);
+
+                                // Total
+                                tbody.append(`
+                                  <tr class="table-secondary fw-bold">
+                                    <td class="text-start">Total DW Cost</td>
+                                    <td></td>
+                                    <td>${res.total_dw_cost.toLocaleString('id-ID')}</td>
+                                  </tr>
+                                `);
+
+                                // Today
+                                tbody.append(`
+                                  <tr class="fw-bold">
+                                    <td rowspan="2" class="text-start">Today</td>
+                                    <td>Revenue</td>
+                                    <td></td>
+                                    <td>${res.today_revenue.toLocaleString('id-ID')}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Rasio</td>
+                                    <td>${res.today_ratio}%</td>
+                                    <td>
+                                      <span class="badge ${todayLabelClass}">
+                                        ${res.today_label}
+                                      </span>
+                                    </td>
+                                  </tr>
+                                `);
+
+                                // MTD
+                                tbody.append(`
+                                  <tr class="fw-bold">
+                                    <td rowspan="2" class="text-start">Month To Date</td>
+                                    <td>Revenue</td>
+                                    <td></td>
+                                    <td>${res.mtd_revenue.toLocaleString('id-ID')}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Rasio</td>
+                                    <td>${res.mtd_ratio}%</td>
+                                    <td>
+                                      <span class="badge ${mtdLabelClass}">
+                                        ${res.mtd_label}
+                                      </span>
+                                    </td>
+                                  </tr>
+                                `);
+
+                              }, 'json');
+                            }
+
+
+                            // ==========================
+                            // CLICK DEPARTMENT → LOAD SKILL
+                            // ==========================
+                            $(document).on('click', '.department-row', function(){
+
+                              const department = $(this).data('department');
+
+                              let type;
+
+                              if ($('#navs-pills-justified-home').hasClass('active')) {
+                                type = 'daily_worker';
+                              } 
+                              else if ($('#navs-pills-justified-profile').hasClass('active')) {
+                                type = 'coorporate';
+                              } 
+                              else {
+                                type = 'all';
+                              }
+
+                              $('.department-row').removeClass('table-active');
+                              $(this).addClass('table-active');
+
+                              loadSkillByDepartment(department, type);
+
+                            });
+
+                            // ==========================
+                            // LOAD SKILL PER DEPARTMENT
+                            // ==========================
+                            function loadSkillByDepartment(department, type) {
+
+                              // detect active tab
+                              let containerId;
+
+                              if ($('#navs-pills-justified-home').hasClass('active')) {
+                                containerId = '#dailyWorkerskillRatioContainer';
+                              } 
+                              else if ($('#navs-pills-justified-profile').hasClass('active')) {
+                                containerId = '#coorporateskillRatioContainer';
+                              } 
+                              else {
+                                containerId = '#allskillRatioContainer';
+                              }
+
+                               $.get("<?= base_url('admin/balance/skill-ratio-by-department') ?>",
+                                { 
+                                  department: department,
+                                  type: type
+                                },
+                                function(res){
+
+                                  if(!res.status) return;
+
+                                  const container = $(containerId);
+                                  container.html('');
+
+                                  let html = `
+                                    <div class="card shadow-sm">
+                                      <div class="card-header bg-light">
+                                        <h6 class="mb-0">${department}</h6>
+                                      </div>
+                                      <div class="card-body p-0">
+                                        <table class="table table-sm table-bordered table-striped text-center mb-0">
+                                          <thead class="table-light">
+                                            <tr>
+                                              <th class="text-start">Skill</th>
+                                              <th>Cost</th>
+                                              <th>Ratio (%)</th>
+                                              <th>Status</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                  `;
+
+                                  res.data.forEach(skill => {
+
+                                    const badgeClass = getRatioBadgeClass(skill.label);
+
+                                    html += `
+                                      <tr>
+                                        <td class="text-start">${skill.skill_name}</td>
+                                        <td>${skill.cost.toLocaleString('id-ID')}</td>
+                                        <td>${skill.ratio}%</td>
+                                        <td>
+                                          <span class="badge ${badgeClass}">
+                                            ${skill.label}
+                                          </span>
+                                        </td>
+                                      </tr>
+                                    `;
+                                  });
+
+                                  html += `
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                  `;
+
+                                  container.html(html);
+
+                              }, 'json');
+                            }
+
+                            // ==========================
+                            // BADGE COLOR
+                            // ==========================
+                            function getRatioBadgeClass(label) {
+                              switch(label) {
+                                case 'GOOD': return 'bg-label-success';
+                                case 'AVERAGE': return 'bg-label-warning';
+                                case 'BAD': return 'bg-label-danger';
+                                case 'NO DATA': return 'bg-label-info';
+                                case 'NOT OPTIMAL MAN POWER': return 'bg-label-danger';
+                                default: return 'bg-label-secondary';
+                              }
+                            }
+
+
+                            // ==========================
+                            // INIT
+                            // ==========================
+                            loadReport('daily_worker');
+
+                            $('[data-bs-target="#navs-pills-justified-home"]').on('click', function(){
+                              loadReport('daily_worker');
+                              $('#dailyWorkerskillRatioContainer').html('');
+                            });
+
+                            $('[data-bs-target="#navs-pills-justified-profile"]').on('click', function(){
+                              loadReport('coorporate');
+                              $('#coorporateskillRatioContainer').html('');
+                            });
+
+                            $('[data-bs-target="#navs-pills-justified-messages"]').on('click', function(){
+                              loadReport('all');
+                              $('#allskillRatioContainer').html('');
                             });
 
                           })();

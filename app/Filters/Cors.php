@@ -12,7 +12,7 @@ class Cors implements FilterInterface
     {
         if ($request->getMethod() === 'options') {
             return service('response')
-                ->setHeader('Access-Control-Allow-Origin', 'http://localhost:8100')
+                ->setHeader('Access-Control-Allow-Origin', 'http://localhost:8100', 'https://localhost', 'https://devusers.heywork.id')
                 ->setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
                 ->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
                 ->setStatusCode(200);
@@ -22,7 +22,7 @@ class Cors implements FilterInterface
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
         return $response
-            ->setHeader('Access-Control-Allow-Origin', 'http://localhost:8100')
+            ->setHeader('Access-Control-Allow-Origin', 'http://localhost:8100', 'https://localhost', 'https://devusers.heywork.id')
             ->setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
             ->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     }
