@@ -1168,7 +1168,17 @@
 
                             });
 
-                            function loadReport(type = 'all') {
+                            let selectedDate = null;
+
+                           function loadReport(type = 'all', date = null) {
+
+                              if (!date) {
+                                if (!selectedDate) {
+                                  selectedDate = new Date().toISOString().split('T')[0];
+                                }
+                              } else {
+                                selectedDate = date;
+                              }
 
                               let tableId, bodyId;
 
@@ -1183,7 +1193,12 @@
                                 bodyId  = '#allBody';
                               }
 
-                              $.get("<?= base_url('admin/balance/daily-report') ?>", { type: type }, function(res){
+                              $.get("<?= base_url('admin/balance/daily-report') ?>", 
+                              { 
+                                type: type,
+                                date: selectedDate
+                              }, 
+                              function(res){
 
                                 if(!res.status) return;
 
@@ -1199,12 +1214,21 @@
                                   year: '2-digit'
                                 });
 
-                                table.find('thead tr:first th:nth-child(2)').text(formattedDate);
+                                // ==========================
+                                // Inject header with buttons
+                                // ==========================
+                                table.find('thead tr:first th:nth-child(2)').html(`
+                                  <div class="d-flex justify-content-between align-items-center">
+                                    <button class="btn btn-sm btn-outline-primary prev-day">◀</button>
+                                    <span class="fw-bold">${formattedDate}</span>
+                                    <button class="btn btn-sm btn-outline-primary next-day">▶</button>
+                                  </div>
+                                `);
 
                                 tbody.html('');
 
                                 // ======================
-                                // Departments (Clickable)
+                                // Departments
                                 // ======================
                                 res.departments.forEach(dep => {
 
@@ -1222,10 +1246,8 @@
 
                                 });
 
-                                // Spacer
                                 tbody.append(`<tr><td colspan="4"></td></tr>`);
 
-                                // Total
                                 tbody.append(`
                                   <tr class="table-secondary fw-bold">
                                     <td class="text-start">Total Corporate Cost</td>
@@ -1234,7 +1256,6 @@
                                   </tr>
                                 `);
 
-                                // Today
                                 tbody.append(`
                                   <tr class="fw-bold">
                                     <td rowspan="2" class="text-start">Today</td>
@@ -1253,7 +1274,6 @@
                                   </tr>
                                 `);
 
-                                // MTD
                                 tbody.append(`
                                   <tr class="fw-bold">
                                     <td rowspan="2" class="text-start">Month To Date</td>
@@ -1275,6 +1295,57 @@
                               }, 'json');
                             }
 
+                           
+                            // ==========================
+                            // PREV DAY
+                            // ==========================
+                            $(document).on('click', '.prev-day', function(){
+
+                              const date = new Date(selectedDate);
+                              date.setDate(date.getDate() - 1);
+
+                              selectedDate = date.toISOString().split('T')[0];
+
+                              const activeType = getActiveType();
+                              loadReport(activeType, selectedDate);
+
+                            });
+
+                            // ==========================
+                            // NEXT DAY
+                            // ==========================
+                            $(document).on('click', '.next-day', function(){
+
+                              const date = new Date(selectedDate);
+                              date.setDate(date.getDate() + 1);
+
+                              const today = new Date().toISOString().split('T')[0];
+
+                              const newDate = date.toISOString().split('T')[0];
+
+                              // cegah lebih dari hari ini
+                              if (newDate > today) return;
+
+                              selectedDate = newDate;
+
+                              const activeType = getActiveType();
+                              loadReport(activeType, selectedDate);
+
+                            }); 
+
+                            function getActiveType() {
+
+                              if ($('#navs-pills-justified-home').hasClass('active')) {
+                                return 'daily_worker';
+                              } 
+                              else if ($('#navs-pills-justified-profile').hasClass('active')) {
+                                return 'corporate';
+                              } 
+                              else {
+                                return 'all';
+                              }
+
+                            }
 
                             // ==========================
                             // CLICK DEPARTMENT → LOAD SKILL
@@ -1389,20 +1460,20 @@
                             // ==========================
                             // INIT
                             // ==========================
-                            loadReport('daily_worker');
+                            loadReport('daily_worker', selectedDate);
 
                             $('[data-bs-target="#navs-pills-justified-home"]').on('click', function(){
-                              loadReport('daily_worker');
+                              loadReport('daily_worker', selectedDate);
                               $('#dailyWorkerskillRatioContainer').html('');
                             });
 
                             $('[data-bs-target="#navs-pills-justified-profile"]').on('click', function(){
-                              loadReport('corporate');
+                              loadReport('corporate', selectedDate);
                               $('#corporateskillRatioContainer').html('');
                             });
 
                             $('[data-bs-target="#navs-pills-justified-messages"]').on('click', function(){
-                              loadReport('all');
+                              loadReport('all', selectedDate);
                               $('#allskillRatioContainer').html('');
                             });
 

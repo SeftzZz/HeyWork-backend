@@ -406,12 +406,22 @@ class Balance extends BaseAdminController
     public function dailyReport()
     {
         $hotelId = session()->get('hotel_id');
-        $type = $this->request->getGet('type') ?? 'all';
+        $type    = $this->request->getGet('type') ?? 'all';
 
-        $attendanceDate = date('Y-m-d', strtotime('-1 day'));
+        // ======================
+        // DATE PARAMETER (NEW)
+        // ======================
+        $attendanceDate = $this->request->getGet('date');
+
+        if (!$attendanceDate) {
+            $attendanceDate = date('Y-m-d'); // default hari ini
+        }
+
         $start = $attendanceDate . ' 00:00:00';
         $end   = $attendanceDate . ' 23:59:59';
+
         $daysInMonth = date('t', strtotime($attendanceDate));
+        $monthStart  = date('Y-m-01', strtotime($attendanceDate));
 
         // ======================
         // Filter Category
@@ -503,25 +513,28 @@ class Balance extends BaseAdminController
             $departments[] = [
                 'department' => $category,
                 'dw' => $attendanceMap[$category]['dw'] ?? 0,
-                'cost' => $attendanceMap[$category]['cost'] ?? 0
+                'cost' => round($attendanceMap[$category]['cost'] ?? 0, 2)
             ];
         }
 
         // ======================
-        // Revenue (GLOBAL)
+        // TODAY REVENUE
         // ======================
-        $revenueRow = $this->db->table('hotel_transactions')
+        $todayRevenue = $this->db->table('hotel_transactions')
+            ->selectSum('amount')
             ->where('hotel_id', $hotelId)
             ->where('type', 'credit')
             ->where('category', 'revenue')
-            ->where('date', $attendanceDate)
+            ->where('created_at >=', $start)
+            ->where('created_at <=', $end)
             ->get()
-            ->getRowArray();
+            ->getRow()
+            ->amount ?? 0;
 
-        $todayRevenue = (float)($revenueRow['amount'] ?? 0);
+        $todayRevenue = (float)$todayRevenue;
 
         // ======================
-        // TODAY RATIO (SEGMENT AWARE)
+        // TODAY RATIO
         // ======================
         $todayRatio = $todayRevenue > 0
             ? round(($totalCost / $todayRevenue) * 100, 2)
@@ -530,20 +543,20 @@ class Balance extends BaseAdminController
         $todayLabel = $this->getRatioLabel($todayRatio, $hotelId);
 
         // ======================
-        // MTD
+        // MTD REVENUE (FIXED)
         // ======================
-        $monthStart = date('Y-m-01');
-
         $mtdRevenue = $this->db->table('hotel_transactions')
             ->selectSum('amount')
             ->where('hotel_id', $hotelId)
             ->where('type', 'credit')
             ->where('category', 'revenue')
-            ->where('date >=', $monthStart)
-            ->where('date <=', $attendanceDate)
+            ->where('created_at >=', $monthStart . ' 00:00:00')
+            ->where('created_at <=', $end)
             ->get()
             ->getRow()
             ->amount ?? 0;
+
+        $mtdRevenue = (float)$mtdRevenue;
 
         $mtdRatio = $mtdRevenue > 0
             ? round(($totalCost / $mtdRevenue) * 100, 2)
@@ -555,15 +568,16 @@ class Balance extends BaseAdminController
             'status' => true,
             'date' => $attendanceDate,
             'departments' => $departments,
-            'total_dw_cost' => $totalCost,
+            'total_dw_cost' => round($totalCost, 2),
             'today_revenue' => $todayRevenue,
             'today_ratio' => $todayRatio,
             'today_label' => $todayLabel,
-            'mtd_revenue' => (float)$mtdRevenue,
+            'mtd_revenue' => $mtdRevenue,
             'mtd_ratio' => $mtdRatio,
             'mtd_label' => $mtdLabel
         ]);
     }
+    
 
     public function exportReportXlsx()
     {

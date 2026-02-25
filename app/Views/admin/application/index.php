@@ -146,8 +146,16 @@
                                         </table>
 
                                         <!-- SKILLS -->
-                                        <h6 class="mb-2">Skills</h6>
-                                        <div id="wd_skills" class="d-flex flex-wrap gap-2 mb-4"></div>
+                                        <h6 class="mb-2">Skills & Flight Hours</h6>
+                                        <table class="table table-striped mb-4">
+                                            <thead>
+                                                <tr>
+                                                    <th width="70%">Skill Name</th>
+                                                    <th width="30%">Total Hours</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="wd_skills"></tbody>
+                                        </table>
 
                                         <!-- DOCUMENT -->
                                         <h6 class="mb-2">Documents</h6>
@@ -436,12 +444,28 @@
                                         /* ===============================
                                            SKILLS
                                         =============================== */
+                                        const totalHours = res.total_hours 
+                                            ? parseFloat(res.total_hours).toFixed(2) + ' hours'
+                                            : '0 hours';
+
                                         $('#wd_skills').html(
                                             (res.skills ?? []).length
-                                                ? res.skills.map(s =>
-                                                    `<span class="badge bg-primary me-1">${s.name}</span>`
-                                                  ).join('')
-                                                : '<span class="text-muted">No skills</span>'
+                                                ? res.skills.map((s, index) => `
+                                                    <tr>
+                                                        <td>${s.name}</td>
+                                                        ${index === 0 
+                                                            ? `<td rowspan="${res.skills.length}" class="align-middle fw-semibold text-primary">
+                                                                ${totalHours}
+                                                               </td>` 
+                                                            : ''}
+                                                    </tr>
+                                                `).join('')
+                                                : `
+                                                    <tr>
+                                                        <td class="text-center text-muted">No skills</td>
+                                                        <td class="text-center text-muted">${totalHours}</td>
+                                                    </tr>
+                                                  `
                                         );
 
                                         /* ===============================

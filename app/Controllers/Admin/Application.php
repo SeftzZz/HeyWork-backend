@@ -172,6 +172,40 @@ class Application extends BaseAdminController
 
         $userId = $application['user_id'];
 
+        // ===============================
+        // JAM TERBANG (PAIR CHECKIN-CHECKOUT)
+        // ===============================
+        $attendances = $db->table('job_attendances')
+            ->select('type, created_at')
+            ->where('user_id', $userId)
+            ->where('(deleted_at IS NULL OR deleted_at = "0000-00-00 00:00:00")', null, false)
+            ->orderBy('created_at', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        $totalSeconds = 0;
+        $lastCheckin  = null;
+
+        foreach ($attendances as $row) {
+
+            if ($row['type'] === 'checkin') {
+                $lastCheckin = strtotime($row['created_at']);
+            }
+
+            if ($row['type'] === 'checkout' && $lastCheckin) {
+
+                $checkout = strtotime($row['created_at']);
+
+                if ($checkout > $lastCheckin) {
+                    $totalSeconds += ($checkout - $lastCheckin);
+                }
+
+                $lastCheckin = null; // reset
+            }
+        }
+
+        $totalHours = round($totalSeconds / 3600, 2);
+
         return $this->response->setJSON([
             'status' => true,
 
@@ -192,7 +226,8 @@ class Application extends BaseAdminController
                                 ->where('ws.user_id', $userId)
                                 ->get()->getResultArray(),
             'links'       => $db->table('worker_links')->where('user_id', $userId)->get()->getResultArray(),
-            'rating'      => $db->table('worker_ratings')->where('user_id', $userId)->get()->getRowArray()
+            'rating'      => $db->table('worker_ratings')->where('user_id', $userId)->get()->getRowArray(),
+            'total_hours' => $totalHours
         ]);
     }
 
