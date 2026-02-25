@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 25, 2026 at 04:58 PM
+-- Generation Time: Feb 25, 2026 at 07:01 PM
 -- Server version: 10.11.10-MariaDB-log
 -- PHP Version: 8.3.27
 
@@ -84,6 +84,7 @@ CREATE TABLE `hotel_transactions` (
 --
 
 INSERT INTO `hotel_transactions` (`id`, `hotel_id`, `type`, `amount`, `dw_ratio`, `dw_label`, `category`, `description`, `reference_id`, `reference_type`, `date`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(12, 1, 'credit', 122193844.00, 0.00, 'GOOD', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-20', '2026-02-21 17:59:28', 17, NULL, NULL, NULL, NULL),
 (13, 1, 'debit', 3214285.71, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-21', '2026-02-22 17:59:28', 17, NULL, NULL, NULL, NULL),
 (14, 1, 'credit', 5515260.00, 58.28, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-21', '2026-02-22 17:59:28', 17, NULL, NULL, NULL, NULL),
 (15, 1, 'debit', 3214285.71, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-22', '2026-02-23 17:59:53', 17, NULL, NULL, NULL, NULL),
@@ -149,7 +150,10 @@ INSERT INTO `jobs` (`id`, `hotel_id`, `position`, `job_date_start`, `job_date_en
 (21, 1, 'FDA', '2026-02-06', '2027-02-05', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
 (22, 1, 'Business Development', '2025-12-09', '2026-06-08', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
 (23, 1, 'Security Guard', '2025-12-02', '2026-12-01', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(24, 1, 'General Manager', '2025-12-02', '2026-12-01', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL);
+(24, 1, 'General Manager', '2025-12-02', '2026-12-01', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(25, 1, 'Housekeeping', '2026-02-21', '2026-03-20', '00:00:00', '23:59:00', 'daily_worker', 0, 'Bogor, West Java', 'maintains cleanliness and sanitation in residential or commercial spaces by performing tasks like sweeping, vacuuming, mopping, dusting, cleaning bathrooms, and changing linens', 'surface care and equipment handling, alongside key soft skills like time management, attention to detail, and discretion', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(26, 1, 'Front Office', '2026-02-21', '2026-03-20', '00:00:00', '23:59:00', 'daily_worker', 0, 'Bogor, West Java', 'acts as the company\'s first point of contact, providing exceptional customer service by greeting visitors, managing phone calls, and handling administrative tasks', 'strong communication, interpersonal, and multitasking skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(27, 1, 'Cook', '2026-02-21', '2026-03-20', '00:00:00', '23:59:00', 'daily_worker', 0, 'Bogor, West Java', 'prepares, seasons, and cooks a variety of foods, including soups, salads, and entrees, while ensuring quality, taste, and presentation standards are met', 'proficiency in knife handling, mastery of cooking techniques (sautéing, roasting, grilling), strict adherence to food safety and sanitation standards, and flavor balancing', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -201,7 +205,13 @@ INSERT INTO `job_applications` (`id`, `job_id`, `user_id`, `status`, `applied_at
 (26, 23, 27, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
 (28, 23, 28, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
 (29, 23, 29, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(30, 23, 30, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL);
+(30, 23, 30, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(31, 24, 31, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(32, 24, 32, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(33, 24, 33, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(34, 25, 34, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(35, 26, 35, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(36, 26, 36, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -515,7 +525,278 @@ INSERT INTO `job_attendances` (`id`, `job_id`, `application_id`, `user_id`, `tra
 (307, 23, 29, 29, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
 (308, 23, 30, 30, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
 (309, 23, 30, 30, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(310, 23, 30, 30, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL);
+(310, 23, 30, 30, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(354, 25, 25, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 07:03:29', 34, NULL, NULL, NULL, NULL),
+(355, 24, 24, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 08:08:53', 31, NULL, NULL, NULL, NULL),
+(356, 24, 24, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 08:53:23', 32, NULL, NULL, NULL, NULL),
+(357, 19, 19, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 10:42:42', 35, NULL, NULL, NULL, NULL),
+(358, 22, 22, 24, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 11:48:25', 24, NULL, NULL, NULL, NULL),
+(359, 24, 24, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 11:51:27', 33, NULL, NULL, NULL, NULL),
+(360, 19, 19, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 12:01:14', 36, NULL, NULL, NULL, NULL),
+(361, 24, 24, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 19:25:45', 33, NULL, NULL, NULL, NULL),
+(362, 24, 24, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 20:08:09', 31, NULL, NULL, NULL, NULL),
+(363, 19, 19, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 21:32:04', 35, NULL, NULL, NULL, NULL),
+(364, 24, 24, 32, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 21:38:33', 32, NULL, NULL, NULL, NULL),
+(365, 19, 19, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 00:09:03', 36, NULL, NULL, NULL, NULL),
+(366, 24, 24, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 11:58:06', 32, NULL, NULL, NULL, NULL),
+(367, 19, 19, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 12:02:31', 36, NULL, NULL, NULL, NULL),
+(368, 24, 24, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 20:06:40', 31, NULL, NULL, NULL, NULL),
+(369, 24, 24, 32, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 20:23:57', 32, NULL, NULL, NULL, NULL),
+(370, 19, 19, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 00:30:04', 36, NULL, NULL, NULL, NULL),
+(371, 25, 25, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 03:45:03', 34, NULL, NULL, NULL, NULL),
+(372, 25, 25, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 07:18:32', 34, NULL, NULL, NULL, NULL),
+(373, 24, 24, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 07:33:41', 31, NULL, NULL, NULL, NULL),
+(374, 22, 22, 24, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 09:41:42', 24, NULL, NULL, NULL, NULL),
+(375, 19, 19, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 10:45:46', 35, NULL, NULL, NULL, NULL),
+(376, 24, 24, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 11:38:31', 33, NULL, NULL, NULL, NULL),
+(377, 19, 19, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 12:13:54', 36, NULL, NULL, NULL, NULL),
+(378, 24, 24, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 19:42:42', 31, NULL, NULL, NULL, NULL),
+(379, 24, 24, 32, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 20:53:16', 32, NULL, NULL, NULL, NULL),
+(380, 19, 19, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 21:48:27', 35, NULL, NULL, NULL, NULL),
+(381, 24, 24, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 23:04:07', 33, NULL, NULL, NULL, NULL),
+(382, 19, 19, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 02:50:12', 36, NULL, NULL, NULL, NULL),
+(383, 25, 25, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 07:05:48', 34, NULL, NULL, NULL, NULL),
+(384, 24, 24, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 07:53:17', 31, NULL, NULL, NULL, NULL),
+(385, 22, 22, 24, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 08:30:45', 24, NULL, NULL, NULL, NULL),
+(386, 24, 24, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 08:57:45', 32, NULL, NULL, NULL, NULL),
+(387, 19, 19, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 10:52:10', 35, NULL, NULL, NULL, NULL);
+INSERT INTO `job_attendances` (`id`, `job_id`, `application_id`, `user_id`, `transaction_id`, `type`, `latitude`, `longitude`, `photo_path`, `device_info`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(388, 24, 24, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 12:24:28', 33, NULL, NULL, NULL, NULL),
+(389, 19, 19, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 16:59:02', 36, NULL, NULL, NULL, NULL),
+(390, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:12:02', NULL, NULL, NULL, NULL, NULL),
+(391, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:12:02', NULL, NULL, NULL, NULL, NULL),
+(392, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:12:02', NULL, NULL, NULL, NULL, NULL),
+(393, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:12:02', NULL, NULL, NULL, NULL, NULL),
+(394, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:12:02', NULL, NULL, NULL, NULL, NULL),
+(395, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:12:02', NULL, NULL, NULL, NULL, NULL),
+(396, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:13:01', NULL, NULL, NULL, NULL, NULL),
+(397, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:13:01', NULL, NULL, NULL, NULL, NULL),
+(398, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:13:01', NULL, NULL, NULL, NULL, NULL),
+(399, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:13:01', NULL, NULL, NULL, NULL, NULL),
+(400, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:13:01', NULL, NULL, NULL, NULL, NULL),
+(401, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:13:01', NULL, NULL, NULL, NULL, NULL),
+(402, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:14:01', NULL, NULL, NULL, NULL, NULL),
+(403, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:14:01', NULL, NULL, NULL, NULL, NULL),
+(404, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:14:01', NULL, NULL, NULL, NULL, NULL),
+(405, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:14:01', NULL, NULL, NULL, NULL, NULL),
+(406, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:14:01', NULL, NULL, NULL, NULL, NULL),
+(407, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:14:01', NULL, NULL, NULL, NULL, NULL),
+(408, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:17:49', NULL, NULL, NULL, NULL, NULL),
+(409, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:17:49', NULL, NULL, NULL, NULL, NULL),
+(410, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:17:49', NULL, NULL, NULL, NULL, NULL),
+(411, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:17:49', NULL, NULL, NULL, NULL, NULL),
+(412, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:17:49', NULL, NULL, NULL, NULL, NULL),
+(413, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:17:49', NULL, NULL, NULL, NULL, NULL),
+(414, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:19:45', NULL, NULL, NULL, NULL, NULL),
+(415, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:19:45', NULL, NULL, NULL, NULL, NULL),
+(416, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:19:45', NULL, NULL, NULL, NULL, NULL),
+(417, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:19:45', NULL, NULL, NULL, NULL, NULL),
+(418, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:19:45', NULL, NULL, NULL, NULL, NULL),
+(419, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:19:45', NULL, NULL, NULL, NULL, NULL),
+(420, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:20:45', NULL, NULL, NULL, NULL, NULL),
+(421, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:20:45', NULL, NULL, NULL, NULL, NULL),
+(422, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:20:45', NULL, NULL, NULL, NULL, NULL),
+(423, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:20:45', NULL, NULL, NULL, NULL, NULL),
+(424, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:20:45', NULL, NULL, NULL, NULL, NULL),
+(425, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:20:45', NULL, NULL, NULL, NULL, NULL),
+(426, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:24:58', NULL, NULL, NULL, NULL, NULL),
+(427, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:24:58', NULL, NULL, NULL, NULL, NULL),
+(428, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:24:58', NULL, NULL, NULL, NULL, NULL),
+(429, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:24:58', NULL, NULL, NULL, NULL, NULL),
+(430, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:24:58', NULL, NULL, NULL, NULL, NULL),
+(431, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:24:58', NULL, NULL, NULL, NULL, NULL),
+(432, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:25:58', NULL, NULL, NULL, NULL, NULL),
+(433, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:25:58', NULL, NULL, NULL, NULL, NULL),
+(434, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:25:58', NULL, NULL, NULL, NULL, NULL),
+(435, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:25:58', NULL, NULL, NULL, NULL, NULL),
+(436, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:25:58', NULL, NULL, NULL, NULL, NULL),
+(437, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:25:58', NULL, NULL, NULL, NULL, NULL),
+(438, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:26:58', NULL, NULL, NULL, NULL, NULL),
+(439, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:26:58', NULL, NULL, NULL, NULL, NULL),
+(440, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:26:58', NULL, NULL, NULL, NULL, NULL),
+(441, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:26:58', NULL, NULL, NULL, NULL, NULL),
+(442, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:26:58', NULL, NULL, NULL, NULL, NULL),
+(443, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:26:58', NULL, NULL, NULL, NULL, NULL),
+(444, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:27:58', NULL, NULL, NULL, NULL, NULL),
+(445, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:27:58', NULL, NULL, NULL, NULL, NULL),
+(446, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:27:58', NULL, NULL, NULL, NULL, NULL),
+(447, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:27:58', NULL, NULL, NULL, NULL, NULL),
+(448, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:27:58', NULL, NULL, NULL, NULL, NULL),
+(449, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:27:58', NULL, NULL, NULL, NULL, NULL),
+(450, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:28:58', NULL, NULL, NULL, NULL, NULL),
+(451, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:28:58', NULL, NULL, NULL, NULL, NULL),
+(452, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:28:58', NULL, NULL, NULL, NULL, NULL),
+(453, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:28:58', NULL, NULL, NULL, NULL, NULL),
+(454, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:28:58', NULL, NULL, NULL, NULL, NULL),
+(455, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:28:58', NULL, NULL, NULL, NULL, NULL),
+(456, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:33:45', NULL, NULL, NULL, NULL, NULL),
+(457, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:33:45', NULL, NULL, NULL, NULL, NULL),
+(458, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:33:45', NULL, NULL, NULL, NULL, NULL),
+(459, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:33:45', NULL, NULL, NULL, NULL, NULL),
+(460, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:33:45', NULL, NULL, NULL, NULL, NULL),
+(461, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:33:45', NULL, NULL, NULL, NULL, NULL),
+(462, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:34:45', NULL, NULL, NULL, NULL, NULL),
+(463, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:34:45', NULL, NULL, NULL, NULL, NULL),
+(464, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:34:45', NULL, NULL, NULL, NULL, NULL),
+(465, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:34:45', NULL, NULL, NULL, NULL, NULL),
+(466, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:34:45', NULL, NULL, NULL, NULL, NULL),
+(467, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:34:45', NULL, NULL, NULL, NULL, NULL),
+(468, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:35:45', NULL, NULL, NULL, NULL, NULL),
+(469, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:35:45', NULL, NULL, NULL, NULL, NULL),
+(470, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:35:45', NULL, NULL, NULL, NULL, NULL),
+(471, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:35:45', NULL, NULL, NULL, NULL, NULL),
+(472, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:35:45', NULL, NULL, NULL, NULL, NULL),
+(473, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:35:45', NULL, NULL, NULL, NULL, NULL),
+(474, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:36:45', NULL, NULL, NULL, NULL, NULL),
+(475, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:36:45', NULL, NULL, NULL, NULL, NULL),
+(476, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:36:45', NULL, NULL, NULL, NULL, NULL),
+(477, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:36:45', NULL, NULL, NULL, NULL, NULL),
+(478, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:36:45', NULL, NULL, NULL, NULL, NULL),
+(479, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:36:45', NULL, NULL, NULL, NULL, NULL),
+(480, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:37:45', NULL, NULL, NULL, NULL, NULL),
+(481, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:37:45', NULL, NULL, NULL, NULL, NULL),
+(482, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:37:45', NULL, NULL, NULL, NULL, NULL),
+(483, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:37:45', NULL, NULL, NULL, NULL, NULL),
+(484, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:37:45', NULL, NULL, NULL, NULL, NULL),
+(485, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:37:45', NULL, NULL, NULL, NULL, NULL),
+(486, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:38:45', NULL, NULL, NULL, NULL, NULL),
+(487, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:38:45', NULL, NULL, NULL, NULL, NULL),
+(488, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:38:45', NULL, NULL, NULL, NULL, NULL),
+(489, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:38:45', NULL, NULL, NULL, NULL, NULL),
+(490, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:38:45', NULL, NULL, NULL, NULL, NULL),
+(491, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:38:45', NULL, NULL, NULL, NULL, NULL),
+(492, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:39:45', NULL, NULL, NULL, NULL, NULL),
+(493, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:39:45', NULL, NULL, NULL, NULL, NULL),
+(494, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:39:45', NULL, NULL, NULL, NULL, NULL),
+(495, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:39:45', NULL, NULL, NULL, NULL, NULL),
+(496, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:39:45', NULL, NULL, NULL, NULL, NULL),
+(497, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:39:45', NULL, NULL, NULL, NULL, NULL),
+(498, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:40:45', NULL, NULL, NULL, NULL, NULL),
+(499, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:40:45', NULL, NULL, NULL, NULL, NULL),
+(500, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:40:45', NULL, NULL, NULL, NULL, NULL),
+(501, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:40:45', NULL, NULL, NULL, NULL, NULL),
+(502, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:40:45', NULL, NULL, NULL, NULL, NULL),
+(503, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:40:45', NULL, NULL, NULL, NULL, NULL),
+(504, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:41:45', NULL, NULL, NULL, NULL, NULL),
+(505, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:41:45', NULL, NULL, NULL, NULL, NULL),
+(506, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:41:45', NULL, NULL, NULL, NULL, NULL),
+(507, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:41:45', NULL, NULL, NULL, NULL, NULL),
+(508, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:41:45', NULL, NULL, NULL, NULL, NULL),
+(509, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:41:45', NULL, NULL, NULL, NULL, NULL),
+(510, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:42:45', NULL, NULL, NULL, NULL, NULL),
+(511, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:42:45', NULL, NULL, NULL, NULL, NULL),
+(512, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:42:45', NULL, NULL, NULL, NULL, NULL),
+(513, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:42:45', NULL, NULL, NULL, NULL, NULL),
+(514, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:42:45', NULL, NULL, NULL, NULL, NULL),
+(515, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:42:45', NULL, NULL, NULL, NULL, NULL),
+(516, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:43:45', NULL, NULL, NULL, NULL, NULL),
+(517, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:43:45', NULL, NULL, NULL, NULL, NULL),
+(518, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:43:45', NULL, NULL, NULL, NULL, NULL),
+(519, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:43:45', NULL, NULL, NULL, NULL, NULL),
+(520, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:43:45', NULL, NULL, NULL, NULL, NULL),
+(521, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:43:45', NULL, NULL, NULL, NULL, NULL),
+(522, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:44:45', NULL, NULL, NULL, NULL, NULL),
+(523, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:44:45', NULL, NULL, NULL, NULL, NULL),
+(524, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:44:45', NULL, NULL, NULL, NULL, NULL),
+(525, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:44:45', NULL, NULL, NULL, NULL, NULL),
+(526, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:44:45', NULL, NULL, NULL, NULL, NULL),
+(527, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:44:45', NULL, NULL, NULL, NULL, NULL),
+(528, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:45:45', NULL, NULL, NULL, NULL, NULL),
+(529, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:45:45', NULL, NULL, NULL, NULL, NULL),
+(530, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:45:45', NULL, NULL, NULL, NULL, NULL),
+(531, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:45:45', NULL, NULL, NULL, NULL, NULL),
+(532, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:45:45', NULL, NULL, NULL, NULL, NULL),
+(533, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:45:45', NULL, NULL, NULL, NULL, NULL),
+(534, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:46:45', NULL, NULL, NULL, NULL, NULL),
+(535, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:46:45', NULL, NULL, NULL, NULL, NULL),
+(536, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:46:45', NULL, NULL, NULL, NULL, NULL),
+(537, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:46:45', NULL, NULL, NULL, NULL, NULL),
+(538, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:46:45', NULL, NULL, NULL, NULL, NULL),
+(539, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:46:45', NULL, NULL, NULL, NULL, NULL),
+(540, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:47:45', NULL, NULL, NULL, NULL, NULL),
+(541, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:47:45', NULL, NULL, NULL, NULL, NULL),
+(542, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:47:45', NULL, NULL, NULL, NULL, NULL),
+(543, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:47:45', NULL, NULL, NULL, NULL, NULL),
+(544, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:47:45', NULL, NULL, NULL, NULL, NULL),
+(545, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:47:45', NULL, NULL, NULL, NULL, NULL),
+(546, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:48:45', NULL, NULL, NULL, NULL, NULL),
+(547, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:48:45', NULL, NULL, NULL, NULL, NULL),
+(548, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:48:45', NULL, NULL, NULL, NULL, NULL),
+(549, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:48:45', NULL, NULL, NULL, NULL, NULL),
+(550, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:48:45', NULL, NULL, NULL, NULL, NULL),
+(551, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:48:45', NULL, NULL, NULL, NULL, NULL),
+(552, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:49:45', NULL, NULL, NULL, NULL, NULL),
+(553, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:49:45', NULL, NULL, NULL, NULL, NULL),
+(554, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:49:45', NULL, NULL, NULL, NULL, NULL),
+(555, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:49:45', NULL, NULL, NULL, NULL, NULL),
+(556, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:49:45', NULL, NULL, NULL, NULL, NULL),
+(557, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:49:45', NULL, NULL, NULL, NULL, NULL),
+(558, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:50:45', NULL, NULL, NULL, NULL, NULL),
+(559, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:50:45', NULL, NULL, NULL, NULL, NULL),
+(560, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:50:45', NULL, NULL, NULL, NULL, NULL),
+(561, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:50:45', NULL, NULL, NULL, NULL, NULL),
+(562, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:50:45', NULL, NULL, NULL, NULL, NULL),
+(563, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:50:45', NULL, NULL, NULL, NULL, NULL),
+(564, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:51:45', NULL, NULL, NULL, NULL, NULL),
+(565, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:51:45', NULL, NULL, NULL, NULL, NULL),
+(566, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:51:45', NULL, NULL, NULL, NULL, NULL),
+(567, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:51:45', NULL, NULL, NULL, NULL, NULL),
+(568, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:51:45', NULL, NULL, NULL, NULL, NULL),
+(569, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:51:45', NULL, NULL, NULL, NULL, NULL),
+(570, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:52:45', NULL, NULL, NULL, NULL, NULL),
+(571, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:52:45', NULL, NULL, NULL, NULL, NULL),
+(572, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:52:45', NULL, NULL, NULL, NULL, NULL),
+(573, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:52:45', NULL, NULL, NULL, NULL, NULL),
+(574, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:52:45', NULL, NULL, NULL, NULL, NULL),
+(575, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:52:45', NULL, NULL, NULL, NULL, NULL),
+(576, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:53:45', NULL, NULL, NULL, NULL, NULL),
+(577, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:53:45', NULL, NULL, NULL, NULL, NULL),
+(578, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:53:45', NULL, NULL, NULL, NULL, NULL),
+(579, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:53:45', NULL, NULL, NULL, NULL, NULL),
+(580, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:53:45', NULL, NULL, NULL, NULL, NULL),
+(581, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:53:45', NULL, NULL, NULL, NULL, NULL),
+(582, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:54:45', NULL, NULL, NULL, NULL, NULL),
+(583, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:54:45', NULL, NULL, NULL, NULL, NULL),
+(584, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:54:45', NULL, NULL, NULL, NULL, NULL),
+(585, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:54:45', NULL, NULL, NULL, NULL, NULL),
+(586, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:54:45', NULL, NULL, NULL, NULL, NULL),
+(587, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:54:45', NULL, NULL, NULL, NULL, NULL),
+(588, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:55:45', NULL, NULL, NULL, NULL, NULL),
+(589, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:55:45', NULL, NULL, NULL, NULL, NULL),
+(590, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:55:45', NULL, NULL, NULL, NULL, NULL),
+(591, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:55:45', NULL, NULL, NULL, NULL, NULL),
+(592, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:55:45', NULL, NULL, NULL, NULL, NULL),
+(593, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:55:45', NULL, NULL, NULL, NULL, NULL),
+(594, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:56:45', NULL, NULL, NULL, NULL, NULL),
+(595, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:56:45', NULL, NULL, NULL, NULL, NULL),
+(596, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:56:45', NULL, NULL, NULL, NULL, NULL),
+(597, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:56:45', NULL, NULL, NULL, NULL, NULL),
+(598, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:56:45', NULL, NULL, NULL, NULL, NULL),
+(599, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:56:45', NULL, NULL, NULL, NULL, NULL),
+(600, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:57:45', NULL, NULL, NULL, NULL, NULL),
+(601, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:57:45', NULL, NULL, NULL, NULL, NULL),
+(602, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:57:45', NULL, NULL, NULL, NULL, NULL),
+(603, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:57:45', NULL, NULL, NULL, NULL, NULL),
+(604, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:57:45', NULL, NULL, NULL, NULL, NULL),
+(605, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:57:45', NULL, NULL, NULL, NULL, NULL),
+(606, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:58:45', NULL, NULL, NULL, NULL, NULL),
+(607, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:58:45', NULL, NULL, NULL, NULL, NULL),
+(608, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:58:45', NULL, NULL, NULL, NULL, NULL),
+(609, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:58:45', NULL, NULL, NULL, NULL, NULL),
+(610, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:58:45', NULL, NULL, NULL, NULL, NULL),
+(611, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:58:45', NULL, NULL, NULL, NULL, NULL),
+(612, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:59:45', NULL, NULL, NULL, NULL, NULL),
+(613, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:59:45', NULL, NULL, NULL, NULL, NULL),
+(614, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:59:45', NULL, NULL, NULL, NULL, NULL),
+(615, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:59:45', NULL, NULL, NULL, NULL, NULL),
+(616, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:59:45', NULL, NULL, NULL, NULL, NULL),
+(617, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 17:59:45', NULL, NULL, NULL, NULL, NULL),
+(618, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:45', NULL, NULL, NULL, NULL, NULL),
+(619, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:45', NULL, NULL, NULL, NULL, NULL),
+(620, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:45', NULL, NULL, NULL, NULL, NULL),
+(621, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:45', NULL, NULL, NULL, NULL, NULL),
+(622, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:45', NULL, NULL, NULL, NULL, NULL),
+(623, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:45', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -653,7 +934,10 @@ INSERT INTO `refresh_tokens` (`id`, `user_id`, `token`, `expires_at`, `created_a
 (17, 20, '479ad369635e8cc1b08fc53f84781a2c517532cf7e6931758601e71886e1ca471af908f3196bc27c0270b1e804696bf4a56914fa998476cef84c3a9292e80a2a', '2026-03-26 16:50:17', '2026-02-24 16:50:17'),
 (18, 7, '13d211ca508c2c5b0c4b6127a183f8195ca31ca9fa20a430d2c2dfd764f2a76d8057d64b616ea223496c101c51a9ef6beecf5f95506d9ebc9dfe8d730783554a', '2026-03-26 16:57:05', '2026-02-24 16:57:05'),
 (19, 22, '67b455f3eaa1225ea8019215b86ac67e5089faeaa7d29d2580cf76cb3eb094ca220368b949f48bc5211c3d2afbe0110597a49aa1490657387218d9283492420b', '2026-03-26 16:58:37', '2026-02-24 16:58:37'),
-(20, 13, 'e79b8f787033c6ac2a05480cb612c8e53c2cd1699185ec4c60e9ac3e6ad6b9990b356705d8c454914c89b95136d7da1dcffb70c2e6c1d640524dde71985c63b8', '2026-03-27 01:17:23', '2026-02-25 01:17:23');
+(20, 13, 'e79b8f787033c6ac2a05480cb612c8e53c2cd1699185ec4c60e9ac3e6ad6b9990b356705d8c454914c89b95136d7da1dcffb70c2e6c1d640524dde71985c63b8', '2026-03-27 01:17:23', '2026-02-25 01:17:23'),
+(21, 13, 'c51556340cf2aae120a0cb7cd3ae577078df35f5893ac56ce208615f8962f070a7881b7ab23f7f20fdea70f9f2656f16ec17c97d35e23bb3769ec2cad3c758ee', '2026-03-27 17:11:42', '2026-02-25 17:11:42'),
+(22, 13, 'c3732151bfdd5b64592f353a1d4127fc99cb2061f3b06e8c0f9be5763aa81a421ffab1fafbf9d3175e99d7d765ebba920055c0565f4c4c92a6963feb28e5ea89', '2026-03-27 17:16:39', '2026-02-25 17:16:39'),
+(23, 13, 'd1868096abfeaf039e5e894cfee49be78ac94deb3c80f6202ba868f40cb969ac7e3880e39a61a2607f6eece842649fa86858dd4a598db9e33818d1bb00839092', '2026-03-27 17:26:17', '2026-02-25 17:26:17');
 
 -- --------------------------------------------------------
 
@@ -768,7 +1052,7 @@ INSERT INTO `users` (`id`, `hotel_id`, `role`, `name`, `email`, `phone`, `passwo
 (1, 0, 'admin', 'Mick Jagger', 'admin@admin.com', '81234567890', '$2y$10$TYZN8k0YxaB.jxCtqA4sl.JnllEeN3/UF9oGYK5.LTvbGlCe7HE82', 'local', NULL, 'uploads/profiles/profile_2_1768811928.png', 0, 'active', '2026-01-18 12:25:53', 1, '2026-01-18 12:25:53', 1, NULL, NULL),
 (2, 1, 'worker', 'Muhamad Ridwan Munawar', 'ridwanmunawar2607@gmail.com', '85171040347', '$2y$10$cd46MWgwLtVEaT0q1cQgiOi0ixH5HS8rIRewd7ohU326D5N1OLK22', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-21 08:16:16', 1, NULL, NULL),
 (3, 1, 'worker', 'Taufik Kurnia', 'dantiratu8@gmail.com', NULL, '$2y$10$lYBxa6y7u/fsBBcis8UJVeE0/Ux/oye4cAcTb4Em.gbbX9.p0x0EC', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-21 10:11:50', 1, NULL, NULL),
-(4, 1, 'worker', 'Rahadian Perdana', 'rahadian.rivelino@gmail.com', '88802308136', '$2y$10$BtcSKJUO/fdWbm1Kb/Bb6.pPPjBWRLRksjHqDJW/tboXWJKjXVH4S', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-22 16:53:23', 1, NULL, NULL),
+(4, 1, 'hotel_fnb_service', 'Rahadian Perdana', 'rahadian.rivelino@gmail.com', '88802308136', '$2y$10$SevkdvpJd8fprRwxgWhaQ.HHt5XzuD0kg.N3LacCpEmJQXCRYctT6', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-25 17:46:34', 17, NULL, NULL),
 (5, 1, 'worker', 'Renaldy Herlando', 'rey.herlando@gmail.com', '81255800626', '$2y$10$BtcSKJUO/fdWbm1Kb/Bb6.pPPjBWRLRksjHqDJW/tboXWJKjXVH4S', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-22 16:53:23', 1, NULL, NULL),
 (6, 1, 'worker', 'Tri Setiyawati', 'celineq683@gmail.com', '87880006558', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-22 23:21:54', 1, NULL, NULL),
 (7, 1, 'worker', 'Raafi Teguh Septianto', 'raafiteguh73@gmail.com', '895711102828', '$2y$10$EJeLN55b5c4hPxbOZ08MvOlzqjW4P/KoDll8VSgGl4GlPp9mov/n6', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-24 16:57:04', 1, NULL, NULL),
@@ -795,7 +1079,12 @@ INSERT INTO `users` (`id`, `hotel_id`, `role`, `name`, `email`, `phone`, `passwo
 (28, 1, 'worker', 'Jarkasih', 'jarkasihuntung4@gmail.com', '85775588443', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
 (29, 1, 'worker', 'Cecep dikdik Kurniawan ', 'cecepdikdikkurniawan@gmail.com', '85719251910', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
 (30, 1, 'worker', 'Dadan Mulyana', 'cipitung78@gmail.com', '85716638004', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
-(31, 1, 'worker', 'Prabu', 'prabunad@salamdjourney.com', '812', '$2y$10$e5fGDgW5bz9oTupY.ZgsN.KPwzNC6JKcFZE2uAq5kZ7ve./OSMVYi', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 16:43:44', 1, NULL, NULL);
+(31, 1, 'worker', 'Vita', 'vita@gmail.com', '812', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL),
+(32, 1, 'worker', 'M. Paldan', 'paldan@gmail.com', '812', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL),
+(33, 1, 'worker', 'Tedi Sukmana', 'tedi@gmail.com', '812', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL),
+(34, 1, 'worker', 'Aldo', 'aldo@gmail.com', '812', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL),
+(35, 1, 'worker', 'Aldi', 'aldi@gmail.com', '812', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL),
+(36, 1, 'worker', 'Azizi', 'azizi@gmail.com', '812', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1383,6 +1672,13 @@ CREATE TABLE `worker_ratings` (
   `deleted_by` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `worker_ratings`
+--
+
+INSERT INTO `worker_ratings` (`id`, `user_id`, `job_id`, `comments`, `punctuality`, `apperance`, `knowledge`, `durability`, `ethics`, `date`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 29, 23, 'GOOD', 5, 5, 5, 5, 5, '2026-02-24', '2026-02-25 17:56:49', 4, NULL, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -1473,7 +1769,6 @@ INSERT INTO `worker_skills` (`id`, `user_id`, `skill_id`, `created_at`, `created
 (9, 10, 38, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
 (10, 11, 54, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
 (11, 12, 24, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
-(12, 13, 45, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
 (13, 14, 28, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
 (14, 15, 28, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
 (15, 16, 49, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
@@ -1490,7 +1785,8 @@ INSERT INTO `worker_skills` (`id`, `user_id`, `skill_id`, `created_at`, `created
 (26, 27, 32, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
 (27, 28, 32, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
 (28, 29, 32, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
-(29, 30, 32, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL);
+(29, 30, 32, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
+(33, 13, 45, '2026-02-25 17:26:23', 13, '2026-02-25 17:26:23', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1739,25 +2035,25 @@ ALTER TABLE `hotels`
 -- AUTO_INCREMENT for table `hotel_transactions`
 --
 ALTER TABLE `hotel_transactions`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `job_applications`
 --
 ALTER TABLE `job_applications`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `job_attendances`
 --
 ALTER TABLE `job_attendances`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=354;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=624;
 
 --
 -- AUTO_INCREMENT for table `job_extend_attendances`
@@ -1787,7 +2083,7 @@ ALTER TABLE `ratio_rules`
 -- AUTO_INCREMENT for table `refresh_tokens`
 --
 ALTER TABLE `refresh_tokens`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `skills`
@@ -1799,7 +2095,7 @@ ALTER TABLE `skills`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `worker_child`
@@ -1865,7 +2161,7 @@ ALTER TABLE `worker_profiles`
 -- AUTO_INCREMENT for table `worker_ratings`
 --
 ALTER TABLE `worker_ratings`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `worker_reviews`
@@ -1883,7 +2179,7 @@ ALTER TABLE `worker_sibling`
 -- AUTO_INCREMENT for table `worker_skills`
 --
 ALTER TABLE `worker_skills`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `worker_spouse`

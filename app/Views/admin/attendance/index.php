@@ -117,7 +117,7 @@
                                             </div>
                                         </div>
 
-                                        <?php if (in_array(session('user_role'), ['hotel_hr', 'admin'])): ?>
+                                        <?php if (in_array(session('user_role'), ['hotel_hr', 'admin', 'hotel_fnb_service', 'hotel_fnb_production', 'hotel_fo', 'hotel_hk'])): ?>
                                         <hr>
 
                                         <div id="extendRequestWrapper">
@@ -402,6 +402,44 @@
                                     $('#wr_user_id').val(d.user_id);
                                     $('#wr_job_id').val(d.job_id);
                                     $('#wr_date').val(d.date);
+
+                                    if (d.existing_rating) {
+
+                                        const r = d.existing_rating;
+
+                                        ['punctuality','apperance','knowledge','durability','ethics']
+                                            .forEach(field => {
+                                                if (r[field]) {
+                                                    $(`#formWorkerRating input[name="${field}"][value="${r[field]}"]`)
+                                                        .prop('checked', true);
+                                                }
+                                            });
+
+                                        $('#formWorkerRating textarea[name="comments"]')
+                                            .val(r.comments);
+
+                                        $('#formWorkerRating input, #formWorkerRating textarea')
+                                            .prop('disabled', true);
+
+                                        $('#formWorkerRating button[type=submit]')
+                                            .prop('disabled', true)
+                                            .removeClass('btn-primary')
+                                            .addClass('btn-secondary')
+                                            .html('<i class="ti ti-check"></i> Already Rated');
+
+                                    } else {
+
+                                        $('#formWorkerRating')[0].reset();
+
+                                        $('#formWorkerRating input, #formWorkerRating textarea')
+                                            .prop('disabled', false);
+
+                                        $('#formWorkerRating button[type=submit]')
+                                            .prop('disabled', false)
+                                            .removeClass('btn-secondary')
+                                            .addClass('btn-primary')
+                                            .html('<i class="ti ti-star"></i> Submit Rating');
+                                    }
 
                                     $('#modalAttendanceDetail').modal('show');
 

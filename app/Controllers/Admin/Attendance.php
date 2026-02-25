@@ -266,6 +266,16 @@ class Attendance extends BaseAdminController
             ->get()
             ->getResultArray();
 
+        // ===============================
+        // CEK RATING SUDAH ADA ATAU BELUM
+        // ===============================
+        $existingRating = $db->table('worker_ratings')
+            ->where('user_id', $userId)
+            ->where('job_id', $jobId)
+            ->where('date', $date)
+            ->where('deleted_at', null)
+            ->get()
+            ->getRowArray();
 
         if (!$rows) {
             return $this->response->setJSON([
@@ -321,7 +331,10 @@ class Attendance extends BaseAdminController
                 'checkin_photo'  => $photoIn,
                 'checkout_photo' => $photoOut,
                 'extend'         => $extend,
-                'extend_attendance' => $extendAttendance
+                'extend_attendance' => $extendAttendance,
+
+                // 🔥 TAMBAHAN BARU
+                'existing_rating' => $existingRating
             ]
         ]);
     }
@@ -329,7 +342,7 @@ class Attendance extends BaseAdminController
     public function submitRating()
     {
         // hanya hotel_hr & admin
-        if (!in_array(session('user_role'), ['hotel_hr', 'admin'])) {
+        if (!in_array(session('user_role'), ['hotel_hr', 'admin', 'hotel_fnb_service', 'hotel_fnb_production', 'hotel_fo', 'hotel_hk'])) {
             return $this->response->setJSON([
                 'status' => false,
                 'message' => 'Unauthorized'
@@ -390,7 +403,7 @@ class Attendance extends BaseAdminController
     public function extendRequest()
     {
         // hanya HR / admin
-        if (!in_array(session('user_role'), ['hotel_hr', 'admin'])) {
+        if (!in_array(session('user_role'), ['hotel_hr', 'admin', 'hotel_fnb_service', 'hotel_fnb_production', 'hotel_fo', 'hotel_hk'])) {
             return $this->response->setJSON([
                 'status' => false,
                 'message' => 'Unauthorized'
