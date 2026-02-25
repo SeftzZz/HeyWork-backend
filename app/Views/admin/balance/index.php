@@ -77,7 +77,7 @@
                                       </div>
                                       <div class="border rounded p-3 mt-4">
                                         <div class="row gap-4 gap-sm-0">
-                                          <div class="col-12 col-sm-3">
+                                          <div class="col-12 col-sm-4">
                                             <div class="d-flex gap-2 align-items-center">
                                               <h6 class="mb-0">Month To Date</h6>
                                             </div>
@@ -92,22 +92,7 @@
                                                 aria-valuemax="100"></div>
                                             </div>
                                           </div>
-                                          <div class="col-12 col-sm-3">
-                                            <div class="d-flex gap-2 align-items-center">
-                                              <h6 class="mb-0">Profit</h6>
-                                            </div>
-                                            <h4 class="my-2 pt-1 profit-value">0</h4>
-                                            <div class="progress w-75" style="height: 4px">
-                                              <div
-                                                class="progress-bar bg-info profit-progress"
-                                                role="progressbar"
-                                                style="width: 50%"
-                                                aria-valuenow="50"
-                                                aria-valuemin="0"
-                                                aria-valuemax="100"></div>
-                                            </div>
-                                          </div>
-                                          <div class="col-12 col-sm-3">
+                                          <div class="col-12 col-sm-4">
                                             <div class="d-flex gap-2 align-items-center">
                                               <h6 class="mb-0">Expense</h6>
                                             </div>
@@ -122,14 +107,14 @@
                                                 aria-valuemax="100"></div>
                                             </div>
                                           </div>
-                                          <div class="col-12 col-sm-3">
+                                          <div class="col-12 col-sm-4">
                                             <div class="d-flex gap-2 align-items-center">
                                               <h6 class="mb-0">End Balance</h6>
                                             </div>
                                             <h4 class="my-2 pt-1 end-balance-value">0</h4>
                                             <div class="progress w-75" style="height: 4px">
                                               <div
-                                                class="progress-bar bg-danger end-balance-progress"
+                                                class="progress-bar bg-info end-balance-progress"
                                                 role="progressbar"
                                                 style="width: 65%"
                                                 aria-valuenow="65"
@@ -361,7 +346,7 @@
                                           </div>
 
                                           <div class="col-lg-4 mb-4">
-                                            <div id="coorporateskillRatioContainer" class="mb-4"></div>
+                                            <div id="corporateskillRatioContainer" class="mb-4"></div>
                                             <div class="card mb-4">
                                               <div class="card-header d-flex justify-content-between">
                                                 <div class="card-title mb-0">
@@ -664,6 +649,10 @@
 
                               const infoText = earningCard.find('small');
                               const badge    = earningCard.find('.badge');
+                              let ytdBalance = 0;
+
+                              const now = new Date();
+                              const yearStart = new Date(now.getFullYear(), 0, 1);
 
                               // =========================
                               // INITIAL VALUE
@@ -716,8 +705,16 @@
                                 // TOTAL (untuk earning/profit chart)
                                 // =========================
                                 if (row.category === 'revenue') {
+
                                   earnings += amount;
                                   weeklyRevenue[day] += amount;
+
+                                  // =========================
+                                  // END BALANCE (YTD)
+                                  // =========================
+                                  if (date >= yearStart && date <= now) {
+                                    ytdBalance += amount;
+                                  }
                                 }
 
                                 if (row.category === 'payroll' || row.category === 'extend') {
@@ -1071,6 +1068,20 @@
 
                                 window.totalChartInstance.render();
                               }
+
+                              // =========================
+                              // END BALANCE UPDATE (YTD)
+                              // =========================
+                              $('.end-balance-value')
+                                .text('Rp ' + ytdBalance.toLocaleString('id-ID'));
+
+                              // Optional: progress terhadap target tahunan (kalau ada)
+                              const yearlyTarget = 5000000000; // ubah sesuai target
+                              const endPercent = Math.min((ytdBalance / yearlyTarget) * 100, 100);
+
+                              $('.end-balance-progress')
+                                .css('width', endPercent + '%')
+                                .attr('aria-valuenow', endPercent);
                             }, 'json');
 
                             // ==============================
@@ -1164,7 +1175,7 @@
                               if (type === 'daily_worker') {
                                 tableId = '#dailyWorkerTable';
                                 bodyId  = '#dailyWorkerBody';
-                              } else if (type === 'coorporate') {
+                              } else if (type === 'corporate') {
                                 tableId = '#companyTable';
                                 bodyId  = '#companyBody';
                               } else {
@@ -1278,7 +1289,7 @@
                                 type = 'daily_worker';
                               } 
                               else if ($('#navs-pills-justified-profile').hasClass('active')) {
-                                type = 'coorporate';
+                                type = 'corporate';
                               } 
                               else {
                                 type = 'all';
@@ -1303,7 +1314,7 @@
                                 containerId = '#dailyWorkerskillRatioContainer';
                               } 
                               else if ($('#navs-pills-justified-profile').hasClass('active')) {
-                                containerId = '#coorporateskillRatioContainer';
+                                containerId = '#corporateskillRatioContainer';
                               } 
                               else {
                                 containerId = '#allskillRatioContainer';
@@ -1323,8 +1334,14 @@
 
                                   let html = `
                                     <div class="card shadow-sm">
-                                      <div class="card-header bg-light">
+                                      <div class="card-header bg-light d-flex justify-content-between align-items-center">
                                         <h6 class="mb-0">${department}</h6>
+                                        <button 
+                                          class="btn btn-sm btn-primary btn-department-detail"
+                                          data-department="${department}"
+                                          data-type="${type}">
+                                          Detail
+                                        </button>
                                       </div>
                                       <div class="card-body p-0">
                                         <table class="table table-sm table-bordered table-striped text-center mb-0">
@@ -1370,21 +1387,6 @@
                             }
 
                             // ==========================
-                            // BADGE COLOR
-                            // ==========================
-                            function getRatioBadgeClass(label) {
-                              switch(label) {
-                                case 'GOOD': return 'bg-label-success';
-                                case 'AVERAGE': return 'bg-label-warning';
-                                case 'BAD': return 'bg-label-danger';
-                                case 'NO DATA': return 'bg-label-info';
-                                case 'NOT OPTIMAL MAN POWER': return 'bg-label-danger';
-                                default: return 'bg-label-secondary';
-                              }
-                            }
-
-
-                            // ==========================
                             // INIT
                             // ==========================
                             loadReport('daily_worker');
@@ -1395,8 +1397,8 @@
                             });
 
                             $('[data-bs-target="#navs-pills-justified-profile"]').on('click', function(){
-                              loadReport('coorporate');
-                              $('#coorporateskillRatioContainer').html('');
+                              loadReport('corporate');
+                              $('#corporateskillRatioContainer').html('');
                             });
 
                             $('[data-bs-target="#navs-pills-justified-messages"]').on('click', function(){
@@ -1404,6 +1406,17 @@
                               $('#allskillRatioContainer').html('');
                             });
 
+                            $(document).on('click', '.btn-department-detail', function(){
+
+                              const department = $(this).data('department');
+                              const type       = $(this).data('type');
+
+                              const url = "<?= base_url('admin/balance/department-detail') ?>"
+                                          + "?department=" + encodeURIComponent(department)
+                                          + "&type=" + type;
+
+                              window.open(url, '_blank');
+                            });
                           })();
                         </script>
 

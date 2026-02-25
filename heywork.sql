@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 24, 2026 at 05:39 AM
+-- Generation Time: Feb 25, 2026 at 04:58 PM
 -- Server version: 10.11.10-MariaDB-log
 -- PHP Version: 8.3.27
 
@@ -84,8 +84,14 @@ CREATE TABLE `hotel_transactions` (
 --
 
 INSERT INTO `hotel_transactions` (`id`, `hotel_id`, `type`, `amount`, `dw_ratio`, `dw_label`, `category`, `description`, `reference_id`, `reference_type`, `date`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(6, 1, 'debit', 196428.57, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-23', '2026-02-24 02:27:43', 17, NULL, NULL, NULL, NULL),
-(7, 1, 'credit', 780000.00, 25.18, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-23', '2026-02-24 02:27:43', 17, NULL, NULL, NULL, NULL);
+(13, 1, 'debit', 3214285.71, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-21', '2026-02-22 17:59:28', 17, NULL, NULL, NULL, NULL),
+(14, 1, 'credit', 5515260.00, 58.28, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-21', '2026-02-22 17:59:28', 17, NULL, NULL, NULL, NULL),
+(15, 1, 'debit', 3214285.71, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-22', '2026-02-23 17:59:53', 17, NULL, NULL, NULL, NULL),
+(16, 1, 'credit', 1884298.00, 170.58, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-22', '2026-02-23 17:59:53', 17, NULL, NULL, NULL, NULL),
+(17, 1, 'debit', 3214285.71, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-23', '2026-02-24 18:00:12', 17, NULL, NULL, NULL, NULL),
+(18, 1, 'credit', 6933888.00, 46.36, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-23', '2026-02-24 18:00:12', 17, NULL, NULL, NULL, NULL),
+(19, 1, 'debit', 3428571.43, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-24', '2026-02-25 13:54:09', 17, NULL, NULL, NULL, NULL),
+(20, 1, 'credit', 4991736.00, 68.68, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-24', '2026-02-25 13:54:09', 17, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -101,7 +107,7 @@ CREATE TABLE `jobs` (
   `job_date_end` date NOT NULL,
   `start_time` time NOT NULL,
   `end_time` time NOT NULL,
-  `category` enum('daily_worker','casual','coorporate') CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT 'daily_worker',
+  `category` enum('daily_worker','casual','corporate') CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT 'daily_worker',
   `fee` int(1) NOT NULL,
   `location` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `description` text CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
@@ -120,29 +126,30 @@ CREATE TABLE `jobs` (
 --
 
 INSERT INTO `jobs` (`id`, `hotel_id`, `position`, `job_date_start`, `job_date_end`, `start_time`, `end_time`, `category`, `fee`, `location`, `description`, `requirement_skill`, `status`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 1, 'Information Technology', '2025-09-05', '2026-09-04', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', 'Pengelolaan infrastruktur, pengembangan perangkat lunak, keamanan data dan dukungan teknis untuk memastikan operasional perusahaan berjalan lancar', 'Network configuration, Hardware deployment & Operating system knowledge', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(2, 1, 'HK Attandent', '2025-11-19', '2026-11-18', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', 'cleans, sanitizes, and organizes guest rooms and public areas to meet high hospitality standards', 'high physical stamina, exceptional attention to detail and strong time-management skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(3, 1, 'FB Manager', '2025-11-20', '2026-11-19', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', 'oversees all dining operations, including restaurants, bars, banquets, and room service, to ensure high-quality service, profitability, and compliance with health regulations', 'cost control, menu engineering, inventory management, and high-level customer service', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(4, 1, 'Executive Housekeeper', '2025-11-20', '2026-11-19', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', 'manages all housekeeping operations, staff, and budgets to maintain spotless guest rooms and public areas, ensuring high hygiene and comfort standards', 'strong leadership, organizational, and financial management skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(5, 1, 'Director of sales marketing', '2025-11-24', '2026-11-23', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', 'leads, develops, and implements strategic plans to drive revenue growth, enhance brand awareness, and increase market share', 'proficiency in CRM software, data analysis, revenue growth strategies, and excellent communication skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(6, 1, 'Graphics design', '2025-11-24', '2026-11-23', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', 'creates visual concepts using computer software or by hand to communicate ideas that inspire, inform, or captivate consumers', 'technical proficiency in software (Adobe Creative Suite, Figma) with core design principles like typography, color theory, and layout composition', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(7, 1, 'Senior Waiter', '2025-11-26', '2026-11-25', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', 'leads the service team to ensure exceptional dining experiences, acting as a mentor to junior staff and a point of escalation for guest concerns', 'advanced technical skills with strong leadership', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(8, 1, 'Supervisor Housekeeping', '2025-11-28', '2026-11-27', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(9, 1, 'AR/AP', '2025-12-02', '2026-12-01', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(10, 1, 'Chief Accounting', '2025-12-04', '2026-12-03', '00:00:00', '00:55:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(11, 1, 'Head Chef', '2025-12-04', '2026-12-03', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(12, 1, 'Front Office Manager', '2025-12-11', '2026-12-10', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(13, 1, 'Engineering', '2025-12-14', '2026-12-13', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(14, 1, 'Chief Engineering', '2025-12-23', '2026-12-22', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(15, 1, 'HR Manager', '2025-12-27', '2026-12-26', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(16, 1, 'Chef De Partie', '2025-12-28', '2026-12-27', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(17, 1, 'Sales Executive', '2026-01-05', '2027-01-04', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(18, 1, 'Senior Sales Marketing', '2026-01-07', '2027-01-06', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(19, 1, 'Cook', '2026-01-12', '2027-01-11', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(20, 1, 'Sales Manager', '2026-01-14', '2027-01-13', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(21, 1, 'FDA', '2026-02-06', '2027-02-05', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(22, 1, 'Business Development', '2025-12-09', '2026-06-08', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(23, 1, 'Security Guard', '2025-12-02', '2026-12-01', '09:00:00', '18:00:00', 'coorporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL);
+(1, 1, 'Information Technology', '2025-09-05', '2026-09-04', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', 'Pengelolaan infrastruktur, pengembangan perangkat lunak, keamanan data dan dukungan teknis untuk memastikan operasional perusahaan berjalan lancar', 'Network configuration, Hardware deployment & Operating system knowledge', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(2, 1, 'HK Attandent', '2025-11-19', '2026-11-18', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', 'cleans, sanitizes, and organizes guest rooms and public areas to meet high hospitality standards', 'high physical stamina, exceptional attention to detail and strong time-management skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(3, 1, 'FB Manager', '2025-11-20', '2026-11-19', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', 'oversees all dining operations, including restaurants, bars, banquets, and room service, to ensure high-quality service, profitability, and compliance with health regulations', 'cost control, menu engineering, inventory management, and high-level customer service', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(4, 1, 'Executive Housekeeper', '2025-11-20', '2026-11-19', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', 'manages all housekeeping operations, staff, and budgets to maintain spotless guest rooms and public areas, ensuring high hygiene and comfort standards', 'strong leadership, organizational, and financial management skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(5, 1, 'Director of sales marketing', '2025-11-24', '2026-11-23', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', 'leads, develops, and implements strategic plans to drive revenue growth, enhance brand awareness, and increase market share', 'proficiency in CRM software, data analysis, revenue growth strategies, and excellent communication skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(6, 1, 'Graphics design', '2025-11-24', '2026-11-23', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', 'creates visual concepts using computer software or by hand to communicate ideas that inspire, inform, or captivate consumers', 'technical proficiency in software (Adobe Creative Suite, Figma) with core design principles like typography, color theory, and layout composition', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(7, 1, 'Senior Waiter', '2025-11-26', '2026-11-25', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', 'leads the service team to ensure exceptional dining experiences, acting as a mentor to junior staff and a point of escalation for guest concerns', 'advanced technical skills with strong leadership', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(8, 1, 'Supervisor Housekeeping', '2025-11-28', '2026-11-27', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(9, 1, 'AR/AP', '2025-12-02', '2026-12-01', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(10, 1, 'Chief Accounting', '2025-12-04', '2026-12-03', '00:00:00', '00:55:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(11, 1, 'Head Chef', '2025-12-04', '2026-12-03', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(12, 1, 'Front Office Manager', '2025-12-11', '2026-12-10', '01:20:00', '01:29:00', 'corporate', 0, 'Bogor, West Java', '', NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-25 01:18:21', 17, NULL, NULL),
+(13, 1, 'Engineering', '2025-12-14', '2026-12-13', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(14, 1, 'Chief Engineering', '2025-12-23', '2026-12-22', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(15, 1, 'HR Manager', '2025-12-27', '2026-12-26', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(16, 1, 'Chef De Partie', '2025-12-28', '2026-12-27', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(17, 1, 'Sales Executive', '2026-01-05', '2027-01-04', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(18, 1, 'Senior Sales Marketing', '2026-01-07', '2027-01-06', '09:00:00', '16:55:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(19, 1, 'Cook', '2026-01-12', '2027-01-11', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(20, 1, 'Sales Manager', '2026-01-14', '2027-01-13', '09:00:00', '17:05:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(21, 1, 'FDA', '2026-02-06', '2027-02-05', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(22, 1, 'Business Development', '2025-12-09', '2026-06-08', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(23, 1, 'Security Guard', '2025-12-02', '2026-12-01', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(24, 1, 'General Manager', '2025-12-02', '2026-12-01', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -226,8 +233,289 @@ CREATE TABLE `job_attendances` (
 --
 
 INSERT INTO `job_attendances` (`id`, `job_id`, `application_id`, `user_id`, `transaction_id`, `type`, `latitude`, `longitude`, `photo_path`, `device_info`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 10, 10, 11, 6, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_10_11_1771869199.jpg', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0', '2026-02-23 00:53:19', 11, NULL, NULL, NULL, NULL),
-(2, 10, 10, 11, 6, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 01:08:33', NULL, NULL, NULL, NULL, NULL);
+(13, 1, 1, 2, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_1_2_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 2, NULL, NULL, NULL, NULL),
+(14, 1, 1, 2, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_1_2_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 2, NULL, NULL, NULL, NULL),
+(15, 1, 1, 2, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_1_2_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 2, NULL, NULL, NULL, NULL),
+(16, 1, 1, 2, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_1_2_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 2, NULL, NULL, NULL, NULL),
+(17, 2, 2, 3, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_2_3_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 3, NULL, NULL, NULL, NULL),
+(18, 2, 2, 3, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_2_3_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 3, NULL, NULL, NULL, NULL),
+(19, 2, 2, 3, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_2_3_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 3, NULL, NULL, NULL, NULL),
+(20, 2, 2, 3, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_2_3_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 3, NULL, NULL, NULL, NULL),
+(21, 3, 3, 4, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_3_4_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 4, NULL, NULL, NULL, NULL),
+(22, 3, 3, 4, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_3_4_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 4, NULL, NULL, NULL, NULL),
+(23, 3, 3, 4, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_3_4_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 4, NULL, NULL, NULL, NULL),
+(24, 3, 3, 4, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_3_4_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 4, NULL, NULL, NULL, NULL),
+(25, 4, 4, 5, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_4_5_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 5, NULL, NULL, NULL, NULL),
+(26, 4, 4, 5, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_4_5_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 5, NULL, NULL, NULL, NULL),
+(27, 4, 4, 5, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_4_5_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 5, NULL, NULL, NULL, NULL),
+(28, 4, 4, 5, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_4_5_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 5, NULL, NULL, NULL, NULL),
+(29, 5, 5, 6, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_5_6_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 6, NULL, NULL, NULL, NULL),
+(30, 5, 5, 6, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_5_6_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 6, NULL, NULL, NULL, NULL),
+(31, 5, 5, 6, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_5_6_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 6, NULL, NULL, NULL, NULL),
+(32, 5, 5, 6, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_5_6_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 6, NULL, NULL, NULL, NULL),
+(33, 6, 6, 7, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_7_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 7, NULL, NULL, NULL, NULL),
+(34, 6, 6, 7, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_7_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 7, NULL, NULL, NULL, NULL),
+(35, 6, 6, 7, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_7_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 7, NULL, NULL, NULL, NULL),
+(36, 6, 6, 7, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_7_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 7, NULL, NULL, NULL, NULL),
+(37, 7, 7, 8, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_7_8_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 8, NULL, NULL, NULL, NULL),
+(38, 7, 7, 8, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_7_8_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 8, NULL, NULL, NULL, NULL),
+(39, 7, 7, 8, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_7_8_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 8, NULL, NULL, NULL, NULL),
+(40, 7, 7, 8, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_7_8_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 8, NULL, NULL, NULL, NULL),
+(41, 8, 8, 9, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_8_9_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 9, NULL, NULL, NULL, NULL),
+(42, 8, 8, 9, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_8_9_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 9, NULL, NULL, NULL, NULL),
+(43, 8, 8, 9, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_8_9_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 9, NULL, NULL, NULL, NULL),
+(44, 8, 8, 9, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_8_9_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 9, NULL, NULL, NULL, NULL),
+(45, 9, 9, 10, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_9_10_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 10, NULL, NULL, NULL, NULL),
+(46, 9, 9, 10, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_9_10_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 10, NULL, NULL, NULL, NULL),
+(47, 9, 9, 10, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_9_10_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 10, NULL, NULL, NULL, NULL),
+(48, 9, 9, 10, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_9_10_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 10, NULL, NULL, NULL, NULL),
+(49, 10, 10, 11, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_10_11_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 00:00:00', 11, NULL, NULL, NULL, NULL),
+(50, 10, 10, 11, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_10_11_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 00:00:00', 11, NULL, NULL, NULL, NULL),
+(51, 10, 10, 11, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_10_11_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 00:00:00', 11, NULL, NULL, NULL, NULL),
+(52, 10, 10, 11, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_10_11_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 00:00:00', 11, NULL, NULL, NULL, NULL),
+(53, 11, 11, 12, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_11_12_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 12, NULL, NULL, NULL, NULL),
+(54, 11, 11, 12, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_11_12_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 12, NULL, NULL, NULL, NULL),
+(55, 11, 11, 12, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_11_12_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 12, NULL, NULL, NULL, NULL),
+(56, 11, 11, 12, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_11_12_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 12, NULL, NULL, NULL, NULL),
+(57, 12, 12, 13, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_12_13_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 13, NULL, NULL, NULL, NULL),
+(58, 12, 12, 13, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_12_13_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 13, NULL, NULL, NULL, NULL),
+(59, 12, 12, 13, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_12_13_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 13, NULL, NULL, NULL, NULL),
+(60, 12, 12, 13, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_12_13_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 13, NULL, NULL, NULL, NULL),
+(61, 13, 13, 14, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_14_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 14, NULL, NULL, NULL, NULL),
+(62, 13, 13, 14, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_14_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 14, NULL, NULL, NULL, NULL),
+(63, 13, 13, 14, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_14_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 14, NULL, NULL, NULL, NULL),
+(64, 13, 13, 14, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_14_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 14, NULL, NULL, NULL, NULL),
+(65, 13, 14, 15, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_15_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 15, NULL, NULL, NULL, NULL),
+(66, 13, 14, 15, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_15_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 15, NULL, NULL, NULL, NULL),
+(67, 13, 14, 15, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_15_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 15, NULL, NULL, NULL, NULL),
+(68, 13, 14, 15, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_15_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 15, NULL, NULL, NULL, NULL),
+(69, 14, 15, 16, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_14_16_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 16, NULL, NULL, NULL, NULL),
+(70, 14, 15, 16, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_14_16_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 16, NULL, NULL, NULL, NULL),
+(71, 14, 15, 16, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_14_16_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 16, NULL, NULL, NULL, NULL),
+(72, 14, 15, 16, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_14_16_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 16, NULL, NULL, NULL, NULL),
+(73, 16, 17, 18, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_16_18_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 18, NULL, NULL, NULL, NULL),
+(74, 16, 17, 18, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_16_18_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 18, NULL, NULL, NULL, NULL),
+(75, 16, 17, 18, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_16_18_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 18, NULL, NULL, NULL, NULL),
+(76, 16, 17, 18, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_16_18_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 18, NULL, NULL, NULL, NULL),
+(77, 17, 18, 19, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_17_19_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 19, NULL, NULL, NULL, NULL),
+(78, 17, 18, 19, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_17_19_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 19, NULL, NULL, NULL, NULL),
+(79, 17, 18, 19, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_17_19_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 19, NULL, NULL, NULL, NULL),
+(80, 17, 18, 19, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_17_19_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 19, NULL, NULL, NULL, NULL),
+(81, 18, 19, 20, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_18_20_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 20, NULL, NULL, NULL, NULL),
+(82, 18, 19, 20, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_18_20_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 20, NULL, NULL, NULL, NULL),
+(83, 18, 19, 20, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_18_20_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 20, NULL, NULL, NULL, NULL),
+(84, 18, 19, 20, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_18_20_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 20, NULL, NULL, NULL, NULL),
+(85, 19, 20, 21, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_19_21_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 21, NULL, NULL, NULL, NULL),
+(86, 19, 20, 21, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_19_21_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 21, NULL, NULL, NULL, NULL),
+(87, 19, 20, 21, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_19_21_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 21, NULL, NULL, NULL, NULL),
+(88, 19, 20, 21, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_19_21_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 21, NULL, NULL, NULL, NULL),
+(89, 20, 21, 22, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_20_22_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 22, NULL, NULL, NULL, NULL),
+(90, 20, 21, 22, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_20_22_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 22, NULL, NULL, NULL, NULL),
+(91, 20, 21, 22, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_20_22_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 22, NULL, NULL, NULL, NULL),
+(92, 20, 21, 22, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_20_22_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 22, NULL, NULL, NULL, NULL),
+(93, 21, 22, 23, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_21_23_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 23, NULL, NULL, NULL, NULL),
+(94, 21, 22, 23, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_21_23_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 23, NULL, NULL, NULL, NULL),
+(95, 21, 22, 23, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_21_23_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 23, NULL, NULL, NULL, NULL),
+(96, 21, 22, 23, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_21_23_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 23, NULL, NULL, NULL, NULL),
+(97, 22, 23, 24, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_22_24_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 24, NULL, NULL, NULL, NULL),
+(98, 22, 23, 24, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_22_24_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 24, NULL, NULL, NULL, NULL),
+(99, 22, 23, 24, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_22_24_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 24, NULL, NULL, NULL, NULL),
+(100, 22, 23, 24, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_22_24_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 24, NULL, NULL, NULL, NULL),
+(101, 6, 24, 25, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_25_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 25, NULL, NULL, NULL, NULL),
+(102, 6, 24, 25, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_25_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 25, NULL, NULL, NULL, NULL),
+(103, 6, 24, 25, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_25_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 25, NULL, NULL, NULL, NULL),
+(104, 6, 24, 25, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_25_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 25, NULL, NULL, NULL, NULL),
+(105, 23, 25, 26, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_26_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 26, NULL, NULL, NULL, NULL),
+(106, 23, 25, 26, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_26_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 26, NULL, NULL, NULL, NULL),
+(107, 23, 25, 26, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_26_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 26, NULL, NULL, NULL, NULL),
+(108, 23, 25, 26, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_26_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 26, NULL, NULL, NULL, NULL),
+(109, 23, 26, 27, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_27_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 27, NULL, NULL, NULL, NULL),
+(110, 23, 26, 27, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_27_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 27, NULL, NULL, NULL, NULL),
+(111, 23, 26, 27, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_27_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 27, NULL, NULL, NULL, NULL),
+(112, 23, 26, 27, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_27_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 27, NULL, NULL, NULL, NULL),
+(113, 23, 28, 28, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_28_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 28, NULL, NULL, NULL, NULL),
+(114, 23, 28, 28, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_28_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 28, NULL, NULL, NULL, NULL),
+(115, 23, 28, 28, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_28_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 28, NULL, NULL, NULL, NULL),
+(116, 23, 28, 28, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_28_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 28, NULL, NULL, NULL, NULL),
+(117, 23, 29, 29, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_29_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 29, NULL, NULL, NULL, NULL),
+(118, 23, 29, 29, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_29_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 29, NULL, NULL, NULL, NULL),
+(119, 23, 29, 29, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_29_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 29, NULL, NULL, NULL, NULL),
+(120, 23, 29, 29, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_29_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 29, NULL, NULL, NULL, NULL),
+(121, 23, 30, 30, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_30_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 30, NULL, NULL, NULL, NULL),
+(122, 23, 30, 30, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_30_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 30, NULL, NULL, NULL, NULL),
+(123, 23, 30, 30, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_30_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 30, NULL, NULL, NULL, NULL),
+(124, 23, 30, 30, 19, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_30_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 30, NULL, NULL, NULL, NULL),
+(140, 1, 1, 2, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(141, 1, 1, 2, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(142, 1, 1, 2, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(143, 2, 2, 3, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(144, 2, 2, 3, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(145, 2, 2, 3, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(146, 3, 3, 4, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(147, 3, 3, 4, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(148, 3, 3, 4, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(149, 4, 4, 5, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(150, 4, 4, 5, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(151, 4, 4, 5, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(152, 5, 5, 6, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(153, 5, 5, 6, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(154, 5, 5, 6, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(155, 6, 6, 7, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(156, 6, 6, 7, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(157, 6, 6, 7, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(158, 7, 7, 8, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(159, 7, 7, 8, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(160, 7, 7, 8, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(161, 8, 8, 9, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(162, 8, 8, 9, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(163, 8, 8, 9, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(164, 9, 9, 10, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(165, 9, 9, 10, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(166, 9, 9, 10, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(167, 10, 10, 11, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(168, 10, 10, 11, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(169, 10, 10, 11, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(170, 10, 10, 11, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(171, 11, 11, 12, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(172, 11, 11, 12, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(173, 11, 11, 12, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(174, 12, 12, 13, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(175, 12, 12, 13, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(176, 12, 12, 13, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(177, 13, 13, 14, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(178, 13, 13, 14, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(179, 13, 13, 14, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(180, 13, 14, 15, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(181, 13, 14, 15, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(182, 13, 14, 15, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(183, 14, 15, 16, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(184, 14, 15, 16, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(185, 14, 15, 16, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(186, 16, 17, 18, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(187, 16, 17, 18, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(188, 16, 17, 18, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(189, 17, 18, 19, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(190, 17, 18, 19, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(191, 17, 18, 19, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(192, 18, 19, 20, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(193, 18, 19, 20, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(194, 18, 19, 20, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(195, 18, 19, 20, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(196, 19, 20, 21, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(197, 19, 20, 21, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(198, 19, 20, 21, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(199, 20, 21, 22, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(200, 20, 21, 22, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(201, 20, 21, 22, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(202, 20, 21, 22, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(203, 21, 22, 23, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(204, 21, 22, 23, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(205, 21, 22, 23, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(206, 22, 23, 24, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(207, 22, 23, 24, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(208, 22, 23, 24, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(209, 6, 24, 25, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(210, 6, 24, 25, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(211, 6, 24, 25, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(212, 23, 25, 26, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(213, 23, 25, 26, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(214, 23, 25, 26, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(215, 23, 26, 27, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(216, 23, 26, 27, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(217, 23, 26, 27, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(218, 23, 28, 28, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(219, 23, 28, 28, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(220, 23, 28, 28, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(221, 23, 29, 29, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(222, 23, 29, 29, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(223, 23, 29, 29, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(224, 23, 30, 30, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(225, 23, 30, 30, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(226, 23, 30, 30, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
+(227, 1, 1, 2, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(228, 1, 1, 2, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(229, 1, 1, 2, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(230, 2, 2, 3, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(231, 2, 2, 3, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(232, 2, 2, 3, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(233, 3, 3, 4, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(234, 3, 3, 4, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(235, 3, 3, 4, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(236, 4, 4, 5, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(237, 4, 4, 5, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(238, 4, 4, 5, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(239, 5, 5, 6, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(240, 5, 5, 6, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(241, 5, 5, 6, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(242, 6, 6, 7, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(243, 6, 6, 7, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(244, 6, 6, 7, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(245, 7, 7, 8, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(246, 7, 7, 8, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(247, 7, 7, 8, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(248, 8, 8, 9, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(249, 8, 8, 9, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(250, 8, 8, 9, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(251, 9, 9, 10, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(252, 9, 9, 10, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(253, 9, 9, 10, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(254, 10, 10, 11, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 00:55:00', NULL, NULL, NULL, NULL, NULL),
+(255, 10, 10, 11, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 00:55:00', NULL, NULL, NULL, NULL, NULL),
+(256, 10, 10, 11, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 00:55:00', NULL, NULL, NULL, NULL, NULL),
+(257, 11, 11, 12, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(258, 11, 11, 12, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(259, 11, 11, 12, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(260, 12, 12, 13, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(261, 12, 12, 13, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(262, 12, 12, 13, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(263, 13, 13, 14, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(264, 13, 13, 14, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(265, 13, 13, 14, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(266, 13, 14, 15, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(267, 13, 14, 15, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(268, 13, 14, 15, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(269, 14, 15, 16, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(270, 14, 15, 16, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(271, 14, 15, 16, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(272, 16, 17, 18, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(273, 16, 17, 18, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(274, 16, 17, 18, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(275, 17, 18, 19, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(276, 17, 18, 19, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(277, 17, 18, 19, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(278, 18, 19, 20, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 16:55:00', NULL, NULL, NULL, NULL, NULL),
+(279, 18, 19, 20, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 16:55:00', NULL, NULL, NULL, NULL, NULL),
+(280, 18, 19, 20, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 16:55:00', NULL, NULL, NULL, NULL, NULL),
+(281, 19, 20, 21, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(282, 19, 20, 21, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(283, 19, 20, 21, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(284, 20, 21, 22, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 17:05:00', NULL, NULL, NULL, NULL, NULL),
+(285, 20, 21, 22, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 17:05:00', NULL, NULL, NULL, NULL, NULL),
+(286, 20, 21, 22, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 17:05:00', NULL, NULL, NULL, NULL, NULL),
+(287, 21, 22, 23, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(288, 21, 22, 23, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(289, 21, 22, 23, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(290, 22, 23, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(291, 22, 23, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(292, 22, 23, 24, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(293, 6, 24, 25, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(294, 6, 24, 25, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(295, 6, 24, 25, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(296, 23, 25, 26, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(297, 23, 25, 26, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(298, 23, 25, 26, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(299, 23, 26, 27, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(300, 23, 26, 27, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(301, 23, 26, 27, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(302, 23, 28, 28, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(303, 23, 28, 28, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(304, 23, 28, 28, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(305, 23, 29, 29, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(306, 23, 29, 29, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(307, 23, 29, 29, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(308, 23, 30, 30, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(309, 23, 30, 30, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(310, 23, 30, 30, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -315,14 +603,17 @@ CREATE TABLE `ratio_rules` (
 --
 
 INSERT INTO `ratio_rules` (`id`, `hotel_id`, `department_category`, `min_value`, `max_value`, `label`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
-(1, 1, NULL, 0.00, 6.00, 'NO DATA', 1, 1, '2026-02-24 03:40:13', NULL),
-(2, 1, NULL, 6.00, 10.00, 'GOOD', 1, 2, '2026-02-24 03:40:13', NULL),
-(3, 1, NULL, 10.00, 12.00, 'AVERAGE', 1, 3, '2026-02-24 03:40:13', NULL),
-(4, 1, NULL, 12.00, 15.00, 'BAD', 1, 4, '2026-02-24 03:40:13', NULL),
-(5, 1, NULL, 15.00, 999.00, 'NOT OPTIMAL MAN POWER', 1, 5, '2026-02-24 03:40:13', NULL),
+(1, 1, NULL, 0.00, 0.00, 'NO DATA', 1, 1, '2026-02-24 03:40:13', NULL),
+(2, 1, NULL, 0.00, 2.00, 'GOOD', 1, 2, '2026-02-24 03:40:13', NULL),
+(3, 1, NULL, 2.00, 4.00, 'AVERAGE', 1, 3, '2026-02-24 03:40:13', NULL),
+(4, 1, NULL, 4.00, 6.00, 'BAD', 1, 4, '2026-02-24 03:40:13', NULL),
+(5, 1, NULL, 6.00, 999.00, 'NOT OPTIMAL MAN POWER', 1, 5, '2026-02-24 03:40:13', NULL),
 (6, 1, 'Finance', 0.00, 7.00, 'BAD', 1, 1, '2026-02-24 03:40:13', NULL),
 (7, 1, 'Finance', 7.00, 14.00, 'AVERAGE', 1, 2, '2026-02-24 03:40:13', NULL),
-(8, 1, 'Finance', 14.00, 999.00, 'GOOD', 1, 3, '2026-02-24 03:40:13', NULL);
+(8, 1, 'Finance', 14.00, 999.00, 'GOOD', 1, 3, '2026-02-24 03:40:13', NULL),
+(9, 1, 'Sales & Marketing', 0.00, 7.00, 'BAD', 1, 1, '2026-02-24 03:40:13', NULL),
+(10, 1, 'Sales & Marketing', 7.00, 14.00, 'AVERAGE', 1, 2, '2026-02-24 03:40:13', NULL),
+(11, 1, 'Sales & Marketing', 14.00, 22.00, 'GOOD', 1, 3, '2026-02-24 03:40:13', NULL);
 
 -- --------------------------------------------------------
 
@@ -353,7 +644,16 @@ INSERT INTO `refresh_tokens` (`id`, `user_id`, `token`, `expires_at`, `created_a
 (8, 11, '0d57205df30973e9c37bed03a598c696c432af46b34ded46c5f34a96c820afb950e851e4676eaefeaf944082a4c099b08c403e8e9dc2427075cef48931254ea4', '2026-03-26 00:52:59', '2026-02-24 00:52:59'),
 (9, 11, 'e76aa746b577fdaee4bf813a5f9375acda7648bd26253525f2d413cbd0f1ae1aba022ab4512864342e69d61f84db7df41f582d9139bc152695abc6ae7fb8486f', '2026-03-26 00:54:52', '2026-02-24 00:54:52'),
 (10, 11, '91f9b31eebb24e259faed68b4f5b37d4df157d8f7935f3c33fab6732b7f72e9b7c68c5a26626e273923d2eed71918d017b5dc404c49983fe36bb042af2d35d62', '2026-03-26 00:55:35', '2026-02-24 00:55:35'),
-(11, 11, 'f68f8572eff06202f8791d6d29e5c3471dc658993af427a9a6af224ce299a46e2d9408da81c59362422a8fb94fe81c2d2d6335eee8c265c28508c8cf46540935', '2026-03-26 00:56:13', '2026-02-24 00:56:13');
+(11, 11, 'f68f8572eff06202f8791d6d29e5c3471dc658993af427a9a6af224ce299a46e2d9408da81c59362422a8fb94fe81c2d2d6335eee8c265c28508c8cf46540935', '2026-03-26 00:56:13', '2026-02-24 00:56:13'),
+(12, 13, '3bb2991042429294a9ba13c0f919160e26a65c2e205499268b1e8b5ea0305547cb5fb707720647657ab4d540259cdc1ee6856f0feca644a92ff2a2b0d057e77d', '2026-03-26 16:34:29', '2026-02-24 16:34:29'),
+(13, 13, 'f3e2543357973ada9d48784ec03e63ae67ab15c4c39f80dced523bb85d43b0809eecdaa016011c6d282045ae3374ba90285c3e562c7886267b5b942dcce4c7a6', '2026-03-26 16:38:31', '2026-02-24 16:38:31'),
+(14, 13, '7a2380306b30ac291e7b74c83d1f2bb1e97bc5c88b8582e9c5d464bb9052b6ead24a3417a857e88a6dbe59d133d41ca86e379873090eeee8fcd08128ef8ea28a', '2026-03-26 16:38:49', '2026-02-24 16:38:49'),
+(15, 1, 'a16a3209999241c80e81f4cf88e14c5105d717b30435ad4b8ee45e5f8be18c2d1dd0c2769feb3dc01ee814e6365f2396d29c3406878cd29730c8fc0bee12dde9', '2026-03-26 16:45:46', '2026-02-24 16:45:46'),
+(16, 1, 'cf4682bbe74aa3de0e3f025cc79840ed3eef4562b848c119133ffed3783c3107d8d3b5bcfdd66ab828299081cff385d7471b372456c24a5217c5d913079905b4', '2026-03-26 16:46:12', '2026-02-24 16:46:12'),
+(17, 20, '479ad369635e8cc1b08fc53f84781a2c517532cf7e6931758601e71886e1ca471af908f3196bc27c0270b1e804696bf4a56914fa998476cef84c3a9292e80a2a', '2026-03-26 16:50:17', '2026-02-24 16:50:17'),
+(18, 7, '13d211ca508c2c5b0c4b6127a183f8195ca31ca9fa20a430d2c2dfd764f2a76d8057d64b616ea223496c101c51a9ef6beecf5f95506d9ebc9dfe8d730783554a', '2026-03-26 16:57:05', '2026-02-24 16:57:05'),
+(19, 22, '67b455f3eaa1225ea8019215b86ac67e5089faeaa7d29d2580cf76cb3eb094ca220368b949f48bc5211c3d2afbe0110597a49aa1490657387218d9283492420b', '2026-03-26 16:58:37', '2026-02-24 16:58:37'),
+(20, 13, 'e79b8f787033c6ac2a05480cb612c8e53c2cd1699185ec4c60e9ac3e6ad6b9990b356705d8c454914c89b95136d7da1dcffb70c2e6c1d640524dde71985c63b8', '2026-03-27 01:17:23', '2026-02-25 01:17:23');
 
 -- --------------------------------------------------------
 
@@ -471,22 +771,22 @@ INSERT INTO `users` (`id`, `hotel_id`, `role`, `name`, `email`, `phone`, `passwo
 (4, 1, 'worker', 'Rahadian Perdana', 'rahadian.rivelino@gmail.com', '88802308136', '$2y$10$BtcSKJUO/fdWbm1Kb/Bb6.pPPjBWRLRksjHqDJW/tboXWJKjXVH4S', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-22 16:53:23', 1, NULL, NULL),
 (5, 1, 'worker', 'Renaldy Herlando', 'rey.herlando@gmail.com', '81255800626', '$2y$10$BtcSKJUO/fdWbm1Kb/Bb6.pPPjBWRLRksjHqDJW/tboXWJKjXVH4S', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-22 16:53:23', 1, NULL, NULL),
 (6, 1, 'worker', 'Tri Setiyawati', 'celineq683@gmail.com', '87880006558', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-22 23:21:54', 1, NULL, NULL),
-(7, 1, 'worker', 'Raafi Teguh Septianto', 'raafiteguh73@gmail.com', '895711102828', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-22 23:21:54', 1, NULL, NULL),
+(7, 1, 'worker', 'Raafi Teguh Septianto', 'raafiteguh73@gmail.com', '895711102828', '$2y$10$EJeLN55b5c4hPxbOZ08MvOlzqjW4P/KoDll8VSgGl4GlPp9mov/n6', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-24 16:57:04', 1, NULL, NULL),
 (8, 1, 'worker', 'Jan Pelupessy', 'janhawajasmine14@gmail.com', '81212790875', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
 (9, 1, 'worker', 'Adi Alfian Surahman', 'Adialfian83@gmail.com', '83811404011', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
 (10, 1, 'worker', 'Dini Wulandari', 'Dinilandari18@gmail.com', '8987795834', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
 (11, 1, 'worker', 'Didik Febriawan', 'didikj4dul@gmail.com', '81298096880', '$2y$10$Pl4rYXHK5ew1/NhfVag9H.51rS6x07me6wXifU2chgeX4.0lacX4q', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 00:42:06', 1, NULL, NULL),
 (12, 1, 'worker', 'Muji priyanto', 'mujipriyanto445@gmail.com', '82139111259', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
-(13, 1, 'worker', 'Syahwal Ramadhan', 'syahwal.86@gmail.com', '87711210850', '$2y$10$/rlE/a6DkvmUtfWg9qy.AuClJjqRDSDdQdKpriutmkkYJhCWa00CW', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 00:40:20', 1, NULL, NULL),
+(13, 1, 'worker', 'Syahwal Ramadhan', 'syahwal.86@gmail.com', '87711210850', '$2y$10$tPizxl3IxXA4FmK9XQ6sX.Dx8g8J3KxalgZzOQLcInIrrZX9curua', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 01:17:14', 1, NULL, NULL),
 (14, 1, 'worker', 'Ijang Sulaeman', 'ijangsulaeman3@gmail.com', '81317087778', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
 (15, 1, 'worker', 'Faisal Bahri', 'salbahri43@gmail.com', '85283872224', '$2y$10$l3UXm5Y3Nh/t04IlpsXU4OfxUh4OwsFuUouss7AVpxIo7wcfT3.wm', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 00:43:07', 1, NULL, NULL),
 (16, 1, 'worker', 'Eka panji asmoro', 'panjiasmoro1786@gmail.com', '82130884044', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
 (17, 1, 'hotel_hr', 'Yend Hendriyana', 'yend.hendriyana@gmail.com', '81519992334', '$2y$10$YOlHspewzNL1BEGcSsUTnOOOFQNuaE93.brwNQRCxM.cM/Ege0Loi', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 01:20:19', 1, NULL, NULL),
 (18, 1, 'worker', 'M Aji Maulana', 'muhamadajimaulana557@gmail.com', '89630707971', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
 (19, 1, 'worker', 'Syahla Rahayu Munandar', 'syahlarahayu98@gmail.com', '85811547147', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
-(20, 1, 'worker', 'Rima Lestari Sonneville', 'rima.sonneville.89@gmail.com', '88211521716', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(20, 1, 'worker', 'Rima Lestari Sonneville', 'rima.sonneville.89@gmail.com', '88211521716', '$2y$10$ySX1Lpn2NiSeTU0hQ.KbXe..D1pjorZXAADjem7nZ5vxaJm6Rl8Sm', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 16:50:03', 1, NULL, NULL),
 (21, 1, 'worker', 'Mohtar Bimantoro', 'sofiabimantoro1@gmail.com', '83165994287', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
-(22, 1, 'worker', 'Hani yuniarti', 'haniyuniarti1306@gmail.com', '85691659516', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(22, 1, 'worker', 'Hani yuniarti', 'haniyuniarti1306@gmail.com', '85691659516', '$2y$10$Pz5QVATwxPKyNUfUbT4FRu/wonNfLVQRrmhnFeb0Y7FFomVhgwnNS', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 16:58:35', 1, NULL, NULL),
 (23, 1, 'worker', 'Qhalia putri', 'halloqhalia@gmail.com', '85775264566', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
 (24, 1, 'worker', 'Faishal Tri Aditama', 'faishaltriaditama@gmail.com', '81295724744', '$2y$10$lC5t.48FjdMSqR/Q0P6LKuEkvyW0iklBc2ELXi0ncdK7VeiWEnAAu', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:47:14', 1, NULL, NULL),
 (25, 1, 'worker', 'Hilwa Salsabila Ahesa', 'ahesa.hilwa@gmail.com', '87897532333', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
@@ -494,7 +794,8 @@ INSERT INTO `users` (`id`, `hotel_id`, `role`, `name`, `email`, `phone`, `passwo
 (27, 1, 'worker', 'Firmansyah', 'firmansyahfirmansyah934@gmail.com', '85777166572', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
 (28, 1, 'worker', 'Jarkasih', 'jarkasihuntung4@gmail.com', '85775588443', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
 (29, 1, 'worker', 'Cecep dikdik Kurniawan ', 'cecepdikdikkurniawan@gmail.com', '85719251910', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
-(30, 1, 'worker', 'Dadan Mulyana', 'cipitung78@gmail.com', '85716638004', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL);
+(30, 1, 'worker', 'Dadan Mulyana', 'cipitung78@gmail.com', '85716638004', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
+(31, 1, 'worker', 'Prabu', 'prabunad@salamdjourney.com', '812', '$2y$10$e5fGDgW5bz9oTupY.ZgsN.KPwzNC6JKcFZE2uAq5kZ7ve./OSMVYi', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 16:43:44', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -564,7 +865,7 @@ INSERT INTO `worker_child` (`id`, `user_id`, `child`, `child_gender`, `child_bir
 CREATE TABLE `worker_contracts` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `contract_type` enum('daily_worker','casual','coorporate','internship') NOT NULL DEFAULT 'daily_worker',
+  `contract_type` enum('daily_worker','casual','corporate','internship') NOT NULL DEFAULT 'daily_worker',
   `contract_number` varchar(100) DEFAULT NULL,
   `start_date` date NOT NULL,
   `end_date` date DEFAULT NULL,
@@ -587,30 +888,30 @@ CREATE TABLE `worker_contracts` (
 --
 
 INSERT INTO `worker_contracts` (`id`, `user_id`, `contract_type`, `contract_number`, `start_date`, `end_date`, `is_active`, `salary_type`, `base_salary`, `overtime_rate`, `contract_file`, `notes`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 2, 'coorporate', NULL, '2024-09-05', '2025-09-04', 1, 'monthly', 5000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-21 08:16:44', NULL, NULL, NULL),
-(2, 3, 'coorporate', NULL, '2025-11-19', '2026-11-18', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-22 00:44:18', NULL, NULL, NULL),
-(3, 4, 'coorporate', NULL, '2025-11-20', '2026-11-19', 1, 'monthly', 5000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-22 00:44:18', NULL, NULL, NULL),
-(4, 5, 'coorporate', NULL, '2025-11-24', '2026-11-23', 1, 'monthly', 6000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-22 00:44:18', NULL, NULL, NULL),
-(5, 6, 'coorporate', NULL, '2025-11-24', '2026-11-23', 1, 'monthly', 6000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-22 00:44:18', NULL, NULL, NULL),
-(6, 7, 'coorporate', NULL, '2025-11-24', '2026-11-23', 1, 'monthly', 3000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-22 00:44:18', NULL, NULL, NULL),
-(7, 8, 'coorporate', NULL, '2025-11-26', '2026-11-25', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(8, 9, 'coorporate', NULL, '2025-11-28', '2026-11-27', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(9, 10, 'coorporate', NULL, '2025-12-02', '2026-12-01', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(10, 11, 'coorporate', NULL, '2025-12-04', '2026-12-03', 1, 'monthly', 5500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(11, 12, 'coorporate', NULL, '2025-12-04', '2026-12-03', 1, 'monthly', 8000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(12, 13, 'coorporate', NULL, '2025-12-11', '2026-12-10', 1, 'monthly', 4500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(13, 14, 'coorporate', NULL, '2025-12-14', '2026-12-13', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(14, 15, 'coorporate', NULL, '2025-12-15', '2026-12-14', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(15, 16, 'coorporate', NULL, '2025-12-23', '2026-12-22', 1, 'monthly', 4000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(16, 17, 'coorporate', NULL, '2025-12-27', '2027-12-26', 1, 'monthly', 5000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(17, 18, 'coorporate', NULL, '2025-12-28', '2026-12-27', 1, 'monthly', 4500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(18, 19, 'coorporate', NULL, '2026-01-05', '2027-01-04', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(19, 20, 'coorporate', NULL, '2026-01-07', '2027-01-06', 1, 'monthly', 4500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(20, 21, 'coorporate', NULL, '2026-01-12', '2027-01-11', 1, 'monthly', 3000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(21, 22, 'coorporate', NULL, '2026-01-14', '2027-01-13', 1, 'monthly', 4000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(22, 23, 'coorporate', NULL, '2026-02-06', '2027-02-05', 1, 'monthly', 3000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(23, 24, 'coorporate', NULL, '2025-12-09', '2026-12-08', 1, 'monthly', 2500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
-(24, 25, 'coorporate', NULL, '2026-01-12', '2027-01-11', 1, 'monthly', NULL, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL);
+(1, 2, 'corporate', NULL, '2024-09-05', '2025-09-04', 1, 'monthly', 5000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-21 08:16:44', NULL, NULL, NULL),
+(2, 3, 'corporate', NULL, '2025-11-19', '2026-11-18', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-22 00:44:18', NULL, NULL, NULL),
+(3, 4, 'corporate', NULL, '2025-11-20', '2026-11-19', 1, 'monthly', 5000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-22 00:44:18', NULL, NULL, NULL),
+(4, 5, 'corporate', NULL, '2025-11-24', '2026-11-23', 1, 'monthly', 6000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-22 00:44:18', NULL, NULL, NULL),
+(5, 6, 'corporate', NULL, '2025-11-24', '2026-11-23', 1, 'monthly', 6000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-22 00:44:18', NULL, NULL, NULL),
+(6, 7, 'corporate', NULL, '2025-11-24', '2026-11-23', 1, 'monthly', 3000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:44', 1, '2026-02-22 00:44:18', NULL, NULL, NULL),
+(7, 8, 'corporate', NULL, '2025-11-26', '2026-11-25', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(8, 9, 'corporate', NULL, '2025-11-28', '2026-11-27', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(9, 10, 'corporate', NULL, '2025-12-02', '2026-12-01', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(10, 11, 'corporate', NULL, '2025-12-04', '2026-12-03', 1, 'monthly', 5500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(11, 12, 'corporate', NULL, '2025-12-04', '2026-12-03', 1, 'monthly', 8000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(12, 13, 'corporate', NULL, '2025-12-11', '2026-12-10', 1, 'monthly', 4500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(13, 14, 'corporate', NULL, '2025-12-14', '2026-12-13', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(14, 15, 'corporate', NULL, '2025-12-15', '2026-12-14', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(15, 16, 'corporate', NULL, '2025-12-23', '2026-12-22', 1, 'monthly', 4000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(16, 17, 'corporate', NULL, '2025-12-27', '2027-12-26', 1, 'monthly', 5000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(17, 18, 'corporate', NULL, '2025-12-28', '2026-12-27', 1, 'monthly', 4500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(18, 19, 'corporate', NULL, '2026-01-05', '2027-01-04', 1, 'monthly', 3500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(19, 20, 'corporate', NULL, '2026-01-07', '2027-01-06', 1, 'monthly', 4500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(20, 21, 'corporate', NULL, '2026-01-12', '2027-01-11', 1, 'monthly', 3000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(21, 22, 'corporate', NULL, '2026-01-14', '2027-01-13', 1, 'monthly', 4000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(22, 23, 'corporate', NULL, '2026-02-06', '2027-02-05', 1, 'monthly', 3000000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(23, 24, 'corporate', NULL, '2025-12-09', '2026-12-08', 1, 'monthly', 2500000.00, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL),
+(24, 25, 'corporate', NULL, '2026-01-12', '2027-01-11', 1, 'monthly', NULL, 0.00, NULL, NULL, '2026-02-21 08:16:00', 1, '2026-02-22 00:44:00', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1438,13 +1739,13 @@ ALTER TABLE `hotels`
 -- AUTO_INCREMENT for table `hotel_transactions`
 --
 ALTER TABLE `hotel_transactions`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `job_applications`
@@ -1456,7 +1757,7 @@ ALTER TABLE `job_applications`
 -- AUTO_INCREMENT for table `job_attendances`
 --
 ALTER TABLE `job_attendances`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=354;
 
 --
 -- AUTO_INCREMENT for table `job_extend_attendances`
@@ -1480,13 +1781,13 @@ ALTER TABLE `ratings`
 -- AUTO_INCREMENT for table `ratio_rules`
 --
 ALTER TABLE `ratio_rules`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `refresh_tokens`
 --
 ALTER TABLE `refresh_tokens`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `skills`
@@ -1498,7 +1799,7 @@ ALTER TABLE `skills`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `worker_child`

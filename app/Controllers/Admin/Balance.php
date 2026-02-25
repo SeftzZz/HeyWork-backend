@@ -242,7 +242,7 @@ class Balance extends BaseAdminController
             ')
             ->join('jobs j', 'j.id = ja.job_id', 'inner')
             ->join('worker_contracts wc',
-                   'wc.user_id = ja.user_id AND wc.contract_type = "coorporate"',
+                   'wc.user_id = ja.user_id AND wc.contract_type = "corporate"',
                    'left')
             ->where('j.hotel_id', $hotelId)
             ->where('ja.created_at >=', $start)
@@ -260,7 +260,7 @@ class Balance extends BaseAdminController
                 $dw = (int)$row['total_applications'];
                 $cost = $dw * (float)$row['fee'];
 
-            } elseif ($row['job_category'] === 'coorporate') {
+            } elseif ($row['job_category'] === 'corporate') {
 
                 $dw = (int)$row['total_workers'];
                 $dailySalary = (float)$row['base_salary'] / $daysInMonth;
@@ -416,7 +416,7 @@ class Balance extends BaseAdminController
         // ======================
         // Filter Category
         // ======================
-        $allowedTypes = ['daily_worker', 'coorporate', 'all'];
+        $allowedTypes = ['daily_worker', 'corporate', 'all'];
         if (!in_array($type, $allowedTypes)) {
             $type = 'all';
         }
@@ -445,7 +445,7 @@ class Balance extends BaseAdminController
             ->join('jobs j', 'j.id = ja.job_id')
             ->join('skills s', 's.name = j.position', 'left')
             ->join('worker_contracts wc',
-                   'wc.user_id = ja.user_id AND wc.contract_type = "coorporate"',
+                   'wc.user_id = ja.user_id AND wc.contract_type = "corporate"',
                    'left')
             ->where('j.hotel_id', $hotelId)
             ->where('ja.created_at >=', $start)
@@ -470,7 +470,7 @@ class Balance extends BaseAdminController
                 $dw = (int)$row['total_applications'];
                 $cost = $dw * (float)$row['fee'];
 
-            } elseif ($row['job_category'] === 'coorporate') {
+            } elseif ($row['job_category'] === 'corporate') {
 
                 $dw = (int)$row['total_workers'];
                 $dailySalary = (float)$row['base_salary'] / $daysInMonth;
@@ -962,7 +962,7 @@ class Balance extends BaseAdminController
                 ')
                 ->join('jobs j', 'j.id = ja.job_id')
                 ->join('worker_contracts wc',
-                       'wc.user_id = ja.user_id AND wc.contract_type = "coorporate"',
+                       'wc.user_id = ja.user_id AND wc.contract_type = "corporate"',
                        'left')
                 ->where('j.hotel_id', $hotelId)
                 ->where('j.position', $skillName)
@@ -981,7 +981,7 @@ class Balance extends BaseAdminController
                     $dw = (int)$row['total_applications'];
                     $cost = $dw * (float)$row['fee'];
 
-                } elseif ($row['job_category'] === 'coorporate') {
+                } elseif ($row['job_category'] === 'corporate') {
 
                     $dw = (int)$row['total_workers'];
                     $dailySalary = (float)$row['base_salary'] / $daysInMonth;
@@ -1077,7 +1077,7 @@ class Balance extends BaseAdminController
                 ')
                 ->join('jobs j', 'j.id = ja.job_id')
                 ->join('worker_contracts wc',
-                       'wc.user_id = ja.user_id AND wc.contract_type = "coorporate"',
+                       'wc.user_id = ja.user_id AND wc.contract_type = "corporate"',
                        'left')
                 ->where('j.hotel_id', $hotelId)
                 ->where('j.position', $skillName)
@@ -1092,7 +1092,7 @@ class Balance extends BaseAdminController
                 ->groupBy('j.id')
                 ->get()
                 ->getResultArray();
-                
+
             $skillCost = 0;
 
             foreach ($rows as $row) {
@@ -1102,7 +1102,7 @@ class Balance extends BaseAdminController
                     $dw = (int)$row['total_applications'];
                     $cost = $dw * (float)$row['fee'];
 
-                } elseif ($row['job_category'] === 'coorporate') {
+                } elseif ($row['job_category'] === 'corporate') {
 
                     $dw = (int)$row['total_workers'];
                     $dailySalary = (float)$row['base_salary'] / $daysInMonth;
@@ -1122,7 +1122,7 @@ class Balance extends BaseAdminController
                 ? round(($skillCost / $todayRevenue) * 100, 2)
                 : 0;
 
-            $label = $this->getRatioLabel($ratio, $hotelId, $department);
+            $label = $this->getRatioLabel($ratio, $hotelId, '');
 
             $result[] = [
                 'skill_name' => $skillName,
@@ -1138,6 +1138,248 @@ class Balance extends BaseAdminController
             'date'   => $attendanceDate,
             'department' => $department,
             'data'   => $result
+        ]);
+    }
+
+    public function departmentDetail()
+    {
+        return view('admin/balance/department_detail', [
+            'title' => 'Hotel Balance Detail'
+        ]);
+    }
+
+    public function departmentDetailData()
+    {
+        $hotelId   = session()->get('hotel_id');
+        $department = $this->request->getGet('department');
+        $type       = $this->request->getGet('type') ?? 'all';
+
+        if (!$department) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Department required'
+            ]);
+        }
+
+        // =========================
+        // H-1
+        // =========================
+        $attendanceDate = date('Y-m-d', strtotime('-1 day'));
+        $todayStart = $attendanceDate . ' 00:00:00';
+        $todayEnd   = $attendanceDate . ' 23:59:59';
+
+        // =========================
+        // MTD RANGE (1 → H-1)
+        // =========================
+        $rangeStart = date('Y-m-01 00:00:00', strtotime($attendanceDate));
+        $rangeEnd   = $attendanceDate . ' 23:59:59';
+
+        $daysInMonth = date('t', strtotime($attendanceDate));
+
+        /*
+        |--------------------------------------------------------------------------
+        | TODAY COST (H-1)
+        |--------------------------------------------------------------------------
+        */
+
+        $todayRows = $this->db->table('job_attendances ja')
+            ->select('
+                u.id as user_id,
+                j.category as job_category,
+                j.fee,
+                wc.base_salary,
+                COUNT(DISTINCT DATE(ja.created_at)) as total_days
+            ')
+            ->join('users u', 'u.id = ja.user_id')
+            ->join('jobs j', 'j.id = ja.job_id')
+            ->join('skills s', 's.name = j.position', 'left')
+            ->join(
+                'worker_contracts wc',
+                'wc.user_id = ja.user_id AND wc.contract_type = "corporate"',
+                'left'
+            )
+            ->where('j.hotel_id', $hotelId)
+            ->where('s.category', $department)
+            ->where('ja.created_at >=', $todayStart)
+            ->where('ja.created_at <=', $todayEnd)
+            ->groupBy('u.id')
+            ->get()
+            ->getResultArray();
+
+        $todayCost = 0;
+
+        foreach ($todayRows as $row) {
+
+            $days = (int)$row['total_days'];
+
+            if ($row['job_category'] === 'daily_worker') {
+                $todayCost += $days * (float)$row['fee'];
+            }
+
+            if ($row['job_category'] === 'corporate') {
+                $dailySalary = (float)$row['base_salary'] / $daysInMonth;
+                $todayCost += $days * $dailySalary;
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | DETAIL DATA (PER HARI SAJA, BUKAN AKUMULASI)
+        |--------------------------------------------------------------------------
+        */
+
+        $rows = $this->db->table('job_attendances ja')
+            ->select('
+                u.id as user_id,
+                u.name,
+                j.position,
+                j.category as job_category,
+                j.fee,
+                wc.base_salary
+            ')
+            ->join('users u', 'u.id = ja.user_id')
+            ->join('jobs j', 'j.id = ja.job_id')
+            ->join('skills s', 's.name = j.position', 'left')
+            ->join(
+                'worker_contracts wc',
+                'wc.user_id = ja.user_id AND wc.contract_type = "corporate"',
+                'left'
+            )
+            ->where('j.hotel_id', $hotelId)
+            ->where('s.category', $department)
+            ->where('ja.created_at >=', $todayStart)
+            ->where('ja.created_at <=', $todayEnd)
+            ->groupBy('u.id')
+            ->get()
+            ->getResultArray();
+
+        $result = [];
+
+        foreach ($rows as $row) {
+
+            $cost = 0;
+            $salary = 0;
+
+            if ($row['job_category'] === 'daily_worker') {
+                $cost = (float)$row['fee'];
+                $salary = (float)$row['fee'];
+            }
+
+            if ($row['job_category'] === 'corporate') {
+                $dailySalary = (float)$row['base_salary'] / $daysInMonth;
+                $cost = $dailySalary;
+                $salary = (float)$row['base_salary'];
+            }
+
+            $result[] = [
+                'name'     => $row['name'],
+                'position' => $row['position'],
+                'cost'     => round($cost, 2),
+                'salary'   => round($salary, 2)
+            ];
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | MTD COST (AKUMULASI DARI 1 → H-1)
+        |--------------------------------------------------------------------------
+        */
+
+        $mtdRows = $this->db->table('job_attendances ja')
+            ->select('
+                j.category as job_category,
+                j.fee,
+                wc.base_salary,
+                COUNT(DISTINCT DATE(ja.created_at)) as total_days
+            ')
+            ->join('jobs j', 'j.id = ja.job_id')
+            ->join('skills s', 's.name = j.position', 'left')
+            ->join(
+                'worker_contracts wc',
+                'wc.user_id = ja.user_id AND wc.contract_type = "corporate"',
+                'left'
+            )
+            ->where('j.hotel_id', $hotelId)
+            ->where('s.category', $department)
+            ->where('ja.created_at >=', $rangeStart)
+            ->where('ja.created_at <=', $rangeEnd)
+            ->groupBy('ja.user_id')
+            ->get()
+            ->getResultArray();
+
+        $mtdCost = 0;
+
+        foreach ($mtdRows as $row) {
+
+            $days = (int)$row['total_days'];
+
+            if ($row['job_category'] === 'daily_worker') {
+                $mtdCost += $days * (float)$row['fee'];
+            }
+
+            if ($row['job_category'] === 'corporate') {
+                $dailySalary = (float)$row['base_salary'] / $daysInMonth;
+                $mtdCost += $days * $dailySalary;
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | REVENUE
+        |--------------------------------------------------------------------------
+        */
+
+        $todayRevenue = $this->db->table('hotel_transactions')
+            ->selectSum('amount')
+            ->where('hotel_id', $hotelId)
+            ->where('type', 'credit')
+            ->where('category', 'revenue')
+            ->where('date', $attendanceDate)
+            ->get()
+            ->getRow()
+            ->amount ?? 0;
+
+        $mtdRevenue = $this->db->table('hotel_transactions')
+            ->selectSum('amount')
+            ->where('hotel_id', $hotelId)
+            ->where('type', 'credit')
+            ->where('category', 'revenue')
+            ->where('date >=', date('Y-m-01', strtotime($attendanceDate)))
+            ->where('date <=', $attendanceDate)
+            ->get()
+            ->getRow()
+            ->amount ?? 0;
+
+        /*
+        |--------------------------------------------------------------------------
+        | RATIO
+        |--------------------------------------------------------------------------
+        */
+
+        $todayRatio = $todayRevenue > 0
+            ? round(($todayCost / $todayRevenue) * 100, 2)
+            : 0;
+
+        $mtdRatio = $mtdRevenue > 0
+            ? round(($mtdCost / $mtdRevenue) * 100, 2)
+            : 0;
+
+        $todayLabel = $this->getRatioLabel($todayRatio, $hotelId, '');
+        $mtdLabel   = $this->getRatioLabel($mtdRatio, $hotelId, '');
+
+        return $this->response->setJSON([
+            'status'        => true,
+            'department'    => $department,
+            'date'          => $attendanceDate,
+            'data'          => $result,
+            'total_cost'    => round($todayCost, 2),
+            'mtd_cost'      => round($mtdCost, 2),
+            'today_revenue' => (float)$todayRevenue,
+            'mtd_revenue'   => (float)$mtdRevenue,
+            'today_ratio'   => $todayRatio,
+            'mtd_ratio'     => $mtdRatio,
+            'today_label'   => $todayLabel,
+            'mtd_label'     => $mtdLabel
         ]);
     }
 }
