@@ -77,7 +77,7 @@
                                       </div>
                                       <div class="border rounded p-3 mt-4">
                                         <div class="row gap-4 gap-sm-0">
-                                          <div class="col-12 col-sm-4">
+                                          <div class="col-12 col-sm-3">
                                             <div class="d-flex gap-2 align-items-center">
                                               <h6 class="mb-0">Month To Date</h6>
                                             </div>
@@ -92,7 +92,7 @@
                                                 aria-valuemax="100"></div>
                                             </div>
                                           </div>
-                                          <div class="col-12 col-sm-4">
+                                          <div class="col-12 col-sm-3">
                                             <div class="d-flex gap-2 align-items-center">
                                               <h6 class="mb-0">Profit</h6>
                                             </div>
@@ -107,7 +107,7 @@
                                                 aria-valuemax="100"></div>
                                             </div>
                                           </div>
-                                          <div class="col-12 col-sm-4">
+                                          <div class="col-12 col-sm-3">
                                             <div class="d-flex gap-2 align-items-center">
                                               <h6 class="mb-0">Expense</h6>
                                             </div>
@@ -115,6 +115,21 @@
                                             <div class="progress w-75" style="height: 4px">
                                               <div
                                                 class="progress-bar bg-danger expense-progress"
+                                                role="progressbar"
+                                                style="width: 65%"
+                                                aria-valuenow="65"
+                                                aria-valuemin="0"
+                                                aria-valuemax="100"></div>
+                                            </div>
+                                          </div>
+                                          <div class="col-12 col-sm-3">
+                                            <div class="d-flex gap-2 align-items-center">
+                                              <h6 class="mb-0">End Balance</h6>
+                                            </div>
+                                            <h4 class="my-2 pt-1 end-balance-value">0</h4>
+                                            <div class="progress w-75" style="height: 4px">
+                                              <div
+                                                class="progress-bar bg-danger end-balance-progress"
                                                 role="progressbar"
                                                 style="width: 65%"
                                                 aria-valuenow="65"
@@ -226,6 +241,7 @@
                                           </div>
 
                                           <div class="col-lg-4 mb-4">
+                                            <div id="dailyWorkerskillRatioContainer" class="mb-4"></div>
                                             <div class="card mb-4">
                                               <div class="card-header d-flex justify-content-between">
                                                 <div class="card-title mb-0">
@@ -316,7 +332,6 @@
                                                 </ul>
                                               </div>
                                             </div>
-                                            <div id="dailyWorkerskillRatioContainer"></div>
                                           </div>
                                           <!--/ Last day attendances -->
                                         </div>
@@ -334,7 +349,7 @@
                                                       <th colspan="3">31-Jan-26</th>
                                                     </tr>
                                                     <tr>
-                                                      <th>DW</th>
+                                                      <th>CORPORATE</th>
                                                       <th>COST</th>
                                                       <th>Total</th>
                                                     </tr>
@@ -346,6 +361,7 @@
                                           </div>
 
                                           <div class="col-lg-4 mb-4">
+                                            <div id="coorporateskillRatioContainer" class="mb-4"></div>
                                             <div class="card mb-4">
                                               <div class="card-header d-flex justify-content-between">
                                                 <div class="card-title mb-0">
@@ -436,7 +452,6 @@
                                                 </ul>
                                               </div>
                                             </div>
-                                            <div id="coorporateskillRatioContainer"></div>
                                           </div>
                                           <!--/ Last day attendances -->
                                         </div>
@@ -466,6 +481,7 @@
                                           </div>
 
                                           <div class="col-lg-4 mb-4">
+                                            <div id="allskillRatioContainer" class="mb-4"></div>
                                             <div class="card mb-4">
                                               <div class="card-header d-flex justify-content-between">
                                                 <div class="card-title mb-0">
@@ -556,7 +572,6 @@
                                                 </ul>
                                               </div>
                                             </div>
-                                            <div id="allskillRatioContainer"></div>
                                           </div>
                                           <!--/ Last day attendances -->
                                         </div>
@@ -1202,7 +1217,7 @@
                                 // Total
                                 tbody.append(`
                                   <tr class="table-secondary fw-bold">
-                                    <td class="text-start">Total DW Cost</td>
+                                    <td class="text-start">Total Corporate Cost</td>
                                     <td></td>
                                     <td>${res.total_dw_cost.toLocaleString('id-ID')}</td>
                                   </tr>
