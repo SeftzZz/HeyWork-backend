@@ -17,7 +17,7 @@
                                 if ($hotelId == 0) {
                                     $hotelName    = 'Hey Work Corp';
                                     $hotelLoc     = 'Bogor, West Java';
-                                    $hotelWebsite = 'www.heywork.com';
+                                    $hotelWebsite = 'www.heywork.id';
                                     $hotelLogo    = 'images/heywork48.png';
                                 }
 
@@ -85,10 +85,12 @@
                                                 Balance: <strong>Rp.0</strong>
                                             </span> -->
 
-                                            <span class="amount-item active">
-                                                <i class="ti ti-cash ti-md me-1"></i>
-                                                Usage Amt: <strong id="usage-amount">Rp.0</strong>
-                                            </span>
+                                            <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr'])) : ?>
+                                                <span class="amount-item active">
+                                                    <i class="ti ti-cash ti-md me-1"></i>
+                                                    Usage Amt: <strong id="usage-amount">Rp.0</strong>
+                                                </span>
+                                            <?php endif; ?>
                                         </div>
                                     </li>
                                 <?php endif; ?>

@@ -24,7 +24,7 @@ class Hotels extends BaseAdminController
     public function index()
     {
         $data = [
-            'title'  => 'Hotels'
+            'title' => 'Hotels'
         ];
 
         return view('admin/hotels/index', $data);

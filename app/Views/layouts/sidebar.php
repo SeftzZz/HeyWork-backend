@@ -20,58 +20,74 @@
                                 <div data-i18n="Dashboards">Dashboards</div>
                             </a>
                         </li>
-                        <li class="menu-item <?= ($uri=='hotels')?'active':'' ?>">
-                            <a href="<?= base_url('admin/hotels') ?>" class="menu-link">
-                              <i class="menu-icon tf-icons ti ti-building"></i>
-                              <div data-i18n="Hotels">Hotels</div>
-                            </a>
-                        </li>
-                        <li class="menu-item <?= ($uri=='users')?'active':'' ?>">
-                            <a href="<?= base_url('admin/users') ?>" class="menu-link">
-                              <i class="menu-icon tf-icons ti ti-users"></i>
-                              <div data-i18n="Users">Users</div>
-                            </a>
-                        </li>
-                        <li class="menu-item <?= ($uri=='job-vacancies')?'active':'' ?>">
-                            <a href="<?= base_url('admin/job-vacancies') ?>" class="menu-link">
-                              <i class="menu-icon tf-icons ti ti-briefcase"></i>
-                              <div data-i18n="Job Vacancies">Job Vacancies</div>
-                            </a>
-                        </li>
+
+                        <?php if (in_array(session()->get('user_role'), ['admin', 'hotel_hr'])) : ?>
+                            <li class="menu-item <?= ($uri=='hotels')?'active':'' ?>">
+                                <a href="<?= base_url('admin/hotels') ?>" class="menu-link">
+                                  <i class="menu-icon tf-icons ti ti-building"></i>
+                                  <div data-i18n="Hotels">Hotels</div>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php if (in_array(session()->get('user_role'), ['admin', 'hotel_hr'])) : ?>
+                            <li class="menu-item <?= ($uri=='users')?'active':'' ?>">
+                                <a href="<?= base_url('admin/users') ?>" class="menu-link">
+                                  <i class="menu-icon tf-icons ti ti-users"></i>
+                                  <div data-i18n="Users">Users</div>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php if (in_array(session()->get('user_role'), ['admin', 'hotel_hr'])) : ?>
+                            <li class="menu-item <?= ($uri=='job-vacancies')?'active':'' ?>">
+                                <a href="<?= base_url('admin/job-vacancies') ?>" class="menu-link">
+                                  <i class="menu-icon tf-icons ti ti-briefcase"></i>
+                                  <div data-i18n="Job Vacancies">Job Vacancies</div>
+                                </a>
+                            </li>
+                        <?php endif; ?>
                         
                         <li class="menu-header small text-uppercase">
                           <span class="menu-header-text" data-i18n="Workers & Applications">Workers &amp; Applications</span>
                         </li>
-                        <li class="menu-item <?= ($uri=='application')?'active':'' ?>">
-                            <a href="<?= base_url('admin/application') ?>" class="menu-link">
-                              <i class="menu-icon tf-icons ti ti-inbox"></i>
-                              <div data-i18n="Applications">Applications</div>
-                            </a>
-                        </li>
-                        <li class="menu-item <?= ($uri=='attendance')?'active':'' ?>">
-                            <a href="<?= base_url('admin/attendance') ?>" class="menu-link">
-                              <i class="menu-icon tf-icons ti ti-list"></i>
-                              <div data-i18n="Attendances">Attendances</div>
-                            </a>
-                        </li>
+                        <?php if (in_array(session()->get('user_role'), ['admin', 'hotel_hr'])) : ?>
+                            <li class="menu-item <?= ($uri=='application')?'active':'' ?>">
+                                <a href="<?= base_url('admin/application') ?>" class="menu-link">
+                                  <i class="menu-icon tf-icons ti ti-inbox"></i>
+                                  <div data-i18n="Applications">Applications</div>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production'])) : ?>
+                            <li class="menu-item <?= ($uri=='attendance')?'active':'' ?>">
+                                <a href="<?= base_url('admin/attendance') ?>" class="menu-link">
+                                  <i class="menu-icon tf-icons ti ti-list"></i>
+                                  <div data-i18n="Attendances">Attendances</div>
+                                </a>
+                            </li>
+                        <?php endif; ?>
                         
-                        <li class="menu-header small text-uppercase">
-                          <span class="menu-header-text">Finance</span>
-                        </li>
+                        <?php if (in_array(session()->get('user_role'), ['admin', 'hotel_hr'])) : ?>
+                            <li class="menu-header small text-uppercase">
+                              <span class="menu-header-text">Finance</span>
+                            </li>
 
-                        <li class="menu-item <?= ($uri=='balance')?'active':'' ?>">
-                            <a href="<?= base_url('admin/balance') ?>" class="menu-link">
-                              <i class="menu-icon tf-icons ti ti-wallet"></i>
-                              <div>Productivity Ratio</div>
-                            </a>
-                        </li>
+                            <li class="menu-item <?= ($uri=='balance')?'active':'' ?>">
+                                <a href="<?= base_url('admin/balance') ?>" class="menu-link">
+                                  <i class="menu-icon tf-icons ti ti-wallet"></i>
+                                  <div>Productivity Ratio</div>
+                                </a>
+                            </li>
 
-                        <li class="menu-item <?= ($uri=='transactions')?'active':'' ?>">
-                            <a href="<?= base_url('admin/transactions') ?>" class="menu-link">
-                              <i class="menu-icon tf-icons ti ti-history"></i>
-                              <div data-i18n="Transactions">Transactions</div>
-                            </a>
-                        </li>
+                            <li class="menu-item <?= ($uri=='transactions')?'active':'' ?>">
+                                <a href="<?= base_url('admin/transactions') ?>" class="menu-link">
+                                  <i class="menu-icon tf-icons ti ti-history"></i>
+                                  <div data-i18n="Transactions">Transactions</div>
+                                </a>
+                            </li>
+                        <?php endif; ?>
 
                         <li class="menu-item">
                             <a href="<?= base_url('logout') ?>" class="menu-link">
