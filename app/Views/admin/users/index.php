@@ -482,6 +482,7 @@
 							    }
 
 							    const allowedRolesHR = [
+							        'worker',
 							        'hotel_hr',
 							        'hotel_fo',
 							        'hotel_hk',
@@ -546,6 +547,24 @@
 							        initHotelSelect2('#edit_hotel_user', $(this));
 							        filterRoleOptions('#edit_role_user');
 							    });
+
+							    // RESET FORM EDIT USER jika di tutup
+							    $('#modalEditUser').on('hidden.bs.modal', function () {
+								    const $form = $('#formEditUser');
+
+								    // reset form native
+								    $form[0].reset();
+
+								    // clear select2 hotel
+								    $('#edit_hotel_user').val(null).trigger('change');
+
+								    // clear preview foto
+								    $('#preview_foto').attr('src', '').hide();
+
+								    // hapus validation error jika ada
+								    $form.find('.is-invalid').removeClass('is-invalid');
+								    $form.find('.invalid-feedback').remove();
+								});
 
 							    // Auto Set Hotel Add User
 							    function lockAddHotel() {
