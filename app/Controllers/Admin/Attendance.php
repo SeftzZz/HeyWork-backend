@@ -31,6 +31,20 @@ class Attendance extends BaseAdminController
     // =========================================
     public function datatable()
     {
+        $sessionRole  = session()->get('user_role');
+        $sessionHotel = session()->get('hotel_id');
+
+        $roleCategoryMap = [
+            'hotel_fnb_service' => 'Food & Beverage Service',
+            // kalau nanti ada:
+            // 'hotel_fnb_production' => 'Food & Beverage Production',
+        ];
+
+        // HR boleh lihat semua → jangan kasih filter
+        $isHR = ($sessionRole === 'hotel_hr');
+
+        $categoryFilter = $roleCategoryMap[$sessionRole] ?? null;
+
         $request = service('request');
 
         $search = $request->getPost('search')['value'] ?? null;
@@ -85,18 +99,22 @@ class Attendance extends BaseAdminController
                 job_attendances.user_id,
                 job_attendances.job_id
             ")
-            ->join(
-                'users',
-                'users.id = job_attendances.user_id
-                 AND users.deleted_at IS NULL
-                 AND users.is_active = "active"',
-                'left'
-            )
+            ->join('users', 'users.id = job_attendances.user_id
+                AND users.deleted_at IS NULL
+                AND users.is_active = "active"', 'left')
             ->join('jobs', 'jobs.id = job_attendances.job_id', 'left')
             ->join('hotels', 'hotels.id = jobs.hotel_id', 'left')
-            ->where('jobs.hotel_id', session()->get('hotel_id'))
-            ->where('(job_attendances.deleted_at IS NULL OR job_attendances.deleted_at = "0000-00-00 00:00:00")', null, false)
-            ->groupBy('job_attendances.user_id, job_attendances.job_id, DATE(job_attendances.created_at)');
+            ->join('skills', 'skills.name = jobs.position', 'left')
+            ->where('jobs.hotel_id', $sessionHotel)
+            ->where('(job_attendances.deleted_at IS NULL OR job_attendances.deleted_at = "0000-00-00 00:00:00")', null, false);
+
+        // selalu filter hotel
+        $baseBuilder->where('jobs.hotel_id', $sessionHotel);
+
+        // 🔥 hanya FNB yang difilter category
+        if ($sessionRole === 'hotel_fnb_service') {
+            $baseBuilder->where('skills.category', 'Food & Beverage Service');
+        }
 
         if ($search) {
             $baseBuilder->groupStart()
