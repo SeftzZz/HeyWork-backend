@@ -30,6 +30,7 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('hotels/get', 'Admin\Hotels::getById', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('hotels/update', 'Admin\Hotels::update', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('hotels/delete', 'Admin\Hotels::delete', ['filter' => 'role:admin']);
+    $routes->post('hotels/get-total', 'Admin\Hotels::getTotalHotels');
 
     $routes->get('attendance', 'Admin\Attendance::index', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk']);
     $routes->post('attendance/datatable', 'Admin\Attendance::datatable', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk']);
@@ -43,12 +44,14 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('users/get', 'Admin\Users::getById', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('users/update', 'Admin\Users::update', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('users/delete', 'Admin\Users::delete', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('users/get-partner', 'Admin\Users::getPartner', ['filter' => 'role:admin,hotel_hr']);
 
     $routes->get('application', 'Admin\Application::index', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('application/datatable', 'Admin\Application::datatable', ['filter' => 'role:admin,hotel_hr']);
     $routes->get('application/worker/(:num)', 'Admin\Application::workerDetail/$1', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('application/update-status', 'Admin\Application::updateStatus', ['filter' => 'role:admin,hotel_hr']);
-
+    $routes->post('application/get-total-completed', 'Admin\Application::getTotalCompletedJobs');
+    
     $routes->get('job-vacancies', 'Admin\JobVacancies::index', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('job-vacancies/datatable', 'Admin\JobVacancies::datatable', ['filter' => 'role:admin,hotel_hr']);
     $routes->post('job-vacancies/store', 'Admin\JobVacancies::store', ['filter' => 'role:admin,hotel_hr']);
@@ -56,6 +59,7 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('job-vacancies/update', 'Admin\JobVacancies::update', ['filter' => 'role:admin,hotel_hr']);
     $routes->get('job-vacancies/skills', 'Admin\JobVacancies::skills', ['filter' => 'role:admin,hotel_hr']);
     $routes->get('job-vacancies/coorporate', 'Admin\JobVacancies::getCoorporateJobs', ['filter' => 'role:admin,hotel_hr']);
+    $routes->post('job-vacancies/get-total-postings', 'Admin\JobVacancies::getTotalJobPostings');
 
     $routes->get('balance', 'Admin\Balance::index', ['filter' => 'role:admin,hotel_hr']);
     $routes->get('balance/get', 'Admin\Balance::getBalance', ['filter' => 'role:admin,hotel_hr']);

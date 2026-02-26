@@ -359,4 +359,24 @@ class JobVacancies extends BaseAdminController
         return $this->response->setJSON($jobs);
     }
 
+    public function getTotalJobPostings()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(404);
+        }
+
+        $db = \Config\Database::connect();
+
+        $total = $db->table('jobs')
+            ->where('hotel_id', session()->get('hotel_id'))
+            ->whereIn('category', ['daily_worker', 'casual'])
+            ->where('status', 'open') // ✅ tambah ini
+            ->where('deleted_at IS NULL')
+            ->countAllResults();
+
+        return $this->response->setJSON([
+            'status' => true,
+            'total'  => $total
+        ]);
+    }
 }

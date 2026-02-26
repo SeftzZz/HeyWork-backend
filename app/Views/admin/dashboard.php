@@ -15,6 +15,67 @@
                             </style>
 
                             <div class="container-xxl flex-grow-1 container-p-y">
+                              <div class="row">
+                                <!-- Generated Leads -->
+                                <div class="col-xl-3 mb-4 col-md-6">
+                                  <div class="card">
+                                    <div class="card-body">
+                                      <div class="d-flex justify-content-between">
+                                        <div class="d-flex flex-column">
+                                          <div class="card-title mb-auto">
+                                            <h5 class="mb-1 text-nowrap">Partners</h5>
+                                          </div>
+                                          <div class="chart-statistics">
+                                            <h3 class="card-title mb-1" id="partnerTotal">0</h3>
+                                          </div>
+                                        </div>
+                                        <div id="generatedLeadsChart"></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!--/ Generated Leads -->
+
+                                <!-- Sessions Last month -->
+                                <div class="col-xl-3 col-md-4 col-6 mb-4">
+                                  <div class="card">
+                                    <div class="card-body">
+                                      <div class="badge p-2 bg-label-primary mb-2 rounded">
+                                        <i class="ti ti-building ti-md"></i>
+                                      </div>
+                                      <h5 class="card-title mb-1 pt-2">Corporate/Hotels</h5>
+                                      <h4 class="card-title mt-1" id="hotelTotal">0</h4>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <!-- Total Profit -->
+                                <div class="col-xl-3 col-md-4 col-6 mb-4">
+                                  <div class="card">
+                                    <div class="card-body">
+                                      <div class="badge p-2 bg-label-info mb-2 rounded">
+                                        <i class="ti ti-briefcase ti-md"></i>
+                                      </div>
+                                      <h5 class="card-title mb-1 pt-2">Job Postings</h5>
+                                      <h4 class="card-title mt-1" id="jobPostingTotal">0</h4>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <!-- Total Sales -->
+                                <div class="col-xl-3 col-md-4 col-6 mb-4">
+                                  <div class="card">
+                                    <div class="card-body">
+                                      <div class="badge p-2 bg-label-success mb-2 rounded">
+                                        <i class="ti ti-list-check ti-md"></i>
+                                      </div>
+                                      <h5 class="card-title mb-1 pt-2">Completed Jobs</h5>
+                                      <h4 class="card-title mt-1" id="completedJobsTotal">0</h4>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
                               <div class="card app-calendar-wrapper">
                                 <div class="row g-0">
                                   <!-- Calendar Sidebar -->
@@ -279,6 +340,7 @@
                         <script src="<?= base_url('assets/vendor/libs/@form-validation/bootstrap5.js') ?>"></script>
                         <script src="<?= base_url('assets/vendor/libs/@form-validation/auto-focus.js') ?>"></script>
                         <script src="<?= base_url('assets/vendor/libs/toastr/toastr.js') ?>"></script>
+                        <script src="<?= base_url('assets/vendor/libs/apex-charts/apexcharts.js') ?>"></script>
 
                         <!-- Main JS (HANYA SEKALI, PASTIKAN TIDAK DOUBLE DI LAYOUT) -->
                         <!-- <script src="<?= base_url('assets/js/main.js') ?>"></script> -->
@@ -399,7 +461,6 @@
                            * ============================
                            */
                           document.addEventListener('DOMContentLoaded', function () {
-
                             // tunggu sampai calendar benar-benar ada
                             const waitCalendar = setInterval(() => {
                               if (!window.calendar) return;
@@ -530,6 +591,230 @@
                                 offcanvas.show();
                               });
                             }, 100);
+                          });
+                        </script>
+
+                        <script>
+                          let cardColor, labelColor, headingColor, borderColor, legendColor;
+
+                          if (isDarkStyle) {
+                            cardColor = config.colors_dark.cardColor;
+                            labelColor = config.colors_dark.textMuted;
+                            legendColor = config.colors_dark.bodyColor;
+                            headingColor = config.colors_dark.headingColor;
+                            borderColor = config.colors_dark.borderColor;
+                          } else {
+                            cardColor = config.colors.cardColor;
+                            labelColor = config.colors.textMuted;
+                            legendColor = config.colors.bodyColor;
+                            headingColor = config.colors.headingColor;
+                            borderColor = config.colors.borderColor;
+                          }
+
+                          // Donut Chart Colors
+                          const chartColors = {
+                            donut: {
+                              series1: config.colors.success,
+                              series2: '#28c76fb3',
+                              series3: '#28c76f80',
+                              series4: config.colors_label.success
+                            }
+                          };
+
+                          // ===============================================
+                          // CHART CONFIG
+                          // ===============================================
+
+                          const generatedLeadsChartEl = document.querySelector('#generatedLeadsChart');
+
+                          const generatedLeadsChartConfig = {
+                            chart: {
+                              height: 147,
+                              width: 130,
+                              parentHeightOffset: 0,
+                              type: 'donut'
+                            },
+                            labels: ['Female', 'Male'],
+                            series: [0, 0], // default kosong
+                            colors: [
+                              config.colors.success,
+                              '#28c76fb3'
+                            ],
+                            stroke: {
+                              width: 0
+                            },
+                            dataLabels: {
+                              enabled: false
+                            },
+                            legend: {
+                              show: false
+                            },
+                            plotOptions: {
+                              pie: {
+                                donut: {
+                                  size: '70%',
+                                  labels: {
+                                    show: true,
+                                    value: {
+                                      fontSize: '1.375rem',
+                                      fontFamily: 'Public Sans',
+                                      color: headingColor,
+                                      fontWeight: 500,
+                                      offsetY: -15
+                                    },
+                                    name: {
+                                      offsetY: 20
+                                    },
+                                    total: {
+                                      show: true,
+                                      showAlways: true,
+                                      label: 'Total',
+                                      formatter: function (w) {
+                                        return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          };
+
+                          // ===============================================
+                          // INIT CHART
+                          // ===============================================
+
+                          let generatedLeadsChart = null;
+
+                          if (generatedLeadsChartEl) {
+                            generatedLeadsChart = new ApexCharts(
+                              generatedLeadsChartEl,
+                              generatedLeadsChartConfig
+                            );
+                            generatedLeadsChart.render();
+                          }
+
+                          // ===============================================
+                          // LOAD PARTNERS (AJAX)
+                          // ===============================================
+
+                          function loadPartners() {
+                            $.ajax({
+                              url: `<?= base_url('admin/users/get-partner') ?>`,
+                              type: 'POST',
+                              dataType: 'json',
+                              success: function (res) {
+
+                                if (!res.status) return;
+
+                                let femaleCount = 0;
+                                let maleCount = 0;
+
+                                res.data.forEach(function (item) {
+
+                                  const gender = item.gender
+                                    ? item.gender.toLowerCase().trim()
+                                    : '';
+
+                                  if (gender === 'female') {
+                                    femaleCount++;
+                                  } else if (gender === 'male') {
+                                    maleCount++;
+                                  }
+
+                                });
+
+                                const total = femaleCount + maleCount;
+
+                                // Update angka besar
+                                $('#partnerTotal').text(total);
+
+                                // Update chart
+                                if (generatedLeadsChart) {
+                                  generatedLeadsChart.updateSeries([femaleCount, maleCount]);
+                                }
+
+                                // Optional: hide chart kalau kosong
+                                if (total === 0) {
+                                  $('#generatedLeadsChart').hide();
+                                } else {
+                                  $('#generatedLeadsChart').show();
+                                }
+
+                              }
+                            });
+                          }
+
+                          function loadTotalHotels() {
+                              $.ajax({
+                                  url: `<?= base_url('admin/hotels/get-total') ?>`,
+                                  type: 'POST',
+                                  dataType: 'json',
+                                  success: function (res) {
+
+                                      if (!res.status) return;
+
+                                      let total = res.total;
+
+                                      // Format angka jika > 1000
+                                      if (total >= 1000) {
+                                          total = (total / 1000).toFixed(2) + 'k';
+                                      }
+
+                                      $('#hotelTotal').text(total);
+                                  }
+                              });
+                          }
+
+                          function loadTotalJobPostings() {
+                              $.ajax({
+                                  url: `<?= base_url('admin/job-vacancies/get-total-postings') ?>`,
+                                  type: 'POST',
+                                  dataType: 'json',
+                                  success: function (res) {
+
+                                      if (!res.status) return;
+
+                                      let total = res.total;
+
+                                      // Format ke K kalau ribuan
+                                      if (total >= 1000) {
+                                          total = (total / 1000).toFixed(2) + 'k';
+                                      }
+
+                                      $('#jobPostingTotal').text(total);
+                                  }
+                              });
+                          }
+
+                          function loadTotalCompletedJobs() {
+                              $.ajax({
+                                  url: `<?= base_url('admin/application/get-total-completed') ?>`,
+                                  type: 'POST',
+                                  dataType: 'json',
+                                  success: function (res) {
+
+                                      if (!res.status) return;
+
+                                      let total = res.total;
+
+                                      if (total >= 1000) {
+                                          total = (total / 1000).toFixed(2) + 'k';
+                                      }
+
+                                      $('#completedJobsTotal').text(total);
+                                  }
+                              });
+                          }
+
+                          // ===============================================
+                          // CALL FUNCTION
+                          // ===============================================
+
+                          $(document).ready(function () {
+                            loadPartners();
+                            loadTotalHotels();
+                            loadTotalJobPostings();
+                            loadTotalCompletedJobs();
                           });
                         </script>
 

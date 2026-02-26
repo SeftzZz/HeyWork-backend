@@ -372,4 +372,26 @@ class Application extends BaseAdminController
             'new_status'     => $status
         ]);
     }
+
+    public function getTotalCompletedJobs()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(404);
+        }
+
+        $db = \Config\Database::connect();
+
+        $total = $db->table('job_applications ja')
+            ->join('jobs j', 'j.id = ja.job_id')
+            ->where('j.hotel_id', session()->get('hotel_id'))
+            ->where('ja.status', 'completed')
+            ->whereIn('j.category', ['daily_worker', 'casual'])
+            ->where('j.deleted_at', null)
+            ->countAllResults();
+
+        return $this->response->setJSON([
+            'status' => true,
+            'total'  => $total
+        ]);
+    }
 }
