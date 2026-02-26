@@ -157,7 +157,6 @@ class Hotels extends BaseAdminController
         ]);
     }
 
-
     public function store()
     {
         if (! $this->request->isAJAX()) {
@@ -189,7 +188,6 @@ class Hotels extends BaseAdminController
             'message' => 'Hotel successfully added'
         ]);
     }
-
 
     public function getById()
     {
@@ -280,8 +278,6 @@ class Hotels extends BaseAdminController
         ]);
     }
 
-
-
     public function delete()
     {
         if (!$this->request->isAJAX()) {
@@ -315,6 +311,30 @@ class Hotels extends BaseAdminController
         return $this->response->setJSON([
             'status'  => false,
             'message' => 'Failed to delete data'
+        ]);
+    }
+
+    public function getTotalHotels()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(404);
+        }
+
+        $userRole = session()->get('user_role');
+        $hotelId  = session()->get('hotel_id');
+
+        $builder = $this->hotelModel
+            ->where('deleted_at', null);
+
+        if ($userRole === 'hotel_hr') {
+            $builder->where('id', $hotelId);
+        }
+
+        $total = $builder->countAllResults();
+
+        return $this->response->setJSON([
+            'status' => true,
+            'total'  => $total
         ]);
     }
 }

@@ -455,4 +455,31 @@ class Users extends BaseAdminController
             'message' => 'Failed to delete data'
         ]);
     }
+
+    public function getPartner()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(404);
+        }
+
+        $hotelId = session()->get('hotel_id');
+
+        $partners = $this->userModel
+            ->select('users.id, users.name, users.gender')
+            ->join('job_applications ja', 'ja.user_id = users.id')
+            ->join('jobs j', 'j.id = ja.job_id')
+            ->whereIn('j.category', ['daily_worker', 'casual'])
+            ->where('j.hotel_id', $hotelId)
+            ->where('users.role', 'worker')
+            ->where('users.deleted_at', null)
+            ->where('users.is_active', 'active')
+            ->groupBy('users.id')
+            ->orderBy('users.name', 'ASC')
+            ->findAll();
+
+        return $this->response->setJSON([
+            'status' => true,
+            'data'   => $partners
+        ]);
+    }
 }

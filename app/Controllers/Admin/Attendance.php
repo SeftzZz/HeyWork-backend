@@ -31,20 +31,6 @@ class Attendance extends BaseAdminController
     // =========================================
     public function datatable()
     {
-        $sessionRole  = session()->get('user_role');
-        $sessionHotel = session()->get('hotel_id');
-
-        $roleCategoryMap = [
-            'hotel_fnb_service' => 'Food & Beverage Service',
-            // kalau nanti ada:
-            // 'hotel_fnb_production' => 'Food & Beverage Production',
-        ];
-
-        // HR boleh lihat semua → jangan kasih filter
-        $isHR = ($sessionRole === 'hotel_hr');
-
-        $categoryFilter = $roleCategoryMap[$sessionRole] ?? null;
-
         $request = service('request');
 
         $search = $request->getPost('search')['value'] ?? null;
@@ -66,9 +52,22 @@ class Attendance extends BaseAdminController
 
         $db = \Config\Database::connect();
 
+        $userRole = session()->get('user_role');
+        $userId   = session()->get('user_id');
+
+        $roleCategoryMap = [
+            'hotel_fo'              => 'Front Office',
+            'hotel_hk'              => 'Housekeeping',
+            'hotel_fnb_service'     => 'Food & Beverage Service',
+            'hotel_fnb_production'  => 'Kitchen / Culinary',
+            'hotel_hr'              => 'Human Resources'
+        ];
+
         $baseBuilder = $db->table('job_attendances')
             ->select("
                 DATE(job_attendances.created_at) AS work_date,
+                users.role,
+                skills.category,
                 IFNULL(users.name, '-') AS worker_name,
                 IFNULL(hotels.hotel_name, '-') AS hotel_name,
                 IFNULL(jobs.position, '-') AS position,
@@ -79,7 +78,6 @@ class Attendance extends BaseAdminController
                 MIN(CASE WHEN job_attendances.type = 'checkin' THEN job_attendances.created_at END) AS checkin_time,
                 MAX(CASE WHEN job_attendances.type = 'checkout' THEN job_attendances.created_at END) AS checkout_time,
 
-                -- EXTEND AGGREGATE
                 (
                     SELECT MIN(CASE WHEN type='checkin' THEN created_at END)
                     FROM job_extend_attendances jea
@@ -99,23 +97,55 @@ class Attendance extends BaseAdminController
                 job_attendances.user_id,
                 job_attendances.job_id
             ")
-            ->join('users', 'users.id = job_attendances.user_id
-                AND users.deleted_at IS NULL
-                AND users.is_active = "active"', 'left')
+            ->join(
+                'users',
+                'users.id = job_attendances.user_id
+                 AND users.deleted_at IS NULL
+                 AND users.is_active = "active"',
+                'left'
+            )
+            ->join('job_applications', 'job_applications.id = job_attendances.application_id', 'left')
             ->join('jobs', 'jobs.id = job_attendances.job_id', 'left')
+
+            // ✅ JOIN YANG BENAR
+            ->join(
+                'skills',
+                'LOWER(TRIM(skills.name)) = LOWER(TRIM(jobs.position))',
+                'left',
+                false
+            )
+
             ->join('hotels', 'hotels.id = jobs.hotel_id', 'left')
-            ->join('skills', 'skills.name = jobs.position', 'left')
-            ->where('jobs.hotel_id', $sessionHotel)
-            ->where('(job_attendances.deleted_at IS NULL OR job_attendances.deleted_at = "0000-00-00 00:00:00")', null, false);
+            ->where('jobs.hotel_id', session()->get('hotel_id'))
+            ->where('(job_attendances.deleted_at IS NULL OR job_attendances.deleted_at = "0000-00-00 00:00:00")', null, false)
+            ->groupBy('job_attendances.user_id, job_attendances.job_id, DATE(job_attendances.created_at)');
 
-        // selalu filter hotel
-        $baseBuilder->where('jobs.hotel_id', $sessionHotel);
+        // ==========================
+        // ROLE BASED FILTER
+        // ==========================
+        if ($userRole === 'worker') {
 
-        // 🔥 hanya FNB yang difilter category
-        if ($sessionRole === 'hotel_fnb_service') {
-            $baseBuilder->where('skills.category', 'Food & Beverage Service');
+            // Worker hanya lihat dirinya sendiri
+            $baseBuilder->where('job_attendances.user_id', $userId);
+
+        }
+        elseif ($userRole === 'admin' || $userRole === 'hotel_hr') {
+
+            // Admin & HR lihat semua (tetap terfilter hotel_id di atas)
+            // Tidak perlu filter tambahan
+
+        }
+        else {
+
+            // Manager department hanya lihat sesuai category
+            if (isset($roleCategoryMap[$userRole])) {
+                $baseBuilder->where('skills.category', $roleCategoryMap[$userRole]);
+            }
         }
 
+        // ==========================
+        // SEARCH
+        // ==========================
         if ($search) {
             $baseBuilder->groupStart()
                 ->like('users.name', $search)
@@ -145,12 +175,10 @@ class Attendance extends BaseAdminController
 
         $data = [];
         $no = $start + 1;
-        // ==========================
-        // EXTEND WORK
-        // ==========================
-        $extendMinutes = 0;
-        
+
         foreach ($rows as $row) {
+
+            $extendMinutes = 0; // FIX BUG RESET
 
             $checkin  = $row['checkin_time'];
             $checkout = $row['checkout_time'];
@@ -160,12 +188,9 @@ class Attendance extends BaseAdminController
             $status        = 'Incomplete';
             $rate          = '-';
             $extendBadge   = '';
-            
+
             if ($checkin && $checkout) {
 
-                // ==========================
-                // NORMAL WORK
-                // ==========================
                 $secondsNormal = strtotime($checkout) - strtotime($checkin);
                 $minutesNormal = floor($secondsNormal / 60);
 
@@ -179,9 +204,6 @@ class Attendance extends BaseAdminController
                     }
                 }
 
-                // ==========================
-                // TOTAL WORK
-                // ==========================
                 $totalMinutes = $minutesNormal + $extendMinutes;
                 $totalSeconds = $totalMinutes * 60;
 
@@ -189,9 +211,6 @@ class Attendance extends BaseAdminController
                 $status   = 'Complete';
                 $tenMinutesCnt = floor($totalMinutes / 10);
 
-                // ==========================
-                // RATE CALCULATION
-                // ==========================
                 $jobStart = strtotime($row['start_time']);
                 $jobEnd   = strtotime($row['end_time']);
 
@@ -205,18 +224,20 @@ class Attendance extends BaseAdminController
             }
 
             $data[] = [
-                'no'                => $no++.'.',
-                'date'              => date('d-m-Y', strtotime($row['work_date'])),
-                'worker'            => esc($row['worker_name']),
-                'job'               => esc($row['position']) . $extendBadge,
-                'checkin'           => $checkin ? date('H:i', strtotime($checkin)) : '-',
-                'checkout'          => $checkout ? date('H:i', strtotime($checkout)) : '-',
-                'duration'          => $duration,
-                'ten_minutes'       => $tenMinutesCnt,
-                'rate'              => $rate !== '-' ? number_format($rate, 0, ',', '.') : '-',
-                'status'            => $status,
-                'extend_duration'   => $extendMinutes > 0 ? gmdate('H:i', $extendMinutes * 60) : '-',
-                'action'            => '
+                'no'              => $no++.'.',
+                'date'            => date('d-m-Y', strtotime($row['work_date'])),
+                'worker'          => esc($row['worker_name']),
+                'role'            => esc($row['role']),
+                'category'        => esc($row['category']),
+                'job'             => esc($row['position']) . $extendBadge,
+                'checkin'         => $checkin ? date('H:i', strtotime($checkin)) : '-',
+                'checkout'        => $checkout ? date('H:i', strtotime($checkout)) : '-',
+                'duration'        => $duration,
+                'ten_minutes'     => $tenMinutesCnt,
+                'rate'            => $rate !== '-' ? number_format($rate, 0, ',', '.') : '-',
+                'status'          => $status,
+                'extend_duration' => $extendMinutes > 0 ? gmdate('H:i', $extendMinutes * 60) : '-',
+                'action'          => '
                     <button 
                         class="btn btn-sm btn-info btn-detail"
                         data-user="'.$row['user_id'].'"

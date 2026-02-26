@@ -81,10 +81,10 @@
                                             <div class="d-flex gap-2 align-items-center">
                                               <h6 class="mb-0">Month To Date</h6>
                                             </div>
-                                            <h4 class="my-2 pt-1 earning-value">0</h4>
+                                            <h4 class="my-2 pt-1 end-balance-value">0</h4>
                                             <div class="progress w-75" style="height: 4px">
                                               <div
-                                                class="progress-bar earning-progress"
+                                                class="progress-bar end-balance-progress"
                                                 role="progressbar"
                                                 style="width: 65%"
                                                 aria-valuenow="65"
@@ -111,10 +111,10 @@
                                             <div class="d-flex gap-2 align-items-center">
                                               <h6 class="mb-0">End Balance</h6>
                                             </div>
-                                            <h4 class="my-2 pt-1 end-balance-value">0</h4>
+                                            <h4 class="my-2 pt-1 earning-value">0</h4>
                                             <div class="progress w-75" style="height: 4px">
                                               <div
-                                                class="progress-bar bg-info end-balance-progress"
+                                                class="progress-bar bg-info earning-progress"
                                                 role="progressbar"
                                                 style="width: 65%"
                                                 aria-valuenow="65"
@@ -1392,12 +1392,12 @@
                               }
 
                                $.get("<?= base_url('admin/balance/skill-ratio-by-department') ?>",
-                                { 
+                                {
                                   department: department,
-                                  type: type
+                                  type: type,
+                                  date: selectedDate   // ✅ tambah ini
                                 },
                                 function(res){
-
                                   if(!res.status) return;
 
                                   const container = $(containerId);
@@ -1484,7 +1484,8 @@
 
                               const url = "<?= base_url('admin/balance/department-detail') ?>"
                                           + "?department=" + encodeURIComponent(department)
-                                          + "&type=" + type;
+                                          + "&type=" + type
+                                          + "&date=" + selectedDate;
 
                               window.open(url, '_blank');
                             });

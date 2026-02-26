@@ -71,10 +71,12 @@
                             const urlParams = new URLSearchParams(window.location.search);
                             const department = urlParams.get('department');
                             const type       = urlParams.get('type');
+                            const date       = urlParams.get('date');
 
                             $.get("<?= base_url('admin/balance/department-detail-data') ?>", {
                               department: department,
-                              type: type
+                              type: type,
+                              date: date,
                             }, function(res){
 
                               if(!res.status) return;

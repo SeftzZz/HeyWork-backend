@@ -1044,7 +1044,7 @@ class Balance extends BaseAdminController
             ]);
         }
 
-        $attendanceDate = date('Y-m-d', strtotime('-1 day'));
+        $attendanceDate = $this->request->getGet('date') ?? date('Y-m-d', strtotime('-1 day'));
         $start = $attendanceDate . ' 00:00:00';
         $end   = $attendanceDate . ' 23:59:59';
         $daysInMonth = date('t', strtotime($attendanceDate));
@@ -1158,7 +1158,8 @@ class Balance extends BaseAdminController
     public function departmentDetail()
     {
         return view('admin/balance/department_detail', [
-            'title' => 'Hotel Balance Detail'
+            'title' => 'Hotel Balance Detail',
+            'date' => $this->request->getGet('date')
         ]);
     }
 
@@ -1178,7 +1179,8 @@ class Balance extends BaseAdminController
         // =========================
         // H-1
         // =========================
-        $attendanceDate = date('Y-m-d', strtotime('-1 day'));
+        $dateParam = $this->request->getGet('date');
+        $attendanceDate = date('Y-m-d', strtotime($dateParam . ' -1 day'));
         $todayStart = $attendanceDate . ' 00:00:00';
         $todayEnd   = $attendanceDate . ' 23:59:59';
 
