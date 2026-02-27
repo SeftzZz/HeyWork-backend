@@ -630,38 +630,47 @@ class WorkerController extends BaseController
         }
 
         // =========================
-        // AMBIL JOB + HOTEL
+        // 1️⃣ Ambil category dari skill worker
+        // =========================
+        $categoryRows = $this->workerSkill
+            ->select('skills.category')
+            ->join('skills', 'skills.id = worker_skills.skill_id')
+            ->where('worker_skills.user_id', $user->id)
+            ->get()
+            ->getResultArray();
+
+        $myCategories = array_unique(array_column($categoryRows, 'category'));
+
+        if (empty($myCategories)) {
+            return $this->response->setJSON([]);
+        }
+
+        // =========================
+        // 2️⃣ Ambil semua skill.name dalam category tersebut
+        // =========================
+        $skillRows = $this->skill
+            ->whereIn('category', $myCategories)
+            ->get()
+            ->getResultArray();
+
+        $allowedPositions = array_column($skillRows, 'name');
+
+        if (empty($allowedPositions)) {
+            return $this->response->setJSON([]);
+        }
+
+        // =========================
+        // 3️⃣ Ambil jobs sesuai posisi dalam category itu
         // =========================
         $jobs = $this->job
-            ->select('
-                jobs.*,
-                hotels.hotel_name,
-                hotels.logo as hotel_logo,
-            ')
-            ->join('hotels', 'hotels.id = jobs.hotel_id', 'left')
-            ->where('jobs.status', 'open')
-            ->orderBy('jobs.job_date_start', 'DESC')
+            ->whereIn('position', $allowedPositions)
+            ->where('status', 'open')
+            ->orderBy('job_date_start', 'DESC')
             ->findAll();
-
-        $jobs = $jobs ?? [];
-
-        // =========================
-        // JOB YANG SUDAH DIAPPLY
-        // =========================
-        $appliedJobs = (array) $this->apply
-            ->where('user_id', $user->id)
-            ->findColumn('job_id');
-
-        // =========================
-        // FLAG is_applied
-        // =========================
-        foreach ($jobs as &$job) {
-            $job['is_applied'] = in_array($job['id'], $appliedJobs);
-        }
 
         return $this->response->setJSON($jobs);
     }
-
+    
     /**
      * ============================
      * MOST POPULAR JOBS
@@ -680,6 +689,39 @@ class WorkerController extends BaseController
 
         $db = \Config\Database::connect();
 
+        // =========================
+        // 1️⃣ Ambil category worker
+        // =========================
+        $categoryRows = $this->workerSkill
+            ->select('skills.category')
+            ->join('skills', 'skills.id = worker_skills.skill_id')
+            ->where('worker_skills.user_id', $user->id)
+            ->get()
+            ->getResultArray();
+
+        $myCategories = array_unique(array_column($categoryRows, 'category'));
+
+        if (empty($myCategories)) {
+            return $this->response->setJSON([]);
+        }
+
+        // =========================
+        // 2️⃣ Ambil semua skill dalam category tersebut
+        // =========================
+        $skillRows = $this->skill
+            ->whereIn('category', $myCategories)
+            ->get()
+            ->getResultArray();
+
+        $allowedPositions = array_column($skillRows, 'name');
+
+        if (empty($allowedPositions)) {
+            return $this->response->setJSON([]);
+        }
+
+        // =========================
+        // 3️⃣ Ambil job populer sesuai category worker
+        // =========================
         $jobs = $db->table('job_applications ja')
             ->select('
                 j.*,
@@ -689,6 +731,8 @@ class WorkerController extends BaseController
             ')
             ->join('jobs j', 'j.id = ja.job_id')
             ->join('hotels h', 'h.id = j.hotel_id', 'left')
+            ->whereIn('j.position', $allowedPositions)
+            ->where('j.status', 'open')
             ->groupBy('j.id')
             ->orderBy('total_apply', 'DESC')
             ->limit(5)
