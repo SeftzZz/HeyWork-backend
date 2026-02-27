@@ -627,7 +627,7 @@
 
                               if (label === 'GOOD') return 'bg-label-success';
                               if (label === 'AVERAGE') return 'bg-label-warning';
-                              if (label === 'BAD') return 'bg-label-danger';
+                              if (label === 'OVER') return 'bg-label-danger';
                               if (label.includes('NOT OPTIMAL')) return 'bg-label-danger';
                               if (label === 'NO DATA') return 'bg-label-info';
 
@@ -920,7 +920,7 @@
                                 badge.addClass('bg-label-warning');
                               } 
                               else if (dwRatio > 12 && dwRatio <= 15) {
-                                ratioLabel = 'BAD';
+                                ratioLabel = 'OVER';
                                 ratioClass = 'text-danger';
                                 badge.addClass('bg-label-danger');
                               } 

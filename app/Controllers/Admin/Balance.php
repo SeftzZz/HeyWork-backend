@@ -279,7 +279,7 @@ class Balance extends BaseAdminController
         $ratioLabel = 'NO DATA';
         if ($dwRatio >= 6 && $dwRatio <= 10) $ratioLabel = 'GOOD';
         elseif ($dwRatio > 10 && $dwRatio <= 12) $ratioLabel = 'AVERAGE';
-        elseif ($dwRatio > 12 && $dwRatio <= 15) $ratioLabel = 'BAD';
+        elseif ($dwRatio > 12 && $dwRatio <= 15) $ratioLabel = 'OVER';
         elseif ($dwRatio > 15) $ratioLabel = 'NOT OPTIMAL MAN POWER';
 
         $payrollTransactionId = null;
