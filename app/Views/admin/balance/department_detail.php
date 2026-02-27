@@ -106,7 +106,7 @@
                               function getMultipleStatus(value) {
                                 if (value <= 7) {
                                   return {
-                                    label: 'BAD',
+                                    label: 'OVER',
                                     class: 'bg-label-danger'
                                   };
                                 }
@@ -264,7 +264,7 @@
                             switch(label) {
                               case 'GOOD': return 'bg-label-success';
                               case 'AVERAGE': return 'bg-label-warning';
-                              case 'BAD': return 'bg-label-danger';
+                              case 'OVER': return 'bg-label-danger';
                               case 'NOT OPTIMAL MAN POWER': return 'bg-label-danger';
                               case 'NO DATA': return 'bg-label-info';
                               default: return 'bg-label-secondary';

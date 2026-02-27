@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 27, 2026 at 04:43 PM
+-- Generation Time: Feb 27, 2026 at 06:44 PM
 -- Server version: 10.11.10-MariaDB-log
 -- PHP Version: 8.3.27
 
@@ -1039,35 +1039,38 @@ INSERT INTO `ratio_rules` (`id`, `hotel_id`, `department_category`, `min_value`,
 (1, 1, NULL, 0.00, 0.00, 'NO DATA', 1, 1, '2026-02-24 03:40:13', NULL),
 (2, 1, NULL, 0.00, 1.00, 'GOOD', 1, 2, '2026-02-24 03:40:13', NULL),
 (3, 1, NULL, 1.00, 4.00, 'AVERAGE', 1, 3, '2026-02-24 03:40:13', NULL),
-(4, 1, NULL, 4.00, 6.00, 'BAD', 1, 4, '2026-02-24 03:40:13', NULL),
+(4, 1, NULL, 4.00, 6.00, 'OVER', 1, 4, '2026-02-24 03:40:13', NULL),
 (5, 1, NULL, 6.00, 999.00, 'NOT OPTIMAL MAN POWER', 1, 5, '2026-02-24 03:40:13', NULL),
-(6, 1, 'Finance', 0.00, 7.00, 'BAD', 1, 1, '2026-02-24 03:40:13', NULL),
+(6, 1, 'Finance', 0.00, 7.00, 'OVER', 1, 1, '2026-02-24 03:40:13', NULL),
 (7, 1, 'Finance', 7.00, 14.00, 'AVERAGE', 1, 2, '2026-02-24 03:40:13', NULL),
 (8, 1, 'Finance', 14.00, 999.00, 'GOOD', 1, 3, '2026-02-24 03:40:13', NULL),
-(9, 1, 'Sales & Marketing', 0.00, 7.00, 'BAD', 1, 1, '2026-02-24 03:40:13', NULL),
-(10, 1, 'Sales & Marketing', 7.00, 14.00, 'AVERAGE', 1, 2, '2026-02-24 03:40:13', NULL),
-(11, 1, 'Sales & Marketing', 14.00, 22.00, 'GOOD', 1, 3, '2026-02-24 03:40:13', NULL),
+(9, 1, 'Sales & Marketing Multiple', 0.00, 7.00, 'OVER', 1, 1, '2026-02-24 03:40:13', NULL),
+(10, 1, 'Sales & Marketing Multiple', 7.00, 14.00, 'AVERAGE', 1, 2, '2026-02-24 03:40:13', NULL),
+(11, 1, 'Sales & Marketing Multiple', 14.00, 22.00, 'GOOD', 1, 3, '2026-02-24 03:40:13', NULL),
 (12, 1, 'Front Office', 0.00, 2.00, 'GOOD', 1, 1, '2026-02-27 11:32:52', NULL),
 (13, 1, 'Front Office', 3.00, 4.00, 'AVERAGE', 1, 1, '2026-02-27 11:32:52', NULL),
-(14, 1, 'Front Office', 4.00, 999.00, 'BAD', 1, 1, '2026-02-27 11:32:52', NULL),
+(14, 1, 'Front Office', 4.00, 999.00, 'OVER', 1, 1, '2026-02-27 11:32:52', NULL),
 (15, 1, 'Housekeeping', 0.00, 3.00, 'GOOD', 1, 1, '2026-02-27 11:32:52', NULL),
 (16, 1, 'Housekeeping', 3.00, 5.00, 'AVERAGE', 1, 1, '2026-02-27 11:32:52', NULL),
-(17, 1, 'Housekeeping', 5.00, 999.00, 'BAD', 1, 1, '2026-02-27 11:32:52', NULL),
+(17, 1, 'Housekeeping', 5.00, 999.00, 'OVER', 1, 1, '2026-02-27 11:32:52', NULL),
 (18, 1, 'Food & Beverage Service', 0.00, 2.00, 'GOOD', 1, 1, '2026-02-27 11:32:52', NULL),
 (19, 1, 'Food & Beverage Service', 2.00, 4.00, 'AVERAGE', 1, 1, '2026-02-27 11:32:52', NULL),
-(20, 1, 'Food & Beverage Service', 4.00, 999.00, 'BAD', 1, 1, '2026-02-27 11:32:52', NULL),
+(20, 1, 'Food & Beverage Service', 4.00, 999.00, 'OVER', 1, 1, '2026-02-27 11:32:52', NULL),
 (21, 1, 'Kitchen / Culinary', 0.00, 3.00, 'GOOD', 1, 1, '2026-02-27 11:32:52', NULL),
 (22, 1, 'Kitchen / Culinary', 3.00, 6.00, 'AVERAGE', 1, 1, '2026-02-27 11:32:52', NULL),
-(23, 1, 'Kitchen / Culinary', 6.00, 999.00, 'BAD', 1, 1, '2026-02-27 11:32:52', NULL),
+(23, 1, 'Kitchen / Culinary', 6.00, 999.00, 'OVER', 1, 1, '2026-02-27 11:32:52', NULL),
 (24, 1, 'Finance', 0.00, 1.00, 'GOOD', 1, 1, '2026-02-27 11:32:52', NULL),
 (25, 1, 'Finance', 1.00, 3.00, 'AVERAGE', 1, 1, '2026-02-27 11:32:52', NULL),
-(26, 1, 'Finance', 3.00, 999.00, 'BAD', 1, 1, '2026-02-27 11:32:52', NULL),
+(26, 1, 'Finance', 3.00, 999.00, 'OVER', 1, 1, '2026-02-27 11:32:52', NULL),
 (27, 1, 'Human Resources', 0.00, 1.00, 'GOOD', 1, 1, '2026-02-27 11:32:52', NULL),
 (28, 1, 'Human Resources', 1.00, 4.00, 'AVERAGE', 1, 1, '2026-02-27 11:32:52', NULL),
-(29, 1, 'Human Resources', 4.00, 999.00, 'BAD', 1, 1, '2026-02-27 11:32:52', NULL),
+(29, 1, 'Human Resources', 4.00, 999.00, 'OVER', 1, 1, '2026-02-27 11:32:52', NULL),
 (30, 1, 'Engineering', 0.00, 1.00, 'GOOD', 1, 1, '2026-02-27 11:32:52', NULL),
 (31, 1, 'Engineering', 1.00, 3.00, 'AVERAGE', 1, 1, '2026-02-27 11:32:52', NULL),
-(32, 1, 'Engineering', 3.00, 999.00, 'BAD', 1, 1, '2026-02-27 11:32:52', NULL);
+(32, 1, 'Engineering', 3.00, 999.00, 'OVER', 1, 1, '2026-02-27 11:32:52', NULL),
+(33, 1, 'Sales & Marketing', 0.00, 3.00, 'GOOD', 1, 1, '2026-02-24 03:40:13', NULL),
+(34, 1, 'Sales & Marketing', 3.00, 6.00, 'AVERAGE', 1, 2, '2026-02-24 03:40:13', NULL),
+(35, 1, 'Sales & Marketing', 6.00, 999.00, 'OVER', 1, 3, '2026-02-24 03:40:13', NULL);
 
 -- --------------------------------------------------------
 
@@ -1111,7 +1114,26 @@ INSERT INTO `refresh_tokens` (`id`, `user_id`, `token`, `expires_at`, `created_a
 (21, 13, 'c51556340cf2aae120a0cb7cd3ae577078df35f5893ac56ce208615f8962f070a7881b7ab23f7f20fdea70f9f2656f16ec17c97d35e23bb3769ec2cad3c758ee', '2026-03-27 17:11:42', '2026-02-25 17:11:42'),
 (22, 13, 'c3732151bfdd5b64592f353a1d4127fc99cb2061f3b06e8c0f9be5763aa81a421ffab1fafbf9d3175e99d7d765ebba920055c0565f4c4c92a6963feb28e5ea89', '2026-03-27 17:16:39', '2026-02-25 17:16:39'),
 (23, 13, 'd1868096abfeaf039e5e894cfee49be78ac94deb3c80f6202ba868f40cb969ac7e3880e39a61a2607f6eece842649fa86858dd4a598db9e33818d1bb00839092', '2026-03-27 17:26:17', '2026-02-25 17:26:17'),
-(24, 13, '9372fd2c0ff5a826cbd84f9743658b817025fa8465f1c1af673109c5e676ba40463d89123b21113b0c2ebc3e1f507d379c4a2a9b13a14cd771b624ca8e2bb258', '2026-03-27 18:09:23', '2026-02-25 18:09:23');
+(24, 13, '9372fd2c0ff5a826cbd84f9743658b817025fa8465f1c1af673109c5e676ba40463d89123b21113b0c2ebc3e1f507d379c4a2a9b13a14cd771b624ca8e2bb258', '2026-03-27 18:09:23', '2026-02-25 18:09:23'),
+(25, 34, 'f642ad7e112d39a156bc823c0b6b1ec089e1b04e8b3f99782546e92f089d55ddc72e633dcb398913eae7e1cd477a26df8290aaef61c5c4ffa7a1ae270783d220', '2026-03-29 15:58:00', '2026-02-27 15:58:00'),
+(26, 34, '3674b22880c7f6b1af4c634dda2469fb845ee9395cd4f2e7abbb316ff430a02621f264004180b24178555be97b6d2f68bbf93753dc3835a67a0abf1387911368', '2026-03-29 16:00:42', '2026-02-27 16:00:42'),
+(27, 34, 'bd1c75fa8450403dba6bcefc3ad1817e043aeb52668468059e136f328419b5353bfd2788798be811b9d0877f510c4572159949fedd692470115b1363917a4305', '2026-03-29 16:01:40', '2026-02-27 16:01:40'),
+(28, 34, 'f57765e30ec491a3fda104284b368ced2ee2731f2c34187e67625a22413a0325be5e023d05d6113f79b4738d4389cbbaf86553232890d912e47ef8b9cc0d786d', '2026-03-29 16:02:07', '2026-02-27 16:02:07'),
+(29, 34, '007b1ec700850fcc5cf6e378d30cb92bca885609aa15d434b0f90921934ed946d1b46a13bf8620e259fe49215af55e059f08e1a13b639e878a2f9ecfdf3812ba', '2026-03-29 16:05:45', '2026-02-27 16:05:45'),
+(30, 34, '1204399683514efd9475674026edfa29e45c81b634768e9e1e3ba6cb7c0766524a9c33b92160d31e55c2a018f519d780d072b45241594e557e22b41a0af336b8', '2026-03-29 16:06:44', '2026-02-27 16:06:44'),
+(31, 34, '9004c9d5c7d1bc7500d7c92c5321af851ece8da42da6e4dc753f77245c1bf0f0bc224cd6e83ccb7a5fe4e167d5b25451c8f420563c59d25dbccf5e8ae8a7c991', '2026-03-29 16:07:57', '2026-02-27 16:07:57'),
+(32, 34, '0034005eceb8968221d68456c767a649a56a4ba9b3bf5b035891cb4393f026415ef1e5a6cbcf88c1651640f06900b61b597ccc26cb1196b3c4b769c7342cca97', '2026-03-29 16:08:43', '2026-02-27 16:08:43'),
+(33, 34, '2ee8c2518ae9ade4dbfa52bb5ac1e5cbcd7099a941685fcdfb95b5080c2fbeb917befaec45b68b7d1e46023d0367c98672fbd3fdb8a5b6fc0e68b6ee0ffa3c87', '2026-03-29 16:52:46', '2026-02-27 16:52:46'),
+(34, 34, '842c7131d285302854eda4af49181355118474e2bdd2eea981e75ac744518f4753d9424523f6de8ad97825a385abb8e8999d4e6589cfbfbf68ec35253185b820', '2026-03-29 16:52:59', '2026-02-27 16:52:59'),
+(35, 34, '246062a56a7646a9e7b67d5eb4825bf13ab98bdddfcf7d2d321eb1b3fd641df87a1f88b8d0d9563ae183dab79b441a953ae6fbaf9e8ec39e3204e9a909843e18', '2026-03-29 16:53:22', '2026-02-27 16:53:22'),
+(36, 34, 'd4594ae30031bead3d40eb904cdae689d619c9e387683b8125172fb97d20a9b3538e4377576b7620124ac8d5e37290d047d56235df72d16e330e8245cfb590f7', '2026-03-29 16:56:21', '2026-02-27 16:56:21'),
+(37, 34, 'b08eff4c5ff6bd4d3b0f783504e345dd0eb2001eb2a53c014fe9a6d83a83d80d5c512e1cb33447de4bcfa5815940f932e45ba8f9b601fa72806d251c9086b3c8', '2026-03-29 16:57:32', '2026-02-27 16:57:32'),
+(38, 34, 'eacb6c9f11f1ce6772569e0d34984b1c6429556b49a7497bc3e3c6c684ca972e59dc8f81e4ef266db432ee6ebf2ffa2dee8fd41bb4d71516a62820df74c7360a', '2026-03-29 16:58:17', '2026-02-27 16:58:17'),
+(39, 34, '13a1b211a08269250818d86d68f822011e2b69570f6d15d5096b92c590c61b5f7cf1b1fc6b069c59988167e552f071d9231e74650d9e4b3d599bb4bfb276afa5', '2026-03-29 16:59:09', '2026-02-27 16:59:09'),
+(40, 34, '60d34e6058bf5861d642c6384cd70fe8af1d240ce140b8044ed5b1a695238b078609255700534dc49d93d3fe50cdccbea9fbaa6decf1e0967cf8442375b1f94f', '2026-03-29 17:00:24', '2026-02-27 17:00:24'),
+(41, 34, '8748d60f231d05481c91e6d5617c3bbc4d0eb53fe9a5765f549c2d6fca2d538ea16507259b0bed894c5f3ff367d9701a7870e3c70c807af2bec26522c8efeb2b', '2026-03-29 17:00:50', '2026-02-27 17:00:50'),
+(42, 34, '8d8dff7d7c6287a04fc79dce415fc0b4e4b3faeaa4253a4aca45e68d80a88f980d2dba3e00a54796a788726358f9e4f54dd2a4708695e1cc4f525d0ea9be2ac2', '2026-03-29 17:01:10', '2026-02-27 17:01:10'),
+(43, 34, '3f8b6c7720401304a7a0e8e8dd7de0cb3155406f71cc74e6280628870a7d5ecb88bf20a0aa7030a92adb08766a3262524e2a78d1a033a14a7b9ac53efc0f9b97', '2026-03-29 17:02:04', '2026-02-27 17:02:04');
 
 -- --------------------------------------------------------
 
@@ -1157,7 +1179,7 @@ INSERT INTO `skills` (`id`, `name`, `category`, `created_at`, `created_by`, `upd
 (19, 'Room Service Staff', 'Food & Beverage Service', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (20, 'Cook Helper', 'Kitchen / Culinary', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (21, 'Cook', 'Kitchen / Culinary', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
-(22, 'Chef de Partie', 'Kitchen / Culinary', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(22, 'Chef De Partie', 'Kitchen / Culinary', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (23, 'Sous Chef', 'Kitchen / Culinary', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (24, 'Executive Chef', 'Kitchen / Culinary', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (25, 'Pastry Chef', 'Kitchen / Culinary', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
@@ -1963,7 +1985,8 @@ INSERT INTO `worker_skills` (`id`, `user_id`, `skill_id`, `created_at`, `created
 (27, 28, 32, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
 (28, 29, 32, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
 (29, 30, 32, '2026-02-21 08:44:00', 1, '2026-02-21 08:44:00', 1, NULL, NULL),
-(33, 13, 45, '2026-02-25 17:26:23', 13, '2026-02-25 17:26:23', NULL, NULL, NULL);
+(33, 13, 45, '2026-02-25 17:26:23', 13, '2026-02-25 17:26:23', NULL, NULL, NULL),
+(34, 34, 1, '2026-02-27 16:52:54', 34, '2026-02-27 16:52:54', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2254,13 +2277,13 @@ ALTER TABLE `ratings`
 -- AUTO_INCREMENT for table `ratio_rules`
 --
 ALTER TABLE `ratio_rules`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `refresh_tokens`
 --
 ALTER TABLE `refresh_tokens`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `skills`
@@ -2356,7 +2379,7 @@ ALTER TABLE `worker_sibling`
 -- AUTO_INCREMENT for table `worker_skills`
 --
 ALTER TABLE `worker_skills`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `worker_spouse`
