@@ -1146,6 +1146,7 @@
 
                                 $.post("<?= base_url('admin/balance/update-revenue') ?>", {
                                     revenue: amount,
+                                    date: selectedDate,
                                     '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
                                 }, function(res){
 
@@ -1170,131 +1171,130 @@
 
                             let selectedDate = null;
 
-                           function loadReport(type = 'all', date = null) {
+                            function loadReport(type = 'all', date = null) {
 
-                              if (!date) {
-                                if (!selectedDate) {
-                                  selectedDate = new Date().toISOString().split('T')[0];
+                                if (!date) {
+                                  if (!selectedDate) {
+                                    selectedDate = new Date().toISOString().split('T')[0];
+                                  }
+                                } else {
+                                  selectedDate = date;
                                 }
-                              } else {
-                                selectedDate = date;
-                              }
 
-                              let tableId, bodyId;
+                                let tableId, bodyId;
 
-                              if (type === 'daily_worker') {
-                                tableId = '#dailyWorkerTable';
-                                bodyId  = '#dailyWorkerBody';
-                              } else if (type === 'corporate') {
-                                tableId = '#companyTable';
-                                bodyId  = '#companyBody';
-                              } else {
-                                tableId = '#allTable';
-                                bodyId  = '#allBody';
-                              }
+                                if (type === 'daily_worker') {
+                                  tableId = '#dailyWorkerTable';
+                                  bodyId  = '#dailyWorkerBody';
+                                } else if (type === 'corporate') {
+                                  tableId = '#companyTable';
+                                  bodyId  = '#companyBody';
+                                } else {
+                                  tableId = '#allTable';
+                                  bodyId  = '#allBody';
+                                }
 
-                              $.get("<?= base_url('admin/balance/daily-report') ?>", 
-                              { 
-                                type: type,
-                                date: selectedDate
-                              }, 
-                              function(res){
+                                $.get("<?= base_url('admin/balance/daily-report') ?>", 
+                                { 
+                                  type: type,
+                                  date: selectedDate
+                                }, 
+                                function(res){
 
-                                if(!res.status) return;
+                                  if(!res.status) return;
 
-                                const table = $(tableId);
-                                const tbody = $(bodyId);
+                                  const table = $(tableId);
+                                  const tbody = $(bodyId);
 
-                                const todayLabelClass = getRatioBadgeClass(res.today_label);
-                                const mtdLabelClass   = getRatioBadgeClass(res.mtd_label);
+                                  const todayLabelClass = getRatioBadgeClass(res.today_label);
+                                  const mtdLabelClass   = getRatioBadgeClass(res.mtd_label);
 
-                                const formattedDate = new Date(res.date).toLocaleDateString('id-ID', {
-                                  day: '2-digit',
-                                  month: 'short',
-                                  year: '2-digit'
-                                });
+                                  const formattedDate = new Date(res.date).toLocaleDateString('id-ID', {
+                                    day: '2-digit',
+                                    month: 'short',
+                                    year: '2-digit'
+                                  });
 
-                                // ==========================
-                                // Inject header with buttons
-                                // ==========================
-                                table.find('thead tr:first th:nth-child(2)').html(`
-                                  <div class="d-flex justify-content-between align-items-center">
-                                    <button class="btn btn-sm btn-outline-primary prev-day">◀</button>
-                                    <span class="fw-bold">${formattedDate}</span>
-                                    <button class="btn btn-sm btn-outline-primary next-day">▶</button>
-                                  </div>
-                                `);
+                                  // ==========================
+                                  // Inject header with buttons
+                                  // ==========================
+                                  table.find('thead tr:first th:nth-child(2)').html(`
+                                    <div class="d-flex justify-content-between align-items-center">
+                                      <button class="btn btn-sm btn-outline-primary prev-day">◀</button>
+                                      <span class="fw-bold">${formattedDate}</span>
+                                      <button class="btn btn-sm btn-outline-primary next-day">▶</button>
+                                    </div>
+                                  `);
 
-                                tbody.html('');
+                                  tbody.html('');
 
-                                // ======================
-                                // Departments
-                                // ======================
-                                res.departments.forEach(dep => {
+                                  // ======================
+                                  // Departments
+                                  // ======================
+                                  res.departments.forEach(dep => {
+
+                                    tbody.append(`
+                                      <tr class="department-row"
+                                          data-department="${dep.department}"
+                                          style="cursor:pointer">
+                                        <td class="text-start fw-semibold text-primary">
+                                          ${dep.department}
+                                        </td>
+                                        <td>${dep.dw > 0 ? dep.dw : ''}</td>
+                                        <td>${dep.cost > 0 ? dep.cost.toLocaleString('id-ID') : ''}</td>
+                                      </tr>
+                                    `);
+
+                                  });
+
+                                  tbody.append(`<tr><td colspan="4"></td></tr>`);
 
                                   tbody.append(`
-                                    <tr class="department-row"
-                                        data-department="${dep.department}"
-                                        style="cursor:pointer">
-                                      <td class="text-start fw-semibold text-primary">
-                                        ${dep.department}
-                                      </td>
-                                      <td>${dep.dw > 0 ? dep.dw : ''}</td>
-                                      <td>${dep.cost > 0 ? dep.cost.toLocaleString('id-ID') : ''}</td>
+                                    <tr class="table-secondary fw-bold">
+                                      <td class="text-start">Total Corporate Cost</td>
+                                      <td></td>
+                                      <td>${res.total_dw_cost.toLocaleString('id-ID')}</td>
                                     </tr>
                                   `);
 
-                                });
+                                  tbody.append(`
+                                    <tr class="fw-bold">
+                                      <td rowspan="2" class="text-start">Today</td>
+                                      <td>Revenue</td>
+                                      <td></td>
+                                      <td>${res.today_revenue.toLocaleString('id-ID')}</td>
+                                    </tr>
+                                    <tr>
+                                      <td>Rasio</td>
+                                      <td>${res.today_ratio}%</td>
+                                      <td>
+                                        <span class="badge ${todayLabelClass}">
+                                          ${res.today_label}
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  `);
 
-                                tbody.append(`<tr><td colspan="4"></td></tr>`);
+                                  tbody.append(`
+                                    <tr class="fw-bold">
+                                      <td rowspan="2" class="text-start">Month To Date</td>
+                                      <td>Revenue</td>
+                                      <td></td>
+                                      <td>${res.mtd_revenue.toLocaleString('id-ID')}</td>
+                                    </tr>
+                                    <tr>
+                                      <td>Rasio</td>
+                                      <td>${res.mtd_ratio}%</td>
+                                      <td>
+                                        <span class="badge ${mtdLabelClass}">
+                                          ${res.mtd_label}
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  `);
 
-                                tbody.append(`
-                                  <tr class="table-secondary fw-bold">
-                                    <td class="text-start">Total Corporate Cost</td>
-                                    <td></td>
-                                    <td>${res.total_dw_cost.toLocaleString('id-ID')}</td>
-                                  </tr>
-                                `);
-
-                                tbody.append(`
-                                  <tr class="fw-bold">
-                                    <td rowspan="2" class="text-start">Today</td>
-                                    <td>Revenue</td>
-                                    <td></td>
-                                    <td>${res.today_revenue.toLocaleString('id-ID')}</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Rasio</td>
-                                    <td>${res.today_ratio}%</td>
-                                    <td>
-                                      <span class="badge ${todayLabelClass}">
-                                        ${res.today_label}
-                                      </span>
-                                    </td>
-                                  </tr>
-                                `);
-
-                                tbody.append(`
-                                  <tr class="fw-bold">
-                                    <td rowspan="2" class="text-start">Month To Date</td>
-                                    <td>Revenue</td>
-                                    <td></td>
-                                    <td>${res.mtd_revenue.toLocaleString('id-ID')}</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Rasio</td>
-                                    <td>${res.mtd_ratio}%</td>
-                                    <td>
-                                      <span class="badge ${mtdLabelClass}">
-                                        ${res.mtd_label}
-                                      </span>
-                                    </td>
-                                  </tr>
-                                `);
-
-                              }, 'json');
+                                }, 'json');
                             }
-
                            
                             // ==========================
                             // PREV DAY

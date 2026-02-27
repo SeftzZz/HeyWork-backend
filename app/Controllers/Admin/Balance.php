@@ -315,7 +315,7 @@ class Balance extends BaseAdminController
                     'amount'     => $totalPayroll,
                     'date'       => $attendanceDate,
                     'description'=> 'Auto Payroll Deduction H-1',
-                    'created_at' => date('Y-m-d H:i:s'),
+                    'created_at' => date('Y-m-d', strtotime('-1 day')),
                     'created_by' => session('user_id')
                 ]);
 
@@ -349,7 +349,7 @@ class Balance extends BaseAdminController
                     'amount'     => $revenue,
                     'dw_ratio'   => $dwRounded,
                     'dw_label'   => $ratioLabel,
-                    'updated_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d', strtotime('-1 day')),
                     'updated_by' => session('user_id')
                 ]);
 
@@ -364,7 +364,7 @@ class Balance extends BaseAdminController
                 'dw_label'   => $ratioLabel,
                 'date'       => $attendanceDate,
                 'description'=> 'Daily Revenue H-1',
-                'created_at' => date('Y-m-d H:i:s'),
+                'created_at' => date('Y-m-d', strtotime('-1 day')),
                 'created_by' => session('user_id')
             ]);
         }
@@ -462,8 +462,18 @@ class Balance extends BaseAdminController
             ->where('ja.created_at <=', $end)
             ->groupBy('j.id');
 
-        if ($type !== 'all') {
-            $builder->where('j.category', $type);
+
+        // ======================
+        // FILTER TYPE (FIXED)
+        // ======================
+        if ($type === 'daily_worker') {
+            $builder->groupStart()
+                ->where('j.category', 'daily_worker')
+                ->orWhere('j.category', 'casual')
+                ->groupEnd();
+        }
+        elseif ($type === 'corporate') {
+            $builder->where('j.category', 'corporate');
         }
 
         $attendanceRows = $builder->get()->getResultArray();
@@ -474,19 +484,23 @@ class Balance extends BaseAdminController
         foreach ($attendanceRows as $row) {
 
             $category = $row['category'] ?? 'Uncategorized';
+            
+            $jobCategory = strtolower(trim($row['job_category'] ?? ''));
 
-            if ($row['job_category'] === 'daily_worker') {
+            if (in_array($jobCategory, ['daily_worker', 'casual'])) {
 
                 $dw = (int)$row['total_applications'];
                 $cost = $dw * (float)$row['fee'];
 
-            } elseif ($row['job_category'] === 'corporate') {
+            }
+            elseif ($jobCategory === 'corporate') {
 
                 $dw = (int)$row['total_workers'];
                 $dailySalary = (float)$row['base_salary'] / $daysInMonth;
                 $cost = $dw * $dailySalary;
 
-            } else {
+            }
+            else {
                 $dw = 0;
                 $cost = 0;
             }
@@ -542,24 +556,40 @@ class Balance extends BaseAdminController
 
         $todayLabel = $this->getRatioLabel($todayRatio, $hotelId);
 
-        // ======================
-        // MTD REVENUE (FIXED)
+        /// ======================
+        // MTD REVENUE
         // ======================
         $mtdRevenue = $this->db->table('hotel_transactions')
             ->selectSum('amount')
             ->where('hotel_id', $hotelId)
             ->where('type', 'credit')
             ->where('category', 'revenue')
-            ->where('created_at >=', $monthStart . ' 00:00:00')
-            ->where('created_at <=', $end)
+            ->where('date >=', $monthStart)
+            ->where('date <=', $attendanceDate)
             ->get()
             ->getRow()
             ->amount ?? 0;
 
         $mtdRevenue = (float)$mtdRevenue;
 
+        // ======================
+        // HITUNG HARI OPERASIONAL
+        // ======================
+        $operationalStartDay = 20; // bisa kamu buat configurable nanti
+        $currentDay = (int) date('d', strtotime($attendanceDate));
+
+        $operationalDays = max(1, $currentDay - $operationalStartDay);
+
+        // ======================
+        // ESTIMASI MTD COST
+        // ======================
+        $mtdEstimatedCost = $totalCost * $operationalDays;
+
+        // ======================
+        // MTD RATIO
+        // ======================
         $mtdRatio = $mtdRevenue > 0
-            ? round(($totalCost / $mtdRevenue) * 100, 2)
+            ? round(($mtdEstimatedCost / $mtdRevenue) * 100, 2)
             : 0;
 
         $mtdLabel = $this->getRatioLabel($mtdRatio, $hotelId);
@@ -577,7 +607,6 @@ class Balance extends BaseAdminController
             'mtd_label' => $mtdLabel
         ]);
     }
-    
 
     public function exportReportXlsx()
     {
@@ -1033,9 +1062,9 @@ class Balance extends BaseAdminController
 
     public function skillRatioByDepartment()
     {
-        $hotelId = session()->get('hotel_id');
+        $hotelId   = session()->get('hotel_id');
         $department = $this->request->getGet('department');
-        $type = $this->request->getGet('type') ?? 'all';
+        $type       = $this->request->getGet('type') ?? 'all';
 
         if (!$department) {
             return $this->response->setJSON([
@@ -1044,7 +1073,7 @@ class Balance extends BaseAdminController
             ]);
         }
 
-        $attendanceDate = $this->request->getGet('date') ?? date('Y-m-d', strtotime('-1 day'));
+        $attendanceDate = $this->request->getGet('date') ?? date('Y-m-d');
         $start = $attendanceDate . ' 00:00:00';
         $end   = $attendanceDate . ' 23:59:59';
         $daysInMonth = date('t', strtotime($attendanceDate));
@@ -1052,15 +1081,17 @@ class Balance extends BaseAdminController
         // ==========================
         // Ambil revenue harian (global)
         // ==========================
-        $revenueRow = $this->db->table('hotel_transactions')
+        $todayRevenue = $this->db->table('hotel_transactions')
+            ->selectSum('amount')
             ->where('hotel_id', $hotelId)
             ->where('type', 'credit')
             ->where('category', 'revenue')
             ->where('date', $attendanceDate)
             ->get()
-            ->getRowArray();
+            ->getRow()
+            ->amount ?? 0;
 
-        $todayRevenue = (float)($revenueRow['amount'] ?? 0);
+        $todayRevenue = (float)$todayRevenue;
 
         // ==========================
         // Ambil semua skill dalam department
@@ -1078,9 +1109,6 @@ class Balance extends BaseAdminController
 
             $skillName = $skill['name'];
 
-            // ==========================
-            // Hitung cost per skill
-            // ==========================
             $builder = $this->db->table('job_attendances ja')
                 ->select('
                     j.category as job_category,
@@ -1098,8 +1126,17 @@ class Balance extends BaseAdminController
                 ->where('ja.created_at >=', $start)
                 ->where('ja.created_at <=', $end);
 
-            if ($type !== 'all') {
-                $builder->where('j.category', $type);
+            // ==========================
+            // FILTER TYPE (FIXED)
+            // ==========================
+            if ($type === 'daily_worker') {
+                $builder->groupStart()
+                    ->where('j.category', 'daily_worker')
+                    ->orWhere('j.category', 'casual')
+                    ->groupEnd();
+            }
+            elseif ($type === 'corporate') {
+                $builder->where('j.category', 'corporate');
             }
 
             $rows = $builder
@@ -1111,18 +1148,25 @@ class Balance extends BaseAdminController
 
             foreach ($rows as $row) {
 
-                if ($row['job_category'] === 'daily_worker') {
+                $jobCategory = strtolower(trim($row['job_category'] ?? ''));
+
+                // ==========================
+                // COST LOGIC (FIXED)
+                // ==========================
+                if (in_array($jobCategory, ['daily_worker', 'casual'])) {
 
                     $dw = (int)$row['total_applications'];
                     $cost = $dw * (float)$row['fee'];
 
-                } elseif ($row['job_category'] === 'corporate') {
+                }
+                elseif ($jobCategory === 'corporate') {
 
                     $dw = (int)$row['total_workers'];
                     $dailySalary = (float)$row['base_salary'] / $daysInMonth;
                     $cost = $dw * $dailySalary;
 
-                } else {
+                }
+                else {
                     $cost = 0;
                 }
 
@@ -1130,17 +1174,17 @@ class Balance extends BaseAdminController
             }
 
             // ==========================
-            // Hitung ratio
+            // HITUNG RATIO
             // ==========================
             $ratio = $todayRevenue > 0
                 ? round(($skillCost / $todayRevenue) * 100, 2)
                 : 0;
 
-            $label = $this->getRatioLabel($ratio, $hotelId, '');
+            $label = $this->getRatioLabel($ratio, $hotelId, $department);
 
             $result[] = [
                 'skill_name' => $skillName,
-                'cost'       => $skillCost,
+                'cost'       => round($skillCost, 2),
                 'revenue'    => $todayRevenue,
                 'ratio'      => $ratio,
                 'label'      => $label
@@ -1148,10 +1192,10 @@ class Balance extends BaseAdminController
         }
 
         return $this->response->setJSON([
-            'status' => true,
-            'date'   => $attendanceDate,
+            'status'     => true,
+            'date'       => $attendanceDate,
             'department' => $department,
-            'data'   => $result
+            'data'       => $result
         ]);
     }
 
@@ -1176,25 +1220,14 @@ class Balance extends BaseAdminController
             ]);
         }
 
-        // =========================
-        // H-1
-        // =========================
-        $dateParam = $this->request->getGet('date');
-        $attendanceDate = date('Y-m-d', strtotime($dateParam . ' -1 day'));
+        $attendanceDate = $this->request->getGet('date') ?? date('Y-m-d');
         $todayStart = $attendanceDate . ' 00:00:00';
         $todayEnd   = $attendanceDate . ' 23:59:59';
-
-        // =========================
-        // MTD RANGE (1 → H-1)
-        // =========================
-        $rangeStart = date('Y-m-01 00:00:00', strtotime($attendanceDate));
-        $rangeEnd   = $attendanceDate . ' 23:59:59';
-
         $daysInMonth = date('t', strtotime($attendanceDate));
 
         /*
         |--------------------------------------------------------------------------
-        | TODAY COST (H-1)
+        | TODAY COST
         |--------------------------------------------------------------------------
         */
 
@@ -1217,7 +1250,22 @@ class Balance extends BaseAdminController
             ->where('j.hotel_id', $hotelId)
             ->where('s.category', $department)
             ->where('ja.created_at >=', $todayStart)
-            ->where('ja.created_at <=', $todayEnd)
+            ->where('ja.created_at <=', $todayEnd);
+
+        // ==========================
+        // FILTER TYPE (FIXED)
+        // ==========================
+        if ($type === 'daily_worker') {
+            $todayRows->groupStart()
+                ->where('j.category', 'daily_worker')
+                ->orWhere('j.category', 'casual')
+                ->groupEnd();
+        }
+        elseif ($type === 'corporate') {
+            $todayRows->where('j.category', 'corporate');
+        }
+
+        $todayRows = $todayRows
             ->groupBy('u.id')
             ->get()
             ->getResultArray();
@@ -1226,13 +1274,13 @@ class Balance extends BaseAdminController
 
         foreach ($todayRows as $row) {
 
+            $jobCategory = strtolower(trim($row['job_category'] ?? ''));
             $days = (int)$row['total_days'];
 
-            if ($row['job_category'] === 'daily_worker') {
+            if (in_array($jobCategory, ['daily_worker', 'casual'])) {
                 $todayCost += $days * (float)$row['fee'];
             }
-
-            if ($row['job_category'] === 'corporate') {
+            elseif ($jobCategory === 'corporate') {
                 $dailySalary = (float)$row['base_salary'] / $daysInMonth;
                 $todayCost += $days * $dailySalary;
             }
@@ -1240,13 +1288,12 @@ class Balance extends BaseAdminController
 
         /*
         |--------------------------------------------------------------------------
-        | DETAIL DATA (PER HARI SAJA, BUKAN AKUMULASI)
+        | DETAIL DATA
         |--------------------------------------------------------------------------
         */
 
         $rows = $this->db->table('job_attendances ja')
             ->select('
-                u.id as user_id,
                 u.name,
                 j.position,
                 j.category as job_category,
@@ -1264,7 +1311,19 @@ class Balance extends BaseAdminController
             ->where('j.hotel_id', $hotelId)
             ->where('s.category', $department)
             ->where('ja.created_at >=', $todayStart)
-            ->where('ja.created_at <=', $todayEnd)
+            ->where('ja.created_at <=', $todayEnd);
+
+        if ($type === 'daily_worker') {
+            $rows->groupStart()
+                ->where('j.category', 'daily_worker')
+                ->orWhere('j.category', 'casual')
+                ->groupEnd();
+        }
+        elseif ($type === 'corporate') {
+            $rows->where('j.category', 'corporate');
+        }
+
+        $rows = $rows
             ->groupBy('u.id')
             ->get()
             ->getResultArray();
@@ -1273,18 +1332,20 @@ class Balance extends BaseAdminController
 
         foreach ($rows as $row) {
 
-            $cost = 0;
-            $salary = 0;
+            $jobCategory = strtolower(trim($row['job_category'] ?? ''));
 
-            if ($row['job_category'] === 'daily_worker') {
+            if (in_array($jobCategory, ['daily_worker', 'casual'])) {
                 $cost = (float)$row['fee'];
                 $salary = (float)$row['fee'];
             }
-
-            if ($row['job_category'] === 'corporate') {
+            elseif ($jobCategory === 'corporate') {
                 $dailySalary = (float)$row['base_salary'] / $daysInMonth;
                 $cost = $dailySalary;
                 $salary = (float)$row['base_salary'];
+            }
+            else {
+                $cost = 0;
+                $salary = 0;
             }
 
             $result[] = [
@@ -1293,50 +1354,6 @@ class Balance extends BaseAdminController
                 'cost'     => round($cost, 2),
                 'salary'   => round($salary, 2)
             ];
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | MTD COST (AKUMULASI DARI 1 → H-1)
-        |--------------------------------------------------------------------------
-        */
-
-        $mtdRows = $this->db->table('job_attendances ja')
-            ->select('
-                j.category as job_category,
-                j.fee,
-                wc.base_salary,
-                COUNT(DISTINCT DATE(ja.created_at)) as total_days
-            ')
-            ->join('jobs j', 'j.id = ja.job_id')
-            ->join('skills s', 's.name = j.position', 'left')
-            ->join(
-                'worker_contracts wc',
-                'wc.user_id = ja.user_id AND wc.contract_type = "corporate"',
-                'left'
-            )
-            ->where('j.hotel_id', $hotelId)
-            ->where('s.category', $department)
-            ->where('ja.created_at >=', $rangeStart)
-            ->where('ja.created_at <=', $rangeEnd)
-            ->groupBy('ja.user_id')
-            ->get()
-            ->getResultArray();
-
-        $mtdCost = 0;
-
-        foreach ($mtdRows as $row) {
-
-            $days = (int)$row['total_days'];
-
-            if ($row['job_category'] === 'daily_worker') {
-                $mtdCost += $days * (float)$row['fee'];
-            }
-
-            if ($row['job_category'] === 'corporate') {
-                $dailySalary = (float)$row['base_salary'] / $daysInMonth;
-                $mtdCost += $days * $dailySalary;
-            }
         }
 
         /*
@@ -1366,6 +1383,9 @@ class Balance extends BaseAdminController
             ->getRow()
             ->amount ?? 0;
 
+        $todayRevenue = (float)$todayRevenue;
+        $mtdRevenue   = (float)$mtdRevenue;
+
         /*
         |--------------------------------------------------------------------------
         | RATIO
@@ -1376,12 +1396,26 @@ class Balance extends BaseAdminController
             ? round(($todayCost / $todayRevenue) * 100, 2)
             : 0;
 
+        $operationalStartDay = 20;
+        $currentDay = (int) date('d', strtotime($attendanceDate));
+
+        if ($currentDay >= $operationalStartDay) {
+            $operationalDays = $currentDay - $operationalStartDay;
+        } else {
+            $prevStart = date('Y-m-20', strtotime('-1 month', strtotime($attendanceDate)));
+            $operationalDays = (strtotime($attendanceDate) - strtotime($prevStart)) / 86400;
+        }
+
+        $operationalDays = max(1, (int)$operationalDays);
+
+        $mtdCost = $todayCost * $operationalDays;
+
         $mtdRatio = $mtdRevenue > 0
             ? round(($mtdCost / $mtdRevenue) * 100, 2)
             : 0;
 
-        $todayLabel = $this->getRatioLabel($todayRatio, $hotelId, '');
-        $mtdLabel   = $this->getRatioLabel($mtdRatio, $hotelId, '');
+        $todayLabel = $this->getRatioLabel($todayRatio, $hotelId, $department);
+        $mtdLabel   = $this->getRatioLabel($mtdRatio, $hotelId, $department);
 
         return $this->response->setJSON([
             'status'        => true,
@@ -1390,8 +1424,8 @@ class Balance extends BaseAdminController
             'data'          => $result,
             'total_cost'    => round($todayCost, 2),
             'mtd_cost'      => round($mtdCost, 2),
-            'today_revenue' => (float)$todayRevenue,
-            'mtd_revenue'   => (float)$mtdRevenue,
+            'today_revenue' => $todayRevenue,
+            'mtd_revenue'   => $mtdRevenue,
             'today_ratio'   => $todayRatio,
             'mtd_ratio'     => $mtdRatio,
             'today_label'   => $todayLabel,
