@@ -42,13 +42,16 @@
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Job Position</label>
                                                 <select
-                                                    name="position[]"
                                                     id="add_job_position"
                                                     class="form-select select2"
-                                                    data-placeholder="Select Job Position"
-                                                    style="width:100%"
-                                                    multiple
-                                                    required>
+                                                    data-placeholder="Select Hotel"
+                                                    style="width:100%">
+                                                    <option value=""></option>
+                                                    <?php foreach ($skills as $skill): ?>
+                                                        <option value="<?= $skill['id'] ?>">
+                                                            <?= esc($skill['name']) ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
                                                 </select>
                                             </div>
 
@@ -528,19 +531,7 @@
                                         placeholder: 'Select Job Position',
                                         allowClear: true,
                                         closeOnSelect: false, // 🔥 penting untuk multi select
-                                        dropdownParent: modal,
-                                        ajax: {
-                                            url: "<?= base_url('admin/job-vacancies/skills') ?>",
-                                            dataType: 'json',
-                                            delay: 250,
-                                            data: function (params) {
-                                                return { q: params.term };
-                                            },
-                                            processResults: function (data) {
-                                                return { results: data.results };
-                                            },
-                                            cache: true
-                                        }
+                                        dropdownParent: modal
                                     });
                                 }
 

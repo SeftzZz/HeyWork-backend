@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Models\JobModel;
+use App\Models\SkillModel;
 use CodeIgniter\Controller;
 
 class JobVacancies extends BaseAdminController
@@ -17,12 +18,17 @@ class JobVacancies extends BaseAdminController
         parent::initController($request, $response, $logger);
 
         $this->job = new JobModel();
+        $this->skills = new SkillModel();
     }
 
     public function index()
     {
         return view('admin/job-vacancies/index', [
-            'title' => 'Job Vacancies'
+            'title' => 'Job Vacancies',
+            'skills' => $this->skills
+                ->where('deleted_at', null)
+                ->orderBy('name', 'ASC')
+                ->findAll()
         ]);
     }
 
@@ -370,8 +376,7 @@ class JobVacancies extends BaseAdminController
         $total = $db->table('jobs')
             ->where('hotel_id', session()->get('hotel_id'))
             ->whereIn('category', ['daily_worker', 'casual'])
-            ->where('status', 'open') // ✅ tambah ini
-            ->where('deleted_at IS NULL')
+            ->where('deleted_at', null)
             ->countAllResults();
 
         return $this->response->setJSON([
