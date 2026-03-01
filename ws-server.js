@@ -90,6 +90,53 @@ async function autoCheckout() {
   }
 }
 
+async function autoCompleteApplications() {
+  try {
+    console.log('🔎 Checking completed job applications...');
+
+    const [rows] = await db.query(`
+      SELECT 
+        ja.id AS application_id,
+        ja.user_id,
+        j.id AS job_id,
+        j.job_date_end,
+        j.end_time,
+        MAX(att.created_at) AS last_attendance,
+        MAX(CASE WHEN att.type = 'checkout' THEN 1 ELSE 0 END) AS has_checkout
+      FROM job_applications ja
+      JOIN jobs j ON j.id = ja.job_id
+      JOIN job_attendances att 
+        ON att.application_id = ja.id
+      WHERE ja.status != 'completed'
+        AND j.job_date_end <= CURDATE()
+      GROUP BY ja.id
+      HAVING has_checkout = 1
+        AND NOW() >= TIMESTAMP(j.job_date_end, j.end_time)
+    `);
+
+    for (const row of rows) {
+
+      await db.query(`
+        UPDATE job_applications
+        SET status = 'completed'
+        WHERE id = ?
+      `, [row.application_id]);
+
+      console.log(`✅ Auto completed application ${row.application_id}`);
+
+      broadcast({
+        type: 'job_completed',
+        application_id: row.application_id,
+        user_id: row.user_id,
+        job_id: row.job_id
+      });
+    }
+
+  } catch (err) {
+    console.error('❌ Auto complete error:', err);
+  }
+}
+
 /**
  * =========================
  * WS CONNECTION
@@ -124,5 +171,8 @@ app.post('/emit', (req, res) => {
  */
 app.listen(3005, () => {
   console.log('WS HTTP bridge running on port 3005');
-  setInterval(autoCheckout, 1 * 60 * 1000); // 1 menit
+  setInterval(() => {
+    autoCheckout();
+    autoCompleteApplications();
+  }, 1 * 60 * 1000);
 });

@@ -96,6 +96,14 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('schedule-approvals/reject-plan/(:num)', 'Admin\ScheduleApprovals::rejectPlan/$1');
     $routes->post('schedule-approvals/approve-revision/(:num)', 'Admin\ScheduleApprovals::approveRevision/$1');
     $routes->post('schedule-approvals/reject-revision/(:num)', 'Admin\ScheduleApprovals::rejectRevision/$1');
+
+    $routes->get('invoices', 'Admin\Invoices::index', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk']);
+    $routes->get('invoices/print/(:num)', 'Admin\Invoices::print/$1', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk']);
+    $routes->get('invoices/send/(:num)', 'Admin\Invoices::sendEmail/$1', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk']);
+    $routes->get('invoices/create/(:num)', 'Admin\Invoices::create/$1', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk']);
+
+    $routes->get('payments', 'Admin\Payments::index', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk']);
+    $routes->post('payments/datatable', 'Admin\Payments::datatable');
 });
 
 $routes->group('api', function($routes) {
@@ -146,7 +154,7 @@ $routes->group('api', ['filter' => 'jwt'], function($routes) {
     // ATTENDANCE 🔥 (FIXED)
     // =========================
     $routes->get('worker/schedule', 'Api\WorkerController::schedule');
-    
+
     // list attendance (schedule)
     // optional: ?date=YYYY-MM-DD
     $routes->get('worker/attendance', 'Api\WorkerController::attendance');

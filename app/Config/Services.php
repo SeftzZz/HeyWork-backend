@@ -4,33 +4,11 @@ namespace Config;
 
 use CodeIgniter\Config\BaseService;
 use App\Services\WsEmitter;
+use Config\Email;
+use CodeIgniter\Email\Email as CIEmail;
 
-/**
- * Services Configuration file.
- *
- * Services are simply other classes/libraries that the system uses
- * to do its job. This is used by CodeIgniter to allow the core of the
- * framework to be swapped out easily without affecting the usage within
- * the rest of your application.
- *
- * This file holds any application-specific services, or service overrides
- * that you might need. An example has been included with the general
- * method format you should use for your service methods. For more examples,
- * see the core Services file at system/Config/Services.php.
- */
 class Services extends BaseService
 {
-    /*
-     * public static function example($getShared = true)
-     * {
-     *     if ($getShared) {
-     *         return static::getSharedInstance('example');
-     *     }
-     *
-     *     return new \CodeIgniter\Example();
-     * }
-     */
-
     public static function wsEmitter(bool $getShared = true)
     {
         if ($getShared) {
@@ -38,5 +16,29 @@ class Services extends BaseService
         }
 
         return new WsEmitter();
+    }
+
+    // ========================================
+    // INVOICE EMAIL SERVICE
+    // ========================================
+    public static function invoiceEmail(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('invoiceEmail');
+        }
+
+        $config = new Email();
+
+        $config->protocol   = 'smtp';
+        $config->SMTPHost   = 'smtp.gmail.com';
+        $config->SMTPUser   = env('email.SMTPUser');
+        $config->SMTPPass   = env('email.SMTPPass');
+        $config->SMTPPort   = 587;
+        $config->SMTPCrypto = 'tls';
+        $config->mailType   = 'html';
+        $config->charset    = 'utf-8';
+        $config->newline    = "\r\n";
+
+        return new CIEmail($config);
     }
 }
