@@ -874,6 +874,7 @@ class WorkerController extends BaseController
             'longitude'     => $data['longitude'],
             'photo_path'    => $photoPath,
             'device_info'   => $this->request->getUserAgent()->getAgentString(),
+            'created_at'    => $data['device_time'],
             'created_by'    => $user->id
         ]);
 
@@ -957,4 +958,80 @@ class WorkerController extends BaseController
         ]);
     }
 
+    public function schedule()
+    {
+        $db = \Config\Database::connect();
+
+        $userId = $this->request->user->id ?? null;
+        if (!$userId) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Unauthorized'
+            ]);
+        }
+
+        // ===============================
+        // GET ALL APPROVED SHIFTS FOR USER
+        // ===============================
+        $rows = $db->table('schedule_shifts ss')
+            ->select('
+                ss.id as schedule_shift_id,
+                sd.shift_date,
+                ss.start_time,
+                ss.end_time,
+                ss.shift_type,
+                ss.application_id,
+                ss.job_id,
+                sp.department,
+                sp.status,
+                sp.hotel_id,
+                h.hotel_name,
+                h.latitude,
+                h.longitude
+            ')
+            ->join('schedule_days sd', 'sd.id = ss.schedule_day_id')
+            ->join('schedule_plans sp', 'sp.id = sd.schedule_plan_id')
+            ->join('hotels h', 'h.id = sp.hotel_id') // 🔥 TAMBAH INI
+            ->where('ss.user_id', $userId)
+            ->where('sp.status', 'approved')
+            ->orderBy('sd.shift_date', 'ASC')
+            ->orderBy('ss.start_time', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        // ===============================
+        // GROUP BY DATE
+        // ===============================
+        $grouped = [];
+
+        foreach ($rows as $row) {
+            $date = $row['shift_date'];
+
+            if (!isset($grouped[$date])) {
+                $grouped[$date] = [
+                    'shift_date' => $date,
+                    'shifts'     => []
+                ];
+            }
+
+            $grouped[$date]['shifts'][] = [
+                'schedule_shift_id' => $row['schedule_shift_id'],
+                'start_time'        => $row['start_time'],
+                'end_time'          => $row['end_time'],
+                'shift_type'        => $row['shift_type'],
+                'department'        => $row['department'],
+                'hotel_id'          => $row['hotel_id'],
+                'hotel_name'        => $row['hotel_name'],
+                'hotel_latitude'    => $row['latitude'],
+                'hotel_longitude'   => $row['longitude'],
+                'application_id'    => $row['application_id'],
+                'job_id'            => $row['job_id'],
+            ];
+        }
+
+        return $this->response->setJSON([
+            'status' => true,
+            'data'   => array_values($grouped)
+        ]);
+    }
 }

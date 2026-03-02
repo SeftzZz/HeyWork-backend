@@ -110,8 +110,11 @@
 					                        '<"col-sm-12 col-md-6"i>' +
 					                        '<"col-sm-12 col-md-6"p>' +
 					                    	'>',
-					                    displayLength: 10,
-						                lengthMenu: [10, 25, 50, 100],
+					                    pageLength: -1,
+						                lengthMenu: [
+										  [10, 25, 50, 100, -1],
+										  [10, 25, 50, 100, "All"]
+										],
 						                buttons: (sessionHotelId === 0) ? [
 										    {
 										        extend: 'collection',

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 27, 2026 at 06:44 PM
+-- Generation Time: Mar 02, 2026 at 04:25 AM
 -- Server version: 10.11.10-MariaDB-log
 -- PHP Version: 8.3.27
 
@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `hotels` (
   `id` int(11) NOT NULL,
   `hotel_name` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
   `location` varchar(250) NOT NULL,
   `latitude` decimal(10,7) NOT NULL,
   `longitude` decimal(10,7) NOT NULL,
@@ -50,8 +51,8 @@ CREATE TABLE `hotels` (
 -- Dumping data for table `hotels`
 --
 
-INSERT INTO `hotels` (`id`, `hotel_name`, `location`, `latitude`, `longitude`, `website`, `description`, `founded`, `size`, `logo`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 'Sahira Butik Hotel Paledang', 'Bogor, West Java', -6.6011450, 106.7941260, 'www.sahirahotelsgroup.com', '', '2005', 100, 'images/sbh-color.png', '2026-02-21 07:56:34', 1, '2026-02-24 00:52:46', 1, NULL, NULL);
+INSERT INTO `hotels` (`id`, `hotel_name`, `email`, `location`, `latitude`, `longitude`, `website`, `description`, `founded`, `size`, `logo`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 'Sahira Butik Hotel Paledang', 'finance@salamdjourney.com', 'Bogor, West Java', -6.6011450, 106.7941260, 'www.sahirahotelsgroup.com', '', '2005', 100, 'images/sbh-color.png', '2026-02-21 07:56:34', 1, '2026-02-24 00:52:46', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -96,7 +97,82 @@ INSERT INTO `hotel_transactions` (`id`, `hotel_id`, `type`, `amount`, `dw_ratio`
 (26, 1, 'debit', 3035714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-25', '2026-02-25 18:02:36', 17, NULL, NULL, NULL, NULL),
 (27, 1, 'credit', 3223140.00, 94.18, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-25', '2026-02-25 18:02:36', 17, NULL, NULL, NULL, NULL),
 (31, 1, 'debit', 3355714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-26', '2026-02-26 00:00:00', 17, NULL, NULL, NULL, NULL),
-(32, 1, 'credit', 9867769.00, 34.01, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-26', '2026-02-26 00:00:00', 17, NULL, NULL, NULL, NULL);
+(32, 1, 'credit', 9867769.00, 34.01, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-26', '2026-02-26 00:00:00', 17, NULL, NULL, NULL, NULL),
+(33, 1, 'debit', 125000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-27', '2026-02-27 00:00:00', 17, '2026-03-01 18:01:31', 17, NULL, NULL),
+(34, 1, 'credit', 9933884.00, 0.93, 'NO DATA', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-27', '2026-02-27 00:00:00', 17, '2026-02-28 00:00:00', 17, NULL, NULL),
+(35, 1, 'debit', 125000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-28', '2026-02-28 00:00:00', 17, NULL, NULL, NULL, NULL),
+(36, 1, 'credit', 13496063.00, 0.93, 'NO DATA', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-28', '2026-02-28 00:00:00', 17, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoices`
+--
+
+CREATE TABLE `invoices` (
+  `id` int(11) NOT NULL,
+  `invoice_number` varchar(50) NOT NULL,
+  `hotel_id` int(11) NOT NULL,
+  `billing_start` date NOT NULL,
+  `billing_end` date NOT NULL,
+  `total_amount` decimal(15,2) NOT NULL,
+  `paid_amount` decimal(15,2) DEFAULT 0.00,
+  `status` enum('unbilled','billed','partial','paid','overdue','cancelled') NOT NULL DEFAULT 'unbilled',
+  `due_date` date DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `created_by` int(11) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `invoices`
+--
+
+INSERT INTO `invoices` (`id`, `invoice_number`, `hotel_id`, `billing_start`, `billing_end`, `total_amount`, `paid_amount`, `status`, `due_date`, `created_at`, `created_by`, `updated_at`, `deleted_at`) VALUES
+(1, 'INV-20260302-ID-1', 1, '2026-03-01', '2026-03-01', 110000.00, 0.00, 'unbilled', '2026-03-09', '2026-03-02 03:23:58', 17, '2026-03-02 03:24:16', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoice_items`
+--
+
+CREATE TABLE `invoice_items` (
+  `id` int(11) NOT NULL,
+  `invoice_id` int(11) NOT NULL,
+  `amount` decimal(15,2) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `application_id` int(11) DEFAULT NULL,
+  `attendance_date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `invoice_items`
+--
+
+INSERT INTO `invoice_items` (`id`, `invoice_id`, `amount`, `created_at`, `application_id`, `attendance_date`) VALUES
+(1, 1, 110000.00, '2026-03-02 03:23:58', 1, '2026-03-01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoice_payments`
+--
+
+CREATE TABLE `invoice_payments` (
+  `id` int(11) NOT NULL,
+  `invoice_id` int(11) NOT NULL,
+  `hotel_id` int(11) NOT NULL,
+  `amount` decimal(15,2) NOT NULL,
+  `payment_method` enum('bank_transfer','cash','virtual_account','crypto','other') DEFAULT 'bank_transfer',
+  `payment_reference` varchar(100) DEFAULT NULL,
+  `payment_date` date NOT NULL,
+  `proof_file` varchar(255) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `created_by` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -155,7 +231,7 @@ INSERT INTO `jobs` (`id`, `hotel_id`, `position`, `job_date_start`, `job_date_en
 (22, 1, 'Business Development', '2025-12-09', '2026-06-08', '00:00:00', '23:59:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
 (23, 1, 'Security Guard', '2025-12-02', '2026-12-01', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
 (24, 1, 'Housekeeping', '2026-02-21', '2026-03-20', '00:00:00', '23:59:00', 'casual', 100000, 'Bogor, West Java', 'maintains cleanliness and sanitation in residential or commercial spaces by performing tasks like sweeping, vacuuming, mopping, dusting, cleaning bathrooms, and changing linens', 'surface care and equipment handling, alongside key soft skills like time management, attention to detail, and discretion', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(25, 1, 'Front Office', '2026-02-21', '2026-03-20', '00:00:00', '23:59:00', 'daily_worker', 110000, 'Bogor, West Java', 'acts as the company\'s first point of contact, providing exceptional customer service by greeting visitors, managing phone calls, and handling administrative tasks', 'strong communication, interpersonal, and multitasking skills', 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(25, 1, 'Front Office', '2026-03-01', '2026-03-01', '07:00:00', '14:59:00', 'daily_worker', 110000, 'Bogor, West Java', 'acts as the company\'s first point of contact, providing exceptional customer service by greeting visitors, managing phone calls, and handling administrative tasks', 'strong communication, interpersonal, and multitasking skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
 (26, 1, 'Cook', '2026-02-21', '2026-03-20', '00:00:00', '23:59:00', 'daily_worker', 100000, 'Bogor, West Java', 'prepares, seasons, and cooks a variety of foods, including soups, salads, and entrees, while ensuring quality, taste, and presentation standards are met', 'proficiency in knife handling, mastery of cooking techniques (sautéing, roasting, grilling), strict adherence to food safety and sanitation standards, and flavor balancing', 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
 (27, 1, 'Front Office', '2026-02-21', '2026-03-20', '00:00:00', '23:59:00', 'daily_worker', 120000, 'Bogor, West Java', 'acts as the company\'s first point of contact, providing exceptional customer service by greeting visitors, managing phone calls, and handling administrative tasks', 'strong communication, interpersonal, and multitasking skills', 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL);
 
@@ -181,43 +257,7 @@ CREATE TABLE `job_applications` (
 --
 
 INSERT INTO `job_applications` (`id`, `job_id`, `user_id`, `status`, `applied_at`, `accepted_at`, `accepted_by`, `deleted_at`) VALUES
-(1, 1, 2, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(2, 2, 3, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(3, 3, 4, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(4, 4, 5, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(5, 5, 6, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(6, 6, 7, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(7, 7, 8, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(8, 8, 9, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(9, 9, 10, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(10, 10, 11, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(11, 11, 12, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(12, 12, 13, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(13, 13, 14, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(14, 13, 15, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(15, 14, 16, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(16, 15, 17, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(17, 16, 18, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(18, 17, 19, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(19, 18, 20, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(20, 19, 21, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(21, 20, 22, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(22, 21, 23, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(23, 22, 24, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(24, 6, 25, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(25, 23, 26, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(26, 23, 27, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(28, 23, 28, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(29, 23, 29, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(30, 23, 30, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(31, 24, 31, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(32, 24, 32, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(33, 24, 33, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(34, 27, 34, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(35, 26, 35, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(36, 26, 36, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(37, 24, 37, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
-(38, 25, 38, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL);
+(1, 25, 34, 'completed', '2026-03-01 01:12:18', '2026-03-01 01:12:30', 17, NULL);
 
 -- --------------------------------------------------------
 
@@ -249,706 +289,8 @@ CREATE TABLE `job_attendances` (
 --
 
 INSERT INTO `job_attendances` (`id`, `job_id`, `application_id`, `user_id`, `transaction_id`, `type`, `latitude`, `longitude`, `photo_path`, `device_info`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(13, 1, 1, 2, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_1_2_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 2, NULL, NULL, NULL, NULL),
-(14, 1, 1, 2, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_1_2_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 2, NULL, NULL, NULL, NULL),
-(15, 1, 1, 2, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_1_2_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 2, NULL, NULL, NULL, NULL),
-(16, 1, 1, 2, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_1_2_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 2, NULL, NULL, NULL, NULL),
-(17, 2, 2, 3, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_2_3_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 3, NULL, NULL, NULL, NULL),
-(18, 2, 2, 3, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_2_3_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 3, NULL, NULL, NULL, NULL),
-(19, 2, 2, 3, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_2_3_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 3, NULL, NULL, NULL, NULL),
-(20, 2, 2, 3, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_2_3_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 3, NULL, NULL, NULL, NULL),
-(21, 3, 3, 4, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_3_4_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 4, NULL, NULL, NULL, NULL),
-(22, 3, 3, 4, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_3_4_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 4, NULL, NULL, NULL, NULL),
-(23, 3, 3, 4, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_3_4_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 4, NULL, NULL, NULL, NULL),
-(24, 3, 3, 4, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_3_4_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 4, NULL, NULL, NULL, NULL),
-(25, 4, 4, 5, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_4_5_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 5, NULL, NULL, NULL, NULL),
-(26, 4, 4, 5, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_4_5_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 5, NULL, NULL, NULL, NULL),
-(27, 4, 4, 5, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_4_5_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 5, NULL, NULL, NULL, NULL),
-(28, 4, 4, 5, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_4_5_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 5, NULL, NULL, NULL, NULL),
-(29, 5, 5, 6, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_5_6_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 6, NULL, NULL, NULL, NULL),
-(30, 5, 5, 6, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_5_6_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 6, NULL, NULL, NULL, NULL),
-(31, 5, 5, 6, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_5_6_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 6, NULL, NULL, NULL, NULL),
-(32, 5, 5, 6, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_5_6_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 6, NULL, NULL, NULL, NULL),
-(33, 6, 6, 7, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_7_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 7, NULL, NULL, NULL, NULL),
-(34, 6, 6, 7, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_7_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 7, NULL, NULL, NULL, NULL),
-(35, 6, 6, 7, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_7_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 7, NULL, NULL, NULL, NULL),
-(36, 6, 6, 7, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_7_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 7, NULL, NULL, NULL, NULL),
-(37, 7, 7, 8, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_7_8_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 8, NULL, NULL, NULL, NULL),
-(38, 7, 7, 8, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_7_8_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 8, NULL, NULL, NULL, NULL),
-(39, 7, 7, 8, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_7_8_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 8, NULL, NULL, NULL, NULL),
-(40, 7, 7, 8, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_7_8_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 8, NULL, NULL, NULL, NULL),
-(41, 8, 8, 9, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_8_9_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 9, NULL, NULL, NULL, NULL),
-(42, 8, 8, 9, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_8_9_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 9, NULL, NULL, NULL, NULL),
-(43, 8, 8, 9, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_8_9_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 9, NULL, NULL, NULL, NULL),
-(44, 8, 8, 9, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_8_9_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 9, NULL, NULL, NULL, NULL),
-(45, 9, 9, 10, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_9_10_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 10, NULL, NULL, NULL, NULL),
-(46, 9, 9, 10, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_9_10_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 10, NULL, NULL, NULL, NULL),
-(47, 9, 9, 10, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_9_10_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 10, NULL, NULL, NULL, NULL),
-(48, 9, 9, 10, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_9_10_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 10, NULL, NULL, NULL, NULL),
-(49, 10, 10, 11, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_10_11_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 00:00:00', 11, NULL, NULL, NULL, NULL),
-(50, 10, 10, 11, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_10_11_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 00:00:00', 11, NULL, NULL, NULL, NULL),
-(51, 10, 10, 11, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_10_11_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 00:00:00', 11, NULL, NULL, NULL, NULL),
-(52, 10, 10, 11, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_10_11_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 00:00:00', 11, NULL, NULL, NULL, NULL),
-(53, 11, 11, 12, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_11_12_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 12, NULL, NULL, NULL, NULL),
-(54, 11, 11, 12, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_11_12_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 12, NULL, NULL, NULL, NULL),
-(55, 11, 11, 12, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_11_12_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 12, NULL, NULL, NULL, NULL),
-(56, 11, 11, 12, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_11_12_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 12, NULL, NULL, NULL, NULL),
-(57, 12, 12, 13, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_12_13_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 13, NULL, NULL, NULL, NULL),
-(58, 12, 12, 13, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_12_13_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 13, NULL, NULL, NULL, NULL),
-(59, 12, 12, 13, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_12_13_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 13, NULL, NULL, NULL, NULL),
-(60, 12, 12, 13, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_12_13_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 13, NULL, NULL, NULL, NULL),
-(61, 13, 13, 14, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_14_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 14, NULL, NULL, NULL, NULL),
-(62, 13, 13, 14, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_14_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 14, NULL, NULL, NULL, NULL),
-(63, 13, 13, 14, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_14_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 14, NULL, NULL, NULL, NULL),
-(64, 13, 13, 14, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_14_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 14, NULL, NULL, NULL, NULL),
-(65, 13, 14, 15, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_15_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 15, NULL, NULL, NULL, NULL),
-(66, 13, 14, 15, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_15_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 15, NULL, NULL, NULL, NULL),
-(67, 13, 14, 15, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_15_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 15, NULL, NULL, NULL, NULL),
-(68, 13, 14, 15, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_15_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 15, NULL, NULL, NULL, NULL),
-(69, 14, 15, 16, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_14_16_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 16, NULL, NULL, NULL, NULL),
-(70, 14, 15, 16, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_14_16_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 16, NULL, NULL, NULL, NULL),
-(71, 14, 15, 16, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_14_16_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 16, NULL, NULL, NULL, NULL),
-(72, 14, 15, 16, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_14_16_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 16, NULL, NULL, NULL, NULL),
-(73, 16, 17, 18, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_16_18_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 18, NULL, NULL, NULL, NULL),
-(74, 16, 17, 18, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_16_18_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 18, NULL, NULL, NULL, NULL),
-(75, 16, 17, 18, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_16_18_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 18, NULL, NULL, NULL, NULL),
-(76, 16, 17, 18, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_16_18_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 18, NULL, NULL, NULL, NULL),
-(77, 17, 18, 19, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_17_19_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 19, NULL, NULL, NULL, NULL),
-(78, 17, 18, 19, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_17_19_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 19, NULL, NULL, NULL, NULL),
-(79, 17, 18, 19, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_17_19_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 19, NULL, NULL, NULL, NULL),
-(80, 17, 18, 19, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_17_19_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 19, NULL, NULL, NULL, NULL),
-(81, 18, 19, 20, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_18_20_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 20, NULL, NULL, NULL, NULL),
-(82, 18, 19, 20, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_18_20_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 20, NULL, NULL, NULL, NULL),
-(83, 18, 19, 20, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_18_20_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 20, NULL, NULL, NULL, NULL),
-(84, 18, 19, 20, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_18_20_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 20, NULL, NULL, NULL, NULL),
-(85, 19, 20, 21, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_19_21_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 21, NULL, NULL, NULL, NULL),
-(86, 19, 20, 21, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_19_21_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 21, NULL, NULL, NULL, NULL),
-(87, 19, 20, 21, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_19_21_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 21, NULL, NULL, NULL, NULL),
-(88, 19, 20, 21, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_19_21_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 21, NULL, NULL, NULL, NULL),
-(89, 20, 21, 22, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_20_22_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 22, NULL, NULL, NULL, NULL),
-(90, 20, 21, 22, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_20_22_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 22, NULL, NULL, NULL, NULL),
-(91, 20, 21, 22, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_20_22_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 22, NULL, NULL, NULL, NULL),
-(92, 20, 21, 22, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_20_22_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 22, NULL, NULL, NULL, NULL),
-(93, 21, 22, 23, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_21_23_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 23, NULL, NULL, NULL, NULL),
-(94, 21, 22, 23, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_21_23_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 23, NULL, NULL, NULL, NULL),
-(95, 21, 22, 23, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_21_23_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 23, NULL, NULL, NULL, NULL),
-(96, 21, 22, 23, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_21_23_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 23, NULL, NULL, NULL, NULL),
-(97, 22, 23, 24, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_22_24_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 24, NULL, NULL, NULL, NULL),
-(98, 22, 23, 24, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_22_24_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 24, NULL, NULL, NULL, NULL),
-(99, 22, 23, 24, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_22_24_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 24, NULL, NULL, NULL, NULL),
-(100, 22, 23, 24, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_22_24_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 24, NULL, NULL, NULL, NULL),
-(101, 6, 24, 25, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_25_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 25, NULL, NULL, NULL, NULL),
-(102, 6, 24, 25, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_25_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 25, NULL, NULL, NULL, NULL),
-(103, 6, 24, 25, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_25_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 25, NULL, NULL, NULL, NULL),
-(104, 6, 24, 25, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_25_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 25, NULL, NULL, NULL, NULL),
-(105, 23, 25, 26, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_26_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 26, NULL, NULL, NULL, NULL),
-(106, 23, 25, 26, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_26_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 26, NULL, NULL, NULL, NULL),
-(107, 23, 25, 26, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_26_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 26, NULL, NULL, NULL, NULL),
-(108, 23, 25, 26, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_26_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 26, NULL, NULL, NULL, NULL),
-(109, 23, 26, 27, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_27_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 27, NULL, NULL, NULL, NULL),
-(110, 23, 26, 27, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_27_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 27, NULL, NULL, NULL, NULL),
-(111, 23, 26, 27, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_27_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 27, NULL, NULL, NULL, NULL),
-(112, 23, 26, 27, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_27_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 27, NULL, NULL, NULL, NULL),
-(113, 23, 28, 28, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_28_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 28, NULL, NULL, NULL, NULL),
-(114, 23, 28, 28, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_28_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 28, NULL, NULL, NULL, NULL),
-(115, 23, 28, 28, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_28_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 28, NULL, NULL, NULL, NULL),
-(116, 23, 28, 28, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_28_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 28, NULL, NULL, NULL, NULL),
-(117, 23, 29, 29, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_29_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 29, NULL, NULL, NULL, NULL),
-(118, 23, 29, 29, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_29_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 29, NULL, NULL, NULL, NULL),
-(119, 23, 29, 29, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_29_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 29, NULL, NULL, NULL, NULL),
-(120, 23, 29, 29, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_29_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 29, NULL, NULL, NULL, NULL),
-(121, 23, 30, 30, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_30_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-21 09:00:00', 30, NULL, NULL, NULL, NULL),
-(122, 23, 30, 30, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_30_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-22 09:00:00', 30, NULL, NULL, NULL, NULL),
-(123, 23, 30, 30, 17, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_30_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-23 09:00:00', 30, NULL, NULL, NULL, NULL),
-(124, 23, 30, 30, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_30_1771930654.jpg', 'AUTO SYSTEM GENERATED', '2026-02-24 09:00:00', 30, NULL, NULL, NULL, NULL),
-(140, 1, 1, 2, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(141, 1, 1, 2, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(142, 1, 1, 2, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(143, 2, 2, 3, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(144, 2, 2, 3, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(145, 2, 2, 3, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(146, 3, 3, 4, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(147, 3, 3, 4, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(148, 3, 3, 4, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(149, 4, 4, 5, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(150, 4, 4, 5, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(151, 4, 4, 5, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(152, 5, 5, 6, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(153, 5, 5, 6, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(154, 5, 5, 6, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(155, 6, 6, 7, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(156, 6, 6, 7, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(157, 6, 6, 7, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(158, 7, 7, 8, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(159, 7, 7, 8, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(160, 7, 7, 8, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(161, 8, 8, 9, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(162, 8, 8, 9, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(163, 8, 8, 9, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(164, 9, 9, 10, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(165, 9, 9, 10, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(166, 9, 9, 10, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(167, 10, 10, 11, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(168, 10, 10, 11, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(169, 10, 10, 11, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(170, 10, 10, 11, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(171, 11, 11, 12, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(172, 11, 11, 12, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(173, 11, 11, 12, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(174, 12, 12, 13, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(175, 12, 12, 13, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(176, 12, 12, 13, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(177, 13, 13, 14, 19, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(180, 13, 14, 15, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(181, 13, 14, 15, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(182, 13, 14, 15, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(183, 14, 15, 16, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(184, 14, 15, 16, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(185, 14, 15, 16, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(186, 16, 17, 18, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(187, 16, 17, 18, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(188, 16, 17, 18, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(189, 17, 18, 19, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(190, 17, 18, 19, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(191, 17, 18, 19, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(192, 18, 19, 20, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(193, 18, 19, 20, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(194, 18, 19, 20, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(195, 18, 19, 20, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(196, 19, 20, 21, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(197, 19, 20, 21, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(198, 19, 20, 21, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(199, 20, 21, 22, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(200, 20, 21, 22, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(201, 20, 21, 22, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(202, 20, 21, 22, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(203, 21, 22, 23, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(204, 21, 22, 23, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(205, 21, 22, 23, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(206, 22, 23, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(207, 22, 23, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(208, 22, 23, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(209, 6, 24, 25, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(210, 6, 24, 25, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(211, 6, 24, 25, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(212, 23, 25, 26, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(213, 23, 25, 26, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(214, 23, 25, 26, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(215, 23, 26, 27, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(216, 23, 26, 27, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(217, 23, 26, 27, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(218, 23, 28, 28, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(219, 23, 28, 28, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(220, 23, 28, 28, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(221, 23, 29, 29, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(222, 23, 29, 29, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(223, 23, 29, 29, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(224, 23, 30, 30, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(225, 23, 30, 30, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(226, 23, 30, 30, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 17:57:55', NULL, NULL, NULL, NULL, NULL),
-(227, 1, 1, 2, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(228, 1, 1, 2, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(229, 1, 1, 2, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(230, 2, 2, 3, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(231, 2, 2, 3, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(232, 2, 2, 3, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(233, 3, 3, 4, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(234, 3, 3, 4, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(235, 3, 3, 4, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(236, 4, 4, 5, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(237, 4, 4, 5, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(238, 4, 4, 5, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(239, 5, 5, 6, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(240, 5, 5, 6, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(241, 5, 5, 6, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(242, 6, 6, 7, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(243, 6, 6, 7, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(244, 6, 6, 7, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(245, 7, 7, 8, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(246, 7, 7, 8, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(247, 7, 7, 8, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(248, 8, 8, 9, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(249, 8, 8, 9, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(250, 8, 8, 9, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(251, 9, 9, 10, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(252, 9, 9, 10, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(253, 9, 9, 10, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(254, 10, 10, 11, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 00:55:00', NULL, NULL, NULL, NULL, NULL),
-(255, 10, 10, 11, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 00:55:00', NULL, NULL, NULL, NULL, NULL),
-(256, 10, 10, 11, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 00:55:00', NULL, NULL, NULL, NULL, NULL),
-(257, 11, 11, 12, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(258, 11, 11, 12, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(259, 11, 11, 12, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(260, 12, 12, 13, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(261, 12, 12, 13, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(262, 12, 12, 13, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(263, 13, 13, 14, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(264, 13, 13, 14, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(265, 13, 13, 14, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(266, 13, 14, 15, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(267, 13, 14, 15, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(268, 13, 14, 15, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(269, 14, 15, 16, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(270, 14, 15, 16, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(271, 14, 15, 16, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(272, 16, 17, 18, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(273, 16, 17, 18, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(274, 16, 17, 18, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(275, 17, 18, 19, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(276, 17, 18, 19, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(277, 17, 18, 19, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(278, 18, 19, 20, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 16:55:00', NULL, NULL, NULL, NULL, NULL),
-(279, 18, 19, 20, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 16:55:00', NULL, NULL, NULL, NULL, NULL),
-(280, 18, 19, 20, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 16:55:00', NULL, NULL, NULL, NULL, NULL),
-(281, 19, 20, 21, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(282, 19, 20, 21, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(283, 19, 20, 21, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(284, 20, 21, 22, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 17:05:00', NULL, NULL, NULL, NULL, NULL),
-(285, 20, 21, 22, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 17:05:00', NULL, NULL, NULL, NULL, NULL),
-(286, 20, 21, 22, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 17:05:00', NULL, NULL, NULL, NULL, NULL),
-(287, 21, 22, 23, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(288, 21, 22, 23, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(289, 21, 22, 23, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(290, 22, 23, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(291, 22, 23, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(292, 22, 23, 24, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(293, 6, 24, 25, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(294, 6, 24, 25, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(295, 6, 24, 25, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(296, 23, 25, 26, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(297, 23, 25, 26, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(298, 23, 25, 26, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(299, 23, 26, 27, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(300, 23, 26, 27, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(301, 23, 26, 27, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(302, 23, 28, 28, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(303, 23, 28, 28, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(304, 23, 28, 28, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(305, 23, 29, 29, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(306, 23, 29, 29, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(307, 23, 29, 29, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(308, 23, 30, 30, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(309, 23, 30, 30, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-22 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(310, 23, 30, 30, 17, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(354, 27, 25, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 07:03:29', 34, NULL, NULL, NULL, NULL),
-(355, 24, 24, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 08:08:53', 31, NULL, NULL, NULL, NULL),
-(356, 24, 24, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 08:53:23', 32, NULL, NULL, NULL, NULL),
-(357, 19, 19, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 10:42:42', 35, NULL, NULL, NULL, NULL),
-(358, 22, 22, 24, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 11:48:25', 24, NULL, NULL, NULL, NULL),
-(359, 24, 24, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 11:51:27', 33, NULL, NULL, NULL, NULL),
-(360, 19, 19, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 12:01:14', 36, NULL, NULL, NULL, NULL),
-(361, 24, 24, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 19:25:45', 33, NULL, NULL, NULL, NULL),
-(362, 24, 24, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 20:08:09', 31, NULL, NULL, NULL, NULL),
-(363, 19, 19, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 21:32:04', 35, NULL, NULL, NULL, NULL),
-(364, 24, 24, 32, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 21:38:33', 32, NULL, NULL, NULL, NULL),
-(365, 19, 19, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 00:09:03', 36, NULL, NULL, NULL, NULL),
-(366, 24, 24, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 11:58:06', 32, NULL, NULL, NULL, NULL),
-(367, 19, 19, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 12:02:31', 36, NULL, NULL, NULL, NULL),
-(368, 24, 24, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 20:06:40', 31, NULL, NULL, NULL, NULL),
-(369, 24, 24, 32, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 20:23:57', 32, NULL, NULL, NULL, NULL),
-(370, 19, 19, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 00:30:04', 36, NULL, NULL, NULL, NULL),
-(371, 27, 25, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 03:45:03', 34, NULL, NULL, NULL, NULL),
-(372, 27, 25, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 07:18:32', 34, NULL, NULL, NULL, NULL),
-(373, 24, 24, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 07:33:41', 31, NULL, NULL, NULL, NULL),
-(374, 22, 22, 24, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 09:41:42', 24, NULL, NULL, NULL, NULL),
-(375, 19, 19, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 10:45:46', 35, NULL, NULL, NULL, NULL),
-(376, 24, 24, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 11:38:31', 33, NULL, NULL, NULL, NULL),
-(377, 19, 19, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 12:13:54', 36, NULL, NULL, NULL, NULL),
-(378, 24, 24, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 19:42:42', 31, NULL, NULL, NULL, NULL),
-(379, 24, 24, 32, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 20:53:16', 32, NULL, NULL, NULL, NULL),
-(380, 19, 19, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 21:48:27', 35, NULL, NULL, NULL, NULL),
-(381, 24, 24, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 23:04:07', 33, NULL, NULL, NULL, NULL),
-(382, 19, 19, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 02:50:12', 36, NULL, NULL, NULL, NULL),
-(383, 27, 25, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 07:05:48', 34, NULL, NULL, NULL, NULL),
-(384, 24, 24, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 07:53:17', 31, NULL, NULL, NULL, NULL),
-(385, 22, 22, 24, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 08:30:45', 24, NULL, NULL, NULL, NULL),
-(386, 24, 24, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 08:57:45', 32, NULL, NULL, NULL, NULL),
-(387, 19, 19, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 10:52:10', 35, NULL, NULL, NULL, NULL),
-(388, 24, 24, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 12:24:28', 33, NULL, NULL, NULL, NULL);
-INSERT INTO `job_attendances` (`id`, `job_id`, `application_id`, `user_id`, `transaction_id`, `type`, `latitude`, `longitude`, `photo_path`, `device_info`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(389, 19, 19, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 16:59:02', 36, NULL, NULL, NULL, NULL),
-(390, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 11:56:00', 37, NULL, NULL, NULL, NULL),
-(391, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 19:56:00', 37, '2026-02-22 19:56:00', 37, NULL, NULL),
-(392, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 09:05:11', 37, NULL, NULL, NULL, NULL),
-(393, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 17:05:11', 37, '2026-02-24 17:05:11', 37, NULL, NULL),
-(394, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-21 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(395, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-23 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(396, 24, 24, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(397, 22, 22, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(398, 24, 24, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(399, 24, 24, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-24 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(400, 27, 34, 34, 31, 'checkin', -6.6008118, 106.7938935, 'uploads/attendance/checkin_25_34_1772111390.jpg', 'Mozilla/5.0 (Linux; Android 13; 2209116AG Build/TKQ1.221114.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/145.0.7632.79 Mobile Safari/537.36', '2026-02-26 20:09:50', 34, NULL, NULL, NULL, NULL),
-(401, 27, 34, 34, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(402, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 07:00:00', 38, NULL, NULL, NULL, NULL),
-(403, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 15:00:00', 38, NULL, NULL, NULL, NULL),
-(404, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 07:00:00', 38, NULL, NULL, NULL, NULL),
-(405, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 15:00:00', 38, NULL, NULL, NULL, NULL),
-(406, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 07:00:00', 38, NULL, NULL, NULL, NULL),
-(407, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 15:00:00', 38, NULL, NULL, NULL, NULL),
-(408, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 07:00:00', 38, NULL, NULL, NULL, NULL),
-(409, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 15:00:00', 38, NULL, NULL, NULL, NULL),
-(410, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 07:00:00', 38, NULL, NULL, NULL, NULL),
-(411, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 15:00:00', 38, NULL, NULL, NULL, NULL),
-(412, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 07:00:00', 38, NULL, NULL, NULL, NULL),
-(413, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 15:00:00', 38, NULL, NULL, NULL, NULL),
-(414, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 07:00:00', 38, NULL, NULL, NULL, NULL),
-(415, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 15:00:00', 38, NULL, NULL, NULL, NULL),
-(416, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 07:00:00', 38, NULL, NULL, NULL, NULL),
-(417, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 15:00:00', 38, NULL, NULL, NULL, NULL),
-(418, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 07:00:00', 38, NULL, NULL, NULL, NULL),
-(419, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 15:00:00', 38, NULL, NULL, NULL, NULL),
-(420, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 07:00:00', 38, NULL, NULL, NULL, NULL),
-(421, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 15:00:00', 38, NULL, NULL, NULL, NULL),
-(422, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 07:00:00', 38, NULL, NULL, NULL, NULL),
-(423, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 15:00:00', 38, NULL, NULL, NULL, NULL),
-(424, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 07:00:00', 38, NULL, NULL, NULL, NULL),
-(425, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 15:00:00', 38, NULL, NULL, NULL, NULL),
-(426, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 07:00:00', 38, NULL, NULL, NULL, NULL),
-(427, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 15:00:00', 38, NULL, NULL, NULL, NULL),
-(428, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 07:00:00', 38, NULL, NULL, NULL, NULL),
-(429, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 15:00:00', 38, NULL, NULL, NULL, NULL),
-(430, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 07:00:00', 38, NULL, NULL, NULL, NULL),
-(431, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 15:00:00', 38, NULL, NULL, NULL, NULL),
-(432, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 07:00:00', 38, NULL, NULL, NULL, NULL),
-(433, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 15:00:00', 38, NULL, NULL, NULL, NULL),
-(434, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 07:00:00', 38, NULL, NULL, NULL, NULL),
-(435, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 15:00:00', 38, NULL, NULL, NULL, NULL),
-(436, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 07:00:00', 38, NULL, NULL, NULL, NULL),
-(437, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 15:00:00', 38, NULL, NULL, NULL, NULL),
-(438, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 07:00:00', 38, NULL, NULL, NULL, NULL),
-(439, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 15:00:00', 38, NULL, NULL, NULL, NULL),
-(440, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 13:00:00', 38, NULL, NULL, NULL, NULL),
-(441, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 21:00:00', 38, NULL, NULL, NULL, NULL),
-(442, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 13:00:00', 38, NULL, NULL, NULL, NULL),
-(443, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 21:00:00', 38, NULL, NULL, NULL, NULL),
-(444, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 13:00:00', 38, NULL, NULL, NULL, NULL),
-(445, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 21:00:00', 38, NULL, NULL, NULL, NULL),
-(446, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 13:00:00', 38, NULL, NULL, NULL, NULL),
-(447, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 21:00:00', 38, NULL, NULL, NULL, NULL),
-(448, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 13:00:00', 38, NULL, NULL, NULL, NULL),
-(449, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 21:00:00', 38, NULL, NULL, NULL, NULL),
-(450, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-20 08:00:00', 38, NULL, NULL, NULL, NULL),
-(451, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-20 16:00:00', 38, NULL, NULL, NULL, NULL),
-(452, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 19:00:00', 34, NULL, NULL, NULL, NULL),
-(453, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 03:00:00', 34, NULL, NULL, NULL, NULL),
-(454, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 19:00:00', 34, NULL, NULL, NULL, NULL),
-(455, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 03:00:00', 34, NULL, NULL, NULL, NULL),
-(456, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 19:00:00', 34, NULL, NULL, NULL, NULL),
-(457, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 03:00:00', 34, NULL, NULL, NULL, NULL),
-(458, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 19:00:00', 34, NULL, NULL, NULL, NULL),
-(459, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 03:00:00', 34, NULL, NULL, NULL, NULL),
-(460, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 19:00:00', 34, NULL, NULL, NULL, NULL),
-(461, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 03:00:00', 34, NULL, NULL, NULL, NULL),
-(462, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 19:00:00', 34, NULL, NULL, NULL, NULL),
-(463, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 03:00:00', 34, NULL, NULL, NULL, NULL),
-(464, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 19:00:00', 34, NULL, NULL, NULL, NULL),
-(465, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 03:00:00', 34, NULL, NULL, NULL, NULL),
-(466, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 19:00:00', 34, NULL, NULL, NULL, NULL),
-(467, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 03:00:00', 34, NULL, NULL, NULL, NULL),
-(468, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 19:00:00', 34, NULL, NULL, NULL, NULL),
-(469, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 03:00:00', 34, NULL, NULL, NULL, NULL),
-(470, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 19:00:00', 34, NULL, NULL, NULL, NULL),
-(471, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 03:00:00', 34, NULL, NULL, NULL, NULL),
-(472, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 19:00:00', 34, NULL, NULL, NULL, NULL),
-(473, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 03:00:00', 34, NULL, NULL, NULL, NULL),
-(474, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 19:00:00', 34, NULL, NULL, NULL, NULL),
-(475, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 03:00:00', 34, NULL, NULL, NULL, NULL),
-(476, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 19:00:00', 34, NULL, NULL, NULL, NULL),
-(477, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 03:00:00', 34, NULL, NULL, NULL, NULL),
-(478, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 19:00:00', 34, NULL, NULL, NULL, NULL),
-(479, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 03:00:00', 34, NULL, NULL, NULL, NULL),
-(480, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 19:00:00', 34, NULL, NULL, NULL, NULL),
-(481, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 03:00:00', 34, NULL, NULL, NULL, NULL),
-(482, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 19:00:00', 34, NULL, NULL, NULL, NULL),
-(483, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 03:00:00', 34, NULL, NULL, NULL, NULL),
-(484, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 19:00:00', 34, NULL, NULL, NULL, NULL),
-(485, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 03:00:00', 34, NULL, NULL, NULL, NULL),
-(486, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 19:00:00', 34, NULL, NULL, NULL, NULL),
-(487, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 03:00:00', 34, NULL, NULL, NULL, NULL),
-(488, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 19:00:00', 34, NULL, NULL, NULL, NULL),
-(489, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 03:00:00', 34, NULL, NULL, NULL, NULL),
-(490, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 22:00:00', 34, NULL, NULL, NULL, NULL),
-(491, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 06:00:00', 34, NULL, NULL, NULL, NULL),
-(492, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 19:00:00', 34, NULL, NULL, NULL, NULL),
-(493, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 03:00:00', 34, NULL, NULL, NULL, NULL),
-(494, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 22:00:00', 34, NULL, NULL, NULL, NULL),
-(495, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 06:00:00', 34, NULL, NULL, NULL, NULL),
-(496, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 22:00:00', 34, NULL, NULL, NULL, NULL),
-(497, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 06:00:00', 34, NULL, NULL, NULL, NULL),
-(498, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 22:00:00', 34, NULL, NULL, NULL, NULL),
-(499, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-20 06:00:00', 34, NULL, NULL, NULL, NULL),
-(500, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-20 20:00:00', 34, NULL, NULL, NULL, NULL),
-(501, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 04:00:00', 34, NULL, NULL, NULL, NULL),
-(502, 27, 34, 34, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-21 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(503, 27, 34, 34, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-24 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(504, 27, 34, 34, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-31 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(505, 27, 34, 34, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-03 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(506, 27, 34, 34, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-06 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(507, 27, 34, 34, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-10 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(508, 27, 34, 34, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-15 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(509, 27, 34, 34, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-15 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(510, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 06:00:00', 36, NULL, NULL, NULL, NULL),
-(511, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 14:00:00', 36, NULL, NULL, NULL, NULL),
-(512, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 06:00:00', 36, NULL, NULL, NULL, NULL),
-(513, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 14:00:00', 36, NULL, NULL, NULL, NULL),
-(514, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 09:00:00', 36, NULL, NULL, NULL, NULL),
-(515, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 17:00:00', 36, NULL, NULL, NULL, NULL),
-(516, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 07:00:00', 36, NULL, NULL, NULL, NULL),
-(517, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 15:00:00', 36, NULL, NULL, NULL, NULL),
-(518, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 06:00:00', 36, NULL, NULL, NULL, NULL),
-(519, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 14:00:00', 36, NULL, NULL, NULL, NULL),
-(520, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 06:00:00', 36, NULL, NULL, NULL, NULL),
-(521, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 14:00:00', 36, NULL, NULL, NULL, NULL),
-(522, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 07:00:00', 36, NULL, NULL, NULL, NULL),
-(523, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 15:00:00', 36, NULL, NULL, NULL, NULL),
-(524, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 06:00:00', 36, NULL, NULL, NULL, NULL),
-(525, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 14:00:00', 36, NULL, NULL, NULL, NULL),
-(526, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 06:00:00', 36, NULL, NULL, NULL, NULL),
-(527, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 14:00:00', 36, NULL, NULL, NULL, NULL),
-(528, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 06:00:00', 36, NULL, NULL, NULL, NULL),
-(529, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 14:00:00', 36, NULL, NULL, NULL, NULL),
-(530, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 06:00:00', 36, NULL, NULL, NULL, NULL),
-(531, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 14:00:00', 36, NULL, NULL, NULL, NULL),
-(532, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 06:00:00', 36, NULL, NULL, NULL, NULL),
-(533, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 14:00:00', 36, NULL, NULL, NULL, NULL),
-(534, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 06:00:00', 36, NULL, NULL, NULL, NULL),
-(535, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 14:00:00', 36, NULL, NULL, NULL, NULL),
-(536, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 07:00:00', 36, NULL, NULL, NULL, NULL),
-(537, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 15:00:00', 36, NULL, NULL, NULL, NULL),
-(538, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 12:00:00', 36, NULL, NULL, NULL, NULL),
-(539, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 20:00:00', 36, NULL, NULL, NULL, NULL),
-(540, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 11:00:00', 36, NULL, NULL, NULL, NULL),
-(541, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 19:00:00', 36, NULL, NULL, NULL, NULL),
-(542, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 07:00:00', 36, NULL, NULL, NULL, NULL),
-(543, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 15:00:00', 36, NULL, NULL, NULL, NULL),
-(544, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 07:00:00', 36, NULL, NULL, NULL, NULL),
-(545, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 15:00:00', 36, NULL, NULL, NULL, NULL),
-(546, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 07:00:00', 36, NULL, NULL, NULL, NULL),
-(547, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 15:00:00', 36, NULL, NULL, NULL, NULL),
-(548, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 07:00:00', 36, NULL, NULL, NULL, NULL),
-(549, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 15:00:00', 36, NULL, NULL, NULL, NULL),
-(550, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 17:00:00', 36, NULL, NULL, NULL, NULL),
-(551, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 01:00:00', 36, NULL, NULL, NULL, NULL),
-(552, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 17:00:00', 36, NULL, NULL, NULL, NULL),
-(553, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 01:00:00', 36, NULL, NULL, NULL, NULL),
-(554, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 17:00:00', 36, NULL, NULL, NULL, NULL),
-(555, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 01:00:00', 36, NULL, NULL, NULL, NULL),
-(556, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 17:00:00', 36, NULL, NULL, NULL, NULL),
-(557, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 01:00:00', 36, NULL, NULL, NULL, NULL),
-(558, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 09:00:00', 36, NULL, NULL, NULL, NULL),
-(559, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 17:00:00', 36, NULL, NULL, NULL, NULL),
-(560, 26, 36, 36, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-14 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(561, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 11:00:00', 35, NULL, NULL, NULL, NULL),
-(562, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 19:00:00', 35, NULL, NULL, NULL, NULL),
-(563, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 14:00:00', 35, NULL, NULL, NULL, NULL),
-(564, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 22:00:00', 35, NULL, NULL, NULL, NULL),
-(565, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 14:00:00', 35, NULL, NULL, NULL, NULL),
-(566, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 22:00:00', 35, NULL, NULL, NULL, NULL),
-(567, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 11:00:00', 35, NULL, NULL, NULL, NULL),
-(568, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 19:00:00', 35, NULL, NULL, NULL, NULL),
-(569, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 11:00:00', 35, NULL, NULL, NULL, NULL),
-(570, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 19:00:00', 35, NULL, NULL, NULL, NULL),
-(571, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 11:00:00', 35, NULL, NULL, NULL, NULL),
-(572, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 19:00:00', 35, NULL, NULL, NULL, NULL),
-(573, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 11:00:00', 35, NULL, NULL, NULL, NULL),
-(574, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 19:00:00', 35, NULL, NULL, NULL, NULL),
-(575, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 11:00:00', 35, NULL, NULL, NULL, NULL),
-(576, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 19:00:00', 35, NULL, NULL, NULL, NULL),
-(577, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 14:00:00', 35, NULL, NULL, NULL, NULL),
-(578, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 22:00:00', 35, NULL, NULL, NULL, NULL),
-(579, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 14:00:00', 35, NULL, NULL, NULL, NULL),
-(580, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 22:00:00', 35, NULL, NULL, NULL, NULL),
-(581, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 11:00:00', 35, NULL, NULL, NULL, NULL),
-(582, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 19:00:00', 35, NULL, NULL, NULL, NULL),
-(583, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 14:00:00', 35, NULL, NULL, NULL, NULL),
-(584, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 22:00:00', 35, NULL, NULL, NULL, NULL),
-(585, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 10:00:00', 35, NULL, NULL, NULL, NULL),
-(586, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 18:00:00', 35, NULL, NULL, NULL, NULL),
-(587, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 07:00:00', 35, NULL, NULL, NULL, NULL),
-(588, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 15:00:00', 35, NULL, NULL, NULL, NULL),
-(589, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 07:00:00', 35, NULL, NULL, NULL, NULL),
-(590, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 15:00:00', 35, NULL, NULL, NULL, NULL),
-(591, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 07:00:00', 35, NULL, NULL, NULL, NULL),
-(592, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 15:00:00', 35, NULL, NULL, NULL, NULL),
-(593, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 07:00:00', 35, NULL, NULL, NULL, NULL),
-(594, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 15:00:00', 35, NULL, NULL, NULL, NULL),
-(595, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 07:00:00', 35, NULL, NULL, NULL, NULL),
-(596, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 15:00:00', 35, NULL, NULL, NULL, NULL),
-(597, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 07:00:00', 35, NULL, NULL, NULL, NULL),
-(598, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 15:00:00', 35, NULL, NULL, NULL, NULL),
-(599, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 07:00:00', 35, NULL, NULL, NULL, NULL),
-(600, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 15:00:00', 35, NULL, NULL, NULL, NULL),
-(601, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 07:00:00', 35, NULL, NULL, NULL, NULL),
-(602, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 15:00:00', 35, NULL, NULL, NULL, NULL),
-(603, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 07:00:00', 35, NULL, NULL, NULL, NULL),
-(604, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 15:00:00', 35, NULL, NULL, NULL, NULL),
-(605, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 06:00:00', 35, NULL, NULL, NULL, NULL),
-(606, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 14:00:00', 35, NULL, NULL, NULL, NULL),
-(607, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 09:00:00', 35, NULL, NULL, NULL, NULL),
-(608, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 17:00:00', 35, NULL, NULL, NULL, NULL),
-(609, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 11:00:00', 35, NULL, NULL, NULL, NULL),
-(610, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 19:00:00', 35, NULL, NULL, NULL, NULL),
-(611, 1, 1, 2, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_1_2_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 2, NULL, NULL, NULL, NULL),
-(612, 1, 1, 2, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_1_2_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 2, NULL, NULL, NULL, NULL),
-(613, 1, 1, 2, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_1_2_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 2, NULL, NULL, NULL, NULL),
-(614, 2, 2, 3, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_2_3_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 3, NULL, NULL, NULL, NULL),
-(615, 2, 2, 3, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_2_3_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 3, NULL, NULL, NULL, NULL),
-(616, 2, 2, 3, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_2_3_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 3, NULL, NULL, NULL, NULL),
-(617, 5, 5, 6, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_5_6_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 6, NULL, NULL, NULL, NULL),
-(618, 5, 5, 6, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_5_6_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 6, NULL, NULL, NULL, NULL),
-(619, 5, 5, 6, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_5_6_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 6, NULL, NULL, NULL, NULL),
-(620, 6, 6, 7, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_7_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 7, NULL, NULL, NULL, NULL),
-(621, 6, 6, 7, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_7_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 7, NULL, NULL, NULL, NULL),
-(622, 6, 6, 7, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_7_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 7, NULL, NULL, NULL, NULL),
-(623, 7, 7, 8, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_7_8_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 8, NULL, NULL, NULL, NULL),
-(624, 7, 7, 8, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_7_8_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 8, NULL, NULL, NULL, NULL),
-(625, 7, 7, 8, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_7_8_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 8, NULL, NULL, NULL, NULL),
-(626, 8, 8, 9, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_8_9_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 9, NULL, NULL, NULL, NULL),
-(627, 8, 8, 9, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_8_9_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 9, NULL, NULL, NULL, NULL),
-(628, 8, 8, 9, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_8_9_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 9, NULL, NULL, NULL, NULL),
-(629, 9, 9, 10, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_9_10_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 10, NULL, NULL, NULL, NULL),
-(630, 9, 9, 10, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_9_10_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 10, NULL, NULL, NULL, NULL),
-(631, 9, 9, 10, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_9_10_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 10, NULL, NULL, NULL, NULL),
-(632, 10, 10, 11, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_10_11_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 00:00:00', 11, NULL, NULL, NULL, NULL),
-(633, 10, 10, 11, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_10_11_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 00:00:00', 11, NULL, NULL, NULL, NULL),
-(634, 10, 10, 11, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_10_11_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 00:00:00', 11, NULL, NULL, NULL, NULL),
-(635, 11, 11, 12, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_11_12_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 12, NULL, NULL, NULL, NULL),
-(636, 11, 11, 12, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_11_12_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 12, NULL, NULL, NULL, NULL),
-(637, 11, 11, 12, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_11_12_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 12, NULL, NULL, NULL, NULL),
-(638, 12, 12, 13, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_12_13_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 01:15:00', 13, NULL, NULL, NULL, NULL),
-(639, 12, 12, 13, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_12_13_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 01:15:00', 13, NULL, NULL, NULL, NULL),
-(640, 12, 12, 13, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_12_13_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 01:15:00', 13, NULL, NULL, NULL, NULL),
-(641, 13, 13, 14, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_14_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 14, NULL, NULL, NULL, NULL),
-(642, 13, 13, 14, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_14_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 14, NULL, NULL, NULL, NULL),
-(643, 13, 13, 14, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_14_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 14, NULL, NULL, NULL, NULL),
-(644, 13, 14, 15, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_15_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 15, NULL, NULL, NULL, NULL),
-(645, 13, 14, 15, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_15_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 15, NULL, NULL, NULL, NULL),
-(646, 13, 14, 15, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_13_15_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 15, NULL, NULL, NULL, NULL),
-(647, 14, 15, 16, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_14_16_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 16, NULL, NULL, NULL, NULL),
-(648, 14, 15, 16, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_14_16_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 16, NULL, NULL, NULL, NULL),
-(649, 14, 15, 16, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_14_16_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 16, NULL, NULL, NULL, NULL),
-(650, 16, 17, 18, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_16_18_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 18, NULL, NULL, NULL, NULL),
-(651, 16, 17, 18, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_16_18_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 18, NULL, NULL, NULL, NULL),
-(652, 16, 17, 18, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_16_18_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 18, NULL, NULL, NULL, NULL),
-(653, 17, 18, 19, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_17_19_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 19, NULL, NULL, NULL, NULL),
-(654, 17, 18, 19, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_17_19_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 19, NULL, NULL, NULL, NULL),
-(655, 17, 18, 19, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_17_19_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 19, NULL, NULL, NULL, NULL),
-(656, 18, 19, 20, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_18_20_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 20, NULL, NULL, NULL, NULL),
-(657, 18, 19, 20, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_18_20_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 20, NULL, NULL, NULL, NULL),
-(658, 18, 19, 20, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_18_20_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 20, NULL, NULL, NULL, NULL),
-(659, 19, 20, 21, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_19_21_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 21, NULL, NULL, NULL, NULL),
-(660, 19, 20, 21, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_19_21_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 21, NULL, NULL, NULL, NULL),
-(661, 19, 20, 21, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_19_21_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 21, NULL, NULL, NULL, NULL),
-(662, 20, 21, 22, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_20_22_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 22, NULL, NULL, NULL, NULL),
-(663, 20, 21, 22, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_20_22_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 22, NULL, NULL, NULL, NULL),
-(664, 20, 21, 22, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_20_22_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 22, NULL, NULL, NULL, NULL),
-(665, 21, 22, 23, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_21_23_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 23, NULL, NULL, NULL, NULL),
-(666, 21, 22, 23, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_21_23_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 23, NULL, NULL, NULL, NULL),
-(667, 21, 22, 23, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_21_23_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 23, NULL, NULL, NULL, NULL),
-(668, 22, 23, 24, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_22_24_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 00:00:00', 24, NULL, NULL, NULL, NULL),
-(669, 22, 23, 24, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_22_24_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 00:00:00', 24, NULL, NULL, NULL, NULL),
-(670, 22, 23, 24, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_22_24_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 00:00:00', 24, NULL, NULL, NULL, NULL),
-(671, 6, 24, 25, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_25_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 25, NULL, NULL, NULL, NULL),
-(672, 6, 24, 25, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_25_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 25, NULL, NULL, NULL, NULL),
-(673, 6, 24, 25, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_6_25_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 25, NULL, NULL, NULL, NULL),
-(674, 23, 25, 26, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_26_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 26, NULL, NULL, NULL, NULL),
-(675, 23, 25, 26, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_26_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 26, NULL, NULL, NULL, NULL),
-(676, 23, 25, 26, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_26_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 26, NULL, NULL, NULL, NULL),
-(677, 23, 26, 27, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_27_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 27, NULL, NULL, NULL, NULL),
-(678, 23, 26, 27, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_27_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 27, NULL, NULL, NULL, NULL),
-(679, 23, 26, 27, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_27_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 27, NULL, NULL, NULL, NULL),
-(680, 23, 28, 28, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_28_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 28, NULL, NULL, NULL, NULL),
-(681, 23, 28, 28, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_28_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 28, NULL, NULL, NULL, NULL),
-(682, 23, 28, 28, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_28_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 28, NULL, NULL, NULL, NULL),
-(683, 23, 29, 29, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_29_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 29, NULL, NULL, NULL, NULL),
-(684, 23, 29, 29, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_29_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 29, NULL, NULL, NULL, NULL),
-(685, 23, 29, 29, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_29_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 29, NULL, NULL, NULL, NULL),
-(686, 23, 30, 30, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_30_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 09:00:00', 30, NULL, NULL, NULL, NULL),
-(687, 23, 30, 30, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_30_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 09:00:00', 30, NULL, NULL, NULL, NULL),
-(688, 23, 30, 30, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_23_30_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 09:00:00', 30, NULL, NULL, NULL, NULL),
-(689, 24, 31, 31, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_24_31_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 00:00:00', 31, NULL, NULL, NULL, NULL),
-(690, 24, 31, 31, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_24_31_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 00:00:00', 31, NULL, NULL, NULL, NULL),
-(691, 24, 31, 31, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_24_31_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 00:00:00', 31, NULL, NULL, NULL, NULL),
-(692, 24, 32, 32, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_24_32_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 00:00:00', 32, NULL, NULL, NULL, NULL),
-(693, 24, 32, 32, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_24_32_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 00:00:00', 32, NULL, NULL, NULL, NULL),
-(694, 24, 32, 32, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_24_32_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 00:00:00', 32, NULL, NULL, NULL, NULL),
-(695, 24, 33, 33, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_24_33_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 00:00:00', 33, NULL, NULL, NULL, NULL),
-(696, 24, 33, 33, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_24_33_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 00:00:00', 33, NULL, NULL, NULL, NULL),
-(697, 24, 33, 33, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_24_33_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 00:00:00', 33, NULL, NULL, NULL, NULL),
-(698, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_27_34_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 00:00:00', 34, NULL, NULL, NULL, NULL),
-(699, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_27_34_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 00:00:00', 34, NULL, NULL, NULL, NULL),
-(700, 26, 35, 35, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_26_35_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 00:00:00', 35, NULL, NULL, NULL, NULL),
-(701, 26, 35, 35, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_26_35_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 00:00:00', 35, NULL, NULL, NULL, NULL),
-(702, 26, 35, 35, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_26_35_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 00:00:00', 35, NULL, NULL, NULL, NULL),
-(703, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_26_36_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-25 00:00:00', 36, NULL, NULL, NULL, NULL),
-(704, 26, 36, 36, 31, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_26_36_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-26 00:00:00', 36, NULL, NULL, NULL, NULL),
-(705, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_26_36_1772173118.jpg', 'AUTO SYSTEM GENERATED', '2026-02-27 00:00:00', 36, NULL, NULL, NULL, NULL),
-(738, 1, 1, 2, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(739, 1, 1, 2, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(740, 2, 2, 3, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(741, 2, 2, 3, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(742, 5, 5, 6, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(743, 5, 5, 6, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(744, 6, 6, 7, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(745, 6, 6, 7, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(746, 7, 7, 8, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(747, 7, 7, 8, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(748, 8, 8, 9, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(749, 8, 8, 9, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(750, 9, 9, 10, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(751, 9, 9, 10, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(752, 10, 10, 11, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 00:55:00', NULL, NULL, NULL, NULL, NULL),
-(753, 10, 10, 11, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 00:55:00', NULL, NULL, NULL, NULL, NULL),
-(754, 10, 10, 11, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-27 00:55:00', NULL, NULL, NULL, NULL, NULL),
-(755, 11, 11, 12, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(756, 11, 11, 12, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(757, 12, 12, 13, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 01:17:00', NULL, NULL, NULL, NULL, NULL),
-(758, 12, 12, 13, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 01:17:00', NULL, NULL, NULL, NULL, NULL),
-(759, 12, 12, 13, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-27 01:17:00', NULL, NULL, NULL, NULL, NULL),
-(760, 13, 13, 14, 26, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(761, 13, 13, 14, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(762, 13, 14, 15, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(763, 13, 14, 15, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(764, 14, 15, 16, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(765, 14, 15, 16, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(766, 16, 17, 18, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(767, 16, 17, 18, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `job_attendances` (`id`, `job_id`, `application_id`, `user_id`, `transaction_id`, `type`, `latitude`, `longitude`, `photo_path`, `device_info`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(768, 17, 18, 19, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(769, 17, 18, 19, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(770, 18, 19, 20, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(771, 18, 19, 20, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(772, 19, 20, 21, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(773, 19, 20, 21, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(774, 20, 21, 22, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(775, 20, 21, 22, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(776, 21, 22, 23, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(777, 21, 22, 23, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(778, 22, 23, 24, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(779, 22, 23, 24, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(780, 6, 24, 25, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(781, 6, 24, 25, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(782, 23, 25, 26, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(783, 23, 25, 26, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(784, 23, 26, 27, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(785, 23, 26, 27, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(786, 23, 28, 28, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(787, 23, 28, 28, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(788, 23, 29, 29, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(789, 23, 29, 29, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(790, 23, 30, 30, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(791, 23, 30, 30, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 18:00:00', NULL, NULL, NULL, NULL, NULL),
-(792, 24, 31, 31, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(793, 24, 31, 31, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(794, 24, 32, 32, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(795, 24, 32, 32, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(796, 24, 33, 33, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(797, 24, 33, 33, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(798, 27, 34, 34, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(799, 26, 35, 35, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(800, 26, 35, 35, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(801, 26, 36, 36, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-25 23:59:00', NULL, NULL, NULL, NULL, NULL),
-(802, 26, 36, 36, 31, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-26 23:59:00', NULL, NULL, NULL, NULL, NULL);
+(1, 25, 1, 34, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_25_34_1772388959.jpg', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0', '2026-03-01 07:00:00', 34, NULL, NULL, NULL, NULL),
+(2, 25, 1, 34, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-03-01 14:59:00', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1133,7 +475,168 @@ INSERT INTO `refresh_tokens` (`id`, `user_id`, `token`, `expires_at`, `created_a
 (40, 34, '60d34e6058bf5861d642c6384cd70fe8af1d240ce140b8044ed5b1a695238b078609255700534dc49d93d3fe50cdccbea9fbaa6decf1e0967cf8442375b1f94f', '2026-03-29 17:00:24', '2026-02-27 17:00:24'),
 (41, 34, '8748d60f231d05481c91e6d5617c3bbc4d0eb53fe9a5765f549c2d6fca2d538ea16507259b0bed894c5f3ff367d9701a7870e3c70c807af2bec26522c8efeb2b', '2026-03-29 17:00:50', '2026-02-27 17:00:50'),
 (42, 34, '8d8dff7d7c6287a04fc79dce415fc0b4e4b3faeaa4253a4aca45e68d80a88f980d2dba3e00a54796a788726358f9e4f54dd2a4708695e1cc4f525d0ea9be2ac2', '2026-03-29 17:01:10', '2026-02-27 17:01:10'),
-(43, 34, '3f8b6c7720401304a7a0e8e8dd7de0cb3155406f71cc74e6280628870a7d5ecb88bf20a0aa7030a92adb08766a3262524e2a78d1a033a14a7b9ac53efc0f9b97', '2026-03-29 17:02:04', '2026-02-27 17:02:04');
+(43, 34, '3f8b6c7720401304a7a0e8e8dd7de0cb3155406f71cc74e6280628870a7d5ecb88bf20a0aa7030a92adb08766a3262524e2a78d1a033a14a7b9ac53efc0f9b97', '2026-03-29 17:02:04', '2026-02-27 17:02:04'),
+(44, 8, 'fdcf1fe31f7137c85624c092f0ce4b8183fda75446d80114c9f11f85c49c2960da5db5b8b7924d9171fb337781fb424fb735789ea33f9236efa9c264d8e8843a', '2026-03-30 17:45:28', '2026-02-28 17:45:28'),
+(45, 8, 'dabc79ae4e5c6e2a5dd64bf43f54ceb6b1341fa852c01cf8a7f8eb1323e00773bed0f31b1474bfb371722da2b484ed830d46ccadd40e7f34b90629919fa1b4f1', '2026-03-30 17:45:45', '2026-02-28 17:45:45'),
+(46, 8, '00f89777c87513a5efdad88b819ebf52417b30fda4e6bdb8568c9e0384f1e9cf86a63e8a862a47f10bda2d3b88a944b2d0aa3758f0dee73c0be7e32a815431d1', '2026-03-30 17:47:28', '2026-02-28 17:47:28'),
+(47, 8, '6cae9e1b45f024e8b20b4f1f1b2cc09ea398f9f2778995a6747c575c5e3ff3b0366428a819d355f1be2947b807e00c65b4f46b2baca632f74ff61c5e926d4d2f', '2026-03-30 17:48:10', '2026-02-28 17:48:10'),
+(48, 8, '4b318693ec74f9742edbeb33d218ae84889627c5166ac89f0420b962ea77b75944ae2d2d7893bc44ea481e071cae085c2293f343942a9e2ed7a9adacf7598e20', '2026-03-30 17:49:29', '2026-02-28 17:49:29'),
+(49, 8, '901fefb03aa6215d5492ea42bd2c0feff1b34052e6d05c104ee727343b8b8896ed8fe07f8108a7bd49a1c2db0a42db7feb2fc5be26a32275b53de627c6f6bb58', '2026-03-31 18:00:02', '2026-03-01 18:00:02'),
+(50, 8, 'e072b0b7c64c86b36b8226cc3d76d2983322b3448f9ceddbaa3f7c471d98a179a9088a71ec9125d0506a3d5332461b8c5839088906dc2eb0dfcaf4249bdfa02b', '2026-03-31 18:00:37', '2026-03-01 18:00:37'),
+(51, 8, 'b165ac533340a4d2e6938f7da54d0972528be9bf2c389e642c5eda86d60407e6eb6c9dd7bb0fdde62cd8badcd553ffb7b1d8fa2d833e507fd13ae32c2cc7c4d1', '2026-03-31 18:02:10', '2026-03-01 18:02:10'),
+(52, 8, '5f9a0c65269129b835d28d7619c14fedc70576ab5047e1a61d4e567f4a5ff95516e6f540cf0e7e4a7292f2ab7a86fcec97671e4a50fbbf505971884ce9ae9c6e', '2026-03-31 18:02:26', '2026-03-01 18:02:26'),
+(53, 8, 'b85b2725cdd8da417140da805dc5daaac94be0735175f38a454254116243b150a17f80396e2954722b065c26d94c5ac24e30d1981bbc8ee4904d1302b7e198dc', '2026-03-31 20:46:34', '2026-03-01 20:46:34'),
+(54, 8, 'f3af809709883d8238176761afe96abe2f7af319ac187f264d4fa8252e45a0fe9b5067a5837eb9478f49269f347324aeed4a34f835b9a570d9c20a2a363051e2', '2026-03-31 21:01:01', '2026-03-01 21:01:01'),
+(55, 8, 'd726385ffbe900be4d1e9c720f407b6d8a4dfb5fc7ef9759d81788b634e8ee3b02849b4dccd4759fedda24577ddf5028b5e17a5409e79cbb1af28a047b2b52ed', '2026-03-31 22:36:10', '2026-03-01 22:36:10'),
+(56, 8, '69327a73a2e5104bc6aa81afb39482872adff1443f8127fb99ac80ce4c60000ea9cda7ed59c72f05efffe08bb1e8cfe248bfe650825b9dcfc53dd3a1868516f5', '2026-03-31 22:37:17', '2026-03-01 22:37:17'),
+(57, 8, '58682ba771d6a2996edff16c468c719a0d9e19fbbe3c1e667254669a62c010d1a7290ffb567cb60ed1f12fcda75908c4592b79997799d3d42b3bf4108a1fd362', '2026-03-31 22:49:29', '2026-03-01 22:49:29'),
+(58, 34, 'c2220d703f3faa207d576eb31fdedae5039c7cbbc4405b11e18a293aaac8add54da3838cd6ec0b381f7036bf2a1a7b51ecf8c4e21d4f972b117bcb8b964c5603', '2026-04-01 00:53:22', '2026-03-02 00:53:22'),
+(59, 34, 'f751b5e7bd4a79b76df2b6c092e2bec68c9521fd18fd99c4e2dac44086c5f98767777ca9cc368140c4c13350afde6913d41b4e3b3a9c9cb02e48c3b319bee45b', '2026-04-01 00:53:44', '2026-03-02 00:53:44'),
+(60, 34, '84f968b7d55b1ffd4b3ed5e293ada2cadc88bc8c3f695e068b38e3f22b7dec1962752909f5093a831eb8c74d10323b5be0e28e47d6dc96774fa4d3d7b848cab0', '2026-04-01 00:56:21', '2026-03-02 00:56:21'),
+(61, 34, '4dec030ecc2d43f98eb291e161d3f257a2b9e9c1b381d4245dc7f74fa91bdc8e2853e703f96a834fd7413e2b90b172590ce781e03d2aaf65538df6321f8d48c2', '2026-04-01 00:56:54', '2026-03-02 00:56:54'),
+(62, 34, 'fbcd9b86ed57117f4fa786d799af4bc912c5099fc3f067e954b6a5d5f4979644dc1b8d74ae0d55ecb472c1e22e7eb2624414805309563019bd2f86754e34702f', '2026-04-01 00:59:43', '2026-03-02 00:59:43'),
+(63, 34, '21aa793b249cd9bd83dc19d3a5bbdf965a469ba46e273656390e535736251aa5b121b0a353ac3969c7d2e46ce0bd797a474a29f46a710c99606fcbb16562ec34', '2026-04-01 01:06:38', '2026-03-02 01:06:38');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `schedule_days`
+--
+
+CREATE TABLE `schedule_days` (
+  `id` int(11) NOT NULL,
+  `schedule_plan_id` int(11) NOT NULL,
+  `shift_date` date NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `schedule_days`
+--
+
+INSERT INTO `schedule_days` (`id`, `schedule_plan_id`, `shift_date`, `created_at`) VALUES
+(1, 1, '2026-03-01', '2026-03-02 01:13:34'),
+(2, 1, '2026-03-02', '2026-03-02 01:13:34'),
+(3, 1, '2026-03-03', '2026-03-02 01:13:34'),
+(4, 1, '2026-03-04', '2026-03-02 01:13:34'),
+(5, 1, '2026-03-05', '2026-03-02 01:13:34'),
+(6, 1, '2026-03-06', '2026-03-02 01:13:34'),
+(7, 1, '2026-03-07', '2026-03-02 01:13:34'),
+(8, 1, '2026-03-08', '2026-03-02 01:13:34'),
+(9, 1, '2026-03-09', '2026-03-02 01:13:34'),
+(10, 1, '2026-03-10', '2026-03-02 01:13:34'),
+(11, 1, '2026-03-11', '2026-03-02 01:13:34'),
+(12, 1, '2026-03-12', '2026-03-02 01:13:34'),
+(13, 1, '2026-03-13', '2026-03-02 01:13:34'),
+(14, 1, '2026-03-14', '2026-03-02 01:13:34'),
+(15, 1, '2026-03-15', '2026-03-02 01:13:34'),
+(16, 1, '2026-03-16', '2026-03-02 01:13:34'),
+(17, 1, '2026-03-17', '2026-03-02 01:13:34'),
+(18, 1, '2026-03-18', '2026-03-02 01:13:34'),
+(19, 1, '2026-03-19', '2026-03-02 01:13:34'),
+(20, 1, '2026-03-20', '2026-03-02 01:13:34'),
+(21, 1, '2026-03-21', '2026-03-02 01:13:34'),
+(22, 1, '2026-03-22', '2026-03-02 01:13:34'),
+(23, 1, '2026-03-23', '2026-03-02 01:13:34'),
+(24, 1, '2026-03-24', '2026-03-02 01:13:34'),
+(25, 1, '2026-03-25', '2026-03-02 01:13:34'),
+(26, 1, '2026-03-26', '2026-03-02 01:13:34'),
+(27, 1, '2026-03-27', '2026-03-02 01:13:34'),
+(28, 1, '2026-03-28', '2026-03-02 01:13:34'),
+(29, 1, '2026-03-29', '2026-03-02 01:13:34'),
+(30, 1, '2026-03-30', '2026-03-02 01:13:34'),
+(31, 1, '2026-03-31', '2026-03-02 01:13:34');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `schedule_plans`
+--
+
+CREATE TABLE `schedule_plans` (
+  `id` int(11) NOT NULL,
+  `hotel_id` int(11) NOT NULL,
+  `department` varchar(100) NOT NULL,
+  `month` tinyint(4) NOT NULL,
+  `year` smallint(6) NOT NULL,
+  `status` enum('draft','pending','approved','rejected','revised') DEFAULT 'draft',
+  `requested_by` int(11) NOT NULL,
+  `approved_by` int(11) DEFAULT NULL,
+  `approved_at` datetime DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `schedule_plans`
+--
+
+INSERT INTO `schedule_plans` (`id`, `hotel_id`, `department`, `month`, `year`, `status`, `requested_by`, `approved_by`, `approved_at`, `notes`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Front Office', 3, 2026, 'approved', 17, 17, '2026-03-02 01:14:47', NULL, '2026-03-02 01:13:34', '2026-03-02 01:14:47');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `schedule_revisions`
+--
+
+CREATE TABLE `schedule_revisions` (
+  `id` int(11) NOT NULL,
+  `schedule_plan_id` int(11) NOT NULL,
+  `revision_number` int(11) NOT NULL,
+  `requested_by` int(11) NOT NULL,
+  `status` enum('pending','approved','rejected') DEFAULT 'pending',
+  `approved_by` int(11) DEFAULT NULL,
+  `approved_at` datetime DEFAULT NULL,
+  `reason` text DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `schedule_revision_shifts`
+--
+
+CREATE TABLE `schedule_revision_shifts` (
+  `id` int(11) NOT NULL,
+  `revision_id` int(11) NOT NULL,
+  `schedule_day_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `old_start` time DEFAULT NULL,
+  `old_end` time DEFAULT NULL,
+  `new_start` time DEFAULT NULL,
+  `new_end` time DEFAULT NULL,
+  `old_type` enum('regular','off','leave','overtime') DEFAULT NULL,
+  `new_type` enum('regular','off','leave','overtime') DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `schedule_shifts`
+--
+
+CREATE TABLE `schedule_shifts` (
+  `id` int(11) NOT NULL,
+  `schedule_day_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `shift_type` enum('regular','off','leave','overtime') DEFAULT 'regular',
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `job_id` int(11) DEFAULT NULL,
+  `application_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `schedule_shifts`
+--
+
+INSERT INTO `schedule_shifts` (`id`, `schedule_day_id`, `user_id`, `start_time`, `end_time`, `shift_type`, `created_at`, `updated_at`, `job_id`, `application_id`) VALUES
+(1, 2, 34, '01:00:00', '08:00:00', 'regular', '2026-03-02 01:14:27', '2026-03-02 01:15:42', 25, 1);
 
 -- --------------------------------------------------------
 
@@ -1253,7 +756,7 @@ INSERT INTO `users` (`id`, `hotel_id`, `role`, `name`, `email`, `phone`, `passwo
 (5, 1, 'hotel_hk', 'Renaldy Herlando', 'rey.herlando@gmail.com', '81255800626', '$2y$10$pW8H9bi4vVTVnu3UYL9NHOX.NHuaYHSiYLm8RQkaDevFgJdOHfS9G', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-26 16:13:57', 1, NULL, NULL),
 (6, 1, 'worker', 'Tri Setiyawati', 'celineq683@gmail.com', '87880006558', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-22 23:21:54', 1, NULL, NULL),
 (7, 1, 'worker', 'Raafi Teguh Septianto', 'raafiteguh73@gmail.com', '895711102828', '$2y$10$EJeLN55b5c4hPxbOZ08MvOlzqjW4P/KoDll8VSgGl4GlPp9mov/n6', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-24 16:57:04', 1, NULL, NULL),
-(8, 1, 'worker', 'Jan Pelupessy', 'janhawajasmine14@gmail.com', '81212790875', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(8, 1, 'worker', 'Jan Pelupessy', 'janhawajasmine14@gmail.com', '81212790875', '$2y$10$./MG4Ds6ciroelciHoh9oeoM0plKYQXc1jtbxeWJ8LH0/6JfyN4ii', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-28 17:45:25', 17, NULL, NULL),
 (9, 1, 'worker', 'Adi Alfian Surahman', 'Adialfian83@gmail.com', '83811404011', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
 (10, 1, 'worker', 'Dini Wulandari', 'Dinilandari18@gmail.com', '8987795834', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
 (11, 1, 'worker', 'Didik Febriawan', 'didikj4dul@gmail.com', '81298096880', '$2y$10$Pl4rYXHK5ew1/NhfVag9H.51rS6x07me6wXifU2chgeX4.0lacX4q', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 00:42:06', 1, NULL, NULL),
@@ -2054,6 +1557,27 @@ ALTER TABLE `hotel_transactions`
   ADD KEY `idx_created` (`created_at`);
 
 --
+-- Indexes for table `invoices`
+--
+ALTER TABLE `invoices`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `invoice_items`
+--
+ALTER TABLE `invoice_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `invoice_id` (`invoice_id`);
+
+--
+-- Indexes for table `invoice_payments`
+--
+ALTER TABLE `invoice_payments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `invoice_id` (`invoice_id`),
+  ADD KEY `hotel_id` (`hotel_id`);
+
+--
 -- Indexes for table `jobs`
 --
 ALTER TABLE `jobs`
@@ -2110,6 +1634,45 @@ ALTER TABLE `ratio_rules`
 --
 ALTER TABLE `refresh_tokens`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `schedule_days`
+--
+ALTER TABLE `schedule_days`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_day` (`schedule_plan_id`,`shift_date`),
+  ADD KEY `idx_plan` (`schedule_plan_id`);
+
+--
+-- Indexes for table `schedule_plans`
+--
+ALTER TABLE `schedule_plans`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_schedule` (`hotel_id`,`department`,`month`,`year`),
+  ADD KEY `idx_hotel` (`hotel_id`),
+  ADD KEY `idx_status` (`status`);
+
+--
+-- Indexes for table `schedule_revisions`
+--
+ALTER TABLE `schedule_revisions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_plan` (`schedule_plan_id`);
+
+--
+-- Indexes for table `schedule_revision_shifts`
+--
+ALTER TABLE `schedule_revision_shifts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_revision` (`revision_id`);
+
+--
+-- Indexes for table `schedule_shifts`
+--
+ALTER TABLE `schedule_shifts`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_regular_per_day` (`schedule_day_id`,`user_id`,`shift_type`),
+  ADD KEY `idx_user` (`user_id`);
 
 --
 -- Indexes for table `skills`
@@ -2235,7 +1798,25 @@ ALTER TABLE `hotels`
 -- AUTO_INCREMENT for table `hotel_transactions`
 --
 ALTER TABLE `hotel_transactions`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+
+--
+-- AUTO_INCREMENT for table `invoices`
+--
+ALTER TABLE `invoices`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `invoice_items`
+--
+ALTER TABLE `invoice_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `invoice_payments`
+--
+ALTER TABLE `invoice_payments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -2247,13 +1828,13 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `job_applications`
 --
 ALTER TABLE `job_applications`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `job_attendances`
 --
 ALTER TABLE `job_attendances`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=803;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `job_extend_attendances`
@@ -2283,7 +1864,37 @@ ALTER TABLE `ratio_rules`
 -- AUTO_INCREMENT for table `refresh_tokens`
 --
 ALTER TABLE `refresh_tokens`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+
+--
+-- AUTO_INCREMENT for table `schedule_days`
+--
+ALTER TABLE `schedule_days`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+
+--
+-- AUTO_INCREMENT for table `schedule_plans`
+--
+ALTER TABLE `schedule_plans`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `schedule_revisions`
+--
+ALTER TABLE `schedule_revisions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `schedule_revision_shifts`
+--
+ALTER TABLE `schedule_revision_shifts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `schedule_shifts`
+--
+ALTER TABLE `schedule_shifts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `skills`
@@ -2390,6 +2001,30 @@ ALTER TABLE `worker_spouse`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `schedule_days`
+--
+ALTER TABLE `schedule_days`
+  ADD CONSTRAINT `schedule_days_ibfk_1` FOREIGN KEY (`schedule_plan_id`) REFERENCES `schedule_plans` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `schedule_revisions`
+--
+ALTER TABLE `schedule_revisions`
+  ADD CONSTRAINT `schedule_revisions_ibfk_1` FOREIGN KEY (`schedule_plan_id`) REFERENCES `schedule_plans` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `schedule_revision_shifts`
+--
+ALTER TABLE `schedule_revision_shifts`
+  ADD CONSTRAINT `schedule_revision_shifts_ibfk_1` FOREIGN KEY (`revision_id`) REFERENCES `schedule_revisions` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `schedule_shifts`
+--
+ALTER TABLE `schedule_shifts`
+  ADD CONSTRAINT `schedule_shifts_ibfk_1` FOREIGN KEY (`schedule_day_id`) REFERENCES `schedule_days` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `worker_contracts`

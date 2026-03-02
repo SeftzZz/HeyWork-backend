@@ -67,6 +67,26 @@
                                   <div data-i18n="Attendances">Attendances</div>
                                 </a>
                             </li>
+                            <li class="menu-item <?= ($uri=='schedules')?'active':'' ?>">
+                                <a href="<?= base_url('admin/schedules') ?>" class="menu-link">
+                                    <i class="menu-icon tf-icons ti ti-calendar"></i>
+                                    <div>Scheduling</div>
+                                </a>
+                            </li>
+                            <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr'])) : ?>
+                                <li class="menu-item <?= ($uri=='schedule-approvals')?'active':'' ?>">
+                                    <a href="<?= base_url('admin/schedule-approvals') ?>" class="menu-link">
+                                        <i class="menu-icon tf-icons ti ti-check"></i>
+                                        <div>Schedule Approvals</div>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                            <li class="menu-item <?= ($uri=='payments')?'active':'' ?>">
+                                <a href="<?= base_url('admin/payments') ?>" class="menu-link">
+                                    <i class="menu-icon tf-icons ti-xs ti ti-file-description"></i>
+                                    <div>Payments</div>
+                                </a>
+                            </li>
                         <?php endif; ?>
                         
                         <?php if (in_array(session()->get('user_role'), ['admin', 'hotel_hr'])) : ?>
@@ -87,6 +107,13 @@
                                   <div data-i18n="Transactions">Transactions</div>
                                 </a>
                             </li>
+
+                            <!-- <li class="menu-item <?= ($uri=='invoices')?'active':'' ?>">
+                                <a href="<?= base_url('admin/invoices') ?>" class="menu-link">
+                                  <i class="menu-icon tf-icons ti ti-file-invoice"></i>
+                                  <div data-i18n="Invoices">Invoices</div>
+                                </a>
+                            </li> -->
                         <?php endif; ?>
 
                         <li class="menu-item">

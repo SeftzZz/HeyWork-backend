@@ -134,10 +134,17 @@ class Transactions extends BaseAdminController
             }
         }
 
-        $data = $dataQuery
-            ->limit($length, $start)
-            ->get()
-            ->getResultArray();
+        if ($length == -1) {
+            // tampilkan semua tanpa limit
+            $data = $dataQuery
+                ->get()
+                ->getResultArray();
+        } else {
+            $data = $dataQuery
+                ->limit($length, $start)
+                ->get()
+                ->getResultArray();
+        }
 
         // =============================
         // FORMAT DATA

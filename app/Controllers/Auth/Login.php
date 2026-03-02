@@ -4,6 +4,7 @@ namespace App\Controllers\Auth;
 
 use App\Controllers\BaseController;
 use App\Models\UserModel;
+use App\Models\HotelModel;
 
 class Login extends BaseController
 {
@@ -44,9 +45,14 @@ class Login extends BaseController
             return redirect()->back()->with('error', 'Incorrect password');
         }
 
+        $hotelModel = new HotelModel();
+        $hotel = $hotelModel->find($user['hotel_id']);
+
         session()->set([
             'user_id'        => $user['id'],
             'hotel_id'       => $user['hotel_id'],
+            'hotel_name'     => $hotel['hotel_name'] ?? null,
+            'hotel_email'    => $hotel['email'] ?? null,
             'user_name'      => $user['name'],
             'user_role'      => $user['role'],
             'user_email'     => $user['email'],
