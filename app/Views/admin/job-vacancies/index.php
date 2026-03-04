@@ -42,13 +42,11 @@
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Job Position</label>
                                                 <select
-                                                    id="add_job_position"
-                                                    class="form-select select2"
-                                                    data-placeholder="Select Hotel"
-                                                    style="width:100%">
+                                                    id="add_job_position" name="position" class="form-select select2"
+                                                    data-placeholder="Select Job Position" style="width:100%">
                                                     <option value=""></option>
                                                     <?php foreach ($skills as $skill): ?>
-                                                        <option value="<?= $skill['id'] ?>">
+                                                        <option value="<?= $skill['name'] ?>">
                                                             <?= esc($skill['name']) ?>
                                                         </option>
                                                     <?php endforeach; ?>
@@ -95,7 +93,7 @@
                                             <!-- END TIME -->
                                             <div class="col-md-6 mb-3">
                                               <label class="form-label">End Time</label>
-                                              <input type="time" class="form-control" name="end_time" required>
+                                              <input type="time" class="form-control" name="end_time" id="add_end_time" readonly required>
                                             </div>
 
                                           </div>
@@ -156,16 +154,15 @@
 
                                             <!-- POSITION -->
                                             <div class="col-md-6 mb-3">
-                                              <label class="form-label">Job Position</label>
-                                              <input 
-                                                type="text" 
-                                                class="form-control" 
-                                                id="edit_job_position"
-                                                disabled>
+                                                <label class="form-label">Job Position</label>
+                                                <select id="edit_job_position" name="position" class="form-select select2" style="width:100%">
+                                                    <?php foreach ($skills as $skill): ?>
+                                                        <option value="<?= esc($skill['name']) ?>">
+                                                            <?= esc($skill['name']) ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
                                             </div>
-
-                                            <!-- hidden input untuk tetap kirim value -->
-                                            <input type="hidden" name="position" id="edit_job_position_hidden">
 
                                             <!-- CATEGORY -->
                                             <div class="col-md-6 mb-3">
@@ -200,7 +197,7 @@
 
                                             <div class="col-md-6 mb-3">
                                               <label class="form-label">End Time</label>
-                                              <input type="time" class="form-control" name="end_time" id="edit_end_time" required>
+                                              <input type="time" class="form-control" name="end_time" id="edit_end_time" readonly required>
                                             </div>
                                           </div>
 
@@ -249,19 +246,13 @@
 
                         <script>
                             'use strict';
-
                             $(function () {
-
-                                let dt_table = $('.dtJobVacancies'),
-                                    dt_job;
-
+                                let dt_table = $('.dtJobVacancies'), dt_job;
                                 if (dt_table.length) {
-
                                     dt_job = dt_table.DataTable({
                                         processing: true,
                                         serverSide: true,
                                         responsive: true,
-
                                         ajax: {
                                             url: "<?= base_url('admin/job-vacancies/datatable') ?>",
                                             type: "POST",
@@ -301,8 +292,6 @@
                                                 searchable: false
                                             }
                                         ],
-
-                                        order: [[4, 'desc']], // sort by job date
 
                                         dom:
                                             '<"card-header flex-column flex-md-row"' +
@@ -378,7 +367,6 @@
 
                         <script>
                             'use strict';
-
                             $(function () {
 
                                 // SUBMIT ADD JOB
@@ -397,34 +385,24 @@
                                         dataType: "json",
 
                                         success: function (res) {
+                                            Swal.fire({
+                                                icon: res.status ? 'success' : 'error',
+                                                title: res.status ? 'Success' : 'Failed',
+                                                text: res.message
+                                            });
 
-                                            if (res.status === true) {
-
-                                                // close modal
+                                            if (res.status) {
                                                 $('#modalAddJob').modal('hide');
-
-                                                // reset form
                                                 form[0].reset();
-
-                                                // reload datatable
                                                 $('.dtJobVacancies').DataTable().ajax.reload(null, false);
-
-                                                // toast / alert
-                                                // toastr.success(res.message ?? 'Job successfully added');
-
-                                            } else {
-                                                // toastr.error(res.message ?? 'Failed to save job');
                                             }
                                         },
 
                                         error: function (xhr) {
-
                                             let msg = 'Server error';
-
                                             if (xhr.responseJSON && xhr.responseJSON.message) {
                                                 msg = xhr.responseJSON.message;
                                             }
-
                                             // toastr.error(msg);
                                         },
 
@@ -435,26 +413,19 @@
                                 });
 
                                 $('#formEditJob').on('submit', function (e) {
-
                                     e.preventDefault();
-
                                     let form = $(this);
-
                                     Swal.fire({
                                         title: 'Are you sure?',
                                         icon: 'question',
                                         showCancelButton: true,
                                         confirmButtonText: 'Yes, update'
                                     }).then((result) => {
-
                                         if (result.isConfirmed) {
-
                                             $.post("<?= base_url('admin/job-vacancies/update') ?>",
                                                 form.serialize(),
                                                 function (res) {
-
                                                     if (res.status) {
-
                                                         Swal.fire({
                                                             icon: 'success',
                                                             title: 'Updated',
@@ -478,21 +449,16 @@
 
                                 });
 
-
                                 // =============================
                                 // CLICK EDIT
                                 // =============================
                                 $(document).on('click', '.btn-edit-job', function () {
-
                                     const id = $(this).data('id');
-
                                     $.post("<?= base_url('admin/job-vacancies/get') ?>", {
                                         id: id,
                                         '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
                                     }, function (res) {
-
                                         if (res.status) {
-
                                             $('#edit_id').val(res.data.id);
                                             $('#edit_category').val(res.data.category);
                                             $('#edit_job_date_start').val(res.data.job_date_start);
@@ -503,11 +469,9 @@
                                             $('#edit_description').val(res.data.description);
 
                                             // SET POSITION
-                                            $('#edit_job_position').val(res.data.position);
-                                            $('#edit_job_position_hidden').val(res.data.position);
+                                            $('#edit_job_position').val(res.data.position).trigger('change');
 
                                             $('#modalEditJob').modal('show');
-
                                         } else {
                                             Swal.fire('Failed', res.message, 'error');
                                         }
@@ -520,9 +484,7 @@
 
                         <script>
                             $(document).ready(function () {
-
                                 function initJobPositionSelect2(selector, modal) {
-
                                     if ($(selector).hasClass('select2-hidden-accessible')) {
                                         $(selector).select2('destroy');
                                     }
@@ -536,15 +498,39 @@
                                 }
 
                                 $('#modalAddJob').on('shown.bs.modal', function () {
-                                    initJobPositionSelect2('#add_job_position', $(this));
+                                    $('#add_job_position').select2({
+                                        placeholder: 'Select Job Position',
+                                        allowClear: true,
+                                        dropdownParent: $('#modalAddJob')
+                                    });
                                 });
 
                                 $('#modalAddJob').on('hidden.bs.modal', function () {
                                     $('#add_job_position').val(null).trigger('change');
+                                    const form = $('#formAddJob');
+                                    // Reset form native
+                                    form[0].reset();
+
+                                    // Reset Select2
+                                    $('#add_job_position').val(null).trigger('change');
+
+                                    // Kosongkan end time manual (karena readonly)
+                                    $('#add_end_time').val('');
+                                });
+
+                                $('#modalEditJob').on('shown.bs.modal', function () {
+                                  $('#edit_job_position').select2({
+                                      placeholder: 'Select Job Position',
+                                      allowClear: true,
+                                      dropdownParent: $('#modalEditJob')
+                                  });
+                                });
+
+                                $('#modalEditJob').on('hidden.bs.modal', function () {
+                                    $('#edit_job_position').val(null).trigger('change');
                                 });
 
                                 function initEditJobPositionSelect2() {
-
                                     if ($('#edit_job_position').hasClass('select2-hidden-accessible')) {
                                         $('#edit_job_position').select2('destroy');
                                     }
@@ -571,5 +557,35 @@
                             });
                         </script>
 
+                        <script>
+                            $(function () {
+                                function autoSetEndTime(startSelector, endSelector) {
+                                    $(document).on('change', startSelector, function () {
+                                        let startTime = $(this).val();
+                                        if (!startTime) return;
+                                        let [hours, minutes] = startTime.split(':').map(Number);
+                                        let date = new Date();
+                                        date.setHours(hours);
+                                        date.setMinutes(minutes);
+                                        date.setSeconds(0);
+
+                                        // tambah 9 jam
+                                        date.setHours(date.getHours() + 9);
+
+                                        let endHours   = String(date.getHours()).padStart(2, '0');
+                                        let endMinutes = String(date.getMinutes()).padStart(2, '0');
+
+                                        let endTime = endHours + ':' + endMinutes;
+
+                                        $(endSelector).val(endTime);
+                                    });
+                                }
+                                // Apply ke Add Form
+                                autoSetEndTime('input[name="start_time"]', '#add_end_time');
+
+                                // Apply ke Edit Form
+                                autoSetEndTime('#edit_start_time', '#edit_end_time');
+                            });
+                        </script>
 
                         <?= $this->endSection() ?>

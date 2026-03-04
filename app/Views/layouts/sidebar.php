@@ -81,7 +81,7 @@
                                     </a>
                                 </li>
                             <?php endif; ?>
-                            <li class="menu-item <?= ($uri=='payments')?'active':'' ?>">
+                            <li class="menu-item <?= ($uri=='payments'||$uri=='invoices')?'active':'' ?>">
                                 <a href="<?= base_url('admin/payments') ?>" class="menu-link">
                                     <i class="menu-icon tf-icons ti-xs ti ti-file-description"></i>
                                     <div>Payments</div>

@@ -191,7 +191,7 @@ class Attendance extends BaseAdminController
 
             if ($checkin && $checkout) {
 
-                $secondsNormal = strtotime($checkout) - strtotime($checkin);
+                $secondsNormal = max(0, (strtotime($checkout) - strtotime($checkin)) - 3600);
                 $minutesNormal = floor($secondsNormal / 60);
 
                 if ($row['ex_checkin'] && $row['ex_checkout']) {
@@ -206,7 +206,7 @@ class Attendance extends BaseAdminController
 
                 $totalMinutes = $minutesNormal + $extendMinutes;
                 $totalSeconds = $totalMinutes * 60;
-
+                
                 $duration = gmdate('H:i', $totalSeconds);
                 $status   = 'Complete';
                 $tenMinutesCnt = floor($totalMinutes / 10);
