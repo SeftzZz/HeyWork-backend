@@ -104,6 +104,21 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
 
     $routes->get('payments', 'Admin\Payments::index', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk']);
     $routes->post('payments/datatable', 'Admin\Payments::datatable');
+
+    $routes->get('trainings', 'Admin\Trainings::index', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk']);
+    $routes->post('trainings/datatable', 'Admin\Trainings::datatable');
+    $routes->get('trainings/create', 'Admin\Trainings::create');
+    $routes->post('trainings/store', 'Admin\Trainings::store');
+    $routes->get('trainings/(:num)', 'Admin\Trainings::show/$1', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk']);
+    $routes->post('trainings/get-detail', 'Admin\Trainings::getDetail');
+    $routes->post('trainings/assign-participant', 'Admin\Trainings::assignParticipant');
+    $routes->post('trainings/request-revision', 'Admin\Trainings::requestRevision');
+
+    $routes->get('training-approvals', 'Admin\TrainingApprovals::index', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk']);
+    $routes->post('training-approvals/approve-plan/(:num)', 'Admin\TrainingApprovals::approvePlan/$1');
+    $routes->post('training-approvals/reject-plan/(:num)', 'Admin\TrainingApprovals::rejectPlan/$1');
+    $routes->post('training-approvals/approve-revision/(:num)', 'Admin\TrainingApprovals::approveRevision/$1');
+    $routes->post('training-approvals/reject-revision/(:num)', 'Admin\TrainingApprovals::rejectRevision/$1');
 });
 
 $routes->group('api', function($routes) {

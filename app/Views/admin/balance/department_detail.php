@@ -223,39 +223,39 @@
                               // ======================
                               // REVENUE MULTIPLE SECTION
                               // ======================
-                              // tbody.append(`
-                              //   <tr class="table-info fw-bold text-center">
-                              //     <td colspan="4">Revenue Multiple (Revenue ÷ Total Cost)</td>
-                              //   </tr>
-                              // `);
+                            //   tbody.append(`
+                            //     <tr class="table-info fw-bold text-center">
+                            //       <td colspan="4">Revenue Multiple (Revenue ÷ Total Cost)</td>
+                            //     </tr>
+                            //   `);
 
-                              // tbody.append(`
-                              //   <tr>
-                              //     <td class="text-start">Today</td>
-                              //     <td></td>
-                              //     <td>${todayMultiple.toFixed(1)}x</td>
-                              //     <td>
-                              //       <span class="badge ${todayMultipleStatus.class}">
-                              //         ${todayMultipleStatus.label}
-                              //       </span>
-                              //     </td>
-                              //   </tr>
-                              // `);
+                            //   tbody.append(`
+                            //     <tr>
+                            //       <td class="text-start">Today</td>
+                            //       <td></td>
+                            //       <td>${todayMultiple.toFixed(1)}x</td>
+                            //       <td>
+                            //         <span class="badge ${todayMultipleStatus.class}">
+                            //           ${todayMultipleStatus.label}
+                            //         </span>
+                            //       </td>
+                            //     </tr>
+                            //   `);
 
-                              // tbody.append(`
-                              //   <tr>
-                              //     <td class="text-start">Month To Date</td>
-                              //     <td></td>
-                              //     <td>${mtdMultiple.toFixed(1)}x</td>
-                              //     <td>
-                              //       <span class="badge ${mtdMultipleStatus.class}">
-                              //         ${mtdMultipleStatus.label}
-                              //       </span>
-                              //     </td>
-                              //   </tr>
-                              // `);
+                            //   tbody.append(`
+                            //     <tr>
+                            //       <td class="text-start">Month To Date</td>
+                            //       <td></td>
+                            //       <td>${mtdMultiple.toFixed(1)}x</td>
+                            //       <td>
+                            //         <span class="badge ${mtdMultipleStatus.class}">
+                            //           ${mtdMultipleStatus.label}
+                            //         </span>
+                            //       </td>
+                            //     </tr>
+                            //   `);
 
-                            }, 'json');
+                            // }, 'json');
 
                           });
 

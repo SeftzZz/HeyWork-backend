@@ -61,32 +61,55 @@
                         <?php endif; ?>
 
                         <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production'])) : ?>
+
                             <li class="menu-item <?= ($uri=='attendance')?'active':'' ?>">
                                 <a href="<?= base_url('admin/attendance') ?>" class="menu-link">
-                                  <i class="menu-icon tf-icons ti ti-list"></i>
-                                  <div data-i18n="Attendances">Attendances</div>
+                                    <i class="menu-icon tf-icons ti ti-list"></i>
+                                    <div data-i18n="Attendances">Attendances</div>
                                 </a>
                             </li>
+
                             <li class="menu-item <?= ($uri=='schedules')?'active':'' ?>">
                                 <a href="<?= base_url('admin/schedules') ?>" class="menu-link">
                                     <i class="menu-icon tf-icons ti ti-calendar"></i>
                                     <div>Scheduling</div>
                                 </a>
                             </li>
+
+                            <!-- TRAINING -->
+                            <li class="menu-item <?= ($uri=='trainings')?'active':'' ?>">
+                                <a href="<?= base_url('admin/trainings') ?>" class="menu-link">
+                                    <i class="menu-icon tf-icons ti ti-school"></i>
+                                    <div>Training</div>
+                                </a>
+                            </li>
+
                             <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr'])) : ?>
+
                                 <li class="menu-item <?= ($uri=='schedule-approvals')?'active':'' ?>">
                                     <a href="<?= base_url('admin/schedule-approvals') ?>" class="menu-link">
                                         <i class="menu-icon tf-icons ti ti-check"></i>
                                         <div>Schedule Approvals</div>
                                     </a>
                                 </li>
+
+                                <!-- TRAINING APPROVAL -->
+                                <li class="menu-item <?= ($uri=='training-approvals')?'active':'' ?>">
+                                    <a href="<?= base_url('admin/training-approvals') ?>" class="menu-link">
+                                        <i class="menu-icon tf-icons ti ti-checkup-list"></i>
+                                        <div>Training Approvals</div>
+                                    </a>
+                                </li>
+
                             <?php endif; ?>
+
                             <li class="menu-item <?= ($uri=='payments')?'active':'' ?>">
                                 <a href="<?= base_url('admin/payments') ?>" class="menu-link">
                                     <i class="menu-icon tf-icons ti-xs ti ti-file-description"></i>
                                     <div>Payments</div>
                                 </a>
                             </li>
+
                         <?php endif; ?>
                         
                         <?php if (in_array(session()->get('user_role'), ['admin', 'hotel_hr'])) : ?>
