@@ -32,7 +32,6 @@
                                             <tr>
                                                 <th></th>
                                                 <th>No.</th>
-                                                <th>Date</th>
                                                 <th>Worker</th>
                                                 <!-- <th>Hotel</th> -->
                                                 <th>Job</th>
@@ -247,7 +246,6 @@
                                         columns: [
                                             { defaultContent: '' },
                                             { data: 'no' },
-                                            { data: 'date' },
                                             { data: 'worker' },
                                             // { data: 'hotel' },
                                             { data: 'job' },

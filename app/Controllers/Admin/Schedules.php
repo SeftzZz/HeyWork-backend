@@ -421,15 +421,28 @@ class Schedules extends BaseController
             ]);
         }
 
-        if (strtotime($start) >= strtotime($end)) {
+        // =========================
+        // BUILD DATETIME RANGE
+        // =========================
+        $startDateTime = strtotime($date . ' ' . $start);
+        $endDateTime   = strtotime($date . ' ' . $end);
+
+        // SHIFT LINTAS HARI
+        if ($endDateTime <= $startDateTime) {
+            $endDateTime = strtotime('+1 day', $endDateTime);
+        }
+
+        $durationHours = ($endDateTime - $startDateTime) / 3600;
+
+        if ($durationHours > 16) {
             return $this->response->setJSON([
                 'status' => false,
-                'message' => 'End time must be greater than start time'
+                'message' => 'Shift duration too long'
             ]);
         }
 
         // =========================
-        // CHECK PLAN STATUS (LOCK IF APPROVED)
+        // CHECK PLAN STATUS
         // =========================
         $plan = $this->db->table('schedule_plans')
             ->where('id', $planId)
@@ -443,12 +456,12 @@ class Schedules extends BaseController
             ]);
         }
 
-        if ($plan['status'] === 'approved') {
-            return $this->response->setJSON([
-                'status' => false,
-                'message' => 'Cannot modify approved schedule'
-            ]);
-        }
+        // if ($plan['status'] === 'approved') {
+        //     return $this->response->setJSON([
+        //         'status' => false,
+        //         'message' => 'Cannot modify approved schedule'
+        //     ]);
+        // }
 
         // =========================
         // FIND SCHEDULE DAY
@@ -471,22 +484,34 @@ class Schedules extends BaseController
         $scheduleDayId = $day['id'];
 
         // =========================
-        // OVERLAP CHECK
+        // OVERLAP CHECK (CROSS DAY SAFE)
         // =========================
-        $conflict = $this->db->table('schedule_shifts')
-            ->where('schedule_day_id', $scheduleDayId)
+        $shifts = $this->db->table('schedule_shifts')
             ->where('user_id', $userId)
-            ->groupStart()
-                ->where('start_time <', $end)
-                ->where('end_time >', $start)
-            ->groupEnd()
-            ->countAllResults();
+            ->get()
+            ->getResultArray();
 
-        if ($conflict > 0) {
-            return $this->response->setJSON([
-                'status' => false,
-                'message' => 'Shift time overlaps with existing shift'
-            ]);
+        foreach ($shifts as $shift) {
+
+            $shiftDay = $this->db->table('schedule_days')
+                ->where('id', $shift['schedule_day_id'])
+                ->get()
+                ->getRowArray();
+
+            $shiftStart = strtotime($shiftDay['shift_date'] . ' ' . $shift['start_time']);
+            $shiftEnd   = strtotime($shiftDay['shift_date'] . ' ' . $shift['end_time']);
+
+            if ($shiftEnd <= $shiftStart) {
+                $shiftEnd = strtotime('+1 day', $shiftEnd);
+            }
+
+            // OVERLAP DETECTION
+            if ($startDateTime < $shiftEnd && $endDateTime > $shiftStart) {
+                return $this->response->setJSON([
+                    'status' => false,
+                    'message' => 'Shift time overlaps with existing shift'
+                ]);
+            }
         }
 
         // =========================
@@ -510,8 +535,8 @@ class Schedules extends BaseController
                     'message' => 'Invalid job or application for this date'
                 ]);
             }
+
         } else {
-            // Kosongkan jika tidak dikirim (akan diisi saat approve)
             $jobId = null;
             $applicationId = null;
         }

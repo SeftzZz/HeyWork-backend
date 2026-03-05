@@ -12,7 +12,6 @@
                                             <th>Position</th>
                                             <th>Category</th>
                                             <th>Date</th>
-                                            <th>Time</th>
                                             <th>Location</th>
                                             <th>Fee</th>
                                             <th>Status</th>
@@ -78,22 +77,6 @@
                                             <div class="col-md-6 mb-3">
                                               <label class="form-label">Job End Date</label>
                                               <input type="date" class="form-control" name="job_date_end" required>
-                                            </div>
-
-                                          </div>
-
-                                          <div class="row">
-
-                                            <!-- START TIME -->
-                                            <div class="col-md-6 mb-3">
-                                              <label class="form-label">Start Time</label>
-                                              <input type="time" class="form-control" name="start_time" required>
-                                            </div>
-
-                                            <!-- END TIME -->
-                                            <div class="col-md-6 mb-3">
-                                              <label class="form-label">End Time</label>
-                                              <input type="time" class="form-control" name="end_time" id="add_end_time" readonly required>
                                             </div>
 
                                           </div>
@@ -267,7 +250,6 @@
                                             { data: 'position' },
                                             { data: 'category' },
                                             { data: 'date' },
-                                            { data: 'time' },
                                             { data: 'location' },
                                             { data: 'fee' },
                                             { data: 'status' },

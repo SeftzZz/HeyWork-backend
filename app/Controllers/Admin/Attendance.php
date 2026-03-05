@@ -65,14 +65,15 @@ class Attendance extends BaseAdminController
 
         $baseBuilder = $db->table('job_attendances')
             ->select("
-                DATE(job_attendances.created_at) AS work_date,
+                DATE(MIN(CASE WHEN job_attendances.type='checkin'
+                THEN job_attendances.created_at END)) AS work_date,
                 users.role,
                 skills.category,
                 IFNULL(users.name, '-') AS worker_name,
                 IFNULL(hotels.hotel_name, '-') AS hotel_name,
                 IFNULL(jobs.position, '-') AS position,
-                jobs.start_time,
-                jobs.end_time,
+                schedule_shifts.start_time,
+                schedule_shifts.end_time,
                 jobs.fee,
 
                 MIN(CASE WHEN job_attendances.type = 'checkin' THEN job_attendances.created_at END) AS checkin_time,
@@ -106,8 +107,11 @@ class Attendance extends BaseAdminController
             )
             ->join('job_applications', 'job_applications.id = job_attendances.application_id', 'left')
             ->join('jobs', 'jobs.id = job_attendances.job_id', 'left')
-
-            // ✅ JOIN YANG BENAR
+            ->join(
+                'schedule_shifts',
+                'schedule_shifts.application_id = job_attendances.application_id',
+                'left'
+            )
             ->join(
                 'skills',
                 'LOWER(TRIM(skills.name)) = LOWER(TRIM(jobs.position))',
@@ -118,7 +122,16 @@ class Attendance extends BaseAdminController
             ->join('hotels', 'hotels.id = jobs.hotel_id', 'left')
             ->where('jobs.hotel_id', session()->get('hotel_id'))
             ->where('(job_attendances.deleted_at IS NULL OR job_attendances.deleted_at = "0000-00-00 00:00:00")', null, false)
-            ->groupBy('job_attendances.user_id, job_attendances.job_id, DATE(job_attendances.created_at)');
+            ->groupBy("
+                job_attendances.application_id,
+                DATE(
+                    CASE 
+                        WHEN job_attendances.type='checkin' 
+                        THEN job_attendances.created_at
+                        ELSE DATE_SUB(job_attendances.created_at, INTERVAL 12 HOUR)
+                    END
+                )
+            ");
 
         // ==========================
         // ROLE BASED FILTER
@@ -230,8 +243,13 @@ class Attendance extends BaseAdminController
                 'role'            => esc($row['role']),
                 'category'        => esc($row['category']),
                 'job'             => esc($row['position']) . $extendBadge,
-                'checkin'         => $checkin ? date('H:i', strtotime($checkin)) : '-',
-                'checkout'        => $checkout ? date('H:i', strtotime($checkout)) : '-',
+                'checkin' => $checkin 
+                    ? date('d M Y H:i', strtotime($checkin)) 
+                    : '-',
+
+                'checkout' => $checkout 
+                    ? date('d M Y H:i', strtotime($checkout)) 
+                    : '-',
                 'duration'        => $duration,
                 'ten_minutes'     => $tenMinutesCnt,
                 'rate'            => $rate !== '-' ? number_format($rate, 0, ',', '.') : '-',

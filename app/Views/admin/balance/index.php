@@ -81,7 +81,7 @@
                                             <div class="d-flex gap-2 align-items-center">
                                               <h6 class="mb-0">Month To Date</h6>
                                             </div>
-                                            <h4 class="my-2 pt-1 end-balance-value">0</h4>
+                                            <h4 class="my-2 pt-1 month-to-date-revenue">0</h4>
                                             <div class="progress w-75" style="height: 4px">
                                               <div
                                                 class="progress-bar end-balance-progress"
@@ -1069,14 +1069,8 @@
                                 window.totalChartInstance.render();
                               }
 
-                              // =========================
-                              // END BALANCE UPDATE (YTD)
-                              // =========================
-                              $('.end-balance-value')
-                                .text('Rp ' + ytdBalance.toLocaleString('id-ID'));
-
                               // Optional: progress terhadap target tahunan (kalau ada)
-                              const yearlyTarget = 5000000000; // ubah sesuai target
+                              const yearlyTarget = earnings; // ubah sesuai target
                               const endPercent = Math.min((ytdBalance / yearlyTarget) * 100, 100);
 
                               $('.end-balance-progress')
@@ -1215,6 +1209,12 @@
                                     year: '2-digit'
                                   });
 
+                                  // =========================
+                                  // END BALANCE UPDATE (YTD)
+                                  // =========================
+                                  $('.month-to-date-revenue')
+                                    .text('Rp ' + res.mtd_revenue.toLocaleString('id-ID'));
+
                                   // ==========================
                                   // Inject header with buttons
                                   // ==========================
@@ -1251,7 +1251,7 @@
 
                                   tbody.append(`
                                     <tr class="table-secondary fw-bold">
-                                      <td class="text-start">Total Corporate Cost</td>
+                                      <td class="text-start">Total Cost</td>
                                       <td></td>
                                       <td>${res.total_dw_cost.toLocaleString('id-ID')}</td>
                                     </tr>
