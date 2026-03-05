@@ -69,8 +69,7 @@ class Users extends BaseAdminController
 
         if ($userRole === 'hotel_hr') {
             $countQuery
-                ->where('users.hotel_id', $hotelId)
-                ->where('users.role !=', 'worker');
+                ->where('users.hotel_id', $hotelId);
         }
 
         if ($searchValue) {
@@ -98,8 +97,7 @@ class Users extends BaseAdminController
 
         if ($userRole === 'hotel_hr') {
             $totalQuery
-                ->where('users.hotel_id', $hotelId)
-                ->where('users.role !=', 'worker');
+                ->where('users.hotel_id', $hotelId);
         }
 
         $recordsTotal = $totalQuery->countAllResults();
@@ -112,8 +110,7 @@ class Users extends BaseAdminController
 
         if ($userRole === 'hotel_hr') {
             $dataQuery
-                ->where('users.hotel_id', $hotelId)
-                ->where('users.role !=', 'worker');
+                ->where('users.hotel_id', $hotelId);
         }
 
         if ($searchValue) {
@@ -214,25 +211,45 @@ class Users extends BaseAdminController
             return $this->response->setStatusCode(404);
         }
 
+        $db = \Config\Database::connect();
+        $db->transStart();
+
         $sessionRole = session()->get('user_role');
-        $hotelId    = $this->request->getPost('hotel_id');
+        $hotelId     = $this->request->getPost('hotel_id');
+        $email       = $this->request->getPost('email_user');
 
         if ($sessionRole === 'hotel_hr') {
-            $hotelId = session()->get('hotel_id'); // paksa dari session
+            $hotelId = session()->get('hotel_id');
         }
+
+        // CEK EMAIL
+        $existingEmail = $this->userModel
+            ->where('email', $email)
+            ->where('deleted_at', null)
+            ->first();
+
+        if ($existingEmail) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Email has been registered'
+            ]);
+        }
+
+        $role = $this->request->getPost('role_user');
 
         $data = [
             'name'       => $this->request->getPost('name_user'),
             'hotel_id'   => $hotelId,
-            'email'      => $this->request->getPost('email_user'),
+            'email'      => $email,
             'phone'      => $this->request->getPost('hp_user'),
-            'role'       => $this->request->getPost('role_user'),
+            'role'       => $role,
             'is_active'  => $this->request->getPost('status_user'),
             'password'   => password_hash($this->request->getPost('pass_user'), PASSWORD_DEFAULT),
             'created_by' => session()->get('user_id'),
             'updated_by' => session()->get('user_id')
         ];
 
+        // Upload photo
         $file = $this->request->getFile('foto_user');
         if ($file && $file->isValid()) {
             $name = $file->getRandomName();
@@ -240,7 +257,60 @@ class Users extends BaseAdminController
             $data['photo'] = 'uploads/profiles/' . $name;
         }
 
+        // INSERT USER
         $this->userModel->insert($data);
+        $userId = $this->userModel->getInsertID();
+
+        /**
+         * ===============================
+         * AUTO INSERT APPLICATION IF WORKER
+         * ===============================
+         */
+        if ($role === 'worker') {
+
+            $jobId = $this->request->getPost('job_id');
+
+            if ($jobId) {
+
+                $db->table('job_applications')->insert([
+                    'job_id'     => $jobId,
+                    'user_id'    => $userId,
+                    'status'     => 'accepted',
+                    'applied_at' => date('Y-m-d H:i:s'),
+                    'accepted_at'=> date('Y-m-d H:i:s'),
+                    'accepted_by'=> session()->get('user_id')
+                ]);
+            }
+
+            $baseSalary = $this->request->getPost('base_salary');
+            $overtime   = $this->request->getPost('overtime_rate');
+
+            $baseSalary = is_numeric($baseSalary) ? $baseSalary : 0;
+            $overtime   = is_numeric($overtime) ? $overtime : 0;
+
+            $db->table('worker_contracts')->insert([
+                'user_id'       => $userId,
+                'contract_type' => $this->request->getPost('contract_type') ?? 'daily_worker',
+                'salary_type'   => $this->request->getPost('salary_type') ?? 'daily',
+                'base_salary'   => $baseSalary,
+                'overtime_rate' => $overtime,
+                'start_date'    => $this->request->getPost('contract_start_date'),
+                'end_date'      => $this->request->getPost('contract_end_date') ?: null,
+                'is_active'     => 1,
+                'created_at'    => date('Y-m-d H:i:s'),
+                'created_by'    => session()->get('user_id')
+            ]);
+
+        }
+
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Failed to create user'
+            ]);
+        }
 
         return $this->response->setJSON([
             'status' => true,
@@ -383,6 +453,33 @@ class Users extends BaseAdminController
         return $this->response->setJSON([
             'status'  => false,
             'message' => 'Failed to delete data'
+        ]);
+    }
+
+    public function getPartner()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(404);
+        }
+
+        $hotelId = session()->get('hotel_id');
+
+        $partners = $this->userModel
+            ->select('users.id, users.name, users.gender')
+            ->join('job_applications ja', 'ja.user_id = users.id')
+            ->join('jobs j', 'j.id = ja.job_id')
+            ->whereIn('j.category', ['daily_worker', 'casual'])
+            ->where('j.hotel_id', $hotelId)
+            ->where('users.role', 'worker')
+            ->where('users.deleted_at', null)
+            ->where('users.is_active', 'active')
+            ->groupBy('users.id')
+            ->orderBy('users.name', 'ASC')
+            ->findAll();
+
+        return $this->response->setJSON([
+            'status' => true,
+            'data'   => $partners
         ]);
     }
 }

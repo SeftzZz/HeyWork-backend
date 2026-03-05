@@ -76,32 +76,43 @@ class JobVacancies extends BaseAdminController
             ->where('jobs.hotel_id', session()->get('hotel_id'))
             ->where('jobs.deleted_at IS NULL');
 
-        // 🔍 SEARCH
+        // SEARCH
         if ($search) {
+            // bersihkan format rupiah (hapus titik & koma)
+            $numericSearch = str_replace(['.', ','], '', $search);
+
             $builder->groupStart()
                 ->like('jobs.position', $search)
                 ->orLike('jobs.category', $search)
                 ->orLike('jobs.location', $search)
-                ->orLike('jobs.status', $search)
-            ->groupEnd();
+                ->orLike('jobs.status', $search);
+
+            // kalau numeric, search ke fee juga
+            if (is_numeric($numericSearch)) {
+                $builder->orWhere('jobs.fee', (int)$numericSearch);
+            }
+
+            $builder->groupEnd();
         }
 
-        // 📊 COUNT
+        // COUNT
         $countBuilder    = clone $builder;
         $recordsFiltered = $countBuilder->countAllResults(false);
         $recordsTotal    = $recordsFiltered;
 
-        // ↕️ ORDER
-        if ($order) {
+        // ORDER
+        if ($order && isset($order[0]['column'])) {
             $idx = (int) $order[0]['column'];
             if (!empty($columns[$idx])) {
                 $builder->orderBy($columns[$idx], $order[0]['dir']);
+            } else {
+                $builder->orderBy('jobs.id', 'DESC');
             }
         } else {
-            $builder->orderBy('jobs.job_date_start', 'DESC');
+            $builder->orderBy('jobs.id', 'DESC');
         }
 
-        // 📄 LIMIT
+        // LIMIT
         if ($length > 0) {
             $builder->limit($length, $start);
         }
@@ -148,27 +159,6 @@ class JobVacancies extends BaseAdminController
         ]);
     }
 
-    public function get()
-    {
-        $id = $this->request->getPost('id');
-
-        $job = $this->job->where('id', $id)
-                         ->where('deleted_at IS NULL')
-                         ->first();
-
-        if (!$job) {
-            return $this->response->setJSON([
-                'status' => false,
-                'message' => 'Job not found'
-            ]);
-        }
-
-        return $this->response->setJSON([
-            'status' => true,
-            'data'   => $job
-        ]);
-    }
-
     public function store()
     {
         $data = $this->request->getPost();
@@ -186,7 +176,6 @@ class JobVacancies extends BaseAdminController
 
             $jobDateStart = $jobDateStart->format('Y-m-d');
             $jobDateEnd   = $jobDateEnd->format('Y-m-d');
-
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'status'  => false,
@@ -207,10 +196,10 @@ class JobVacancies extends BaseAdminController
         // =========================
         // VALIDASI POSITION (MULTI)
         // =========================
-        if (empty($data['position']) || !is_array($data['position'])) {
+        if (empty($data['position'])) {
             return $this->response->setJSON([
                 'status'  => false,
-                'message' => 'Please select at least one job position'
+                'message' => 'Please select job position'
             ]);
         }
 
@@ -221,31 +210,57 @@ class JobVacancies extends BaseAdminController
         $userId = session()->get('user_id');
         $hotelId = session()->get('hotel_id');
 
-        foreach ($data['position'] as $position) {
+        // =========================
+        // AMBIL LOCATION DARI HOTEL
+        // =========================
+        $hotel = $db->table('hotels')->select('location')->where('id', $hotelId)->get()->getRowArray();
 
-            if (!$position) continue;
-
-            $insert = [
-                'hotel_id'          => $hotelId,
-                'position'          => $position, // 1 posisi = 1 row
-                'category'          => $data['category'],
-                'job_date_start'    => $jobDateStart, // ✅ yyyy-mm-dd
-                'job_date_end'      => $jobDateEnd,   // ✅ yyyy-mm-dd
-                'start_time'        => $data['start_time'],
-                'end_time'          => $data['end_time'],
-                'fee'               => $data['fee'],
-                'description'       => $data['description'] ?? null,
-                'status'            => 'open',
-                'created_at'        => $now,
-                'created_by'        => $userId
-            ];
-
-            $builder->insert($insert);
+        if (!$hotel) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Hotel not found'
+            ]);
         }
+
+        $insert = [
+            'hotel_id'       => $hotelId,
+            'position'       => $data['position'],
+            'category'       => $data['category'],
+            'job_date_start' => $jobDateStart,
+            'job_date_end'   => $jobDateEnd,
+            'start_time'     => $data['start_time'],
+            'end_time'       => $data['end_time'],
+            'fee'            => $data['fee'],
+            'location'       => $hotel['location'],
+            'description'    => $data['description'] ?? null,
+            'status'         => 'open',
+            'created_at'     => $now,
+            'created_by'     => $userId
+        ];
+
+        $builder->insert($insert);
 
         return $this->response->setJSON([
             'status'  => true,
             'message' => 'Job(s) have been successfully created'
+        ]);
+    }
+
+    public function get()
+    {
+        $id = $this->request->getPost('id');
+        $job = $this->job->where('id', $id)->where('deleted_at IS NULL')->first();
+
+        if (!$job) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Job not found'
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'status' => true,
+            'data'   => $job
         ]);
     }
 
@@ -297,13 +312,30 @@ class JobVacancies extends BaseAdminController
             ]);
         }
 
+        // =========================
+        // AMBIL LOCATION DARI HOTEL
+        // =========================
+        $hotelId = session()->get('hotel_id');
+
+        $db = \Config\Database::connect();
+        $hotel = $db->table('hotels')->select('location')->where('id', $hotelId)->get()->getRowArray();
+
+        if (!$hotel) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Hotel not found'
+            ]);
+        }
+
         $update = [
+            'position'       => $data['position'],
             'category'       => $data['category'],
             'job_date_start' => $jobDateStart,
             'job_date_end'   => $jobDateEnd,
             'start_time'     => $data['start_time'],
             'end_time'       => $data['end_time'],
             'fee'            => $data['fee'],
+            'location'       => $hotel['location'], // AUTO FROM HOTEL ID di Session
             'description'    => $data['description'] ?? null,
             'updated_at'     => date('Y-m-d H:i:s'),
             'updated_by'     => session()->get('user_id')

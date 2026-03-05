@@ -85,9 +85,7 @@ class Payments extends BaseAdminController
         $grouped = [];
 
         foreach ($rows as $row) {
-
             $appId = (int) $row['application_id'];
-
             if (!isset($grouped[$appId])) {
                 $grouped[$appId] = [
                     'worker_name'    => $row['worker_name'],
@@ -117,12 +115,12 @@ class Payments extends BaseAdminController
         // HITUNG TOTAL
         // =========================
         foreach ($grouped as $appId => &$g) {
-
             $count = min(count($g['checkins']), count($g['checkouts']));
-
             for ($i = 0; $i < $count; $i++) {
-
-                $seconds = strtotime($g['checkouts'][$i]) - strtotime($g['checkins'][$i]);
+                $seconds = max(
+                    0,
+                    (strtotime($g['checkouts'][$i]) - strtotime($g['checkins'][$i])) - 3600
+                );
                 $minutes = floor($seconds / 60);
 
                 if ($minutes <= 0) {
