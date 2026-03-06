@@ -172,21 +172,9 @@
                                             </div>
                                           </div>
 
-                                          <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                              <label class="form-label">Start Time</label>
-                                              <input type="time" class="form-control" name="start_time" id="edit_start_time" required>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                              <label class="form-label">End Time</label>
-                                              <input type="time" class="form-control" name="end_time" id="edit_end_time" readonly required>
-                                            </div>
-                                          </div>
-
                                           <div class="mb-3">
                                             <label class="form-label">Fee</label>
-                                            <input type="number" class="form-control" name="fee" id="edit_fee" required>
+                                            <input type="number" class="form-control" name="fee" id="edit_fee">
                                           </div>
 
                                           <div class="mb-3">

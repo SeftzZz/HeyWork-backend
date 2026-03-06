@@ -233,7 +233,8 @@
 
                     <div class="modal-body">
 
-                        <input type="hidden" name="training_day_id" id="assign_day_id">
+                        <input type="hidden" name="training_day_id" id="assign_training_day_id">
+                        <input type="hidden" name="training_date" id="assign_training_date">
 
                         <div class="mb-3">
                             <label>Worker</label>
@@ -250,6 +251,17 @@
 
                             </select>
                         </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label>Start</label>
+                                <input type="time" name="start_time" class="form-control" required>
+                            </div>
+                            <div class="col">
+                                <label>End</label>
+                                <input type="time" name="end_time" class="form-control" required>
+                            </div>
+                      </div>
 
                     </div>
 
@@ -518,41 +530,40 @@
 
 
         // ==========================
-        // VIEW TRAINING
+        // VIEW SCHEDULE (AJAX)
         // ==========================
-
         $(document).on('click', '.btn-view', function () {
 
             let id = $(this).data('id');
 
             $('#modalViewTraining').modal('show');
-
             $('#view_training_body').html(
                 '<tr><td colspan="3" class="text-center">Loading...</td></tr>'
             );
 
             $.post("<?= base_url('admin/trainings/get-detail') ?>", {
-
                 id: id,
                 '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
-
             }, function (res) {
 
                 if (res.status) {
 
+                    // Header
                     $('#view_title').text(res.data.title);
                     $('#view_department').text(res.data.department);
                     $('#view_month').text(res.data.month_name);
                     $('#view_year').text(res.data.year);
                     $('#view_status').html(res.data.status_badge);
 
+                    // Detail rows
                     let rows = '';
 
                     if (res.details.length > 0) {
 
                         res.details.forEach(function (day) {
 
-                            if (!day.participants || day.participants.length === 0) {
+                            // Tidak ada shift
+                            if (!day.shifts || day.shifts.length === 0) {
 
                                 rows += `
                                 <tr>
@@ -572,36 +583,48 @@
 
                             } else {
 
-                                day.participants.forEach(function (p) {
+                                day.shifts.forEach(function (shift) {
 
                                     rows += `
                                     <tr>
                                         <td>${formatDate(day.training_date)}</td>
-                                        <td>${p.worker_name}</td>
+                                        <td>${shift.worker_name}</td>
                                         <td>
-                                            <button class="btn btn-sm btn-outline-primary btn-assign"
-                                            data-plan="${id}"
-                                            data-date="${day.training_date}">
-                                            + Add
+                                            <span class="badge bg-label-${getShiftColor(shift.shift_type)}">
+                                                ${shift.shift_type.toUpperCase()}
+                                            </span>
+                                            <div class="small text-muted">
+                                                ${shift.start_time} - ${shift.end_time}
+                                            </div>
+                                            <button 
+                                                class="btn btn-sm btn-outline-primary ms-2 btn-assign"
+                                                data-plan="${id}"
+                                                data-date="${day.training_date}">
+                                                + Add
                                             </button>
                                         </td>
                                     </tr>
                                     `;
-
                                 });
 
                             }
 
                         });
 
+                    } else {
+
+                        rows = '<tr><td colspan="3" class="text-center">No schedule detail</td></tr>';
                     }
 
                     $('#view_training_body').html(rows);
 
+                } else {
+                    $('#view_training_body').html(
+                        '<tr><td colspan="3" class="text-center text-danger">Failed to load</td></tr>'
+                    );
                 }
 
             }, 'json');
-
         });
 
 
@@ -612,13 +635,10 @@
         $(document).on('click', '.btn-assign', function(){
 
             let planId = $(this).data('plan');
-
             let date   = $(this).data('date');
 
-            $('#assign_plan_id').val(planId);
-
+            $('#assign_training_day_id').val(planId);
             $('#assign_training_date').val(date);
-
             $('#modalAssignParticipant').modal('show');
 
         });
@@ -647,7 +667,7 @@
                             showConfirmButton: false
                         });
 
-                        $('.btn-view[data-id="'+$('#assign_plan_id').val()+'"]').click();
+                        $('.btn-view[data-id="'+$('#assign_training_day_id').val()+'"]').click();
 
                     } else {
 

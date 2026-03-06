@@ -252,26 +252,10 @@
 
                                               <div class="row">
 
-                                                <!-- START TIME -->
-                                                <div class="col-md-6 mb-3">
-                                                  <label class="form-label">Start Time</label>
-                                                  <input type="time" class="form-control" name="start_time" required>
-                                                </div>
-
-                                                <!-- END TIME -->
-                                                <div class="col-md-6 mb-3">
-                                                  <label class="form-label">End Time</label>
-                                                  <input type="time" class="form-control" name="end_time" required>
-                                                </div>
-
-                                              </div>
-
-                                              <div class="row">
-
                                                 <!-- FEE -->
                                                 <div class="col-md-12 mb-3">
                                                   <label class="form-label">Fee</label>
-                                                  <input type="number" class="form-control" name="fee" required>
+                                                  <input type="number" class="form-control" name="fee">
                                                 </div>
 
                                               </div>

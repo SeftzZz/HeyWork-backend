@@ -227,7 +227,7 @@ class Trainings extends BaseController
             $this->db->transRollback();
             return $this->response->setJSON([
                 'status' => false,
-                'message' => 'Failed to create schedule plan'
+                'message' => 'Failed to create training plan'
             ]);
         }
 
@@ -361,39 +361,160 @@ class Trainings extends BaseController
 
     public function assignParticipant()
     {
-        $dayId  = $this->request->getPost('training_day_id');
+        $planId = $this->request->getPost('training_day_id');
+        $date   = $this->request->getPost('training_date');
         $userId = $this->request->getPost('user_id');
+        $start  = $this->request->getPost('start_time');
+        $end    = $this->request->getPost('end_time');
+        $type   = $this->request->getPost('shift_type') ?? 'regular';
 
-        if(!$dayId || !$userId){
+        $jobId         = $this->request->getPost('job_id');
+        $applicationId = $this->request->getPost('application_id');
+
+        if (!$planId || !$date || !$userId || !$start || !$end) {
             return $this->response->setJSON([
-                'status'=>false,
-                'message'=>'Invalid data'
+                'status' => false,
+                'message' => 'Incomplete data'
             ]);
         }
 
-        $exists = $this->db->table('training_participants')
+        // =========================
+        // BUILD DATETIME RANGE
+        // =========================
+        $startDateTime = strtotime($date . ' ' . $start);
+        $endDateTime   = strtotime($date . ' ' . $end);
+
+        // SHIFT LINTAS HARI
+        if ($endDateTime <= $startDateTime) {
+            $endDateTime = strtotime('+1 day', $endDateTime);
+        }
+
+        $durationHours = ($endDateTime - $startDateTime) / 3600;
+
+        if ($durationHours > 16) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Shift duration too long'
+            ]);
+        }
+
+        // =========================
+        // CHECK PLAN STATUS
+        // =========================
+        $plan = $this->db->table('training_plans')
+            ->where('id', $planId)
+            ->get()
+            ->getRowArray();
+
+        if (!$plan) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'training plan not found'
+            ]);
+        }
+
+        // if ($plan['status'] === 'approved') {
+        //     return $this->response->setJSON([
+        //         'status' => false,
+        //         'message' => 'Cannot modify approved training'
+        //     ]);
+        // }
+
+        // =========================
+        // FIND Training DAY
+        // =========================
+        $day = $this->db->table('training_days')
             ->where([
-                'training_day_id'=>$dayId,
-                'user_id'=>$userId
+                'training_plan_id'    => $planId,
+                'training_date'       => $date
             ])
-            ->countAllResults();
+            ->get()
+            ->getRowArray();
 
-        if($exists){
+        if (!$day) {
             return $this->response->setJSON([
-                'status'=>false,
-                'message'=>'Worker already assigned'
+                'status' => false,
+                'message' => 'training day not found'
             ]);
         }
 
-        $this->db->table('training_participants')->insert([
-            'training_day_id'=>$dayId,
-            'user_id'=>$userId,
-            'created_at'=>date('Y-m-d H:i:s')
+        $trainingDayId = $day['id'];
+
+        // =========================
+        // OVERLAP CHECK (CROSS DAY SAFE)
+        // =========================
+        $shifts = $this->db->table('training_shifts')
+            ->where('user_id', $userId)
+            ->get()
+            ->getResultArray();
+
+        foreach ($shifts as $shift) {
+
+            $shiftDay = $this->db->table('training_days')
+                ->where('id', $shift['training_day_id'])
+                ->get()
+                ->getRowArray();
+
+            $shiftStart = strtotime($shiftDay['training_date'] . ' ' . $shift['start_time']);
+            $shiftEnd   = strtotime($shiftDay['training_date'] . ' ' . $shift['end_time']);
+
+            if ($shiftEnd <= $shiftStart) {
+                $shiftEnd = strtotime('+1 day', $shiftEnd);
+            }
+
+            // OVERLAP DETECTION
+            if ($startDateTime < $shiftEnd && $endDateTime > $shiftStart) {
+                return $this->response->setJSON([
+                    'status' => false,
+                    'message' => 'Shift time overlaps with existing shift'
+                ]);
+            }
+        }
+
+        // =========================
+        // OPTIONAL JOB VALIDATION
+        // =========================
+        if ($jobId && $applicationId) {
+
+            $validJob = $this->db->table('job_applications ja')
+                ->join('jobs j', 'j.id = ja.job_id')
+                ->where('ja.id', $applicationId)
+                ->where('ja.user_id', $userId)
+                ->where('j.id', $jobId)
+                ->where('j.job_date_start <=', $date)
+                ->where('j.job_date_end >=', $date)
+                ->get()
+                ->getRowArray();
+
+            if (!$validJob) {
+                return $this->response->setJSON([
+                    'status' => false,
+                    'message' => 'Invalid job or application for this date'
+                ]);
+            }
+
+        } else {
+            $jobId = null;
+            $applicationId = null;
+        }
+
+        // =========================
+        // INSERT SHIFT
+        // =========================
+        $this->db->table('training_shifts')->insert([
+            'training_day_id' => $trainingDayId,
+            'user_id'         => $userId,
+            'job_id'          => $jobId,
+            'application_id'  => $applicationId,
+            'start_time'      => $start,
+            'end_time'        => $end,
+            'shift_type'      => $type,
+            'created_at'      => date('Y-m-d H:i:s')
         ]);
 
         return $this->response->setJSON([
-            'status'=>true,
-            'message'=>'Participant assigned'
+            'status' => true,
+            'message' => 'Shift assigned successfully'
         ]);
     }
 
