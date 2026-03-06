@@ -22,14 +22,27 @@ class BillingService
                 job_attendances.created_at,
                 users.name AS worker_name,
                 jobs.position,
-                jobs.start_time,
-                jobs.end_time,
+                schedule_shifts.start_time,
+                schedule_shifts.end_time,
+                schedule_days.shift_date,
                 jobs.fee,
                 jobs.hotel_id
             ")
             ->join('job_applications', 'job_applications.id = job_attendances.application_id', 'left')
             ->join('users', 'users.id = job_applications.user_id', 'left')
             ->join('jobs', 'jobs.id = job_applications.job_id', 'left')
+            ->join(
+                'schedule_shifts',
+                'schedule_shifts.application_id = job_attendances.application_id
+                 AND schedule_shifts.user_id = job_applications.user_id',
+                'left'
+            )
+
+            ->join(
+                'schedule_days',
+                'schedule_days.id = schedule_shifts.schedule_day_id',
+                'left'
+            )
             ->where('job_attendances.application_id', $applicationId)
             ->orderBy('job_attendances.created_at', 'ASC');
 

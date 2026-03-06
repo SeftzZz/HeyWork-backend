@@ -17,11 +17,11 @@
               <!-- LEFT (HOTEL SENDER) -->
               <div class="mb-xl-0 mb-4">
                 <div class="d-flex svg-illustration mb-4 gap-2 align-items-center">
-                  <span class="fw-bold fs-4"><?= esc($invoice['hotel_name']) ?></span>
+                  <span class="fw-bold fs-4">Hey Work</span>
                 </div>
-                <p class="mb-2">Hotel Finance Department</p>
+                <p class="mb-2">Hospitality Workforce System</p>
                 <p class="mb-2">Indonesia</p>
-                <p class="mb-0">finance@hotel.internal</p>
+                <p class="mb-0">finance@heywork.id</p>
               </div>
 
               <!-- RIGHT -->
@@ -55,9 +55,9 @@
               <!-- Invoice To -->
               <div class="col-xl-6 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-4 mb-sm-0 mb-4">
                 <h6 class="mb-3">Invoice To:</h6>
-                <p class="mb-1 fw-medium">HEYWORK</p>
-                <p class="mb-1">Hospitality Workforce System</p>
-                <p class="mb-0">support@heywork.id</p>
+                <p class="mb-1 fw-medium"><?= esc($invoice['hotel_name']) ?></p>
+                <p class="mb-1">Hotel Finance Department</p>
+                <p class="mb-0">finance@hotel.internal</p>
               </div>
 
               <!-- Bill To -->

@@ -50,6 +50,10 @@
                                     <option value="Housekeeping">Housekeeping</option>
                                     <option value="Food & Beverage Service">Food & Beverage Service</option>
                                     <option value="Kitchen / Culinary">Kitchen / Culinary</option>
+                                    <option value="Human Resources">Human Resources</option>
+                                    <option value="Sales & Marketing">Sales & Marketing</option>
+                                    <option value="Finance">Finance</option>
+                                    <option value="Engineering">Engineering</option>
                                 </select>
                             </div>
                         <?php endif; ?>
