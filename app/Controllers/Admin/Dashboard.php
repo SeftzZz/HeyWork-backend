@@ -50,8 +50,8 @@ class Dashboard extends BaseController
             $events[] = [
                 'id'    => $job['id'],
                 'title' => $job['position'],
-                'start' => $job['job_date_start'] . 'T' . $job['start_time'],
-                'end'   => $job['job_date_end'] . 'T' . $job['end_time'],
+                'start' => $job['job_date_start'],
+                'end'   => $job['job_date_end'],
                 'allDay'=> false,
                 'extendedProps' => [
                     'calendar' => $job['position'], // ⬅️ INI PENTING

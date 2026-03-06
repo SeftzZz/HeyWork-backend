@@ -21,7 +21,7 @@
                             </a>
                         </li>
 
-                        <?php if (in_array(session()->get('user_role'), ['admin', 'hotel_hr'])) : ?>
+                        <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production', 'hotel_gm'])) : ?>
                             <li class="menu-item <?= ($uri=='hotels')?'active':'' ?>">
                                 <a href="<?= base_url('admin/hotels') ?>" class="menu-link">
                                   <i class="menu-icon tf-icons ti ti-building"></i>
@@ -30,7 +30,7 @@
                             </li>
                         <?php endif; ?>
 
-                        <?php if (in_array(session()->get('user_role'), ['admin', 'hotel_hr'])) : ?>
+                        <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production', 'hotel_gm'])) : ?>
                             <li class="menu-item <?= ($uri=='users')?'active':'' ?>">
                                 <a href="<?= base_url('admin/users') ?>" class="menu-link">
                                   <i class="menu-icon tf-icons ti ti-users"></i>
@@ -39,7 +39,7 @@
                             </li>
                         <?php endif; ?>
 
-                        <?php if (in_array(session()->get('user_role'), ['admin', 'hotel_hr'])) : ?>
+                        <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production', 'hotel_gm'])) : ?>
                             <li class="menu-item <?= ($uri=='job-vacancies')?'active':'' ?>">
                                 <a href="<?= base_url('admin/job-vacancies') ?>" class="menu-link">
                                   <i class="menu-icon tf-icons ti ti-briefcase"></i>
@@ -51,7 +51,7 @@
                         <li class="menu-header small text-uppercase">
                           <span class="menu-header-text" data-i18n="Workers & Applications">Workers &amp; Applications</span>
                         </li>
-                        <?php if (in_array(session()->get('user_role'), ['admin', 'hotel_hr'])) : ?>
+                        <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production', 'hotel_gm'])) : ?>
                             <li class="menu-item <?= ($uri=='application')?'active':'' ?>">
                                 <a href="<?= base_url('admin/application') ?>" class="menu-link">
                                   <i class="menu-icon tf-icons ti ti-inbox"></i>
@@ -60,7 +60,7 @@
                             </li>
                         <?php endif; ?>
 
-                        <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production'])) : ?>
+                        <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production', 'hotel_gm'])) : ?>
 
                             <li class="menu-item <?= ($uri=='attendance')?'active':'' ?>">
                                 <a href="<?= base_url('admin/attendance') ?>" class="menu-link">
@@ -84,7 +84,7 @@
                                 </a>
                             </li>
 
-                            <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr'])) : ?>
+                            <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production', 'hotel_gm'])) : ?>
 
                                 <li class="menu-item <?= ($uri=='schedule-approvals')?'active':'' ?>">
                                     <a href="<?= base_url('admin/schedule-approvals') ?>" class="menu-link">
@@ -111,7 +111,7 @@
 
                         <?php endif; ?>
                         
-                        <?php if (in_array(session()->get('user_role'), ['admin', 'hotel_hr'])) : ?>
+                        <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production', 'hotel_gm'])) : ?>
                             <li class="menu-header small text-uppercase">
                               <span class="menu-header-text">Finance</span>
                             </li>
