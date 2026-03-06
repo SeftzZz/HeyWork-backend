@@ -59,7 +59,7 @@
                                                 <option value="">-- Select Category --</option>
                                                 <option value="daily_worker">Daily Worker</option>
                                                 <option value="casual">Casual</option>
-                                                <option value="coorporate">Coorporate</option>
+                                                <option value="corporate">Corporate</option>
                                               </select>
                                             </div>
 
@@ -154,7 +154,7 @@
                                                 <option value="">-- Select Category --</option>
                                                 <option value="daily_worker">Daily Worker</option>
                                                 <option value="casual">Casual</option>
-                                                <option value="coorporate">Coorporate</option>
+                                                <option value="corporate">Corporate</option>
                                               </select>
                                             </div>
 

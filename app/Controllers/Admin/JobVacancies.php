@@ -181,12 +181,12 @@ class JobVacancies extends BaseAdminController
         // =========================
         // VALIDASI TIME
         // =========================
-        if (strtotime($data['end_time']) <= strtotime($data['start_time'])) {
-            return $this->response->setJSON([
-                'status'  => false,
-                'message' => 'End time must be greater than start time'
-            ]);
-        }
+        // if (strtotime($data['end_time']) <= strtotime($data['start_time'])) {
+        //     return $this->response->setJSON([
+        //         'status'  => false,
+        //         'message' => 'End time must be greater than start time'
+        //     ]);
+        // }
 
         // =========================
         // VALIDASI POSITION (MULTI)
@@ -223,8 +223,8 @@ class JobVacancies extends BaseAdminController
             'category'       => $data['category'],
             'job_date_start' => $jobDateStart,
             'job_date_end'   => $jobDateEnd,
-            'start_time'     => $data['start_time'],
-            'end_time'       => $data['end_time'],
+            // 'start_time'     => $data['start_time'],
+            // 'end_time'       => $data['end_time'],
             'fee'            => $data['fee'],
             'location'       => $hotel['location'],
             'description'    => $data['description'] ?? null,
@@ -300,12 +300,12 @@ class JobVacancies extends BaseAdminController
         // =========================
         // VALIDASI TIME
         // =========================
-        if (strtotime($data['end_time']) <= strtotime($data['start_time'])) {
-            return $this->response->setJSON([
-                'status' => false,
-                'message' => 'End time must be greater than start time'
-            ]);
-        }
+        // if (strtotime($data['end_time']) <= strtotime($data['start_time'])) {
+        //     return $this->response->setJSON([
+        //         'status' => false,
+        //         'message' => 'End time must be greater than start time'
+        //     ]);
+        // }
 
         // =========================
         // AMBIL LOCATION DARI HOTEL
@@ -327,8 +327,8 @@ class JobVacancies extends BaseAdminController
             'category'       => $data['category'],
             'job_date_start' => $jobDateStart,
             'job_date_end'   => $jobDateEnd,
-            'start_time'     => $data['start_time'],
-            'end_time'       => $data['end_time'],
+            // 'start_time'     => $data['start_time'],
+            // 'end_time'       => $data['end_time'],
             'fee'            => $data['fee'],
             'location'       => $hotel['location'], // AUTO FROM HOTEL ID di Session
             'description'    => $data['description'] ?? null,
