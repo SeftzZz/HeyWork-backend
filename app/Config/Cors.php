@@ -35,6 +35,10 @@ class Cors extends BaseConfig
          *   - ['https://www.example.com']
          */
         'allowedOrigins' => [
+            'https://users.heywork.id',
+            'https://partners.heywork.id',
+            'https://devpartners.heywork.id',
+            'https://devpartners.heywork.id',
             'https://devusers.heywork.id',
             'https://devpartners.heywork.id',
             'https://localhost',
