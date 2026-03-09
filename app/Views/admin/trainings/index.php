@@ -2,9 +2,10 @@
 <?= $this->section('content') ?>
 
 <div class="container-xxl flex-grow-1 container-p-y">
+
     <div class="card">
         <div class="card-datatable table-responsive pt-0">
-            <table class="dtSchedule table table-striped">
+            <table class="dtTraining table table-striped">
                 <thead>
                     <tr>
                         <th></th>
@@ -23,17 +24,18 @@
         </div>
     </div>
 
+
     <!-- ========================= -->
-    <!-- CREATE SCHEDULE MODAL -->
+    <!-- CREATE TRAINING MODAL -->
     <!-- ========================= -->
-    <div class="modal fade" id="modalAddSchedule" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalAddTraining" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
 
-                <form id="formAddSchedule">
+                <form id="formAddTraining">
 
                     <div class="modal-header">
-                        <h5 class="modal-title">Create Schedule Plan</h5>
+                        <h5 class="modal-title">Create Learning and Growth Plan</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
@@ -41,8 +43,10 @@
 
                         <?php $userRole = session()->get('user_role'); ?>
 
-                        <?php if(in_array($userRole, ['admin','hotel_hr'])): ?>
-                            <div class="mb-3">
+                        <div class="row">
+
+                            <?php if(in_array($userRole, ['admin','hotel_hr'])): ?>
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Department</label>
                                 <select name="department" class="form-select" required>
                                     <option value="">Select Department</option>
@@ -51,42 +55,96 @@
                                     <option value="Food & Beverage Service">Food & Beverage Service</option>
                                     <option value="Kitchen / Culinary">Kitchen / Culinary</option>
                                     <option value="Human Resources">Human Resources</option>
-                                    <option value="Sales & Marketing">Sales & Marketing</option>
-                                    <option value="Finance">Finance</option>
-                                    <option value="Engineering">Engineering</option>
                                 </select>
                             </div>
-                        <?php endif; ?>
+                            <?php endif; ?>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Training Title</label>
+                                <input type="text" name="title" class="form-control" required>
+                            </div>
+
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control" rows="3"
+                            placeholder="Training description (optional)"></textarea>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label">Trainer</label>
+                            <select name="trainer_id" class="form-select">
+                                <option value="">Select Trainer</option>
+
+                                <?php foreach($trainers as $trainer): ?>
+                                    <option value="<?= $trainer['id'] ?>">
+                                        <?= esc($trainer['name']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+
+                            </select>
+                        </div>
+
 
                         <div class="row">
+
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Month</label>
+
                                 <select name="month" class="form-select" required>
+
                                     <?php for($m=1; $m<=12; $m++): ?>
+
                                         <option value="<?= $m ?>" <?= $m == date('n') ? 'selected' : '' ?>>
+
                                             <?= date('F', mktime(0,0,0,$m,1)) ?>
+
                                         </option>
+
                                     <?php endfor; ?>
+
                                 </select>
                             </div>
+
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Year</label>
+
                                 <select name="year" class="form-select" required>
-                                    <?php for($y=date('Y')-1; $y<=date('Y')+1; $y++): ?>
+
+                                    <?php for($y=date('Y')-1; $y<=date('Y')+2; $y++): ?>
+
                                         <option value="<?= $y ?>" <?= $y == date('Y') ? 'selected' : '' ?>>
+
                                             <?= $y ?>
+
                                         </option>
+
                                     <?php endfor; ?>
+
                                 </select>
                             </div>
+
                         </div>
 
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+
+                        <button type="button"
+                                class="btn btn-label-secondary"
+                                data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                                class="btn btn-primary">
+                            Submit
+                        </button>
+
                     </div>
 
                 </form>
@@ -96,56 +154,58 @@
     </div>
 
     <!-- ========================= -->
-    <!-- VIEW SCHEDULE MODAL -->
+    <!-- VIEW TRAINING MODAL -->
     <!-- ========================= -->
-    <div class="modal fade" id="modalViewSchedule" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalViewTraining" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title">Schedule Detail</h5>
+                    <h5 class="modal-title">Training Detail</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
 
-                    <!-- HEADER INFO -->
+                    <!-- HEADER -->
                     <div class="row mb-3">
+
+                        <div class="col-md-4">
+                            <strong>Title:</strong>
+                            <div id="view_title"></div>
+                        </div>
+
                         <div class="col-md-3">
                             <strong>Department:</strong>
                             <div id="view_department"></div>
                         </div>
-                        <div class="col-md-3">
-                            <strong>Month:</strong>
-                            <div id="view_month"></div>
-                        </div>
-                        <div class="col-md-2">
-                            <strong>Year:</strong>
-                            <div id="view_year"></div>
-                        </div>
+
                         <div class="col-md-2">
                             <strong>Status:</strong>
                             <div id="view_status"></div>
                         </div>
+
                     </div>
 
                     <hr>
 
-                    <!-- DETAIL TABLE -->
+                    <!-- PARTICIPANT TABLE -->
                     <div class="table-responsive">
                         <table class="table table-bordered table-sm">
                             <thead class="table-light">
                                 <tr>
                                     <th>Date</th>
-                                    <th>Worker</th>
-                                    <th>Shift</th>
+                                    <th>Participant</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody id="view_schedule_body">
+
+                            <tbody id="view_training_body">
                                 <tr>
                                     <td colspan="3" class="text-center">Loading...</td>
                                 </tr>
                             </tbody>
+
                         </table>
                     </div>
 
@@ -155,66 +215,71 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalAssignShift">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <form id="formAssignShift">
-            <div class="modal-header">
-              <h5 class="modal-title">Assign Shift</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+    <!-- ========================= -->
+    <!-- ASSIGN PARTICIPANT -->
+    <!-- ========================= -->
+    <div class="modal fade" id="modalAssignParticipant">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <form id="formAssignParticipant">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Assign Participant</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <input type="hidden" name="training_day_id" id="assign_training_day_id">
+                        <input type="hidden" name="training_date" id="assign_training_date">
+
+                        <div class="mb-3">
+                            <label>Worker</label>
+
+                            <select name="user_id" class="form-control select2" required>
+
+                                <option value="">Select Worker</option>
+
+                                <?php foreach ($workers as $w) : ?>
+                                    <option value="<?= $w['id'] ?>">
+                                        <?= esc($w['name']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label>Start</label>
+                                <input type="time" name="start_time" class="form-control" required>
+                            </div>
+                            <div class="col">
+                                <label>End</label>
+                                <input type="time" name="end_time" class="form-control" required>
+                            </div>
+                      </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">
+                            Save
+                        </button>
+                    </div>
+
+                </form>
+
             </div>
-
-            <div class="modal-body">
-
-              <input type="hidden" name="schedule_plan_id" id="assign_plan_id">
-              <input type="hidden" name="shift_date" id="assign_shift_date">
-
-              <div class="mb-3">
-                <label>Worker</label>
-                <select name="user_id" class="form-control select2" required>
-                  <option value="">Select Worker</option>
-                  <?php foreach($workers as $w): ?>
-                    <option value="<?= $w['id'] ?>">
-                      <?= esc($w['name']) ?>
-                    </option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-
-              <div class="row">
-                <div class="col">
-                  <label>Start</label>
-                  <input type="time" name="start_time" class="form-control" required>
-                </div>
-                <div class="col">
-                  <label>End</label>
-                  <input type="time" name="end_time" class="form-control" required>
-                </div>
-              </div>
-
-              <div class="mt-3">
-                <label>Shift Type</label>
-                <select name="shift_type" class="form-control">
-                  <option value="regular">Regular</option>
-                  <option value="overtime">Overtime</option>
-                  <option value="leave">Leave</option>
-                  <option value="off">Off</option>
-                </select>
-              </div>
-
-            </div>
-
-            <div class="modal-footer">
-              <button class="btn btn-primary">Save Shift</button>
-            </div>
-          </form>
         </div>
-      </div>
+
     </div>
+
 </div>
-
 <?= $this->endSection() ?>
-
 
 <?= $this->section('scripts') ?>
 
@@ -224,23 +289,22 @@
 <link rel="stylesheet" href="<?= base_url('assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') ?>" />
 
 <script src="<?= base_url('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') ?>"></script>
-
 <script>
     'use strict';
 
     $(function () {
 
-        let dt_table = $('.dtSchedule'),
-            dt_schedule;
+        let dt_table = $('.dtTraining'),
+            dt_training;
 
         if (dt_table.length) {
 
-            dt_schedule = dt_table.DataTable({
+            dt_training = dt_table.DataTable({
                 processing: true,
                 serverSide: true,
                 responsive: true,
                 ajax: {
-                    url: "<?= base_url('admin/schedules/datatable') ?>",
+                    url: "<?= base_url('admin/trainings/datatable') ?>",
                     type: "POST",
                     data: function (d) {
                         d['<?= csrf_token() ?>'] = '<?= csrf_hash() ?>';
@@ -307,10 +371,10 @@
                         ]
                     },
                     {
-                        text: '<i class="ti ti-plus me-sm-1"></i> <span>Create Schedule</span>',
+                        text: '<i class="ti ti-plus me-sm-1"></i> <span>Create Learning and Growth</span>',
                         className: 'btn btn-primary waves-effect waves-light',
                         action: function () {
-                            $('#modalAddSchedule').modal('show');
+                            $('#modalAddTraining').modal('show');
                         }
                     }
                 ],
@@ -319,7 +383,7 @@
                         display: $.fn.dataTable.Responsive.display.modal({
                             header: function (row) {
                                 let data = row.data();
-                                return 'Schedule Detail - ' + data.department;
+                                return 'Learning and Growth Detail - ' + data.department;
                             }
                         }),
                         type: 'column',
@@ -338,7 +402,7 @@
                 }
             });
 
-            $('div.head-label').html('<h5 class="card-title mb-0">Schedule Plans</h5>');
+            $('div.head-label').html('<h5 class="card-title mb-0">Learning and Growth</h5>');
         }
 
         function getShiftColor(type){
@@ -356,17 +420,19 @@
             return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
         }
 
+
         // ==========================
-        // CREATE SCHEDULE (AJAX)
+        // CREATE TRAINING
         // ==========================
-        $('#formAddSchedule').on('submit', function (e) {
+
+        $('#formAddTraining').on('submit', function (e) {
             e.preventDefault();
 
             let formData = new FormData(this);
             formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
 
             Swal.fire({
-                title: 'Submit schedule?',
+                title: 'Submit Training?',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, submit',
@@ -376,7 +442,7 @@
                 if (result.isConfirmed) {
 
                     $.ajax({
-                        url: "<?= base_url('admin/schedules/store') ?>",
+                        url: "<?= base_url('admin/trainings/store') ?>",
                         type: "POST",
                         data: formData,
                         processData: false,
@@ -394,8 +460,8 @@
                                     showConfirmButton: false
                                 });
 
-                                $('#modalAddSchedule').modal('hide');
-                                dt_schedule.ajax.reload(null, false);
+                                $('#modalAddTraining').modal('hide');
+                                dt_training.ajax.reload(null, false);
 
                             } else {
                                 Swal.fire('Failed', res.message, 'error');
@@ -410,47 +476,58 @@
             });
         });
 
+
         // ==========================
-        // REQUEST REVISION (AJAX)
+        // REQUEST REVISION
         // ==========================
+
         $(document).on('click', '.btn-revision', function () {
 
             let id = $(this).data('id');
 
             Swal.fire({
+
                 title: 'Request revision?',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, submit',
-                reverseButtons: true
+                confirmButtonText: 'Yes submit'
+
             }).then(result => {
 
                 if (result.isConfirmed) {
 
-                    $.post("<?= base_url('admin/schedules/request-revision') ?>", {
+                    $.post("<?= base_url('admin/trainings/request-revision') ?>", {
+
                         id: id,
                         '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
+
                     }, function (res) {
 
                         if (res.status) {
 
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Revision Submitted',
+                                title: 'Revision submitted',
                                 timer: 1500,
                                 showConfirmButton: false
                             });
 
-                            dt_schedule.ajax.reload(null, false);
+                            dt_training.ajax.reload(null, false);
 
                         } else {
+
                             Swal.fire('Failed', res.message, 'error');
+
                         }
 
                     }, 'json');
+
                 }
+
             });
+
         });
+
 
         // ==========================
         // VIEW SCHEDULE (AJAX)
@@ -459,12 +536,12 @@
 
             let id = $(this).data('id');
 
-            $('#modalViewSchedule').modal('show');
-            $('#view_schedule_body').html(
+            $('#modalViewTraining').modal('show');
+            $('#view_training_body').html(
                 '<tr><td colspan="3" class="text-center">Loading...</td></tr>'
             );
 
-            $.post("<?= base_url('admin/schedules/get-detail') ?>", {
+            $.post("<?= base_url('admin/trainings/get-detail') ?>", {
                 id: id,
                 '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
             }, function (res) {
@@ -472,6 +549,7 @@
                 if (res.status) {
 
                     // Header
+                    $('#view_title').text(res.data.title);
                     $('#view_department').text(res.data.department);
                     $('#view_month').text(res.data.month_name);
                     $('#view_year').text(res.data.year);
@@ -489,14 +567,14 @@
 
                                 rows += `
                                 <tr>
-                                    <td>${formatDate(day.shift_date)}</td>
+                                    <td>${formatDate(day.training_date)}</td>
                                     <td>-</td>
                                     <td>
                                         <span class="badge bg-label-secondary">NO SHIFT</span>
                                         <button 
                                             class="btn btn-sm btn-primary ms-2 btn-assign"
                                             data-plan="${id}"
-                                            data-date="${day.shift_date}">
+                                            data-date="${day.training_date}">
                                             Assign
                                         </button>
                                     </td>
@@ -509,7 +587,7 @@
 
                                     rows += `
                                     <tr>
-                                        <td>${formatDate(day.shift_date)}</td>
+                                        <td>${formatDate(day.training_date)}</td>
                                         <td>${shift.worker_name}</td>
                                         <td>
                                             <span class="badge bg-label-${getShiftColor(shift.shift_type)}">
@@ -521,7 +599,7 @@
                                             <button 
                                                 class="btn btn-sm btn-outline-primary ms-2 btn-assign"
                                                 data-plan="${id}"
-                                                data-date="${day.shift_date}">
+                                                data-date="${day.training_date}">
                                                 + Add
                                             </button>
                                         </td>
@@ -538,10 +616,10 @@
                         rows = '<tr><td colspan="3" class="text-center">No schedule detail</td></tr>';
                     }
 
-                    $('#view_schedule_body').html(rows);
+                    $('#view_training_body').html(rows);
 
                 } else {
-                    $('#view_schedule_body').html(
+                    $('#view_training_body').html(
                         '<tr><td colspan="3" class="text-center text-danger">Failed to load</td></tr>'
                     );
                 }
@@ -549,47 +627,58 @@
             }, 'json');
         });
 
+
+        // ==========================
+        // ASSIGN PARTICIPANT
+        // ==========================
+
         $(document).on('click', '.btn-assign', function(){
 
             let planId = $(this).data('plan');
             let date   = $(this).data('date');
 
-            $('#assign_plan_id').val(planId);
-            $('#assign_shift_date').val(date);
+            $('#assign_training_day_id').val(planId);
+            $('#assign_training_date').val(date);
+            $('#modalAssignParticipant').modal('show');
 
-            $('#modalAssignShift').modal('show');
         });
 
-        $('#formAssignShift').on('submit', function(e){
+
+        $('#formAssignParticipant').on('submit', function(e){
 
             e.preventDefault();
 
             let formData = $(this).serialize();
 
-            $.post("<?= base_url('admin/schedules/assign-shift') ?>",
+            $.post("<?= base_url('admin/trainings/assign-participant') ?>",
+
                 formData + '&<?= csrf_token() ?>=<?= csrf_hash() ?>',
+
                 function(res){
 
                     if(res.status){
 
-                        $('#modalAssignShift').modal('hide');
+                        $('#modalAssignParticipant').modal('hide');
 
                         Swal.fire({
                             icon: 'success',
-                            title: 'Shift Assigned',
+                            title: 'Participant assigned',
                             timer: 1200,
                             showConfirmButton: false
                         });
 
-                        $('.btn-view[data-id="'+$('#assign_plan_id').val()+'"]').click();
+                        $('.btn-view[data-id="'+$('#assign_training_day_id').val()+'"]').click();
 
                     } else {
+
                         Swal.fire('Error', res.message, 'error');
+
                     }
 
                 }, 'json');
+
         });
+
     });
 </script>
-
 <?= $this->endSection() ?>

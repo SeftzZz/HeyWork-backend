@@ -5,7 +5,7 @@ namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
 use Config\Database;
 
-class Schedules extends BaseController
+class Trainings extends BaseController
 {
     protected $db;
 
@@ -18,6 +18,10 @@ class Schedules extends BaseController
     {
         $hotelId = session()->get('hotel_id');
         $role    = session()->get('user_role');
+
+        // ===============================
+        // WORKERS (training participants)
+        // ===============================
 
         $builder = $this->db->table('users u')
             ->distinct()
@@ -42,9 +46,36 @@ class Schedules extends BaseController
             ->get()
             ->getResultArray();
 
-        return view('admin/schedules/index', [
-            'title'   => 'Schedules',
-            'workers' => $workers
+
+        // ===============================
+        // TRAINERS
+        // ===============================
+
+        $trainerBuilder = $this->db->table('users u')
+            ->select('u.id, u.name')
+            ->where('u.hotel_id', $hotelId)
+            ->where('u.is_active', 1);
+
+        if (!in_array($role, ['admin','hotel_hr'])) {
+
+            $department = $this->getDepartmentFromRole($role);
+
+            $trainerBuilder->join('job_attendances ja', 'ja.user_id = u.id', 'left')
+                    ->join('jobs j', 'j.id = ja.job_id', 'left')
+                    ->join('skills s', 's.name = j.position', 'left')
+                    ->where('s.category', $department);
+        }
+
+        $trainers = $trainerBuilder
+            ->groupBy('u.id')
+            ->orderBy('u.name','ASC')
+            ->get()
+            ->getResultArray();
+
+        return view('admin/trainings/index', [
+            'title'    => 'Trainings',
+            'workers'  => $workers,
+            'trainers' => $trainers
         ]);
     }
 
@@ -55,136 +86,81 @@ class Schedules extends BaseController
         $searchValue = $request->getPost('search')['value'] ?? null;
         $length      = (int) $request->getPost('length');
         $start       = (int) $request->getPost('start');
-        $order       = $request->getPost('order');
 
         $hotelId  = session()->get('hotel_id');
         $userRole = session()->get('user_role');
 
-        $orderColumns = [
-            null,
-            null,
-            'schedule_plans.department',
-            'schedule_plans.month',
-            'schedule_plans.year',
-            'schedule_plans.status',
-            'users.name',
-            'schedule_plans.created_at'
-        ];
+        $builder = $this->db->table('training_plans')
+            ->select('training_plans.*, users.name as requester_name')
+            ->join('users','users.id = training_plans.requested_by','left')
+            ->where('training_plans.hotel_id', $hotelId);
 
-        // =============================
-        // TOTAL RECORDS
-        // =============================
-        $totalQuery = $this->db->table('schedule_plans')
-            ->where('hotel_id', $hotelId);
-
+        // filter department jika bukan admin/hr
         if (!in_array($userRole, ['admin','hotel_hr'])) {
             $department = $this->getDepartmentFromRole($userRole);
-            $totalQuery->where('department', $department);
+            $builder->where('training_plans.department', $department);
         }
 
-        $recordsTotal = $totalQuery->countAllResults();
-
-
-        // =============================
-        // BASE DATA QUERY
-        // =============================
-        $dataQuery = $this->db->table('schedule_plans')
-            ->select('schedule_plans.*, users.name as requester_name')
-            ->join('users', 'users.id = schedule_plans.requested_by', 'left')
-            ->where('schedule_plans.hotel_id', $hotelId);
-
-        if (!in_array($userRole, ['admin','hotel_hr'])) {
-            $department = $this->getDepartmentFromRole($userRole);
-            $dataQuery->where('schedule_plans.department', $department);
-        }
-
-        // =============================
         // SEARCH
-        // =============================
         if (!empty($searchValue)) {
-            $dataQuery->groupStart()
-                ->like('schedule_plans.department', $searchValue)
-                ->orLike('schedule_plans.month', $searchValue)
-                ->orLike('schedule_plans.year', $searchValue)
-                ->orLike('schedule_plans.status', $searchValue)
-                ->orLike('users.name', $searchValue)
-                ->groupEnd();
+            $builder->groupStart()
+                ->like('training_plans.title', $searchValue)
+                ->orLike('training_plans.department', $searchValue)
+                ->orLike('training_plans.status', $searchValue)
+            ->groupEnd();
         }
 
-        // =============================
-        // COUNT FILTERED
-        // =============================
-        $filteredQuery = clone $dataQuery;
-        $recordsFiltered = $filteredQuery->countAllResults();
+        $recordsFiltered = $builder->countAllResults(false);
 
-        // =============================
-        // ORDERING
-        // =============================
-        if (!empty($order)) {
-            $idx = (int) $order[0]['column'];
-            if (!empty($orderColumns[$idx])) {
-                $dataQuery->orderBy($orderColumns[$idx], $order[0]['dir']);
-            }
-        } else {
-            $dataQuery->orderBy('schedule_plans.year', 'DESC')
-                      ->orderBy('schedule_plans.month', 'DESC');
-        }
-
-        // =============================
-        // LIMIT + FETCH
-        // =============================
-        $data = $dataQuery
+        $data = $builder
             ->limit($length, $start)
+            ->orderBy('training_plans.year','DESC')
+            ->orderBy('training_plans.month','DESC')
             ->get()
             ->getResultArray();
 
-        // =============================
-        // FORMAT OUTPUT
-        // =============================
+        $recordsTotal = $this->db->table('training_plans')
+            ->where('hotel_id',$hotelId)
+            ->countAllResults();
+
         $result = [];
         $no = $start + 1;
 
         foreach ($data as $row) {
 
+            // badge status
             $badge = match ($row['status']) {
                 'pending'  => '<span class="badge bg-label-warning">Pending</span>',
                 'approved' => '<span class="badge bg-label-success">Approved</span>',
                 'rejected' => '<span class="badge bg-label-danger">Rejected</span>',
                 'draft'    => '<span class="badge bg-label-secondary">Draft</span>',
-                default    => '<span class="badge bg-label-info">'.ucfirst($row['status']).'</span>',
+                'revised'  => '<span class="badge bg-label-info">Revised</span>',
+                default    => '<span class="badge bg-label-dark">'.ucfirst($row['status']).'</span>',
             };
 
-            $actionBtn = '
+            // convert month number → month name
+            $monthName = date('F', mktime(0,0,0,$row['month'],1));
+
+            $action = '
                 <div class="d-flex gap-2">
                     <a href="javascript:void(0)"
                        class="btn btn-sm btn-icon btn-primary btn-view"
-                       data-id="'.$row['id'].'"
-                       title="View">
-                        <i class="ti ti-eye"></i>
+                       data-id="'.$row['id'].'">
+                       <i class="ti ti-eye"></i>
                     </a>
+                </div>
             ';
-
-            if ($row['status'] === 'approved') {
-                $actionBtn .= '
-                    <button class="btn btn-sm btn-icon btn-warning btn-revision"
-                            data-id="'.$row['id'].'"
-                            title="Request Revision">
-                        <i class="ti ti-edit"></i>
-                    </button>
-                ';
-            }
-
-            $actionBtn .= '</div>';
 
             $result[] = [
                 'no'         => $no++,
+                'title'      => esc($row['title']),
                 'department' => esc($row['department']),
-                'month'      => esc(date('F', mktime(0,0,0,$row['month'],1))),
+                'month'      => $monthName,
                 'year'       => esc($row['year']),
                 'status'     => $badge,
-                'requester'  => esc($row['requester_name'] ?? '-'),
+                'requester'  => esc($row['requester_name']),
                 'created_at' => date('d M Y H:i', strtotime($row['created_at'])),
-                'action'     => $actionBtn
+                'action'     => $action
             ];
         }
 
@@ -200,59 +176,42 @@ class Schedules extends BaseController
     {
         $hotelId = session()->get('hotel_id');
         $userId  = session()->get('user_id');
-        $role    = session()->get('user_role');
+        $userRole = session()->get('user_role');
 
-        $month = (int) $this->request->getPost('month');
-        $year  = (int) $this->request->getPost('year');
+        $title       = trim($this->request->getPost('title'));
+        $department  = trim($this->request->getPost('department'));
+        $description = trim($this->request->getPost('description'));
+        $month       = (int)$this->request->getPost('month');
+        $year        = (int)$this->request->getPost('year');
+        $trainerId   = $this->request->getPost('trainer_id');
 
-        $department = in_array($role, ['admin','hotel_hr'])
-            ? trim($this->request->getPost('department'))
-            : $this->getDepartmentFromRole($role);
+        // department auto dari role
+        if (!in_array($userRole, ['admin','hotel_hr'])) {
+            $department = $this->getDepartmentFromRole($userRole);
+        }
 
-        // ===============================
-        // VALIDATION
-        // ===============================
-        if (!$department) {
+        if (!$title) {
             return $this->response->setJSON([
-                'status' => false,
-                'message' => 'Department required'
+                'status'=>false,
+                'message'=>'Training title required'
             ]);
         }
 
-        if ($month < 1 || $month > 12 || $year < 2000) {
+        if (!$month || !$year) {
             return $this->response->setJSON([
-                'status' => false,
-                'message' => 'Invalid month or year'
+                'status'=>false,
+                'message'=>'Month and year required'
             ]);
         }
 
-        // ===============================
-        // PREVENT DUPLICATE
-        // ===============================
-        $exists = $this->db->table('schedule_plans')
-            ->where([
-                'hotel_id'   => $hotelId,
-                'department' => $department,
-                'month'      => $month,
-                'year'       => $year
-            ])
-            ->countAllResults();
-
-        if ($exists > 0) {
-            return $this->response->setJSON([
-                'status' => false,
-                'message' => 'Schedule already exists for this month'
-            ]);
-        }
-
-        // ===============================
-        // TRANSACTION
-        // ===============================
         $this->db->transBegin();
 
         $planData = [
             'hotel_id'     => $hotelId,
             'department'   => $department,
+            'title'        => $title,
+            'description'  => $description,
+            'trainer_id'   => $trainerId ?: null,
             'month'        => $month,
             'year'         => $year,
             'status'       => 'pending',
@@ -260,7 +219,7 @@ class Schedules extends BaseController
             'created_at'   => date('Y-m-d H:i:s')
         ];
 
-        $this->db->table('schedule_plans')->insert($planData);
+        $this->db->table('training_plans')->insert($planData);
 
         $planId = $this->db->insertID();
 
@@ -268,12 +227,12 @@ class Schedules extends BaseController
             $this->db->transRollback();
             return $this->response->setJSON([
                 'status' => false,
-                'message' => 'Failed to create schedule plan'
+                'message' => 'Failed to create training plan'
             ]);
         }
 
         // ===============================
-        // AUTO GENERATE schedule_days
+        // AUTO GENERATE training_days
         // ===============================
         $daysInMonth = (int) date('t', strtotime($year . '-' . $month . '-01'));
 
@@ -286,30 +245,27 @@ class Schedules extends BaseController
                     str_pad($d, 2, '0', STR_PAD_LEFT);
 
             $dayBatch[] = [
-                'schedule_plan_id' => $planId,
-                'shift_date'       => $date,
+                'training_plan_id' => $planId,
+                'training_date'    => $date,
                 'created_at'       => date('Y-m-d H:i:s')
             ];
         }
 
-        $this->db->table('schedule_days')->insertBatch($dayBatch);
+        $this->db->table('training_days')->insertBatch($dayBatch);
 
-        // ===============================
-        // FINALIZE TRANSACTION
-        // ===============================
         if ($this->db->transStatus() === false) {
             $this->db->transRollback();
             return $this->response->setJSON([
-                'status' => false,
-                'message' => 'Failed to create schedule'
+                'status'=>false,
+                'message'=>'Failed to create training'
             ]);
         }
 
         $this->db->transCommit();
 
         return $this->response->setJSON([
-            'status' => true,
-            'message' => 'Schedule plan created and calendar days generated.'
+            'status'=>true,
+            'message'=>'Training created successfully'
         ]);
     }
 
@@ -320,7 +276,7 @@ class Schedules extends BaseController
         // ===============================
         // GET PLAN
         // ===============================
-        $plan = $this->db->table('schedule_plans')
+        $plan = $this->db->table('training_plans')
             ->where('id', $id)
             ->get()
             ->getRowArray();
@@ -334,19 +290,19 @@ class Schedules extends BaseController
         // ===============================
         // GET DAYS + SHIFTS
         // ===============================
-        $rows = $this->db->table('schedule_days d')
+        $rows = $this->db->table('training_days d')
             ->select('
-                d.shift_date,
+                d.training_date,
                 s.user_id,
                 s.start_time,
                 s.end_time,
                 s.shift_type,
                 u.name as worker_name
             ')
-            ->join('schedule_shifts s', 's.schedule_day_id = d.id', 'left')
+            ->join('training_shifts s', 's.training_day_id = d.id', 'left')
             ->join('users u', 'u.id = s.user_id', 'left')
-            ->where('d.schedule_plan_id', $id)
-            ->orderBy('d.shift_date', 'ASC')
+            ->where('d.training_plan_id', $id)
+            ->orderBy('d.training_date', 'ASC')
             ->get()
             ->getResultArray();
 
@@ -357,11 +313,11 @@ class Schedules extends BaseController
 
         foreach ($rows as $row) {
 
-            $date = $row['shift_date'];
+            $date = $row['training_date'];
 
             if (!isset($grouped[$date])) {
                 $grouped[$date] = [
-                    'shift_date' => $date,
+                    'training_date' => $date,
                     'shifts' => []
                 ];
             }
@@ -393,6 +349,7 @@ class Schedules extends BaseController
         return $this->response->setJSON([
             'status' => true,
             'data' => [
+                'title'        => $plan['title'],
                 'department'   => $plan['department'],
                 'month_name'   => date('F', mktime(0,0,0,$plan['month'],1)),
                 'year'         => $plan['year'],
@@ -402,10 +359,10 @@ class Schedules extends BaseController
         ]);
     }
 
-    public function assignShift()
+    public function assignParticipant()
     {
-        $planId = $this->request->getPost('schedule_plan_id');
-        $date   = $this->request->getPost('shift_date');
+        $planId = $this->request->getPost('training_day_id');
+        $date   = $this->request->getPost('training_date');
         $userId = $this->request->getPost('user_id');
         $start  = $this->request->getPost('start_time');
         $end    = $this->request->getPost('end_time');
@@ -444,7 +401,7 @@ class Schedules extends BaseController
         // =========================
         // CHECK PLAN STATUS
         // =========================
-        $plan = $this->db->table('schedule_plans')
+        $plan = $this->db->table('training_plans')
             ->where('id', $planId)
             ->get()
             ->getRowArray();
@@ -452,24 +409,24 @@ class Schedules extends BaseController
         if (!$plan) {
             return $this->response->setJSON([
                 'status' => false,
-                'message' => 'Schedule plan not found'
+                'message' => 'training plan not found'
             ]);
         }
 
         // if ($plan['status'] === 'approved') {
         //     return $this->response->setJSON([
         //         'status' => false,
-        //         'message' => 'Cannot modify approved schedule'
+        //         'message' => 'Cannot modify approved training'
         //     ]);
         // }
 
         // =========================
-        // FIND SCHEDULE DAY
+        // FIND Training DAY
         // =========================
-        $day = $this->db->table('schedule_days')
+        $day = $this->db->table('training_days')
             ->where([
-                'schedule_plan_id' => $planId,
-                'shift_date'       => $date
+                'training_plan_id'    => $planId,
+                'training_date'       => $date
             ])
             ->get()
             ->getRowArray();
@@ -477,29 +434,29 @@ class Schedules extends BaseController
         if (!$day) {
             return $this->response->setJSON([
                 'status' => false,
-                'message' => 'Schedule day not found'
+                'message' => 'training day not found'
             ]);
         }
 
-        $scheduleDayId = $day['id'];
+        $trainingDayId = $day['id'];
 
         // =========================
         // OVERLAP CHECK (CROSS DAY SAFE)
         // =========================
-        $shifts = $this->db->table('schedule_shifts')
+        $shifts = $this->db->table('training_shifts')
             ->where('user_id', $userId)
             ->get()
             ->getResultArray();
 
         foreach ($shifts as $shift) {
 
-            $shiftDay = $this->db->table('schedule_days')
-                ->where('id', $shift['schedule_day_id'])
+            $shiftDay = $this->db->table('training_days')
+                ->where('id', $shift['training_day_id'])
                 ->get()
                 ->getRowArray();
 
-            $shiftStart = strtotime($shiftDay['shift_date'] . ' ' . $shift['start_time']);
-            $shiftEnd   = strtotime($shiftDay['shift_date'] . ' ' . $shift['end_time']);
+            $shiftStart = strtotime($shiftDay['training_date'] . ' ' . $shift['start_time']);
+            $shiftEnd   = strtotime($shiftDay['training_date'] . ' ' . $shift['end_time']);
 
             if ($shiftEnd <= $shiftStart) {
                 $shiftEnd = strtotime('+1 day', $shiftEnd);
@@ -544,8 +501,8 @@ class Schedules extends BaseController
         // =========================
         // INSERT SHIFT
         // =========================
-        $this->db->table('schedule_shifts')->insert([
-            'schedule_day_id' => $scheduleDayId,
+        $this->db->table('training_shifts')->insert([
+            'training_day_id' => $trainingDayId,
             'user_id'         => $userId,
             'job_id'          => $jobId,
             'application_id'  => $applicationId,
@@ -561,23 +518,6 @@ class Schedules extends BaseController
         ]);
     }
 
-    public function requestRevision()
-    {
-        $userId = session()->get('user_id');
-        $id = $this->request->getPost('id');
-
-        $revisionData = [
-            'schedule_plan_id' => $id,
-            'revision_number'  => $this->getNextRevisionNumber($id),
-            'requested_by'     => $userId,
-            'status'           => 'pending'
-        ];
-
-        $this->db->table('schedule_revisions')->insert($revisionData);
-
-        return redirect()->back()->with('success','Revision submitted for approval');
-    }
-
     private function getDepartmentFromRole($role)
     {
         $map = [
@@ -588,16 +528,5 @@ class Schedules extends BaseController
         ];
 
         return $map[$role] ?? null;
-    }
-
-    private function getNextRevisionNumber($id)
-    {
-        $row = $this->db->table('schedule_revisions')
-            ->selectMax('revision_number')
-            ->where('schedule_plan_id', $id)
-            ->get()
-            ->getRow();
-
-        return $row->revision_number + 1 ?? 1;
     }
 }

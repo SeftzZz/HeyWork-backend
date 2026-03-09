@@ -41,48 +41,75 @@ async function autoCheckout() {
     console.log('⏱ Running auto checkout job...');
 
     const [rows] = await db.query(`
-      SELECT 
+    SELECT 
         ja.job_id,
         ja.application_id,
         ja.user_id,
-        DATE(ja.created_at) as job_date,
-        j.end_time,
-        TIMESTAMP(DATE(ja.created_at), j.end_time) as checkout_time
-      FROM job_attendances ja
-      JOIN jobs j ON j.id = ja.job_id
+        ja.created_at,
 
-      LEFT JOIN job_attendances ja2
-        ON ja2.job_id = ja.job_id
-        AND ja2.application_id = ja.application_id
-        AND ja2.type = 'checkout'
-        AND DATE(ja2.created_at) = DATE(ja.created_at)
+        CASE
+            WHEN ss.end_time < ss.start_time
+            THEN TIMESTAMP(DATE_ADD(d.shift_date, INTERVAL 1 DAY), ss.end_time)
+            ELSE TIMESTAMP(d.shift_date, ss.end_time)
+        END AS shift_end
 
-      WHERE ja.type = 'checkin'
-        AND ja2.id IS NULL
-        AND NOW() >= TIMESTAMP(DATE(ja.created_at), j.end_time)
+    FROM job_attendances ja
+
+    JOIN schedule_shifts ss
+      ON ss.job_id = ja.job_id
+      AND ss.user_id = ja.user_id
+
+    JOIN schedule_days d
+      ON d.id = ss.schedule_day_id
+
+    LEFT JOIN job_attendances ja2
+      ON ja2.job_id = ja.job_id
+      AND ja2.application_id = ja.application_id
+      AND ja2.type = 'checkout'
+      AND ja2.created_at =
+        CASE
+            WHEN ss.end_time < ss.start_time
+            THEN TIMESTAMP(DATE_ADD(d.shift_date, INTERVAL 1 DAY), ss.end_time)
+            ELSE TIMESTAMP(d.shift_date, ss.end_time)
+        END
+
+    WHERE ja.type = 'checkin'
+    AND DATE(ja.created_at) = d.shift_date
+    AND ja2.id IS NULL
+
+    AND NOW() >=
+    CASE
+        WHEN ss.end_time < ss.start_time
+        THEN TIMESTAMP(DATE_ADD(d.shift_date, INTERVAL 1 DAY), ss.end_time)
+        ELSE TIMESTAMP(d.shift_date, ss.end_time)
+    END
     `);
+
+    console.log("AUTO CHECKOUT ROWS:", rows.length);
+    console.log(rows);
 
     for (const row of rows) {
 
       await db.query(`
-        INSERT INTO job_attendances 
+        INSERT INTO job_attendances
         (job_id, application_id, user_id, type, latitude, longitude, photo_path, device_info, created_at)
         VALUES (?, ?, ?, 'checkout', 0, 0, 'system-auto-checkout', 'AUTO SYSTEM', ?)
       `, [
         row.job_id,
         row.application_id,
         row.user_id,
-        row.checkout_time  // 🔥 sudah format: 2026-02-25 18:10:45
+        row.shift_end
       ]);
 
-      console.log(`✅ Auto checkout job ${row.job_id} user ${row.user_id} at ${row.checkout_time}`);
+      console.log(`✅ Auto checkout job ${row.job_id} user ${row.user_id} at ${row.shift_end}`);
 
       broadcast({
         type: 'attendance_auto_checkout',
         job_id: row.job_id,
         user_id: row.user_id,
-        checkout_time: row.checkout_time
+        checkout_time: row.shift_end
       });
+
     }
 
   } catch (err) {
@@ -99,19 +126,40 @@ async function autoCompleteApplications() {
         ja.id AS application_id,
         ja.user_id,
         j.id AS job_id,
-        j.job_date_end,
-        j.end_time,
+
+        d.shift_date,
+        ss.start_time,
+        ss.end_time,
+
         MAX(att.created_at) AS last_attendance,
-        MAX(CASE WHEN att.type = 'checkout' THEN 1 ELSE 0 END) AS has_checkout
+        MAX(CASE WHEN att.type = 'checkout' THEN 1 ELSE 0 END) AS has_checkout,
+
+        CASE
+          WHEN ss.end_time < ss.start_time
+          THEN TIMESTAMP(DATE_ADD(d.shift_date, INTERVAL 1 DAY), ss.end_time)
+          ELSE TIMESTAMP(d.shift_date, ss.end_time)
+        END AS shift_end_datetime
+
       FROM job_applications ja
-      JOIN jobs j ON j.id = ja.job_id
-      JOIN job_attendances att 
+
+      JOIN jobs j 
+        ON j.id = ja.job_id
+
+      JOIN schedule_shifts ss
+        ON ss.application_id = ja.id
+
+      JOIN schedule_days d
+        ON d.id = ss.schedule_day_id
+
+      JOIN job_attendances att
         ON att.application_id = ja.id
+
       WHERE ja.status != 'completed'
-        AND j.job_date_end <= CURDATE()
+
       GROUP BY ja.id
+
       HAVING has_checkout = 1
-        AND NOW() >= TIMESTAMP(j.job_date_end, j.end_time)
+        AND NOW() >= shift_end_datetime
     `);
 
     for (const row of rows) {

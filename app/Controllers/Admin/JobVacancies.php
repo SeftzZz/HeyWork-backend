@@ -67,8 +67,6 @@ class JobVacancies extends BaseAdminController
                 jobs.category,
                 jobs.job_date_start,
                 jobs.job_date_end,
-                jobs.start_time,
-                jobs.end_time,
                 jobs.location,
                 jobs.fee,
                 jobs.status
@@ -135,9 +133,6 @@ class JobVacancies extends BaseAdminController
                 'date'     => date('d-m-Y', strtotime($row['job_date_start']))
                               . ' s/d ' .
                               date('d-m-Y', strtotime($row['job_date_end'])),
-                'time'     => substr($row['start_time'], 0, 5)
-                              . ' - ' .
-                              substr($row['end_time'], 0, 5),
                 'location' => esc($row['location']),
                 'fee'      => number_format($row['fee'], 0, ',', '.'),
                 'status'   => $badgeStatus,
@@ -186,12 +181,12 @@ class JobVacancies extends BaseAdminController
         // =========================
         // VALIDASI TIME
         // =========================
-        if (strtotime($data['end_time']) <= strtotime($data['start_time'])) {
-            return $this->response->setJSON([
-                'status'  => false,
-                'message' => 'End time must be greater than start time'
-            ]);
-        }
+        // if (strtotime($data['end_time']) <= strtotime($data['start_time'])) {
+        //     return $this->response->setJSON([
+        //         'status'  => false,
+        //         'message' => 'End time must be greater than start time'
+        //     ]);
+        // }
 
         // =========================
         // VALIDASI POSITION (MULTI)
@@ -228,8 +223,8 @@ class JobVacancies extends BaseAdminController
             'category'       => $data['category'],
             'job_date_start' => $jobDateStart,
             'job_date_end'   => $jobDateEnd,
-            'start_time'     => $data['start_time'],
-            'end_time'       => $data['end_time'],
+            // 'start_time'     => $data['start_time'],
+            // 'end_time'       => $data['end_time'],
             'fee'            => $data['fee'],
             'location'       => $hotel['location'],
             'description'    => $data['description'] ?? null,
@@ -305,12 +300,12 @@ class JobVacancies extends BaseAdminController
         // =========================
         // VALIDASI TIME
         // =========================
-        if (strtotime($data['end_time']) <= strtotime($data['start_time'])) {
-            return $this->response->setJSON([
-                'status' => false,
-                'message' => 'End time must be greater than start time'
-            ]);
-        }
+        // if (strtotime($data['end_time']) <= strtotime($data['start_time'])) {
+        //     return $this->response->setJSON([
+        //         'status' => false,
+        //         'message' => 'End time must be greater than start time'
+        //     ]);
+        // }
 
         // =========================
         // AMBIL LOCATION DARI HOTEL
@@ -332,8 +327,8 @@ class JobVacancies extends BaseAdminController
             'category'       => $data['category'],
             'job_date_start' => $jobDateStart,
             'job_date_end'   => $jobDateEnd,
-            'start_time'     => $data['start_time'],
-            'end_time'       => $data['end_time'],
+            // 'start_time'     => $data['start_time'],
+            // 'end_time'       => $data['end_time'],
             'fee'            => $data['fee'],
             'location'       => $hotel['location'], // AUTO FROM HOTEL ID di Session
             'description'    => $data['description'] ?? null,

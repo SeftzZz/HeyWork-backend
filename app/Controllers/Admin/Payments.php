@@ -47,8 +47,9 @@ class Payments extends BaseAdminController
                 job_attendances.created_at,
                 users.name AS worker_name,
                 jobs.position,
-                jobs.start_time,
-                jobs.end_time,
+                schedule_shifts.start_time,
+                schedule_shifts.end_time,
+                schedule_days.shift_date,
                 jobs.fee,
 
                 (
@@ -63,12 +64,24 @@ class Payments extends BaseAdminController
             ->join('job_applications', 'job_applications.id = job_attendances.application_id', 'left')
             ->join('users', 'users.id = job_applications.user_id', 'left')
             ->join('jobs', 'jobs.id = job_applications.job_id', 'left')
+            ->join(
+                'schedule_shifts',
+                'schedule_shifts.application_id = job_attendances.application_id
+                 AND schedule_shifts.user_id = job_applications.user_id',
+                'left'
+            )
+
+            ->join(
+                'schedule_days',
+                'schedule_days.id = schedule_shifts.schedule_day_id',
+                'left'
+            )
             ->where('jobs.hotel_id', session()->get('hotel_id'))
-            ->whereIn('jobs.category', ['daily_worker', 'casual'])
+            ->whereIn('jobs.category', ['daily_worker','casual'])
             ->where('job_applications.status', 'completed')
+
             ->orderBy('job_attendances.application_id', 'ASC')
-            ->orderBy('job_attendances.created_at', 'ASC')
-            ->distinct();
+            ->orderBy('job_attendances.created_at', 'ASC');
 
         if ($search) {
             $builder->groupStart()
@@ -80,14 +93,21 @@ class Payments extends BaseAdminController
         $rows = $builder->get()->getResultArray();
 
         // =========================
-        // GROUP PER WORKER
+        // GROUP PER APPLICATION
         // =========================
         $grouped = [];
 
         foreach ($rows as $row) {
-            $appId = (int) $row['application_id'];
-            if (!isset($grouped[$appId])) {
-                $grouped[$appId] = [
+
+            $appId     = (int)$row['application_id'];
+            $shiftDate = $row['shift_date'] ?? 'unknown';
+
+            $key = $appId.'_'.$shiftDate;
+
+            if (!isset($grouped[$key])) {
+
+                $grouped[$key] = [
+                    'application_id' => $appId,
                     'worker_name'    => $row['worker_name'],
                     'position'       => $row['position'],
                     'start_time'     => $row['start_time'],
@@ -103,37 +123,37 @@ class Payments extends BaseAdminController
             }
 
             if ($row['type'] === 'checkin') {
-                $grouped[$appId]['checkins'][] = $row['created_at'];
+                $grouped[$key]['checkins'][] = $row['created_at'];
             }
 
             if ($row['type'] === 'checkout') {
-                $grouped[$appId]['checkouts'][] = $row['created_at'];
+                $grouped[$key]['checkouts'][] = $row['created_at'];
             }
         }
 
         // =========================
         // HITUNG TOTAL
         // =========================
-        foreach ($grouped as $appId => &$g) {
+        foreach ($grouped as &$g) {
+
             $count = min(count($g['checkins']), count($g['checkouts']));
-            for ($i = 0; $i < $count; $i++) {
+
+            for ($i=0; $i<$count; $i++) {
+
                 $seconds = max(
                     0,
                     (strtotime($g['checkouts'][$i]) - strtotime($g['checkins'][$i])) - 3600
                 );
+
                 $minutes = floor($seconds / 60);
 
                 if ($minutes <= 0) {
                     continue;
                 }
 
-                // Tambah hari kerja
                 $g['working_days']++;
-
-                // Tambah total menit
                 $g['total_minutes'] += $minutes;
 
-                // Hitung billing per 10 menit
                 $jobStart = strtotime($g['start_time']);
                 $jobEnd   = strtotime($g['end_time']);
 
@@ -141,21 +161,26 @@ class Payments extends BaseAdminController
                 $jobTenMin  = floor($jobMinutes / 10);
 
                 if ($jobTenMin > 0 && $g['fee'] > 0) {
+
                     $ratePer10Min = $g['fee'] / $jobTenMin;
-                    $g['total_amount'] += round(floor($minutes / 10) * $ratePer10Min);
+
+                    $g['total_amount'] += round(
+                        floor($minutes / 10) * $ratePer10Min
+                    );
                 }
             }
         }
         unset($g);
 
         // =========================
-        // PAGINATION MANUAL
+        // PAGINATION
         // =========================
         $recordsTotal = count($grouped);
 
         $grouped = array_values($grouped);
-        $paged   = ($length != -1)
-            ? array_slice($grouped, $start, $length)
+
+        $paged = ($length != -1)
+            ? array_slice($grouped,$start,$length)
             : $grouped;
 
         // =========================
@@ -166,12 +191,12 @@ class Payments extends BaseAdminController
 
         foreach ($paged as $g) {
 
-            $hours   = floor($g['total_minutes'] / 60);
-            $minutes = $g['total_minutes'] % 60;
+            $hours   = floor($g['total_minutes']/60);
+            $minutes = $g['total_minutes']%60;
 
             $paymentStatus = strtolower($g['payment_status'] ?? 'unbilled');
 
-            $badgeClass = match ($paymentStatus) {
+            $badgeClass = match($paymentStatus){
                 'paid'      => 'bg-success',
                 'partial'   => 'bg-warning',
                 'sent'      => 'bg-info',
@@ -180,26 +205,38 @@ class Payments extends BaseAdminController
                 default     => 'bg-warning'
             };
 
+            $appId = $g['application_id'];
+
             $data[] = [
-                'no'            => $no++.'.',
-                'worker'        => esc($g['worker_name']),
-                'job'           => esc($g['position']),
-                'working_days'  => $g['working_days'] . ' Days',
-                'duration'      => $hours . 'h ' . $minutes . 'm',
-                'application_id'=> $appId,
-                'amount'        => 'Rp ' . number_format($g['total_amount'], 0, ',', '.'),
-                'status'        => '<span class="badge '.$badgeClass.'">'
-                                    . strtoupper($paymentStatus) .
-                                   '</span>',
-                'action'        => '
-                                    <a href="'.base_url('admin/invoices/create/'.$appId).'"
-                                       class="btn btn-sm btn-primary">
-                                        Create Invoice
-                                    </a>'
+
+                'no' => $no++.'.',
+
+                'worker' => esc($g['worker_name']),
+
+                'job' => esc($g['position']),
+
+                'working_days' => $g['working_days'].' Days',
+
+                'duration' => $hours.'h '.$minutes.'m',
+
+                'application_id' => $appId,
+
+                'amount' => 'Rp '.number_format($g['total_amount'],0,',','.'),
+
+                'status' => '<span class="badge '.$badgeClass.'">'
+                            .strtoupper($paymentStatus).
+                            '</span>',
+
+                'action' => '
+                    <a href="'.base_url('admin/invoices/create/'.$appId).'"
+                       class="btn btn-sm btn-primary">
+                        Create Invoice
+                    </a>'
             ];
         }
 
         return $this->response->setJSON([
+
             'draw'            => $draw,
             'recordsTotal'    => $recordsTotal,
             'recordsFiltered' => $recordsTotal,

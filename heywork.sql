@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 02, 2026 at 04:25 AM
+-- Generation Time: Mar 06, 2026 at 04:33 AM
 -- Server version: 10.11.10-MariaDB-log
 -- PHP Version: 8.3.27
 
@@ -85,23 +85,93 @@ CREATE TABLE `hotel_transactions` (
 --
 
 INSERT INTO `hotel_transactions` (`id`, `hotel_id`, `type`, `amount`, `dw_ratio`, `dw_label`, `category`, `description`, `reference_id`, `reference_type`, `date`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(11, 1, 'credit', 122193844.00, 0.00, 'GOOD', 'revenue', 'Daily Revenue H-1', '', '', '2025-12-20', '2025-12-21 17:59:28', 17, NULL, NULL, NULL, NULL),
-(13, 1, 'debit', 3214285.71, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-21', '2026-02-21 17:59:28', 17, NULL, NULL, NULL, NULL),
-(14, 1, 'credit', 5515260.00, 58.28, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-21', '2026-02-21 17:59:28', 17, NULL, NULL, NULL, NULL),
-(15, 1, 'debit', 3214285.71, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-22', '2026-02-22 17:59:53', 17, NULL, NULL, NULL, NULL),
-(16, 1, 'credit', 1884298.00, 170.58, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-22', '2026-02-22 17:59:53', 17, NULL, NULL, NULL, NULL),
-(17, 1, 'debit', 3214285.71, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-23', '2026-02-23 18:00:12', 17, NULL, NULL, NULL, NULL),
-(18, 1, 'credit', 6933888.00, 46.36, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-23', '2026-02-23 18:00:12', 17, NULL, NULL, NULL, NULL),
-(19, 1, 'debit', 3428571.43, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-24', '2026-02-24 13:54:09', 17, NULL, NULL, NULL, NULL),
-(20, 1, 'credit', 4991736.00, 68.68, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-24', '2026-02-24 13:54:09', 17, NULL, NULL, NULL, NULL),
-(26, 1, 'debit', 3035714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-25', '2026-02-25 18:02:36', 17, NULL, NULL, NULL, NULL),
-(27, 1, 'credit', 3223140.00, 94.18, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-25', '2026-02-25 18:02:36', 17, NULL, NULL, NULL, NULL),
-(31, 1, 'debit', 3355714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-26', '2026-02-26 00:00:00', 17, NULL, NULL, NULL, NULL),
-(32, 1, 'credit', 9867769.00, 34.01, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-26', '2026-02-26 00:00:00', 17, NULL, NULL, NULL, NULL),
-(33, 1, 'debit', 125000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-27', '2026-02-27 00:00:00', 17, '2026-03-01 18:01:31', 17, NULL, NULL),
-(34, 1, 'credit', 9933884.00, 0.93, 'NO DATA', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-27', '2026-02-27 00:00:00', 17, '2026-02-28 00:00:00', 17, NULL, NULL),
-(35, 1, 'debit', 125000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-28', '2026-02-28 00:00:00', 17, NULL, NULL, NULL, NULL),
-(36, 1, 'credit', 13496063.00, 0.93, 'NO DATA', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-28', '2026-02-28 00:00:00', 17, NULL, NULL, NULL, NULL);
+(1, 1, 'credit', 47912817.00, 0.00, 'NO DATA', 'revenue', 'Daily Revenue H-1', '', '', '2026-01-20', '2026-01-20 00:00:00', 17, NULL, NULL, NULL, NULL),
+(2, 1, 'debit', 2636451.61, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-01-21', '2026-01-21 00:00:00', 17, NULL, NULL, NULL, NULL),
+(3, 1, 'credit', 578512.00, 455.73, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-01-21', '2026-01-21 00:00:00', 17, NULL, NULL, NULL, NULL),
+(4, 1, 'debit', 2930000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-01-22', '2026-01-22 00:00:00', 17, NULL, NULL, NULL, NULL),
+(5, 1, 'credit', 2270248.00, 129.06, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-01-22', '2026-01-22 00:00:00', 17, NULL, NULL, NULL, NULL),
+(6, 1, 'debit', 2830000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-01-23', '2026-01-23 00:00:00', 17, NULL, NULL, NULL, NULL),
+(7, 1, 'credit', 16400053.00, 17.26, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-01-23', '2026-01-23 00:00:00', 17, NULL, NULL, NULL, NULL),
+(8, 1, 'debit', 2930000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-01-24', '2026-01-24 00:00:00', 17, NULL, NULL, NULL, NULL),
+(9, 1, 'credit', 6983383.00, 41.96, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-01-24', '2026-01-24 00:00:00', 17, NULL, NULL, NULL, NULL),
+(10, 1, 'debit', 2736451.61, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-01-25', '2026-01-25 00:00:00', 17, NULL, NULL, NULL, NULL),
+(11, 1, 'credit', 1347367.00, 203.10, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-01-25', '2026-01-25 00:00:00', 17, NULL, NULL, NULL, NULL),
+(12, 1, 'debit', 2626451.61, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-01-26', '2026-01-26 00:00:00', 17, NULL, NULL, NULL, NULL),
+(13, 1, 'credit', 1066375.00, 246.30, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-01-26', '2026-01-26 00:00:00', 17, NULL, NULL, NULL, NULL),
+(14, 1, 'debit', 2930000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-01-27', '2026-01-27 00:00:00', 17, NULL, NULL, NULL, NULL),
+(15, 1, 'credit', 1503587.00, 194.87, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-01-27', '2026-01-27 00:00:00', 17, NULL, NULL, NULL, NULL),
+(16, 1, 'debit', 2626451.61, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-01-28', '2026-01-28 00:00:00', 17, NULL, NULL, NULL, NULL),
+(17, 1, 'credit', 1044484.00, 251.46, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-01-28', '2026-01-28 00:00:00', 17, NULL, NULL, NULL, NULL),
+(18, 1, 'debit', 2720000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-01-29', '2026-01-29 00:00:00', 17, NULL, NULL, NULL, NULL),
+(19, 1, 'credit', 5772987.00, 47.12, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-01-29', '2026-01-29 00:00:00', 17, NULL, NULL, NULL, NULL),
+(20, 1, 'debit', 2930000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-01-30', '2026-01-30 00:00:00', 17, NULL, NULL, NULL, NULL),
+(21, 1, 'credit', 3083602.00, 95.02, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-01-30', '2026-01-30 00:00:00', 17, NULL, NULL, NULL, NULL),
+(22, 1, 'debit', 2736451.61, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-01-31', '2026-01-31 00:00:00', 17, NULL, NULL, NULL, NULL),
+(23, 1, 'credit', 4760553.00, 57.48, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-01-31', '2026-01-31 00:00:00', 17, NULL, NULL, NULL, NULL),
+(24, 1, 'debit', 2883571.43, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-01', '2026-02-01 00:00:00', 17, NULL, NULL, NULL, NULL),
+(25, 1, 'credit', 4348557.00, 66.31, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-01', '2026-02-01 00:00:00', 17, NULL, NULL, NULL, NULL),
+(26, 1, 'debit', 2883571.43, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-02', '2026-02-02 00:00:00', 17, NULL, NULL, NULL, NULL),
+(27, 1, 'credit', 2829949.00, 101.89, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-02', '2026-02-02 00:00:00', 17, NULL, NULL, NULL, NULL),
+(28, 1, 'debit', 2773571.43, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-03', '2026-02-03 00:00:00', 17, NULL, NULL, NULL, NULL),
+(29, 1, 'credit', 776506.00, 357.19, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-03', '2026-02-03 00:00:00', 17, NULL, NULL, NULL, NULL),
+(30, 1, 'debit', 2883571.43, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-04', '2026-02-04 00:00:00', 17, NULL, NULL, NULL, NULL),
+(31, 1, 'credit', 1458440.00, 197.72, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-04', '2026-02-04 00:00:00', 17, NULL, NULL, NULL, NULL),
+(32, 1, 'debit', 2983571.43, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-05', '2026-02-05 00:00:00', 17, NULL, NULL, NULL, NULL),
+(33, 1, 'credit', 981798.00, 303.89, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-05', '2026-02-05 00:00:00', 17, NULL, NULL, NULL, NULL),
+(34, 1, 'debit', 3090714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-06', '2026-02-06 00:00:00', 17, NULL, NULL, NULL, NULL),
+(35, 1, 'credit', 5118914.00, 60.38, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-06', '2026-02-06 00:00:00', 17, NULL, NULL, NULL, NULL),
+(36, 1, 'debit', 3090714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-07', '2026-02-07 00:00:00', 17, NULL, NULL, NULL, NULL),
+(37, 1, 'credit', 42272030.00, 7.31, 'GOOD', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-07', '2026-02-07 00:00:00', 17, NULL, NULL, NULL, NULL),
+(38, 1, 'debit', 3305000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-08', '2026-02-08 00:00:00', 17, NULL, NULL, NULL, NULL),
+(39, 1, 'credit', 1210393.00, 273.05, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-08', '2026-02-08 00:00:00', 17, NULL, NULL, NULL, NULL),
+(40, 1, 'debit', 2990714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-09', '2026-02-09 00:00:00', 17, NULL, NULL, NULL, NULL),
+(41, 1, 'credit', 516529.00, 579.00, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-09', '2026-02-09 00:00:00', 17, NULL, NULL, NULL, NULL),
+(42, 1, 'debit', 3090714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-10', '2026-02-10 00:00:00', 17, NULL, NULL, NULL, NULL),
+(43, 1, 'credit', 1294553.00, 238.75, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-10', '2026-02-10 00:00:00', 17, NULL, NULL, NULL, NULL),
+(44, 1, 'debit', 2980714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-11', '2026-02-11 00:00:00', 17, NULL, NULL, NULL, NULL),
+(45, 1, 'credit', 15083058.00, 19.76, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-11', '2026-02-11 00:00:00', 17, NULL, NULL, NULL, NULL),
+(46, 1, 'debit', 3090714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-12', '2026-02-12 00:00:00', 17, NULL, NULL, NULL, NULL),
+(47, 1, 'credit', 3401991.00, 90.85, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-12', '2026-02-12 00:00:00', 17, NULL, NULL, NULL, NULL),
+(48, 1, 'debit', 3305000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-13', '2026-02-13 00:00:00', 17, NULL, NULL, NULL, NULL),
+(49, 1, 'credit', 12848189.00, 25.72, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-13', '2026-02-13 00:00:00', 17, NULL, NULL, NULL, NULL),
+(50, 1, 'debit', 3305000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-14', '2026-02-14 00:00:00', 17, NULL, NULL, NULL, NULL),
+(51, 1, 'credit', 12090701.00, 27.34, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-14', '2026-02-14 00:00:00', 17, NULL, NULL, NULL, NULL),
+(52, 1, 'debit', 3090714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-15', '2026-02-15 00:00:00', 17, NULL, NULL, NULL, NULL),
+(53, 1, 'credit', 6392596.00, 48.35, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-15', '2026-02-15 00:00:00', 17, NULL, NULL, NULL, NULL),
+(54, 1, 'debit', 3195000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-16', '2026-02-16 00:00:00', 17, NULL, NULL, NULL, NULL),
+(55, 1, 'credit', 5945155.00, 53.74, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-16', '2026-02-16 00:00:00', 17, NULL, NULL, NULL, NULL),
+(56, 1, 'debit', 2990714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-17', '2026-02-17 00:00:00', 17, NULL, NULL, NULL, NULL),
+(57, 1, 'credit', 2309752.00, 129.48, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-17', '2026-02-17 00:00:00', 17, NULL, NULL, NULL, NULL),
+(58, 1, 'debit', 3090714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-18', '2026-02-18 00:00:00', 17, NULL, NULL, NULL, NULL),
+(59, 1, 'credit', 0.00, 0.00, 'NO DATA', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-18', '2026-02-18 00:00:00', 17, NULL, NULL, NULL, NULL),
+(60, 1, 'debit', 3305000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-19', '2026-02-19 00:00:00', 17, NULL, NULL, NULL, NULL),
+(61, 1, 'credit', 1487603.00, 222.17, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-19', '2026-02-19 00:00:00', 17, NULL, NULL, NULL, NULL),
+(62, 1, 'debit', 2890714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-20', '2026-02-20 00:00:00', 17, NULL, NULL, NULL, NULL),
+(63, 1, 'credit', 1697365.00, 170.31, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-20', '2026-02-20 00:00:00', 17, NULL, NULL, NULL, NULL),
+(64, 1, 'debit', 3214285.71, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-21', '2026-02-21 17:59:28', 17, NULL, NULL, NULL, NULL),
+(65, 1, 'credit', 5515260.00, 58.28, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-21', '2026-02-21 17:59:28', 17, NULL, NULL, NULL, NULL),
+(66, 1, 'debit', 3214285.71, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-22', '2026-02-22 17:59:53', 17, NULL, NULL, NULL, NULL),
+(67, 1, 'credit', 1884298.00, 170.58, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-22', '2026-02-22 17:59:53', 17, NULL, NULL, NULL, NULL),
+(68, 1, 'debit', 3214285.71, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-23', '2026-02-23 18:00:12', 17, NULL, NULL, NULL, NULL),
+(69, 1, 'credit', 6933888.00, 46.36, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-23', '2026-02-23 18:00:12', 17, NULL, NULL, NULL, NULL),
+(70, 1, 'debit', 3428571.43, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-24', '2026-02-24 13:54:09', 17, NULL, NULL, NULL, NULL),
+(71, 1, 'credit', 4991736.00, 68.68, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-24', '2026-02-24 13:54:09', 17, NULL, NULL, NULL, NULL),
+(72, 1, 'debit', 3035714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-25', '2026-02-25 18:02:36', 17, NULL, NULL, NULL, NULL),
+(73, 1, 'credit', 3223140.00, 94.18, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-25', '2026-02-25 18:02:36', 17, NULL, NULL, NULL, NULL),
+(74, 1, 'debit', 3355714.29, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-26', '2026-02-26 00:00:00', 17, NULL, NULL, NULL, NULL),
+(75, 1, 'credit', 9867769.00, 34.01, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-26', '2026-02-26 00:00:00', 17, NULL, NULL, NULL, NULL),
+(76, 1, 'debit', 125000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-27', '2026-02-27 00:00:00', 17, '2026-03-01 18:01:31', 17, NULL, NULL),
+(77, 1, 'credit', 9933884.00, 0.93, 'NO DATA', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-27', '2026-02-27 00:00:00', 17, '2026-02-28 00:00:00', 17, NULL, NULL),
+(78, 1, 'debit', 125000.00, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-02-28', '2026-02-28 00:00:00', 17, NULL, NULL, NULL, NULL),
+(79, 1, 'credit', 13496063.00, 0.93, 'NO DATA', 'revenue', 'Daily Revenue H-1', '', '', '2026-02-28', '2026-02-28 00:00:00', 17, NULL, NULL, NULL, NULL),
+(80, 1, 'debit', 2916774.19, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-03-01', '2026-03-01 00:00:00', 17, '2026-03-05 17:49:45', 17, NULL, NULL),
+(81, 1, 'credit', 2000000.00, 145.84, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-03-01', '2026-03-01 00:00:00', 17, '2026-03-04 00:00:00', 17, NULL, NULL),
+(82, 1, 'debit', 2916774.19, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-03-02', '2026-03-02 00:00:00', 17, NULL, NULL, NULL, NULL),
+(83, 1, 'credit', 2280992.00, 127.87, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-03-02', '2026-03-02 00:00:00', 17, NULL, NULL, NULL, NULL),
+(84, 1, 'debit', 2916774.19, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-03-03', '2026-03-03 00:00:00', 17, NULL, NULL, NULL, NULL),
+(85, 1, 'credit', 16209922.00, 17.99, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-03-03', '2026-03-03 00:00:00', 17, NULL, NULL, NULL, NULL),
+(86, 1, 'debit', 2916774.19, NULL, NULL, 'payroll', 'Auto Payroll Deduction H-1', '', '', '2026-03-04', '2026-03-04 00:00:00', 17, NULL, NULL, NULL, NULL),
+(87, 1, 'credit', 8891317.00, 32.80, 'NOT OPTIMAL MAN POWER', 'revenue', 'Daily Revenue H-1', '', '', '2026-03-04', '2026-03-04 00:00:00', 17, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -125,13 +195,6 @@ CREATE TABLE `invoices` (
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `invoices`
---
-
-INSERT INTO `invoices` (`id`, `invoice_number`, `hotel_id`, `billing_start`, `billing_end`, `total_amount`, `paid_amount`, `status`, `due_date`, `created_at`, `created_by`, `updated_at`, `deleted_at`) VALUES
-(1, 'INV-20260302-ID-1', 1, '2026-03-01', '2026-03-01', 110000.00, 0.00, 'unbilled', '2026-03-09', '2026-03-02 03:23:58', 17, '2026-03-02 03:24:16', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -146,13 +209,6 @@ CREATE TABLE `invoice_items` (
   `application_id` int(11) DEFAULT NULL,
   `attendance_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `invoice_items`
---
-
-INSERT INTO `invoice_items` (`id`, `invoice_id`, `amount`, `created_at`, `application_id`, `attendance_date`) VALUES
-(1, 1, 110000.00, '2026-03-02 03:23:58', 1, '2026-03-01');
 
 -- --------------------------------------------------------
 
@@ -186,8 +242,6 @@ CREATE TABLE `jobs` (
   `position` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `job_date_start` date NOT NULL,
   `job_date_end` date NOT NULL,
-  `start_time` time NOT NULL,
-  `end_time` time NOT NULL,
   `category` enum('daily_worker','casual','corporate') CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT 'daily_worker',
   `fee` int(1) NOT NULL,
   `location` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
@@ -206,34 +260,41 @@ CREATE TABLE `jobs` (
 -- Dumping data for table `jobs`
 --
 
-INSERT INTO `jobs` (`id`, `hotel_id`, `position`, `job_date_start`, `job_date_end`, `start_time`, `end_time`, `category`, `fee`, `location`, `description`, `requirement_skill`, `status`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 1, 'Information Technology', '2025-09-05', '2026-09-04', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', 'Pengelolaan infrastruktur, pengembangan perangkat lunak, keamanan data dan dukungan teknis untuk memastikan operasional perusahaan berjalan lancar', 'Network configuration, Hardware deployment & Operating system knowledge', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(2, 1, 'HK Attandent', '2025-11-19', '2026-11-18', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', 'cleans, sanitizes, and organizes guest rooms and public areas to meet high hospitality standards', 'high physical stamina, exceptional attention to detail and strong time-management skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(3, 1, 'FB Manager', '2025-11-20', '2026-11-19', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', 'oversees all dining operations, including restaurants, bars, banquets, and room service, to ensure high-quality service, profitability, and compliance with health regulations', 'cost control, menu engineering, inventory management, and high-level customer service', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(4, 1, 'Executive Housekeeper', '2025-11-20', '2026-11-19', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', 'manages all housekeeping operations, staff, and budgets to maintain spotless guest rooms and public areas, ensuring high hygiene and comfort standards', 'strong leadership, organizational, and financial management skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(5, 1, 'Director of sales marketing', '2025-11-24', '2026-11-23', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', 'leads, develops, and implements strategic plans to drive revenue growth, enhance brand awareness, and increase market share', 'proficiency in CRM software, data analysis, revenue growth strategies, and excellent communication skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(6, 1, 'Graphics design', '2025-11-24', '2026-11-23', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', 'creates visual concepts using computer software or by hand to communicate ideas that inspire, inform, or captivate consumers', 'technical proficiency in software (Adobe Creative Suite, Figma) with core design principles like typography, color theory, and layout composition', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(7, 1, 'Senior Waiter', '2025-11-26', '2026-11-25', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', 'leads the service team to ensure exceptional dining experiences, acting as a mentor to junior staff and a point of escalation for guest concerns', 'advanced technical skills with strong leadership', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(8, 1, 'Supervisor Housekeeping', '2025-11-28', '2026-11-27', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(9, 1, 'AR/AP', '2025-12-02', '2026-12-01', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(10, 1, 'Chief Accounting', '2025-12-04', '2026-12-03', '00:00:00', '00:55:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(11, 1, 'Head Chef', '2025-12-04', '2026-12-03', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(12, 1, 'Front Office Manager', '2025-12-11', '2026-12-10', '01:15:00', '01:17:00', 'corporate', 0, 'Bogor, West Java', '', NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-25 01:12:51', 17, NULL, NULL),
-(13, 1, 'Maintenance Staff', '2025-12-14', '2026-12-13', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(14, 1, 'Chief Engineering', '2025-12-23', '2026-12-22', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(15, 1, 'HR Manager', '2025-12-27', '2026-12-26', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(16, 1, 'Chef De Partie', '2025-12-28', '2026-12-27', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(17, 1, 'Sales Executive', '2026-01-05', '2027-01-04', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(18, 1, 'Senior Sales Marketing', '2026-01-07', '2027-01-06', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(19, 1, 'Cook', '2026-01-12', '2027-01-11', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(20, 1, 'Sales Manager', '2026-01-14', '2027-01-13', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(21, 1, 'FDA', '2026-02-06', '2027-02-05', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(22, 1, 'Business Development', '2025-12-09', '2026-06-08', '00:00:00', '23:59:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(23, 1, 'Security Guard', '2025-12-02', '2026-12-01', '09:00:00', '18:00:00', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(24, 1, 'Housekeeping', '2026-02-21', '2026-03-20', '00:00:00', '23:59:00', 'casual', 100000, 'Bogor, West Java', 'maintains cleanliness and sanitation in residential or commercial spaces by performing tasks like sweeping, vacuuming, mopping, dusting, cleaning bathrooms, and changing linens', 'surface care and equipment handling, alongside key soft skills like time management, attention to detail, and discretion', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(25, 1, 'Front Office', '2026-03-01', '2026-03-01', '07:00:00', '14:59:00', 'daily_worker', 110000, 'Bogor, West Java', 'acts as the company\'s first point of contact, providing exceptional customer service by greeting visitors, managing phone calls, and handling administrative tasks', 'strong communication, interpersonal, and multitasking skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(26, 1, 'Cook', '2026-02-21', '2026-03-20', '00:00:00', '23:59:00', 'daily_worker', 100000, 'Bogor, West Java', 'prepares, seasons, and cooks a variety of foods, including soups, salads, and entrees, while ensuring quality, taste, and presentation standards are met', 'proficiency in knife handling, mastery of cooking techniques (sautéing, roasting, grilling), strict adherence to food safety and sanitation standards, and flavor balancing', 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
-(27, 1, 'Front Office', '2026-02-21', '2026-03-20', '00:00:00', '23:59:00', 'daily_worker', 120000, 'Bogor, West Java', 'acts as the company\'s first point of contact, providing exceptional customer service by greeting visitors, managing phone calls, and handling administrative tasks', 'strong communication, interpersonal, and multitasking skills', 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL);
+INSERT INTO `jobs` (`id`, `hotel_id`, `position`, `job_date_start`, `job_date_end`, `category`, `fee`, `location`, `description`, `requirement_skill`, `status`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(1, 1, 'Information Technology', '2025-09-05', '2026-09-04', 'corporate', 0, 'Bogor, West Java', 'Pengelolaan infrastruktur, pengembangan perangkat lunak, keamanan data dan dukungan teknis untuk memastikan operasional perusahaan berjalan lancar', 'Network configuration, Hardware deployment & Operating system knowledge', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(2, 1, 'HK Attandent', '2025-11-19', '2026-11-18', 'corporate', 0, 'Bogor, West Java', 'cleans, sanitizes, and organizes guest rooms and public areas to meet high hospitality standards', 'high physical stamina, exceptional attention to detail and strong time-management skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(3, 1, 'FB Manager', '2025-11-20', '2026-11-19', 'corporate', 0, 'Bogor, West Java', 'oversees all dining operations, including restaurants, bars, banquets, and room service, to ensure high-quality service, profitability, and compliance with health regulations', 'cost control, menu engineering, inventory management, and high-level customer service', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(4, 1, 'Executive Housekeeper', '2025-11-20', '2026-11-19', 'corporate', 0, 'Bogor, West Java', 'manages all housekeeping operations, staff, and budgets to maintain spotless guest rooms and public areas, ensuring high hygiene and comfort standards', 'strong leadership, organizational, and financial management skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(5, 1, 'Director of sales marketing', '2025-11-24', '2026-11-23', 'corporate', 0, 'Bogor, West Java', 'leads, develops, and implements strategic plans to drive revenue growth, enhance brand awareness, and increase market share', 'proficiency in CRM software, data analysis, revenue growth strategies, and excellent communication skills', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(6, 1, 'Graphics design', '2025-11-24', '2026-11-23', 'corporate', 0, 'Bogor, West Java', 'creates visual concepts using computer software or by hand to communicate ideas that inspire, inform, or captivate consumers', 'technical proficiency in software (Adobe Creative Suite, Figma) with core design principles like typography, color theory, and layout composition', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(7, 1, 'Senior Waiter', '2025-11-26', '2026-11-25', 'corporate', 0, 'Bogor, West Java', 'leads the service team to ensure exceptional dining experiences, acting as a mentor to junior staff and a point of escalation for guest concerns', 'advanced technical skills with strong leadership', 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(8, 1, 'Supervisor Housekeeping', '2025-11-28', '2026-11-27', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(9, 1, 'AR/AP', '2025-12-02', '2026-12-01', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(10, 1, 'Chief Accounting', '2025-12-04', '2026-12-03', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(11, 1, 'Head Chef', '2025-12-04', '2026-12-03', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(12, 1, 'Front Office Manager', '2025-12-11', '2026-12-10', 'corporate', 0, 'Bogor, West Java', '', NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-25 01:12:51', 17, NULL, NULL),
+(13, 1, 'Maintenance Staff', '2025-12-14', '2026-12-13', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(14, 1, 'Chief Engineering', '2025-12-23', '2026-12-22', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(15, 1, 'HR Manager', '2025-12-27', '2026-12-26', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(16, 1, 'Chef De Partie', '2025-12-28', '2026-12-27', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(17, 1, 'Sales Executive', '2026-01-05', '2027-01-04', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(18, 1, 'Senior Sales Marketing', '2026-01-07', '2027-01-06', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(19, 1, 'Cook', '2026-01-12', '2027-01-11', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(20, 1, 'Sales Manager', '2026-01-14', '2027-01-13', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(21, 1, 'FDA', '2026-02-06', '2027-02-05', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(22, 1, 'Business Development', '2025-12-09', '2026-06-08', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(23, 1, 'Security Guard', '2025-12-02', '2026-12-01', 'corporate', 0, 'Bogor, West Java', NULL, NULL, 'open', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(24, 1, 'Housekeeping', '2026-01-21', '2026-02-20', 'casual', 100000, 'Bogor, West Java', 'maintains cleanliness and sanitation in residential or commercial spaces by performing tasks like sweeping, vacuuming, mopping, dusting, cleaning bathrooms, and changing linens', 'surface care and equipment handling, alongside key soft skills like time management, attention to detail, and discretion', 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(25, 1, 'Front Office', '2026-01-21', '2026-02-20', 'daily_worker', 110000, 'Bogor, West Java', 'acts as the company\'s first point of contact, providing exceptional customer service by greeting visitors, managing phone calls, and handling administrative tasks', 'strong communication, interpersonal, and multitasking skills', 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(26, 1, 'Cook', '2026-01-21', '2026-02-20', 'daily_worker', 100000, 'Bogor, West Java', 'prepares, seasons, and cooks a variety of foods, including soups, salads, and entrees, while ensuring quality, taste, and presentation standards are met', 'proficiency in knife handling, mastery of cooking techniques (sautéing, roasting, grilling), strict adherence to food safety and sanitation standards, and flavor balancing', 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(27, 1, 'Front Office', '2026-01-21', '2026-02-20', 'daily_worker', 120000, 'Bogor, West Java', 'acts as the company\'s first point of contact, providing exceptional customer service by greeting visitors, managing phone calls, and handling administrative tasks', 'strong communication, interpersonal, and multitasking skills', 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(28, 1, 'Housekeeping', '2026-02-21', '2026-03-20', 'casual', 100000, 'Bogor, West Java', 'maintains cleanliness and sanitation in residential or commercial spaces by performing tasks like sweeping, vacuuming, mopping, dusting, cleaning bathrooms, and changing linens', 'surface care and equipment handling, alongside key soft skills like time management, attention to detail, and discretion', 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(29, 1, 'Cook', '2026-02-21', '2026-03-20', 'daily_worker', 100000, 'Bogor, West Java', 'prepares, seasons, and cooks a variety of foods, including soups, salads, and entrees, while ensuring quality, taste, and presentation standards are met', 'proficiency in knife handling, mastery of cooking techniques (sautéing, roasting, grilling), strict adherence to food safety and sanitation standards, and flavor balancing', 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(30, 1, 'Front Office', '2026-02-21', '2026-03-20', 'daily_worker', 120000, 'Bogor, West Java', 'acts as the company\'s first point of contact, providing exceptional customer service by greeting visitors, managing phone calls, and handling administrative tasks', 'strong communication, interpersonal, and multitasking skills', 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(31, 1, 'Waiter', '2026-01-21', '2026-02-20', 'casual', 100000, 'Bogor, West Java', 'acts as the company\'s first point of contact, providing exceptional customer service by greeting visitors, managing phone calls, and handling administrative tasks', 'strong communication, interpersonal, and multitasking skills', 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(32, 1, 'Maintenance Staff', '2026-01-20', '2027-02-21', 'casual', 0, 'Bogor, West Java', NULL, NULL, 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(33, 1, 'Cook', '2026-01-21', '2026-02-20', 'casual', 100000, 'Bogor, West Java', 'prepares, seasons, and cooks a variety of foods, including soups, salads, and entrees, while ensuring quality, taste, and presentation standards are met', 'proficiency in knife handling, mastery of cooking techniques (sautéing, roasting, grilling), strict adherence to food safety and sanitation standards, and flavor balancing', 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL),
+(34, 1, 'Driver', '2026-01-21', '2026-02-20', 'casual', 100000, 'Bogor, West Java', NULL, NULL, 'closed', '2026-02-21 07:56:00', 1, '2026-02-21 07:56:00', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -257,7 +318,65 @@ CREATE TABLE `job_applications` (
 --
 
 INSERT INTO `job_applications` (`id`, `job_id`, `user_id`, `status`, `applied_at`, `accepted_at`, `accepted_by`, `deleted_at`) VALUES
-(1, 25, 34, 'completed', '2026-03-01 01:12:18', '2026-03-01 01:12:30', 17, NULL);
+(1, 1, 2, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(2, 2, 3, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(3, 3, 4, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(4, 4, 5, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(5, 5, 6, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(6, 6, 7, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(7, 7, 8, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(8, 8, 9, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(9, 9, 10, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(10, 10, 11, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(11, 11, 12, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(12, 12, 13, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(13, 13, 14, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(14, 13, 15, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(15, 14, 16, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(16, 15, 17, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(17, 16, 18, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(18, 17, 19, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(19, 18, 20, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(20, 19, 21, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(21, 20, 22, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(22, 21, 23, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(23, 22, 24, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(24, 6, 25, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(25, 23, 26, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(26, 23, 27, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(28, 23, 28, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(29, 23, 29, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(30, 23, 30, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(31, 28, 31, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(32, 28, 32, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(33, 28, 33, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(34, 27, 34, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(35, 26, 35, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(36, 26, 36, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(37, 24, 37, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(38, 25, 38, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(39, 28, 37, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(40, 29, 35, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(41, 29, 36, 'accepted', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(42, 30, 34, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(43, 24, 32, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(44, 24, 33, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(45, 24, 31, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(46, 31, 39, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(47, 31, 40, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(48, 31, 41, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(49, 31, 42, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(50, 31, 43, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(51, 31, 44, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(52, 31, 45, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(53, 31, 46, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(54, 31, 47, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(55, 24, 48, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(56, 33, 49, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(58, 33, 50, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(59, 32, 51, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(60, 33, 53, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL),
+(61, 34, 52, 'completed', '2026-01-01 08:05:00', '2026-01-01 08:05:00', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -289,8 +408,630 @@ CREATE TABLE `job_attendances` (
 --
 
 INSERT INTO `job_attendances` (`id`, `job_id`, `application_id`, `user_id`, `transaction_id`, `type`, `latitude`, `longitude`, `photo_path`, `device_info`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 25, 1, 34, NULL, 'checkin', -6.6011188, 106.7941239, 'uploads/attendance/checkin_25_34_1772388959.jpg', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0', '2026-03-01 07:00:00', 34, NULL, NULL, NULL, NULL),
-(2, 25, 1, 34, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-03-01 14:59:00', NULL, NULL, NULL, NULL, NULL);
+(354, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 08:03:29', 34, NULL, NULL, NULL, NULL),
+(355, 28, 31, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 08:08:53', 31, NULL, NULL, NULL, NULL),
+(356, 28, 32, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 09:00:00', 32, NULL, NULL, NULL, NULL),
+(357, 29, 40, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 10:42:42', 35, NULL, NULL, NULL, NULL),
+(358, 22, 22, 24, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 11:48:25', 24, NULL, NULL, NULL, NULL),
+(359, 28, 33, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 11:51:27', 33, NULL, NULL, NULL, NULL),
+(360, 29, 41, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 12:01:14', 36, NULL, NULL, NULL, NULL),
+(361, 28, 33, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 20:25:45', 33, NULL, NULL, NULL, NULL),
+(362, 28, 31, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 17:08:53', 31, NULL, NULL, NULL, NULL),
+(363, 29, 40, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 19:42:42', 35, NULL, NULL, NULL, NULL),
+(364, 28, 32, 32, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 18:00:00', 32, NULL, NULL, NULL, NULL),
+(365, 29, 41, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 21:02:31', 36, NULL, NULL, NULL, NULL),
+(366, 28, 32, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 09:00:00', 32, NULL, NULL, NULL, NULL),
+(367, 29, 41, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 12:02:31', 36, NULL, NULL, NULL, NULL),
+(368, 28, 31, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 21:06:40', 31, NULL, NULL, NULL, NULL),
+(369, 28, 32, 32, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 18:00:00', 32, NULL, NULL, NULL, NULL),
+(370, 29, 41, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 21:13:54', 36, NULL, NULL, NULL, NULL),
+(371, 30, 42, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 23:18:32', 34, NULL, NULL, NULL, NULL),
+(372, 30, 42, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 08:18:32', 34, NULL, NULL, NULL, NULL),
+(373, 28, 31, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 08:00:00', 31, NULL, NULL, NULL, NULL),
+(374, 22, 22, 24, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 09:41:42', 24, NULL, NULL, NULL, NULL),
+(375, 29, 40, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 10:45:46', 35, NULL, NULL, NULL, NULL),
+(376, 28, 33, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 11:38:31', 33, NULL, NULL, NULL, NULL),
+(377, 29, 41, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 12:13:54', 36, NULL, NULL, NULL, NULL),
+(378, 28, 31, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 17:00:00', 31, NULL, NULL, NULL, NULL),
+(379, 28, 32, 32, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 18:00:00', 32, NULL, NULL, NULL, NULL),
+(380, 29, 40, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 19:45:46', 35, NULL, NULL, NULL, NULL),
+(381, 28, 33, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 00:04:07', 33, NULL, NULL, NULL, NULL),
+(382, 29, 41, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 21:00:00', 36, NULL, NULL, NULL, NULL),
+(383, 30, 42, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 08:05:48', 34, NULL, NULL, NULL, NULL),
+(384, 28, 31, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 07:53:17', 31, NULL, NULL, NULL, NULL),
+(385, 22, 22, 24, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 08:30:45', 24, NULL, NULL, NULL, NULL),
+(386, 28, 32, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 09:00:00', 32, NULL, NULL, NULL, NULL),
+(387, 29, 40, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 10:52:10', 35, NULL, NULL, NULL, NULL),
+(388, 28, 33, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 12:24:28', 33, NULL, NULL, NULL, NULL),
+(389, 29, 41, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 12:00:00', 36, NULL, NULL, NULL, NULL),
+(390, 28, 39, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 11:56:00', 37, NULL, NULL, NULL, NULL),
+(391, 28, 39, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 20:56:00', 37, '2026-02-22 19:56:00', 37, NULL, NULL),
+(392, 28, 39, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 09:05:11', 37, NULL, NULL, NULL, NULL),
+(393, 28, 39, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 18:05:11', 37, '2026-02-24 17:05:11', 37, NULL, NULL),
+(400, 30, 42, 34, NULL, 'checkin', -6.6008118, 106.7938935, 'uploads/attendance/checkin_25_34_1772111390.jpg', 'Mozilla/5.0 (Linux; Android 13; 2209116AG Build/TKQ1.221114.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/145.0.7632.79 Mobile Safari/537.36', '2026-02-26 20:09:50', 34, NULL, NULL, NULL, NULL),
+(402, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 07:00:00', 38, NULL, NULL, NULL, NULL),
+(403, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 16:00:00', 38, NULL, NULL, NULL, NULL),
+(404, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 07:00:00', 38, NULL, NULL, NULL, NULL),
+(405, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 16:00:00', 38, NULL, NULL, NULL, NULL),
+(406, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 07:00:00', 38, NULL, NULL, NULL, NULL),
+(407, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 16:00:00', 38, NULL, NULL, NULL, NULL),
+(408, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 07:00:00', 38, NULL, NULL, NULL, NULL),
+(409, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 16:00:00', 38, NULL, NULL, NULL, NULL),
+(410, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 07:00:00', 38, NULL, NULL, NULL, NULL),
+(411, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 16:00:00', 38, NULL, NULL, NULL, NULL),
+(412, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 07:00:00', 38, NULL, NULL, NULL, NULL),
+(413, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 16:00:00', 38, NULL, NULL, NULL, NULL),
+(414, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 07:00:00', 38, NULL, NULL, NULL, NULL),
+(415, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 16:00:00', 38, NULL, NULL, NULL, NULL),
+(416, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 07:00:00', 38, NULL, NULL, NULL, NULL),
+(417, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 16:00:00', 38, NULL, NULL, NULL, NULL),
+(418, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 07:00:00', 38, NULL, NULL, NULL, NULL),
+(419, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 16:00:00', 38, NULL, NULL, NULL, NULL),
+(420, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 07:00:00', 38, NULL, NULL, NULL, NULL),
+(421, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 16:00:00', 38, NULL, NULL, NULL, NULL),
+(422, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 07:00:00', 38, NULL, NULL, NULL, NULL),
+(423, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 16:00:00', 38, NULL, NULL, NULL, NULL),
+(424, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 07:00:00', 38, NULL, NULL, NULL, NULL),
+(425, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 16:00:00', 38, NULL, NULL, NULL, NULL),
+(426, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 07:00:00', 38, NULL, NULL, NULL, NULL),
+(427, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 16:00:00', 38, NULL, NULL, NULL, NULL),
+(428, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 07:00:00', 38, NULL, NULL, NULL, NULL),
+(429, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 16:00:00', 38, NULL, NULL, NULL, NULL),
+(430, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 07:00:00', 38, NULL, NULL, NULL, NULL),
+(431, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 16:00:00', 38, NULL, NULL, NULL, NULL),
+(432, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 07:00:00', 38, NULL, NULL, NULL, NULL),
+(433, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 16:00:00', 38, NULL, NULL, NULL, NULL),
+(434, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 07:00:00', 38, NULL, NULL, NULL, NULL),
+(435, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 16:00:00', 38, NULL, NULL, NULL, NULL),
+(436, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 07:00:00', 38, NULL, NULL, NULL, NULL),
+(437, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 16:00:00', 38, NULL, NULL, NULL, NULL),
+(438, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 07:00:00', 38, NULL, NULL, NULL, NULL),
+(439, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 16:00:00', 38, NULL, NULL, NULL, NULL),
+(440, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 13:00:00', 38, NULL, NULL, NULL, NULL),
+(441, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 22:00:00', 38, NULL, NULL, NULL, NULL),
+(442, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 13:00:00', 38, NULL, NULL, NULL, NULL),
+(443, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 22:00:00', 38, NULL, NULL, NULL, NULL),
+(444, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 13:00:00', 38, NULL, NULL, NULL, NULL),
+(445, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 22:00:00', 38, NULL, NULL, NULL, NULL),
+(446, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 13:00:00', 38, NULL, NULL, NULL, NULL),
+(447, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 22:00:00', 38, NULL, NULL, NULL, NULL),
+(448, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 13:00:00', 38, NULL, NULL, NULL, NULL),
+(449, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 22:00:00', 38, NULL, NULL, NULL, NULL),
+(450, 25, 38, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-20 08:00:00', 38, NULL, NULL, NULL, NULL),
+(451, 25, 38, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-20 17:00:00', 38, NULL, NULL, NULL, NULL),
+(452, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 19:00:00', 34, NULL, NULL, NULL, NULL),
+(453, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 04:00:00', 34, NULL, NULL, NULL, NULL),
+(454, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 19:00:00', 34, NULL, NULL, NULL, NULL),
+(455, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 04:00:00', 34, NULL, NULL, NULL, NULL),
+(456, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 19:00:00', 34, NULL, NULL, NULL, NULL),
+(457, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 04:00:00', 34, NULL, NULL, NULL, NULL),
+(458, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 19:00:00', 34, NULL, NULL, NULL, NULL),
+(459, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 04:00:00', 34, NULL, NULL, NULL, NULL),
+(460, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 19:00:00', 34, NULL, NULL, NULL, NULL),
+(461, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 04:00:00', 34, NULL, NULL, NULL, NULL),
+(462, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 19:00:00', 34, NULL, NULL, NULL, NULL),
+(463, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 04:00:00', 34, NULL, NULL, NULL, NULL),
+(464, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 19:00:00', 34, NULL, NULL, NULL, NULL),
+(465, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 04:00:00', 34, NULL, NULL, NULL, NULL),
+(466, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 19:00:00', 34, NULL, NULL, NULL, NULL),
+(467, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 04:00:00', 34, NULL, NULL, NULL, NULL),
+(468, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 19:00:00', 34, NULL, NULL, NULL, NULL),
+(469, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 04:00:00', 34, NULL, NULL, NULL, NULL),
+(470, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 19:00:00', 34, NULL, NULL, NULL, NULL),
+(471, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 04:00:00', 34, NULL, NULL, NULL, NULL),
+(472, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 19:00:00', 34, NULL, NULL, NULL, NULL),
+(473, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 04:00:00', 34, NULL, NULL, NULL, NULL),
+(474, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 19:00:00', 34, NULL, NULL, NULL, NULL),
+(475, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 04:00:00', 34, NULL, NULL, NULL, NULL),
+(476, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 19:00:00', 34, NULL, NULL, NULL, NULL),
+(477, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 04:00:00', 34, NULL, NULL, NULL, NULL),
+(478, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 19:00:00', 34, NULL, NULL, NULL, NULL),
+(479, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 04:00:00', 34, NULL, NULL, NULL, NULL),
+(480, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 19:00:00', 34, NULL, NULL, NULL, NULL),
+(481, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 04:00:00', 34, NULL, NULL, NULL, NULL),
+(482, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 19:00:00', 34, NULL, NULL, NULL, NULL),
+(483, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 04:00:00', 34, NULL, NULL, NULL, NULL),
+(484, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 19:00:00', 34, NULL, NULL, NULL, NULL),
+(485, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 04:00:00', 34, NULL, NULL, NULL, NULL),
+(486, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 19:00:00', 34, NULL, NULL, NULL, NULL),
+(487, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 04:00:00', 34, NULL, NULL, NULL, NULL),
+(488, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 19:00:00', 34, NULL, NULL, NULL, NULL),
+(489, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 04:00:00', 34, NULL, NULL, NULL, NULL),
+(490, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 22:00:00', 34, NULL, NULL, NULL, NULL),
+(491, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 07:00:00', 34, NULL, NULL, NULL, NULL),
+(492, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 19:00:00', 34, NULL, NULL, NULL, NULL),
+(493, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 04:00:00', 34, NULL, NULL, NULL, NULL),
+(494, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 22:00:00', 34, NULL, NULL, NULL, NULL),
+(495, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 07:00:00', 34, NULL, NULL, NULL, NULL),
+(496, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 22:00:00', 34, NULL, NULL, NULL, NULL),
+(497, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 07:00:00', 34, NULL, NULL, NULL, NULL),
+(498, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 22:00:00', 34, NULL, NULL, NULL, NULL),
+(499, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-20 07:00:00', 34, NULL, NULL, NULL, NULL),
+(500, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-20 20:00:00', 34, NULL, NULL, NULL, NULL),
+(501, 27, 34, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 05:00:00', 34, NULL, NULL, NULL, NULL),
+(510, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 06:00:00', 36, NULL, NULL, NULL, NULL),
+(511, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 15:00:00', 36, NULL, NULL, NULL, NULL),
+(512, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 06:00:00', 36, NULL, NULL, NULL, NULL),
+(513, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 15:00:00', 36, NULL, NULL, NULL, NULL),
+(514, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 09:00:00', 36, NULL, NULL, NULL, NULL),
+(515, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 18:00:00', 36, NULL, NULL, NULL, NULL),
+(516, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 07:00:00', 36, NULL, NULL, NULL, NULL),
+(517, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 16:00:00', 36, NULL, NULL, NULL, NULL),
+(518, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 06:00:00', 36, NULL, NULL, NULL, NULL),
+(519, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 15:00:00', 36, NULL, NULL, NULL, NULL),
+(520, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 06:00:00', 36, NULL, NULL, NULL, NULL),
+(521, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 15:00:00', 36, NULL, NULL, NULL, NULL),
+(522, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 07:00:00', 36, NULL, NULL, NULL, NULL),
+(523, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 16:00:00', 36, NULL, NULL, NULL, NULL),
+(524, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 06:00:00', 36, NULL, NULL, NULL, NULL),
+(525, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 15:00:00', 36, NULL, NULL, NULL, NULL),
+(526, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 06:00:00', 36, NULL, NULL, NULL, NULL),
+(527, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 15:00:00', 36, NULL, NULL, NULL, NULL),
+(528, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 06:00:00', 36, NULL, NULL, NULL, NULL),
+(529, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 15:00:00', 36, NULL, NULL, NULL, NULL),
+(530, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 06:00:00', 36, NULL, NULL, NULL, NULL),
+(531, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 15:00:00', 36, NULL, NULL, NULL, NULL),
+(532, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 06:00:00', 36, NULL, NULL, NULL, NULL),
+(533, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 15:00:00', 36, NULL, NULL, NULL, NULL),
+(534, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 06:00:00', 36, NULL, NULL, NULL, NULL),
+(535, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 15:00:00', 36, NULL, NULL, NULL, NULL),
+(536, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 07:00:00', 36, NULL, NULL, NULL, NULL),
+(537, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 16:00:00', 36, NULL, NULL, NULL, NULL),
+(538, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 12:00:00', 36, NULL, NULL, NULL, NULL),
+(539, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 21:00:00', 36, NULL, NULL, NULL, NULL),
+(540, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 11:00:00', 36, NULL, NULL, NULL, NULL),
+(541, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 20:00:00', 36, NULL, NULL, NULL, NULL),
+(542, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 07:00:00', 36, NULL, NULL, NULL, NULL),
+(543, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 16:00:00', 36, NULL, NULL, NULL, NULL),
+(544, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 07:00:00', 36, NULL, NULL, NULL, NULL),
+(545, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 16:00:00', 36, NULL, NULL, NULL, NULL),
+(546, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 07:00:00', 36, NULL, NULL, NULL, NULL),
+(547, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 16:00:00', 36, NULL, NULL, NULL, NULL),
+(548, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 07:00:00', 36, NULL, NULL, NULL, NULL),
+(549, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 16:00:00', 36, NULL, NULL, NULL, NULL),
+(550, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 17:00:00', 36, NULL, NULL, NULL, NULL),
+(551, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 02:00:00', 36, NULL, NULL, NULL, NULL),
+(552, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 17:00:00', 36, NULL, NULL, NULL, NULL),
+(553, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 02:00:00', 36, NULL, NULL, NULL, NULL),
+(554, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 17:00:00', 36, NULL, NULL, NULL, NULL),
+(555, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 02:00:00', 36, NULL, NULL, NULL, NULL),
+(556, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 17:00:00', 36, NULL, NULL, NULL, NULL),
+(557, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 02:00:00', 36, NULL, NULL, NULL, NULL),
+(558, 26, 36, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 09:00:00', 36, NULL, NULL, NULL, NULL),
+(559, 26, 36, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 18:00:00', 36, NULL, NULL, NULL, NULL),
+(561, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 11:00:00', 35, NULL, NULL, NULL, NULL),
+(562, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 20:00:00', 35, NULL, NULL, NULL, NULL),
+(563, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 14:00:00', 35, NULL, NULL, NULL, NULL),
+(564, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 23:00:00', 35, NULL, NULL, NULL, NULL),
+(565, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 14:00:00', 35, NULL, NULL, NULL, NULL),
+(566, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 23:00:00', 35, NULL, NULL, NULL, NULL),
+(567, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 11:00:00', 35, NULL, NULL, NULL, NULL),
+(568, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 20:00:00', 35, NULL, NULL, NULL, NULL),
+(569, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 11:00:00', 35, NULL, NULL, NULL, NULL),
+(570, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 20:00:00', 35, NULL, NULL, NULL, NULL),
+(571, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 11:00:00', 35, NULL, NULL, NULL, NULL),
+(572, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 20:00:00', 35, NULL, NULL, NULL, NULL),
+(573, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 11:00:00', 35, NULL, NULL, NULL, NULL),
+(574, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 20:00:00', 35, NULL, NULL, NULL, NULL),
+(575, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 11:00:00', 35, NULL, NULL, NULL, NULL),
+(576, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 20:00:00', 35, NULL, NULL, NULL, NULL),
+(577, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 14:00:00', 35, NULL, NULL, NULL, NULL),
+(578, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 23:00:00', 35, NULL, NULL, NULL, NULL),
+(579, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 14:00:00', 35, NULL, NULL, NULL, NULL),
+(580, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 23:00:00', 35, NULL, NULL, NULL, NULL),
+(581, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 11:00:00', 35, NULL, NULL, NULL, NULL),
+(582, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 20:00:00', 35, NULL, NULL, NULL, NULL),
+(583, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 14:00:00', 35, NULL, NULL, NULL, NULL),
+(584, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 23:00:00', 35, NULL, NULL, NULL, NULL),
+(585, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 10:00:00', 35, NULL, NULL, NULL, NULL),
+(586, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 19:00:00', 35, NULL, NULL, NULL, NULL),
+(587, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 07:00:00', 35, NULL, NULL, NULL, NULL),
+(588, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 16:00:00', 35, NULL, NULL, NULL, NULL),
+(589, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 07:00:00', 35, NULL, NULL, NULL, NULL),
+(590, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 16:00:00', 35, NULL, NULL, NULL, NULL),
+(591, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 07:00:00', 35, NULL, NULL, NULL, NULL),
+(592, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 16:00:00', 35, NULL, NULL, NULL, NULL),
+(593, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 07:00:00', 35, NULL, NULL, NULL, NULL),
+(594, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 16:00:00', 35, NULL, NULL, NULL, NULL),
+(595, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 07:00:00', 35, NULL, NULL, NULL, NULL),
+(596, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 16:00:00', 35, NULL, NULL, NULL, NULL),
+(597, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 07:00:00', 35, NULL, NULL, NULL, NULL),
+(598, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 16:00:00', 35, NULL, NULL, NULL, NULL),
+(599, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 07:00:00', 35, NULL, NULL, NULL, NULL),
+(600, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 16:00:00', 35, NULL, NULL, NULL, NULL),
+(601, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 07:00:00', 35, NULL, NULL, NULL, NULL),
+(602, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 16:00:00', 35, NULL, NULL, NULL, NULL),
+(603, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 07:00:00', 35, NULL, NULL, NULL, NULL),
+(604, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 16:00:00', 35, NULL, NULL, NULL, NULL),
+(605, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 06:00:00', 35, NULL, NULL, NULL, NULL),
+(606, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 15:00:00', 35, NULL, NULL, NULL, NULL),
+(607, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 09:00:00', 35, NULL, NULL, NULL, NULL),
+(608, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 18:00:00', 35, NULL, NULL, NULL, NULL),
+(609, 26, 37, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 11:00:00', 35, NULL, NULL, NULL, NULL),
+(610, 26, 37, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 20:00:00', 35, NULL, NULL, NULL, NULL),
+(611, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 07:00:00', 37, NULL, NULL, NULL, NULL),
+(612, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 16:00:00', 37, NULL, NULL, NULL, NULL),
+(613, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 07:00:00', 37, NULL, NULL, NULL, NULL),
+(614, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-22 16:00:00', 37, NULL, NULL, NULL, NULL),
+(615, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 06:00:00', 37, NULL, NULL, NULL, NULL),
+(616, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 15:00:00', 37, NULL, NULL, NULL, NULL),
+(617, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 07:00:00', 37, NULL, NULL, NULL, NULL),
+(618, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 16:00:00', 37, NULL, NULL, NULL, NULL),
+(619, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 06:00:00', 37, NULL, NULL, NULL, NULL),
+(620, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 15:00:00', 37, NULL, NULL, NULL, NULL),
+(621, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 15:00:00', 37, NULL, NULL, NULL, NULL),
+(622, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 02:00:00', 37, NULL, NULL, NULL, NULL),
+(623, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 06:00:00', 37, NULL, NULL, NULL, NULL),
+(624, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 15:00:00', 37, NULL, NULL, NULL, NULL),
+(625, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 06:00:00', 37, NULL, NULL, NULL, NULL),
+(626, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 15:00:00', 37, NULL, NULL, NULL, NULL),
+(627, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 06:00:00', 37, NULL, NULL, NULL, NULL),
+(628, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 15:00:00', 37, NULL, NULL, NULL, NULL),
+(629, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 06:00:00', 37, NULL, NULL, NULL, NULL),
+(630, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 15:00:00', 37, NULL, NULL, NULL, NULL),
+(631, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 15:00:00', 37, NULL, NULL, NULL, NULL),
+(632, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 00:00:00', 37, NULL, NULL, NULL, NULL),
+(633, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 06:00:00', 37, NULL, NULL, NULL, NULL),
+(634, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 15:00:00', 37, NULL, NULL, NULL, NULL),
+(635, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 06:00:00', 37, NULL, NULL, NULL, NULL),
+(636, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 15:00:00', 37, NULL, NULL, NULL, NULL),
+(637, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 15:00:00', 37, NULL, NULL, NULL, NULL),
+(638, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 02:00:00', 37, NULL, NULL, NULL, NULL),
+(639, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 06:00:00', 37, NULL, NULL, NULL, NULL),
+(640, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 15:00:00', 37, NULL, NULL, NULL, NULL),
+(641, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 06:00:00', 37, NULL, NULL, NULL, NULL),
+(642, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 15:00:00', 37, NULL, NULL, NULL, NULL),
+(643, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 06:00:00', 37, NULL, NULL, NULL, NULL),
+(644, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 15:00:00', 37, NULL, NULL, NULL, NULL),
+(645, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 06:00:00', 37, NULL, NULL, NULL, NULL),
+(646, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 15:00:00', 37, NULL, NULL, NULL, NULL),
+(647, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 12:00:00', 37, NULL, NULL, NULL, NULL),
+(648, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 21:00:00', 37, NULL, NULL, NULL, NULL),
+(649, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 12:00:00', 37, NULL, NULL, NULL, NULL),
+(650, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 21:00:00', 37, NULL, NULL, NULL, NULL),
+(651, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 12:00:00', 37, NULL, NULL, NULL, NULL),
+(652, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 21:00:00', 37, NULL, NULL, NULL, NULL),
+(653, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 12:00:00', 37, NULL, NULL, NULL, NULL),
+(654, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 21:00:00', 37, NULL, NULL, NULL, NULL),
+(655, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 06:00:00', 37, NULL, NULL, NULL, NULL),
+(656, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 15:00:00', 37, NULL, NULL, NULL, NULL),
+(657, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 06:00:00', 37, NULL, NULL, NULL, NULL),
+(658, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 15:00:00', 37, NULL, NULL, NULL, NULL),
+(659, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 12:00:00', 37, NULL, NULL, NULL, NULL),
+(660, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 21:00:00', 37, NULL, NULL, NULL, NULL),
+(661, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-20 12:00:00', 37, NULL, NULL, NULL, NULL),
+(662, 24, 37, 37, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-20 21:00:00', 37, NULL, NULL, NULL, NULL),
+(675, 27, 34, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-20 23:03:29', 34, NULL, NULL, NULL, NULL),
+(677, 30, 42, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 23:05:48', 34, NULL, NULL, NULL, NULL),
+(681, 24, 43, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 09:00:00', 32, NULL, NULL, NULL, NULL),
+(682, 24, 43, 32, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 18:00:00', 32, NULL, NULL, NULL, NULL),
+(683, 24, 43, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 09:00:00', 32, NULL, NULL, NULL, NULL),
+(684, 24, 43, 32, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 18:00:00', 32, NULL, NULL, NULL, NULL),
+(685, 24, 43, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 07:00:00', 32, NULL, NULL, NULL, NULL),
+(686, 24, 43, 32, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 16:00:00', 32, NULL, NULL, NULL, NULL),
+(687, 24, 34, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 09:00:00', 32, NULL, NULL, NULL, NULL),
+(688, 24, 34, 32, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 18:00:00', 32, NULL, NULL, NULL, NULL),
+(689, 24, 43, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 08:00:00', 32, NULL, NULL, NULL, NULL),
+(692, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 11:00:00', 33, NULL, NULL, NULL, NULL),
+(693, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 20:00:00', 33, NULL, NULL, NULL, NULL),
+(694, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 10:00:00', 33, NULL, NULL, NULL, NULL),
+(695, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 19:00:00', 33, NULL, NULL, NULL, NULL),
+(696, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 08:00:00', 33, NULL, NULL, NULL, NULL),
+(697, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 17:00:00', 33, NULL, NULL, NULL, NULL),
+(698, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 09:00:00', 33, NULL, NULL, NULL, NULL),
+(699, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 18:00:00', 33, NULL, NULL, NULL, NULL),
+(700, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 07:00:00', 33, NULL, NULL, NULL, NULL),
+(701, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 16:00:00', 33, NULL, NULL, NULL, NULL),
+(702, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 09:00:00', 33, NULL, NULL, NULL, NULL),
+(703, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 18:00:00', 33, NULL, NULL, NULL, NULL),
+(704, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 09:00:00', 33, NULL, NULL, NULL, NULL),
+(705, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 18:00:00', 33, NULL, NULL, NULL, NULL),
+(706, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 09:00:00', 33, NULL, NULL, NULL, NULL),
+(707, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 18:00:00', 33, NULL, NULL, NULL, NULL),
+(708, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 09:00:00', 33, NULL, NULL, NULL, NULL),
+(709, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 18:00:00', 33, NULL, NULL, NULL, NULL),
+(710, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 09:00:00', 33, NULL, NULL, NULL, NULL),
+(711, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 18:00:00', 33, NULL, NULL, NULL, NULL),
+(712, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 09:00:00', 33, NULL, NULL, NULL, NULL),
+(713, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 18:00:00', 33, NULL, NULL, NULL, NULL),
+(714, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 12:00:00', 33, NULL, NULL, NULL, NULL),
+(715, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 21:00:00', 33, NULL, NULL, NULL, NULL),
+(716, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 07:00:00', 33, NULL, NULL, NULL, NULL),
+(717, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 16:00:00', 33, NULL, NULL, NULL, NULL),
+(718, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 17:00:00', 33, NULL, NULL, NULL, NULL),
+(719, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 02:00:00', 33, NULL, NULL, NULL, NULL),
+(720, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 06:00:00', 33, NULL, NULL, NULL, NULL),
+(721, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 15:00:00', 33, NULL, NULL, NULL, NULL),
+(722, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 12:00:00', 33, NULL, NULL, NULL, NULL),
+(723, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 21:00:00', 33, NULL, NULL, NULL, NULL),
+(724, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 12:00:00', 33, NULL, NULL, NULL, NULL),
+(725, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 21:00:00', 33, NULL, NULL, NULL, NULL),
+(726, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 12:00:00', 33, NULL, NULL, NULL, NULL),
+(727, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 21:00:00', 33, NULL, NULL, NULL, NULL),
+(728, 24, 44, 33, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 09:00:00', 33, NULL, NULL, NULL, NULL),
+(729, 24, 44, 33, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 18:00:00', 33, NULL, NULL, NULL, NULL),
+(731, 28, 31, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 12:06:40', 31, NULL, NULL, NULL, NULL),
+(734, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 07:00:00', 31, NULL, NULL, NULL, NULL),
+(735, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 16:00:00', 31, NULL, NULL, NULL, NULL),
+(736, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 07:00:00', 31, NULL, NULL, NULL, NULL),
+(737, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 16:00:00', 31, NULL, NULL, NULL, NULL),
+(738, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 07:00:00', 31, NULL, NULL, NULL, NULL),
+(739, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 16:00:00', 31, NULL, NULL, NULL, NULL),
+(740, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 07:00:00', 31, NULL, NULL, NULL, NULL),
+(741, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 16:00:00', 31, NULL, NULL, NULL, NULL),
+(742, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 07:00:00', 31, NULL, NULL, NULL, NULL),
+(743, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 16:00:00', 31, NULL, NULL, NULL, NULL),
+(744, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 07:00:00', 31, NULL, NULL, NULL, NULL),
+(745, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 16:00:00', 31, NULL, NULL, NULL, NULL),
+(746, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 07:00:00', 31, NULL, NULL, NULL, NULL),
+(747, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 16:00:00', 31, NULL, NULL, NULL, NULL),
+(748, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 07:00:00', 31, NULL, NULL, NULL, NULL),
+(749, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 16:00:00', 31, NULL, NULL, NULL, NULL),
+(750, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 08:00:00', 31, NULL, NULL, NULL, NULL),
+(751, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 17:00:00', 31, NULL, NULL, NULL, NULL),
+(752, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 08:00:00', 31, NULL, NULL, NULL, NULL),
+(753, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 17:00:00', 31, NULL, NULL, NULL, NULL),
+(754, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 08:00:00', 31, NULL, NULL, NULL, NULL),
+(755, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 17:00:00', 31, NULL, NULL, NULL, NULL),
+(756, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 08:00:00', 31, NULL, NULL, NULL, NULL),
+(757, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 17:00:00', 31, NULL, NULL, NULL, NULL),
+(758, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 07:00:00', 31, NULL, NULL, NULL, NULL),
+(759, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 16:00:00', 31, NULL, NULL, NULL, NULL),
+(760, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 08:00:00', 31, NULL, NULL, NULL, NULL),
+(761, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 17:00:00', 31, NULL, NULL, NULL, NULL),
+(762, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 08:00:00', 31, NULL, NULL, NULL, NULL),
+(763, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 17:00:00', 31, NULL, NULL, NULL, NULL),
+(764, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 08:00:00', 31, NULL, NULL, NULL, NULL),
+(765, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 17:00:00', 31, NULL, NULL, NULL, NULL),
+(766, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 08:00:00', 31, NULL, NULL, NULL, NULL),
+(767, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 17:00:00', 31, NULL, NULL, NULL, NULL),
+(768, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 08:00:00', 31, NULL, NULL, NULL, NULL),
+(769, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 17:00:00', 31, NULL, NULL, NULL, NULL),
+(770, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 08:00:00', 31, NULL, NULL, NULL, NULL),
+(771, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 17:00:00', 31, NULL, NULL, NULL, NULL),
+(772, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 08:00:00', 31, NULL, NULL, NULL, NULL),
+(773, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 17:00:00', 31, NULL, NULL, NULL, NULL),
+(774, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 08:00:00', 31, NULL, NULL, NULL, NULL),
+(775, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-16 17:00:00', 31, NULL, NULL, NULL, NULL),
+(776, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 08:00:00', 31, NULL, NULL, NULL, NULL),
+(777, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-18 17:00:00', 31, NULL, NULL, NULL, NULL),
+(778, 24, 45, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 08:00:00', 31, NULL, NULL, NULL, NULL),
+(779, 24, 45, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-19 17:00:00', 31, NULL, NULL, NULL, NULL),
+(780, 31, 46, 39, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 14:00:00', 39, NULL, NULL, NULL, NULL),
+(781, 31, 46, 39, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 23:00:00', 39, NULL, NULL, NULL, NULL),
+(782, 31, 46, 39, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 14:00:00', 39, NULL, NULL, NULL, NULL),
+(783, 31, 46, 39, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 23:00:00', 39, NULL, NULL, NULL, NULL),
+(784, 31, 46, 39, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 14:00:00', 39, NULL, NULL, NULL, NULL),
+(785, 31, 46, 39, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 23:00:00', 39, NULL, NULL, NULL, NULL),
+(786, 31, 46, 39, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 14:00:00', 39, NULL, NULL, NULL, NULL),
+(787, 31, 46, 39, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 23:00:00', 39, NULL, NULL, NULL, NULL),
+(788, 31, 46, 39, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 14:00:00', 39, NULL, NULL, NULL, NULL),
+(789, 31, 46, 39, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 23:00:00', 39, NULL, NULL, NULL, NULL),
+(790, 31, 47, 40, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 06:00:00', 40, NULL, NULL, NULL, NULL),
+(791, 31, 47, 40, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 15:00:00', 40, NULL, NULL, NULL, NULL),
+(792, 31, 47, 40, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 06:00:00', 40, NULL, NULL, NULL, NULL),
+(793, 31, 47, 40, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 15:00:00', 40, NULL, NULL, NULL, NULL),
+(794, 31, 47, 40, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 10:00:00', 40, NULL, NULL, NULL, NULL);
+INSERT INTO `job_attendances` (`id`, `job_id`, `application_id`, `user_id`, `transaction_id`, `type`, `latitude`, `longitude`, `photo_path`, `device_info`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
+(795, 31, 47, 40, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 19:00:00', 40, NULL, NULL, NULL, NULL),
+(796, 31, 47, 40, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 14:00:00', 40, NULL, NULL, NULL, NULL),
+(797, 31, 47, 40, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 23:00:00', 40, NULL, NULL, NULL, NULL),
+(798, 31, 47, 40, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 07:00:00', 40, NULL, NULL, NULL, NULL),
+(799, 31, 47, 40, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 16:00:00', 40, NULL, NULL, NULL, NULL),
+(800, 31, 47, 40, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 06:00:00', 40, NULL, NULL, NULL, NULL),
+(801, 31, 47, 40, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 15:00:00', 40, NULL, NULL, NULL, NULL),
+(802, 31, 48, 41, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 06:00:00', 41, NULL, NULL, NULL, NULL),
+(803, 31, 48, 41, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-28 15:00:00', 41, NULL, NULL, NULL, NULL),
+(804, 31, 48, 41, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 06:00:00', 41, NULL, NULL, NULL, NULL),
+(805, 31, 48, 41, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 15:00:00', 41, NULL, NULL, NULL, NULL),
+(806, 31, 48, 41, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 14:00:00', 41, NULL, NULL, NULL, NULL),
+(807, 31, 48, 41, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 23:00:00', 41, NULL, NULL, NULL, NULL),
+(808, 31, 48, 41, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 11:00:00', 41, NULL, NULL, NULL, NULL),
+(809, 31, 48, 41, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 20:00:00', 41, NULL, NULL, NULL, NULL),
+(810, 31, 48, 41, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 07:00:00', 41, NULL, NULL, NULL, NULL),
+(811, 31, 48, 41, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 16:00:00', 41, NULL, NULL, NULL, NULL),
+(812, 31, 48, 41, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 10:00:00', 41, NULL, NULL, NULL, NULL),
+(813, 31, 48, 41, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 19:00:00', 41, NULL, NULL, NULL, NULL),
+(814, 31, 48, 41, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 08:00:00', 41, NULL, NULL, NULL, NULL),
+(815, 31, 48, 41, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 17:00:00', 41, NULL, NULL, NULL, NULL),
+(816, 31, 48, 41, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 07:00:00', 41, NULL, NULL, NULL, NULL),
+(817, 31, 48, 41, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 16:00:00', 41, NULL, NULL, NULL, NULL),
+(818, 31, 48, 41, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 08:00:00', 41, NULL, NULL, NULL, NULL),
+(819, 31, 48, 41, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 17:00:00', 41, NULL, NULL, NULL, NULL),
+(820, 31, 48, 41, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 06:00:00', 41, NULL, NULL, NULL, NULL),
+(821, 31, 48, 41, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 15:00:00', 41, NULL, NULL, NULL, NULL),
+(822, 31, 49, 42, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 07:00:00', 42, NULL, NULL, NULL, NULL),
+(823, 31, 49, 42, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-23 16:00:00', 42, NULL, NULL, NULL, NULL),
+(824, 31, 49, 42, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 07:00:00', 42, NULL, NULL, NULL, NULL),
+(825, 31, 49, 42, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-25 16:00:00', 42, NULL, NULL, NULL, NULL),
+(826, 31, 49, 42, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 07:00:00', 42, NULL, NULL, NULL, NULL),
+(827, 31, 49, 42, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 16:00:00', 42, NULL, NULL, NULL, NULL),
+(828, 31, 50, 43, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 07:00:00', 43, NULL, NULL, NULL, NULL),
+(829, 31, 50, 43, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 16:00:00', 43, NULL, NULL, NULL, NULL),
+(830, 31, 50, 43, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 14:00:00', 43, NULL, NULL, NULL, NULL),
+(831, 31, 50, 43, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 23:00:00', 43, NULL, NULL, NULL, NULL),
+(832, 31, 50, 43, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 10:00:00', 43, NULL, NULL, NULL, NULL),
+(833, 31, 50, 43, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 19:00:00', 43, NULL, NULL, NULL, NULL),
+(834, 31, 50, 43, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 07:00:00', 43, NULL, NULL, NULL, NULL),
+(835, 31, 50, 43, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 16:00:00', 43, NULL, NULL, NULL, NULL),
+(836, 31, 50, 43, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 10:00:00', 43, NULL, NULL, NULL, NULL),
+(837, 31, 50, 43, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 19:00:00', 43, NULL, NULL, NULL, NULL),
+(838, 31, 50, 43, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 08:00:00', 43, NULL, NULL, NULL, NULL),
+(839, 31, 50, 43, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 17:00:00', 43, NULL, NULL, NULL, NULL),
+(840, 31, 51, 44, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 07:00:00', 44, NULL, NULL, NULL, NULL),
+(841, 31, 51, 44, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 16:00:00', 44, NULL, NULL, NULL, NULL),
+(842, 31, 51, 44, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 14:00:00', 44, NULL, NULL, NULL, NULL),
+(843, 31, 51, 44, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 23:00:00', 44, NULL, NULL, NULL, NULL),
+(844, 31, 51, 44, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 10:00:00', 44, NULL, NULL, NULL, NULL),
+(845, 31, 51, 44, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 19:00:00', 44, NULL, NULL, NULL, NULL),
+(846, 31, 51, 44, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 07:00:00', 44, NULL, NULL, NULL, NULL),
+(847, 31, 51, 44, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 16:00:00', 44, NULL, NULL, NULL, NULL),
+(848, 31, 51, 44, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 10:00:00', 44, NULL, NULL, NULL, NULL),
+(849, 31, 51, 44, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 19:00:00', 44, NULL, NULL, NULL, NULL),
+(850, 31, 51, 44, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 08:00:00', 44, NULL, NULL, NULL, NULL),
+(851, 31, 51, 44, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 17:00:00', 44, NULL, NULL, NULL, NULL),
+(852, 31, 52, 45, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 10:00:00', 45, NULL, NULL, NULL, NULL),
+(853, 31, 52, 45, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 19:00:00', 45, NULL, NULL, NULL, NULL),
+(854, 31, 52, 45, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 08:00:00', 45, NULL, NULL, NULL, NULL),
+(855, 31, 52, 45, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 17:00:00', 45, NULL, NULL, NULL, NULL),
+(856, 31, 52, 45, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 08:00:00', 45, NULL, NULL, NULL, NULL),
+(857, 31, 52, 45, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 17:00:00', 45, NULL, NULL, NULL, NULL),
+(858, 31, 52, 45, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 08:00:00', 45, NULL, NULL, NULL, NULL),
+(859, 31, 52, 45, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 17:00:00', 45, NULL, NULL, NULL, NULL),
+(860, 31, 53, 46, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 10:00:00', 46, NULL, NULL, NULL, NULL),
+(861, 31, 53, 46, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 19:00:00', 46, NULL, NULL, NULL, NULL),
+(862, 31, 53, 46, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 10:00:00', 46, NULL, NULL, NULL, NULL),
+(863, 31, 53, 46, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 19:00:00', 46, NULL, NULL, NULL, NULL),
+(864, 31, 54, 47, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 10:00:00', 47, NULL, NULL, NULL, NULL),
+(865, 31, 54, 47, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 19:00:00', 47, NULL, NULL, NULL, NULL),
+(866, 31, 54, 47, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 10:00:00', 47, NULL, NULL, NULL, NULL),
+(867, 31, 54, 47, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 19:00:00', 47, NULL, NULL, NULL, NULL),
+(869, 24, 37, 37, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-02 15:00:00', 37, NULL, NULL, NULL, NULL),
+(870, 24, 55, 48, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 14:00:00', 48, NULL, NULL, NULL, NULL),
+(871, 24, 55, 48, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-26 23:00:00', 48, NULL, NULL, NULL, NULL),
+(872, 24, 55, 48, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 10:00:00', 48, NULL, NULL, NULL, NULL),
+(873, 24, 55, 48, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-27 19:00:00', 48, NULL, NULL, NULL, NULL),
+(875, 24, 43, 32, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 18:00:00', 32, NULL, NULL, NULL, NULL),
+(876, 24, 43, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 09:00:00', 32, NULL, NULL, NULL, NULL),
+(878, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 08:00:00', 53, NULL, NULL, NULL, NULL),
+(879, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 17:00:00', 53, NULL, NULL, NULL, NULL),
+(880, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 06:00:00', 53, NULL, NULL, NULL, NULL),
+(881, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-30 15:00:00', 53, NULL, NULL, NULL, NULL),
+(882, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 11:00:00', 53, NULL, NULL, NULL, NULL),
+(883, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-31 20:00:00', 53, NULL, NULL, NULL, NULL),
+(884, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 11:00:00', 53, NULL, NULL, NULL, NULL),
+(885, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 20:00:00', 53, NULL, NULL, NULL, NULL),
+(886, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 06:00:00', 53, NULL, NULL, NULL, NULL),
+(887, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 15:00:00', 53, NULL, NULL, NULL, NULL),
+(888, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 07:00:00', 53, NULL, NULL, NULL, NULL),
+(889, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 16:00:00', 53, NULL, NULL, NULL, NULL),
+(890, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 06:00:00', 53, NULL, NULL, NULL, NULL),
+(891, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 15:00:00', 53, NULL, NULL, NULL, NULL),
+(892, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 07:00:00', 53, NULL, NULL, NULL, NULL),
+(893, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 16:00:00', 53, NULL, NULL, NULL, NULL),
+(894, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 07:00:00', 53, NULL, NULL, NULL, NULL),
+(895, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-07 16:00:00', 53, NULL, NULL, NULL, NULL),
+(896, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 07:00:00', 53, NULL, NULL, NULL, NULL),
+(897, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 16:00:00', 53, NULL, NULL, NULL, NULL),
+(898, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 07:00:00', 53, NULL, NULL, NULL, NULL),
+(899, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-09 16:00:00', 53, NULL, NULL, NULL, NULL),
+(900, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 07:00:00', 53, NULL, NULL, NULL, NULL),
+(901, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-10 16:00:00', 53, NULL, NULL, NULL, NULL),
+(902, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 07:00:00', 53, NULL, NULL, NULL, NULL),
+(903, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-11 16:00:00', 53, NULL, NULL, NULL, NULL),
+(904, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 07:00:00', 53, NULL, NULL, NULL, NULL),
+(905, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-12 16:00:00', 53, NULL, NULL, NULL, NULL),
+(906, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 07:00:00', 53, NULL, NULL, NULL, NULL),
+(907, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-13 16:00:00', 53, NULL, NULL, NULL, NULL),
+(908, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 07:00:00', 53, NULL, NULL, NULL, NULL),
+(909, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-14 16:00:00', 53, NULL, NULL, NULL, NULL),
+(910, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 06:00:00', 53, NULL, NULL, NULL, NULL),
+(911, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-15 15:00:00', 53, NULL, NULL, NULL, NULL),
+(912, 33, 60, 53, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 09:00:00', 53, NULL, NULL, NULL, NULL),
+(913, 33, 60, 53, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-17 18:00:00', 53, NULL, NULL, NULL, NULL),
+(914, 33, 56, 49, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 11:00:00', 49, NULL, NULL, NULL, NULL),
+(915, 33, 56, 49, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-21 20:00:00', 49, NULL, NULL, NULL, NULL),
+(916, 33, 56, 49, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 07:00:00', 49, NULL, NULL, NULL, NULL),
+(917, 33, 56, 49, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-24 16:00:00', 49, NULL, NULL, NULL, NULL),
+(918, 33, 58, 50, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 07:00:00', 50, NULL, NULL, NULL, NULL),
+(919, 33, 58, 50, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-01 16:00:00', 50, NULL, NULL, NULL, NULL),
+(920, 33, 58, 50, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 14:00:00', 50, NULL, NULL, NULL, NULL),
+(921, 33, 58, 50, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-03 23:00:00', 50, NULL, NULL, NULL, NULL),
+(922, 33, 58, 50, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 14:00:00', 50, NULL, NULL, NULL, NULL),
+(923, 33, 58, 50, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-04 23:00:00', 50, NULL, NULL, NULL, NULL),
+(924, 33, 58, 50, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 14:00:00', 50, NULL, NULL, NULL, NULL),
+(925, 33, 58, 50, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-05 23:00:00', 50, NULL, NULL, NULL, NULL),
+(926, 33, 58, 50, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 14:00:00', 50, NULL, NULL, NULL, NULL),
+(927, 33, 58, 50, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-06 23:00:00', 50, NULL, NULL, NULL, NULL),
+(928, 32, 59, 51, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 09:00:00', 51, NULL, NULL, NULL, NULL),
+(929, 32, 59, 51, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-08 18:00:00', 51, NULL, NULL, NULL, NULL),
+(930, 34, 61, 52, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 09:00:00', 52, NULL, NULL, NULL, NULL),
+(931, 34, 61, 52, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-29 18:00:00', 52, NULL, NULL, NULL, NULL),
+(949, 35, 62, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 07:00:00', 38, NULL, NULL, NULL, NULL),
+(950, 35, 62, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-21 16:00:00', 38, NULL, NULL, NULL, NULL),
+(951, 35, 62, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 07:00:00', 38, NULL, NULL, NULL, NULL),
+(952, 35, 62, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-22 16:00:00', 38, NULL, NULL, NULL, NULL),
+(953, 35, 62, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 07:00:00', 38, NULL, NULL, NULL, NULL),
+(954, 35, 62, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 16:00:00', 38, NULL, NULL, NULL, NULL),
+(955, 35, 62, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 07:00:00', 38, NULL, NULL, NULL, NULL),
+(956, 35, 62, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-24 16:00:00', 38, NULL, NULL, NULL, NULL),
+(957, 35, 62, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-26 08:00:00', 38, NULL, NULL, NULL, NULL),
+(958, 35, 62, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-26 17:00:00', 38, NULL, NULL, NULL, NULL),
+(959, 35, 62, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-27 08:00:00', 38, NULL, NULL, NULL, NULL),
+(960, 35, 62, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-27 17:00:00', 38, NULL, NULL, NULL, NULL),
+(961, 29, 40, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-25 11:00:00', 35, NULL, NULL, NULL, NULL),
+(962, 29, 40, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-25 20:00:00', 35, NULL, NULL, NULL, NULL),
+(963, 29, 40, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-26 11:00:00', 35, NULL, NULL, NULL, NULL),
+(964, 29, 40, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-26 20:00:00', 35, NULL, NULL, NULL, NULL),
+(965, 29, 40, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-27 11:00:00', 35, NULL, NULL, NULL, NULL),
+(966, 29, 40, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-27 20:00:00', 35, NULL, NULL, NULL, NULL),
+(967, 36, 63, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-28 11:00:00', 35, NULL, NULL, NULL, NULL),
+(968, 36, 63, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-28 20:00:00', 35, NULL, NULL, NULL, NULL),
+(969, 36, 63, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-03-01 11:00:00', 35, NULL, NULL, NULL, NULL),
+(970, 36, 63, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-03-01 20:00:00', 35, NULL, NULL, NULL, NULL),
+(971, 36, 63, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-03-03 12:00:00', 35, NULL, NULL, NULL, NULL),
+(972, 36, 63, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-03-03 21:00:00', 35, NULL, NULL, NULL, NULL),
+(973, 36, 63, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-03-04 17:00:00', 35, NULL, NULL, NULL, NULL),
+(974, 36, 63, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-03-05 02:00:00', 35, NULL, NULL, NULL, NULL),
+(975, 36, 63, 35, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-03-05 17:00:00', 35, NULL, NULL, NULL, NULL),
+(976, 36, 63, 35, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-03-06 02:00:00', 35, NULL, NULL, NULL, NULL),
+(978, 37, 64, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-28 13:00:00', 38, NULL, NULL, NULL, NULL),
+(979, 37, 64, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-28 22:00:00', 38, NULL, NULL, NULL, NULL),
+(980, 37, 64, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-03-01 13:00:00', 38, NULL, NULL, NULL, NULL),
+(981, 37, 64, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-03-01 22:00:00', 38, NULL, NULL, NULL, NULL),
+(982, 37, 64, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-03-02 13:00:00', 38, NULL, NULL, NULL, NULL),
+(983, 37, 64, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-03-02 22:00:00', 38, NULL, NULL, NULL, NULL),
+(984, 37, 64, 38, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-03-03 13:00:00', 38, NULL, NULL, NULL, NULL),
+(985, 37, 64, 38, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-03-03 22:00:00', 38, NULL, NULL, NULL, NULL),
+(986, 29, 41, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-26 21:00:00', 36, NULL, NULL, NULL, NULL),
+(987, 29, 41, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-26 12:00:00', 36, NULL, NULL, NULL, NULL),
+(988, 36, 65, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-03-01 11:00:00', 36, NULL, NULL, NULL, NULL),
+(989, 36, 65, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-03-01 20:00:00', 36, NULL, NULL, NULL, NULL),
+(990, 36, 65, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-03-02 17:00:00', 36, NULL, NULL, NULL, NULL),
+(991, 36, 65, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-03-03 02:00:00', 36, NULL, NULL, NULL, NULL),
+(992, 36, 65, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-03-03 17:00:00', 36, NULL, NULL, NULL, NULL),
+(993, 36, 65, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-03-04 02:00:00', 36, NULL, NULL, NULL, NULL),
+(994, 36, 65, 36, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-03-04 17:00:00', 36, NULL, NULL, NULL, NULL),
+(995, 36, 65, 36, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-03-05 02:00:00', 36, NULL, NULL, NULL, NULL),
+(997, 28, 31, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-26 08:00:00', 31, NULL, NULL, NULL, NULL),
+(998, 28, 31, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-26 17:00:00', 31, NULL, NULL, NULL, NULL),
+(999, 28, 31, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-27 08:00:00', 31, NULL, NULL, NULL, NULL),
+(1000, 28, 31, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-27 17:00:00', 31, NULL, NULL, NULL, NULL),
+(1001, 38, 66, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-28 08:00:00', 31, NULL, NULL, NULL, NULL),
+(1002, 38, 66, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-28 17:00:00', 31, NULL, NULL, NULL, NULL),
+(1003, 38, 66, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-03-01 12:00:00', 31, NULL, NULL, NULL, NULL),
+(1004, 38, 66, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-03-01 21:00:00', 31, NULL, NULL, NULL, NULL),
+(1005, 38, 66, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-03-02 09:00:00', 31, NULL, NULL, NULL, NULL),
+(1006, 38, 66, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-03-02 18:00:00', 31, NULL, NULL, NULL, NULL),
+(1007, 38, 66, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-03-03 09:00:00', 31, NULL, NULL, NULL, NULL),
+(1008, 38, 66, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-03-03 18:00:00', 31, NULL, NULL, NULL, NULL),
+(1009, 38, 66, 31, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-03-05 09:00:00', 31, NULL, NULL, NULL, NULL),
+(1010, 38, 66, 31, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-03-05 18:00:00', 31, NULL, NULL, NULL, NULL),
+(1014, 29, 20, 21, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-26 09:00:00', 21, NULL, NULL, NULL, NULL),
+(1015, 29, 20, 21, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-26 18:00:00', 21, NULL, NULL, NULL, NULL),
+(1016, 29, 20, 21, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-27 09:00:00', 21, NULL, NULL, NULL, NULL),
+(1017, 29, 20, 21, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-02-27 18:00:00', 21, NULL, NULL, NULL, NULL),
+(1018, 28, 32, 32, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-02-23 09:00:00', 32, NULL, NULL, NULL, NULL),
+(1019, 30, 42, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-01 19:00:00', 34, NULL, NULL, NULL, NULL),
+(1022, 30, 42, 34, NULL, 'checkout', -6.6011188, 106.7941239, NULL, NULL, '2026-01-02 04:00:00', 34, NULL, NULL, NULL, NULL),
+(1028, 30, 42, 34, NULL, 'checkin', -6.6011188, 106.7941239, NULL, NULL, '2026-01-02 19:00:00', 34, NULL, NULL, NULL, NULL),
+(1341, 25, 38, 38, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-21 15:00:00', NULL, NULL, NULL, NULL, NULL),
+(1342, 25, 38, 38, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-22 15:00:00', NULL, NULL, NULL, NULL, NULL),
+(1343, 25, 38, 38, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-23 15:00:00', NULL, NULL, NULL, NULL, NULL),
+(1344, 25, 38, 38, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-24 15:00:00', NULL, NULL, NULL, NULL, NULL),
+(1345, 25, 38, 38, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-25 15:00:00', NULL, NULL, NULL, NULL, NULL),
+(1346, 25, 38, 38, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-27 15:00:00', NULL, NULL, NULL, NULL, NULL),
+(1347, 25, 38, 38, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-30 15:00:00', NULL, NULL, NULL, NULL, NULL),
+(1348, 25, 38, 38, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-31 15:00:00', NULL, NULL, NULL, NULL, NULL),
+(1349, 31, 46, 39, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-23 22:00:00', NULL, NULL, NULL, NULL, NULL),
+(1350, 31, 46, 39, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-24 22:00:00', NULL, NULL, NULL, NULL, NULL),
+(1351, 31, 46, 39, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-25 22:00:00', NULL, NULL, NULL, NULL, NULL),
+(1352, 31, 46, 39, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-26 22:00:00', NULL, NULL, NULL, NULL, NULL),
+(1353, 31, 46, 39, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-27 22:00:00', NULL, NULL, NULL, NULL, NULL),
+(1354, 31, 47, 40, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-31 14:00:00', NULL, NULL, NULL, NULL, NULL),
+(1355, 31, 47, 40, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-01 14:00:00', NULL, NULL, NULL, NULL, NULL),
+(1356, 31, 47, 40, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-02-05 18:00:00', NULL, NULL, NULL, NULL, NULL),
+(1357, 30, 42, 34, NULL, 'checkout', 0.0000000, 0.0000000, 'system-auto-checkout', 'AUTO SYSTEM', '2026-01-03 04:00:00', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -515,37 +1256,88 @@ CREATE TABLE `schedule_days` (
 --
 
 INSERT INTO `schedule_days` (`id`, `schedule_plan_id`, `shift_date`, `created_at`) VALUES
-(1, 1, '2026-03-01', '2026-03-02 01:13:34'),
-(2, 1, '2026-03-02', '2026-03-02 01:13:34'),
-(3, 1, '2026-03-03', '2026-03-02 01:13:34'),
-(4, 1, '2026-03-04', '2026-03-02 01:13:34'),
-(5, 1, '2026-03-05', '2026-03-02 01:13:34'),
-(6, 1, '2026-03-06', '2026-03-02 01:13:34'),
-(7, 1, '2026-03-07', '2026-03-02 01:13:34'),
-(8, 1, '2026-03-08', '2026-03-02 01:13:34'),
-(9, 1, '2026-03-09', '2026-03-02 01:13:34'),
-(10, 1, '2026-03-10', '2026-03-02 01:13:34'),
-(11, 1, '2026-03-11', '2026-03-02 01:13:34'),
-(12, 1, '2026-03-12', '2026-03-02 01:13:34'),
-(13, 1, '2026-03-13', '2026-03-02 01:13:34'),
-(14, 1, '2026-03-14', '2026-03-02 01:13:34'),
-(15, 1, '2026-03-15', '2026-03-02 01:13:34'),
-(16, 1, '2026-03-16', '2026-03-02 01:13:34'),
-(17, 1, '2026-03-17', '2026-03-02 01:13:34'),
-(18, 1, '2026-03-18', '2026-03-02 01:13:34'),
-(19, 1, '2026-03-19', '2026-03-02 01:13:34'),
-(20, 1, '2026-03-20', '2026-03-02 01:13:34'),
-(21, 1, '2026-03-21', '2026-03-02 01:13:34'),
-(22, 1, '2026-03-22', '2026-03-02 01:13:34'),
-(23, 1, '2026-03-23', '2026-03-02 01:13:34'),
-(24, 1, '2026-03-24', '2026-03-02 01:13:34'),
-(25, 1, '2026-03-25', '2026-03-02 01:13:34'),
-(26, 1, '2026-03-26', '2026-03-02 01:13:34'),
-(27, 1, '2026-03-27', '2026-03-02 01:13:34'),
-(28, 1, '2026-03-28', '2026-03-02 01:13:34'),
-(29, 1, '2026-03-29', '2026-03-02 01:13:34'),
-(30, 1, '2026-03-30', '2026-03-02 01:13:34'),
-(31, 1, '2026-03-31', '2026-03-02 01:13:34');
+(1, 1, '2026-01-01', '2026-03-02 20:52:00'),
+(2, 1, '2026-01-02', '2026-03-02 20:52:00'),
+(3, 1, '2026-01-03', '2026-03-02 20:52:00'),
+(4, 1, '2026-01-04', '2026-03-02 20:52:00'),
+(5, 1, '2026-01-05', '2026-03-02 20:52:00'),
+(6, 1, '2026-01-06', '2026-03-02 20:52:00'),
+(7, 1, '2026-01-07', '2026-03-02 20:52:00'),
+(8, 1, '2026-01-08', '2026-03-02 20:52:00'),
+(9, 1, '2026-01-09', '2026-03-02 20:52:00'),
+(10, 1, '2026-01-10', '2026-03-02 20:52:00'),
+(11, 1, '2026-01-11', '2026-03-02 20:52:00'),
+(12, 1, '2026-01-12', '2026-03-02 20:52:00'),
+(13, 1, '2026-01-13', '2026-03-02 20:52:00'),
+(14, 1, '2026-01-14', '2026-03-02 20:52:00'),
+(15, 1, '2026-01-15', '2026-03-02 20:52:00'),
+(16, 1, '2026-01-16', '2026-03-02 20:52:00'),
+(17, 1, '2026-01-17', '2026-03-02 20:52:00'),
+(18, 1, '2026-01-18', '2026-03-02 20:52:00'),
+(19, 1, '2026-01-19', '2026-03-02 20:52:00'),
+(20, 1, '2026-01-20', '2026-03-02 20:52:00'),
+(21, 1, '2026-01-21', '2026-03-02 20:52:00'),
+(22, 1, '2026-01-22', '2026-03-02 20:52:00'),
+(23, 1, '2026-01-23', '2026-03-02 20:52:00'),
+(24, 1, '2026-01-24', '2026-03-02 20:52:00'),
+(25, 1, '2026-01-25', '2026-03-02 20:52:00'),
+(26, 1, '2026-01-26', '2026-03-02 20:52:00'),
+(27, 1, '2026-01-27', '2026-03-02 20:52:00'),
+(28, 1, '2026-01-28', '2026-03-02 20:52:00'),
+(29, 1, '2026-01-29', '2026-03-02 20:52:00'),
+(30, 1, '2026-01-30', '2026-03-02 20:52:00'),
+(31, 1, '2026-01-31', '2026-03-02 20:52:00'),
+(32, 2, '2026-02-01', '2026-03-02 20:52:00'),
+(33, 2, '2026-02-02', '2026-03-02 20:52:00'),
+(34, 2, '2026-02-03', '2026-03-02 20:52:00'),
+(35, 2, '2026-02-04', '2026-03-02 20:52:00'),
+(36, 2, '2026-02-05', '2026-03-02 20:52:00'),
+(37, 2, '2026-02-06', '2026-03-02 20:52:00'),
+(38, 2, '2026-02-07', '2026-03-02 20:52:00'),
+(39, 2, '2026-02-08', '2026-03-02 20:52:00'),
+(40, 2, '2026-02-09', '2026-03-02 20:52:00'),
+(41, 2, '2026-02-10', '2026-03-02 20:52:00'),
+(42, 2, '2026-02-11', '2026-03-02 20:52:00'),
+(43, 2, '2026-02-12', '2026-03-02 20:52:00'),
+(44, 2, '2026-02-13', '2026-03-02 20:52:00'),
+(45, 2, '2026-02-14', '2026-03-02 20:52:00'),
+(46, 2, '2026-02-15', '2026-03-02 20:52:00'),
+(47, 2, '2026-02-16', '2026-03-02 20:52:00'),
+(48, 2, '2026-02-17', '2026-03-02 20:52:00'),
+(49, 2, '2026-02-18', '2026-03-02 20:52:00'),
+(50, 2, '2026-02-19', '2026-03-02 20:52:00'),
+(51, 2, '2026-02-20', '2026-03-02 20:52:00'),
+(52, 3, '2026-01-01', '2026-03-02 23:47:03'),
+(53, 3, '2026-01-02', '2026-03-02 23:47:03'),
+(54, 3, '2026-01-03', '2026-03-02 23:47:03'),
+(55, 3, '2026-01-04', '2026-03-02 23:47:03'),
+(56, 3, '2026-01-05', '2026-03-02 23:47:03'),
+(57, 3, '2026-01-06', '2026-03-02 23:47:03'),
+(58, 3, '2026-01-07', '2026-03-02 23:47:03'),
+(59, 3, '2026-01-08', '2026-03-02 23:47:03'),
+(60, 3, '2026-01-09', '2026-03-02 23:47:03'),
+(61, 3, '2026-01-10', '2026-03-02 23:47:03'),
+(62, 3, '2026-01-11', '2026-03-02 23:47:03'),
+(63, 3, '2026-01-12', '2026-03-02 23:47:03'),
+(64, 3, '2026-01-13', '2026-03-02 23:47:03'),
+(65, 3, '2026-01-14', '2026-03-02 23:47:03'),
+(66, 3, '2026-01-15', '2026-03-02 23:47:03'),
+(67, 3, '2026-01-16', '2026-03-02 23:47:03'),
+(68, 3, '2026-01-17', '2026-03-02 23:47:03'),
+(69, 3, '2026-01-18', '2026-03-02 23:47:03'),
+(70, 3, '2026-01-19', '2026-03-02 23:47:03'),
+(71, 3, '2026-01-20', '2026-03-02 23:47:03'),
+(72, 3, '2026-01-21', '2026-03-02 23:47:03'),
+(73, 3, '2026-01-22', '2026-03-02 23:47:03'),
+(74, 3, '2026-01-23', '2026-03-02 23:47:03'),
+(75, 3, '2026-01-24', '2026-03-02 23:47:03'),
+(76, 3, '2026-01-25', '2026-03-02 23:47:03'),
+(77, 3, '2026-01-26', '2026-03-02 23:47:03'),
+(78, 3, '2026-01-27', '2026-03-02 23:47:03'),
+(79, 3, '2026-01-28', '2026-03-02 23:47:03'),
+(80, 3, '2026-01-29', '2026-03-02 23:47:03'),
+(81, 3, '2026-01-30', '2026-03-02 23:47:03'),
+(82, 3, '2026-01-31', '2026-03-02 23:47:03');
 
 -- --------------------------------------------------------
 
@@ -573,7 +1365,9 @@ CREATE TABLE `schedule_plans` (
 --
 
 INSERT INTO `schedule_plans` (`id`, `hotel_id`, `department`, `month`, `year`, `status`, `requested_by`, `approved_by`, `approved_at`, `notes`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Front Office', 3, 2026, 'approved', 17, 17, '2026-03-02 01:14:47', NULL, '2026-03-02 01:13:34', '2026-03-02 01:14:47');
+(1, 1, 'Food & Beverage Service', 1, 2026, 'approved', 4, 17, '2026-03-02 21:12:56', NULL, '2026-03-02 20:52:00', '2026-03-02 21:12:56'),
+(2, 1, 'Food & Beverage Service', 2, 2026, 'approved', 4, 17, '2026-03-02 21:37:33', NULL, '2026-03-02 20:52:00', '2026-03-02 21:37:33'),
+(3, 1, 'Front Office', 1, 2026, 'approved', 13, 17, '2026-03-02 23:58:53', NULL, '2026-03-02 23:47:03', '2026-03-02 23:58:53');
 
 -- --------------------------------------------------------
 
@@ -636,7 +1430,55 @@ CREATE TABLE `schedule_shifts` (
 --
 
 INSERT INTO `schedule_shifts` (`id`, `schedule_day_id`, `user_id`, `start_time`, `end_time`, `shift_type`, `created_at`, `updated_at`, `job_id`, `application_id`) VALUES
-(1, 2, 34, '01:00:00', '08:00:00', 'regular', '2026-03-02 01:14:27', '2026-03-02 01:15:42', 25, 1);
+(1, 31, 41, '06:00:00', '14:00:00', 'regular', '2026-03-02 20:56:33', NULL, NULL, NULL),
+(2, 31, 40, '06:00:00', '14:00:00', 'regular', '2026-03-02 20:56:33', '2026-03-02 21:12:56', 31, 47),
+(3, 21, 39, '00:00:00', '00:01:00', 'off', '2026-03-02 21:07:21', NULL, NULL, NULL),
+(4, 22, 39, '00:00:00', '00:01:00', 'off', '2026-03-02 21:07:21', NULL, NULL, NULL),
+(5, 23, 39, '14:00:00', '22:00:00', 'regular', '2026-03-02 21:08:42', '2026-03-02 21:12:56', 31, 46),
+(6, 24, 39, '14:00:00', '22:00:00', 'regular', '2026-03-02 21:08:42', '2026-03-02 21:12:56', 31, 46),
+(7, 25, 39, '14:00:00', '22:00:00', 'regular', '2026-03-02 21:08:42', '2026-03-02 21:12:56', 31, 46),
+(8, 26, 39, '14:00:00', '22:00:00', 'regular', '2026-03-02 21:08:42', '2026-03-02 21:12:56', 31, 46),
+(9, 27, 39, '14:00:00', '22:00:00', 'regular', '2026-03-02 21:08:42', '2026-03-02 21:12:56', 31, 46),
+(10, 23, 42, '07:00:00', '15:00:00', 'regular', '2026-03-02 21:10:21', NULL, NULL, NULL),
+(11, 25, 42, '07:00:00', '15:00:00', 'regular', '2026-03-02 21:10:43', NULL, NULL, NULL),
+(12, 26, 42, '07:00:00', '15:00:00', 'regular', '2026-03-02 21:10:43', NULL, NULL, NULL),
+(13, 32, 41, '06:00:00', '14:00:00', 'regular', '2026-03-02 21:19:10', NULL, NULL, NULL),
+(14, 32, 40, '06:00:00', '14:00:00', 'regular', '2026-03-02 21:19:21', '2026-03-02 21:37:33', 31, 47),
+(16, 36, 40, '10:00:00', '18:00:00', 'regular', '2026-03-02 21:21:19', '2026-03-02 21:37:33', 31, 47),
+(17, 37, 40, '14:00:00', '22:00:00', 'regular', '2026-03-02 21:21:54', '2026-03-02 21:37:33', 31, 47),
+(18, 38, 40, '07:00:00', '15:00:00', 'regular', '2026-03-02 21:22:15', '2026-03-02 21:37:33', 31, 47),
+(19, 46, 40, '06:00:00', '14:00:00', 'regular', '2026-03-02 21:23:51', '2026-03-02 21:37:33', 31, 47),
+(20, 37, 41, '14:00:00', '22:00:00', 'regular', '2026-03-02 21:24:34', NULL, NULL, NULL),
+(21, 38, 41, '11:00:00', '19:00:00', 'regular', '2026-03-02 21:25:27', NULL, NULL, NULL),
+(22, 39, 41, '07:00:00', '15:00:00', 'regular', '2026-03-02 21:25:46', NULL, NULL, NULL),
+(23, 41, 41, '08:00:00', '16:00:00', 'regular', '2026-03-02 21:26:04', '2026-03-02 21:28:43', NULL, NULL),
+(24, 40, 41, '10:00:00', '18:00:00', 'regular', '2026-03-02 21:27:12', NULL, NULL, NULL),
+(25, 42, 41, '11:00:00', '19:00:00', 'regular', '2026-03-02 21:29:20', NULL, NULL, NULL),
+(26, 45, 41, '08:00:00', '16:00:00', 'regular', '2026-03-02 21:29:47', NULL, NULL, NULL),
+(27, 46, 41, '06:00:00', '14:00:00', 'regular', '2026-03-02 21:30:06', NULL, NULL, NULL),
+(28, 36, 43, '07:00:00', '15:00:00', 'regular', '2026-03-02 21:31:40', NULL, NULL, NULL),
+(29, 37, 43, '14:00:00', '22:00:00', 'regular', '2026-03-02 21:31:57', NULL, NULL, NULL),
+(30, 41, 43, '10:00:00', '18:00:00', 'regular', '2026-03-02 21:32:20', NULL, NULL, NULL),
+(31, 39, 43, '07:00:00', '15:00:00', 'regular', '2026-03-02 21:32:36', NULL, NULL, NULL),
+(32, 40, 43, '10:00:00', '18:00:00', 'regular', '2026-03-02 21:33:18', NULL, NULL, NULL),
+(33, 38, 44, '07:00:00', '15:00:00', 'regular', '2026-03-02 21:33:46', NULL, NULL, NULL),
+(34, 39, 44, '10:00:00', '18:00:00', 'regular', '2026-03-02 21:34:03', NULL, NULL, NULL),
+(35, 41, 44, '08:00:00', '16:00:00', 'regular', '2026-03-02 21:34:22', NULL, NULL, NULL),
+(36, 42, 44, '07:00:00', '15:00:00', 'regular', '2026-03-02 21:34:41', NULL, NULL, NULL),
+(37, 43, 44, '10:00:00', '18:00:00', 'regular', '2026-03-02 21:35:02', NULL, NULL, NULL),
+(38, 46, 44, '06:00:00', '14:00:00', 'regular', '2026-03-02 21:35:20', NULL, NULL, NULL),
+(39, 81, 52, '09:00:00', '17:00:00', 'regular', '2026-03-02 23:48:29', '2026-03-02 23:58:53', 34, 61),
+(40, 72, 38, '07:00:00', '15:00:00', 'regular', '2026-03-02 23:50:26', '2026-03-02 23:58:26', 25, 38),
+(41, 73, 38, '07:00:00', '15:00:00', 'regular', '2026-03-02 23:50:38', '2026-03-02 23:58:28', 25, 38),
+(42, 74, 38, '07:00:00', '15:00:00', 'regular', '2026-03-02 23:50:48', '2026-03-02 23:58:30', 25, 38),
+(43, 75, 38, '07:00:00', '15:00:00', 'regular', '2026-03-02 23:50:53', '2026-03-02 23:58:32', 25, 38),
+(44, 76, 38, '07:00:00', '15:00:00', 'regular', '2026-03-02 23:50:59', '2026-03-02 23:58:34', 25, 38),
+(45, 77, 38, '00:00:00', '00:05:00', 'off', '2026-03-02 23:51:27', '2026-03-02 23:58:36', 25, 38),
+(46, 78, 38, '07:00:00', '15:00:00', 'regular', '2026-03-02 23:52:14', '2026-03-02 23:58:37', 25, 38),
+(47, 81, 38, '07:00:00', '15:00:00', 'regular', '2026-03-02 23:52:37', '2026-03-02 23:58:39', 25, 38),
+(48, 82, 38, '07:00:00', '15:00:00', 'regular', '2026-03-02 23:52:43', '2026-03-02 23:57:59', 25, 38),
+(49, 52, 34, '19:00:00', '04:00:00', 'regular', '2026-03-06 02:17:57', '2026-03-06 02:38:11', 30, 42),
+(50, 53, 34, '19:00:00', '04:00:00', 'regular', '2026-03-06 02:58:29', '2026-03-06 03:38:11', 30, 42);
 
 -- --------------------------------------------------------
 
@@ -682,7 +1524,7 @@ INSERT INTO `skills` (`id`, `name`, `category`, `created_at`, `created_by`, `upd
 (19, 'Room Service Staff', 'Food & Beverage Service', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (20, 'Cook Helper', 'Kitchen / Culinary', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (21, 'Cook', 'Kitchen / Culinary', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
-(22, 'Chef De Partie', 'Kitchen / Culinary', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(22, 'Chef de Partie', 'Kitchen / Culinary', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (23, 'Sous Chef', 'Kitchen / Culinary', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (24, 'Executive Chef', 'Kitchen / Culinary', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (25, 'Pastry Chef', 'Kitchen / Culinary', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
@@ -699,12 +1541,12 @@ INSERT INTO `skills` (`id`, `name`, `category`, `created_at`, `created_by`, `upd
 (36, 'Marketing Staff', 'Sales & Marketing', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (37, 'Human Resources Staff', 'Human Resources', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (38, 'Accounting Staff', 'Finance', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
-(39, 'Purchasing Staff', 'Purchasing', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(39, 'Purchasing Staff', 'Finance', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (40, 'Hotel Manager', 'Management', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (41, 'Operation Manager', 'Management', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (42, 'General Manager', 'Management', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (43, 'Food & Beverage Manager', 'Management', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
-(44, 'Information Technology', 'IT', '2026-02-21 00:54:00', 1, '2026-02-21 08:44:58', 1, NULL, NULL),
+(44, 'Information Technology', 'Finance', '2026-02-21 00:54:00', 1, '2026-02-21 08:44:58', 1, NULL, NULL),
 (45, 'Front Office Manager', 'Management', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (46, 'Graphics Design', 'Sales & Marketing', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (47, 'Senior Waiter', 'Food & Beverage Service', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
@@ -714,7 +1556,158 @@ INSERT INTO `skills` (`id`, `name`, `category`, `created_at`, `created_by`, `upd
 (51, 'Sales Senior', 'Sales & Marketing', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (52, 'Front Desk Agent', 'Front Office', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
 (53, 'Business Development', 'Human Resources', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
-(54, 'Chief Accounting', 'Finance', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL);
+(54, 'Chief Accounting', 'Finance', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(55, 'Driver', 'Front Office', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL),
+(56, 'AR/AP', 'Finance', '2026-01-18 00:54:00', 1, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `training_days`
+--
+
+CREATE TABLE `training_days` (
+  `id` int(11) NOT NULL,
+  `training_plan_id` int(11) NOT NULL,
+  `training_date` date NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `training_days`
+--
+
+INSERT INTO `training_days` (`id`, `training_plan_id`, `training_date`, `created_at`) VALUES
+(1, 1, '2026-03-01', '2026-03-05 04:51:42'),
+(2, 1, '2026-03-02', '2026-03-05 04:51:42'),
+(3, 1, '2026-03-03', '2026-03-05 04:51:42'),
+(4, 1, '2026-03-04', '2026-03-05 04:51:42'),
+(5, 1, '2026-03-05', '2026-03-05 04:51:42'),
+(6, 1, '2026-03-06', '2026-03-05 04:51:42'),
+(7, 1, '2026-03-07', '2026-03-05 04:51:42'),
+(8, 1, '2026-03-08', '2026-03-05 04:51:42'),
+(9, 1, '2026-03-09', '2026-03-05 04:51:42'),
+(10, 1, '2026-03-10', '2026-03-05 04:51:42'),
+(11, 1, '2026-03-11', '2026-03-05 04:51:42'),
+(12, 1, '2026-03-12', '2026-03-05 04:51:42'),
+(13, 1, '2026-03-13', '2026-03-05 04:51:42'),
+(14, 1, '2026-03-14', '2026-03-05 04:51:42'),
+(15, 1, '2026-03-15', '2026-03-05 04:51:42'),
+(16, 1, '2026-03-16', '2026-03-05 04:51:42'),
+(17, 1, '2026-03-17', '2026-03-05 04:51:42'),
+(18, 1, '2026-03-18', '2026-03-05 04:51:42'),
+(19, 1, '2026-03-19', '2026-03-05 04:51:42'),
+(20, 1, '2026-03-20', '2026-03-05 04:51:42'),
+(21, 1, '2026-03-21', '2026-03-05 04:51:42'),
+(22, 1, '2026-03-22', '2026-03-05 04:51:42'),
+(23, 1, '2026-03-23', '2026-03-05 04:51:42'),
+(24, 1, '2026-03-24', '2026-03-05 04:51:42'),
+(25, 1, '2026-03-25', '2026-03-05 04:51:42'),
+(26, 1, '2026-03-26', '2026-03-05 04:51:42'),
+(27, 1, '2026-03-27', '2026-03-05 04:51:42'),
+(28, 1, '2026-03-28', '2026-03-05 04:51:42'),
+(29, 1, '2026-03-29', '2026-03-05 04:51:42'),
+(30, 1, '2026-03-30', '2026-03-05 04:51:42'),
+(31, 1, '2026-03-31', '2026-03-05 04:51:42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `training_participants`
+--
+
+CREATE TABLE `training_participants` (
+  `id` int(11) NOT NULL,
+  `training_day_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `attendance_status` enum('scheduled','attended','absent','late') DEFAULT 'scheduled',
+  `score` decimal(5,2) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `training_plans`
+--
+
+CREATE TABLE `training_plans` (
+  `id` int(11) NOT NULL,
+  `hotel_id` int(11) NOT NULL,
+  `department` varchar(100) DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `trainer_id` int(11) DEFAULT NULL,
+  `month` tinyint(4) NOT NULL,
+  `year` smallint(6) NOT NULL,
+  `status` enum('draft','pending','approved','rejected','revised') DEFAULT 'draft',
+  `requested_by` int(11) NOT NULL,
+  `approved_by` int(11) DEFAULT NULL,
+  `approved_at` datetime DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `training_plans`
+--
+
+INSERT INTO `training_plans` (`id`, `hotel_id`, `department`, `title`, `description`, `trainer_id`, `month`, `year`, `status`, `requested_by`, `approved_by`, `approved_at`, `notes`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Housekeeping', 'Room Attendance', 'Membuat kamar menjadi layak inap', 9, 3, 2026, 'pending', 17, NULL, NULL, NULL, '2026-03-05 04:51:42', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `training_revisions`
+--
+
+CREATE TABLE `training_revisions` (
+  `id` int(11) NOT NULL,
+  `training_plan_id` int(11) NOT NULL,
+  `revision_number` int(11) NOT NULL,
+  `requested_by` int(11) NOT NULL,
+  `status` enum('pending','approved','rejected') DEFAULT 'pending',
+  `approved_by` int(11) DEFAULT NULL,
+  `approved_at` datetime DEFAULT NULL,
+  `reason` text DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `training_revision_participants`
+--
+
+CREATE TABLE `training_revision_participants` (
+  `id` int(11) NOT NULL,
+  `revision_id` int(11) NOT NULL,
+  `training_day_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `action` enum('added','removed','changed') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `training_shifts`
+--
+
+CREATE TABLE `training_shifts` (
+  `id` int(11) NOT NULL,
+  `training_day_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `shift_type` enum('regular','off','leave','overtime') DEFAULT 'regular',
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `job_id` int(11) DEFAULT NULL,
+  `application_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -725,7 +1718,7 @@ INSERT INTO `skills` (`id`, `name`, `category`, `created_at`, `created_by`, `upd
 CREATE TABLE `users` (
   `id` int(1) NOT NULL,
   `hotel_id` int(1) NOT NULL,
-  `role` enum('worker','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production','admin') CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT 'worker',
+  `role` enum('worker','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales','hotel_gm','admin') CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT 'worker',
   `name` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `email` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `phone` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
@@ -749,44 +1742,60 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `hotel_id`, `role`, `name`, `email`, `phone`, `password`, `gender`, `provider`, `provider_id`, `photo`, `is_verified`, `is_active`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-(1, 0, 'admin', 'Mick Jagger', 'admin@admin.com', '81234567890', '$2y$10$TYZN8k0YxaB.jxCtqA4sl.JnllEeN3/UF9oGYK5.LTvbGlCe7HE82', NULL, 'local', NULL, 'uploads/profiles/profile_2_1768811928.png', 0, 'active', '2026-01-18 12:25:53', 1, '2026-01-18 12:25:53', 1, NULL, NULL),
-(2, 1, 'worker', 'Muhamad Ridwan Munawar', 'ridwanmunawar2607@gmail.com', '85171040347', '$2y$10$cd46MWgwLtVEaT0q1cQgiOi0ixH5HS8rIRewd7ohU326D5N1OLK22', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-21 08:16:16', 1, NULL, NULL),
-(3, 1, 'worker', 'Taufik Kurnia', 'dantiratu8@gmail.com', NULL, '$2y$10$lYBxa6y7u/fsBBcis8UJVeE0/Ux/oye4cAcTb4Em.gbbX9.p0x0EC', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-21 10:11:50', 1, NULL, NULL),
-(4, 1, 'hotel_fnb_service', 'Rahadian Perdana', 'rahadian.rivelino@gmail.com', '88802308136', '$2y$10$dIS9qm5PoJ4m06Sp6Fl29uF96Te6AsOC549F1c/hSqHlPTZbqJeFK', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-26 11:13:55', 1, NULL, NULL),
-(5, 1, 'hotel_hk', 'Renaldy Herlando', 'rey.herlando@gmail.com', '81255800626', '$2y$10$pW8H9bi4vVTVnu3UYL9NHOX.NHuaYHSiYLm8RQkaDevFgJdOHfS9G', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-26 16:13:57', 1, NULL, NULL),
-(6, 1, 'worker', 'Tri Setiyawati', 'celineq683@gmail.com', '87880006558', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-22 23:21:54', 1, NULL, NULL),
-(7, 1, 'worker', 'Raafi Teguh Septianto', 'raafiteguh73@gmail.com', '895711102828', '$2y$10$EJeLN55b5c4hPxbOZ08MvOlzqjW4P/KoDll8VSgGl4GlPp9mov/n6', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-24 16:57:04', 1, NULL, NULL),
-(8, 1, 'worker', 'Jan Pelupessy', 'janhawajasmine14@gmail.com', '81212790875', '$2y$10$./MG4Ds6ciroelciHoh9oeoM0plKYQXc1jtbxeWJ8LH0/6JfyN4ii', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-28 17:45:25', 17, NULL, NULL),
-(9, 1, 'worker', 'Adi Alfian Surahman', 'Adialfian83@gmail.com', '83811404011', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
-(10, 1, 'worker', 'Dini Wulandari', 'Dinilandari18@gmail.com', '8987795834', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
-(11, 1, 'worker', 'Didik Febriawan', 'didikj4dul@gmail.com', '81298096880', '$2y$10$Pl4rYXHK5ew1/NhfVag9H.51rS6x07me6wXifU2chgeX4.0lacX4q', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 00:42:06', 1, NULL, NULL),
-(12, 1, 'worker', 'Muji priyanto', 'mujipriyanto445@gmail.com', '82139111259', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
-(13, 1, 'worker', 'Syahwal Ramadhan', 'syahwal.86@gmail.com', '87711210850', '$2y$10$tPizxl3IxXA4FmK9XQ6sX.Dx8g8J3KxalgZzOQLcInIrrZX9curua', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 01:17:14', 1, NULL, NULL),
-(14, 1, 'worker', 'Ijang Sulaeman', 'ijangsulaeman3@gmail.com', '81317087778', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
-(15, 1, 'worker', 'Faisal Bahri', 'salbahri43@gmail.com', '85283872224', '$2y$10$l3UXm5Y3Nh/t04IlpsXU4OfxUh4OwsFuUouss7AVpxIo7wcfT3.wm', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 00:43:07', 1, NULL, NULL),
-(16, 1, 'worker', 'Eka panji asmoro', 'panjiasmoro1786@gmail.com', '82130884044', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
-(17, 1, 'hotel_hr', 'Yend Hendriyana', 'yend.hendriyana@gmail.com', '81519992334', '$2y$10$YOlHspewzNL1BEGcSsUTnOOOFQNuaE93.brwNQRCxM.cM/Ege0Loi', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 01:20:19', 1, NULL, NULL),
-(18, 1, 'worker', 'M Aji Maulana', 'muhamadajimaulana557@gmail.com', '89630707971', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
-(19, 1, 'worker', 'Syahla Rahayu Munandar', 'syahlarahayu98@gmail.com', '85811547147', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
-(20, 1, 'worker', 'Rima Lestari Sonneville', 'rima.sonneville.89@gmail.com', '88211521716', '$2y$10$ySX1Lpn2NiSeTU0hQ.KbXe..D1pjorZXAADjem7nZ5vxaJm6Rl8Sm', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 16:50:03', 1, NULL, NULL),
-(21, 1, 'worker', 'Mohtar Bimantoro', 'sofiabimantoro1@gmail.com', '83165994287', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
-(22, 1, 'worker', 'Hani yuniarti', 'haniyuniarti1306@gmail.com', '85691659516', '$2y$10$Pz5QVATwxPKyNUfUbT4FRu/wonNfLVQRrmhnFeb0Y7FFomVhgwnNS', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 16:58:35', 1, NULL, NULL),
-(23, 1, 'worker', 'Qhalia putri', 'halloqhalia@gmail.com', '85775264566', '$2y$10$7piC97XEwOQId2uMb5A.UecxpVwq3hAVlrBo.gkzcp3iqFYoRFX2i', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
-(24, 1, 'worker', 'Faishal Tri Aditama', 'faishaltriaditama@gmail.com', '81295724744', '$2y$10$lC5t.48FjdMSqR/Q0P6LKuEkvyW0iklBc2ELXi0ncdK7VeiWEnAAu', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:47:14', 1, NULL, NULL),
-(25, 1, 'worker', 'Hilwa Salsabila Ahesa', 'ahesa.hilwa@gmail.com', '87897532333', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
-(26, 1, 'worker', 'Bambang Setiawan', 'bambangsetiawan0681@gmail.com', '8996601717', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
-(27, 1, 'worker', 'Firmansyah', 'firmansyahfirmansyah934@gmail.com', '85777166572', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
-(28, 1, 'worker', 'Jarkasih', 'jarkasihuntung4@gmail.com', '85775588443', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
-(29, 1, 'worker', 'Cecep dikdik Kurniawan ', 'cecepdikdikkurniawan@gmail.com', '85719251910', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
-(30, 1, 'worker', 'Dadan Mulyana', 'cipitung78@gmail.com', '85716638004', '$2y$10$rg8QNjy6OPk1XqEbdjliMOiDZd/afRZStBlQyowkvPycH9qB74jai', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
-(31, 1, 'worker', 'Vita', 'vita@gmail.com', '812', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', 'Female', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL),
+(1, 0, 'admin', 'Admin Hey Work', 'admin@admin.com', '81234567890', '$2y$10$TYZN8k0YxaB.jxCtqA4sl.JnllEeN3/UF9oGYK5.LTvbGlCe7HE82', NULL, 'local', NULL, 'uploads/profiles/profile_2_1768811928.png', 0, 'active', '2026-01-18 12:25:53', 1, '2026-01-18 12:25:53', 1, NULL, NULL),
+(2, 1, 'worker', 'Muhamad Ridwan Munawar', 'ridwanmunawar2607@gmail.com', '85171040347', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-21 08:16:16', 1, NULL, NULL),
+(3, 1, 'worker', 'Taufik Kurnia', 'dantiratu8@gmail.com', '812', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-25 00:44:15', 1, NULL, NULL),
+(4, 1, 'hotel_fnb_service', 'Rahadian Perdana', 'rahadian.rivelino@gmail.com', '88802308136', '$2y$10$4hUzmX0B1FP9xsk7VRCczeN5KPp2DAnBrNgEY1Z5qLNAv.SE0XOee', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-25 23:59:33', 17, NULL, NULL),
+(5, 1, 'hotel_hk', 'Renaldy Herlando', 'rey.herlando@gmail.com', '81255800626', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-26 03:22:54', 17, NULL, NULL),
+(6, 1, 'worker', 'Tri Setiyawati', 'celineq683@gmail.com', '87880006558', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-22 23:21:54', 1, NULL, NULL),
+(7, 1, 'worker', 'Raafi Teguh Septianto', 'raafiteguh73@gmail.com', '895711102828', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:53', 1, '2026-02-22 23:21:54', 1, NULL, NULL),
+(8, 1, 'worker', 'Jan Pelupessy', 'janhawajasmine14@gmail.com', '81212790875', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(9, 1, 'worker', 'Adi Alfian Surahman', 'Adialfian83@gmail.com', '83811404011', '$2y$10$mLCPGE.cz6Z1tUEL7PI/ouTl3a8bbr8THP65KFbhXrjIkrcsJWsw6', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-26 03:42:42', 17, NULL, NULL),
+(10, 1, 'worker', 'Dini Wulandari', 'Dinilandari18@gmail.com', '8987795834', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(11, 1, 'worker', 'Didik Febriawan', 'didikj4dul@gmail.com', '81298096880', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 00:42:06', 1, NULL, NULL),
+(12, 1, 'worker', 'Muji priyanto', 'mujipriyanto445@gmail.com', '82139111259', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(13, 1, 'hotel_fo', 'Syahwal Ramadhan', 'syahwal.86@gmail.com', '87711210850', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 00:40:20', 1, NULL, NULL),
+(14, 1, 'worker', 'Ijang Sulaeman', 'ijangsulaeman3@gmail.com', '81317087778', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(15, 1, 'worker', 'Faisal Bahri', 'salbahri43@gmail.com', '85283872224', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-24 00:43:07', 1, NULL, NULL),
+(16, 1, 'worker', 'Eka panji asmoro', 'panjiasmoro1786@gmail.com', '82130884044', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(17, 1, 'hotel_hr', 'Yend Hendriyana', 'yend.hendriyana@gmail.com', '81519992334', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 01:05:39', 1, NULL, NULL),
+(18, 1, 'worker', 'M Aji Maulana', 'muhamadajimaulana557@gmail.com', '89630707971', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(19, 1, 'worker', 'Syahla Rahayu Munandar', 'syahlarahayu98@gmail.com', '85811547147', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(20, 1, 'worker', 'Rima Lestari Sonneville', 'rima.sonneville.89@gmail.com', '88211521716', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(21, 1, 'worker', 'Mohtar Bimantoro', 'sofiabimantoro1@gmail.com', '83165994287', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(22, 1, 'worker', 'Hani yuniarti', 'haniyuniarti1306@gmail.com', '85691659516', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', 'Female', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(23, 1, 'worker', 'Qhalia putri', 'halloqhalia@gmail.com', '85775264566', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', 'Female', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-22 23:21:00', 1, NULL, NULL),
+(24, 1, 'worker', 'Faishal Tri Aditama', 'faishaltriaditama@gmail.com', '81295724744', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:47:14', 1, NULL, NULL),
+(25, 1, 'worker', 'Hilwa Salsabila Ahesa', 'ahesa.hilwa@gmail.com', '87897532333', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', 'Female', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
+(26, 1, 'worker', 'Bambang Setiawan', 'bambangsetiawan0681@gmail.com', '8996601717', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
+(27, 1, 'worker', 'Firmansyah', 'firmansyahfirmansyah934@gmail.com', '85777166572', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
+(28, 1, 'worker', 'Jarkasih', 'jarkasihuntung4@gmail.com', '85775588443', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
+(29, 1, 'worker', 'Cecep dikdik Kurniawan ', 'cecepdikdikkurniawan@gmail.com', '85719251910', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
+(30, 1, 'worker', 'Dadan Mulyana', 'cipitung78@gmail.com', '85716638004', '$2y$10$SuliPMeUvm3ggsgEYsBXYuX52cEW0QSV9dTDv3EwuYcPw7J8BTKG.', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-23 22:49:29', 1, NULL, NULL),
+(31, 1, 'worker', 'Vita Andini', 'vita@gmail.com', '812', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', 'Female', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL),
 (32, 1, 'worker', 'M. Paldan', 'paldan@gmail.com', '812', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL),
 (33, 1, 'worker', 'Tedi Sukmana', 'tedi@gmail.com', '812', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL),
-(34, 1, 'worker', 'Aldo', 'aldo@gmail.com', '812', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL),
-(35, 1, 'worker', 'Aldi', 'aldi@gmail.com', '812', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', 'Female', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL),
-(36, 1, 'worker', 'Azizi', 'azizi@gmail.com', '812', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL),
-(37, 1, 'worker', 'Muhamad Fadhli', 'fadilajjah2345@gmail.com', '895406355514', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL),
-(38, 1, 'worker', 'Dahayu Nariswari', 'nariswaridahayu@gmail.com', '8135339143', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', NULL, 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL);
+(34, 1, 'worker', 'Aldo Aldiansyah', 'aldo@gmail.com', '812', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL),
+(35, 1, 'worker', 'Aldi', 'aldi@gmail.com', '812', '$2y$10$y8CwPY/0vDGjxwbOjKj6BeS1m4HJAzIuO183qWg0Q3HPrEQ5.YMIu', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-26 04:28:05', 17, NULL, NULL),
+(36, 1, 'worker', 'Azizi Falaqi Rahman', 'vanofam596@gmail.com', '812', '$2y$10$RZ5tGAQZek8r862a4mtkpOjo9YKZyySUp5u3gMqhLeVGVsG/L.0Gu', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:11:04', 1, NULL, NULL),
+(37, 1, 'worker', 'Muhamad Fadhli', 'fadilajjah2345@gmail.com', '895406355514', '$2y$10$OK0bKQ5ygM7Ok2h69ZYPOuKvHSHI3gK3gOq77HkMHh2Olw8CwS4m6', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 14:49:36', 1, NULL, NULL),
+(38, 1, 'worker', 'Dahayu Nariswari', 'nariswaridahayu@gmail.com', '8135339143', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Female', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(39, 1, 'worker', 'Kafka', 'fafka@gmail.com', '812', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(40, 1, 'worker', 'Dzaki', 'dzaki@gmail.com', '812', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(41, 1, 'worker', 'Alwi', 'alwi@gmail.com', '812', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(42, 1, 'worker', 'Siti', 'siti@gmail.com', '812', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Female', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(43, 1, 'worker', 'Sandi', 'sandi@gmail.com', '812', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(44, 1, 'worker', 'Alung', 'alung@gmail.com', '812', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(45, 1, 'worker', 'Rasya', 'rasya@gmail.com', '812', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Female', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(46, 1, 'worker', 'Varel', 'varel@gmail.com', '812', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(47, 1, 'worker', 'Rival', 'rival@gmail.com', '812', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(48, 1, 'worker', 'Fatih', 'fatih@gmail.com', '812', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Female', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(49, 1, 'worker', 'Yanto', 'yanto@gmail.com', '812', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(50, 1, 'worker', 'Agung', 'agung@gmail.com', '812', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(51, 1, 'worker', 'Ridwan Anwar', 'ridwananwar@gmail.com', '812', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(52, 1, 'worker', 'Rizki', 'rizki@gmail.com', '812', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(53, 1, 'worker', 'Fadil M', 'fadil.m@gmail.com', '812', '$2y$10$CuPJYvOxuMlNGQigYIRhxeSHT9jjZzZ69RupgcCqvw6rNy7znHguK', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-02-25 23:06:16', 1, NULL, NULL),
+(54, 1, 'hotel_gm', 'Prabu', 'prabunad@salamdjourney.com', '812', '$2y$10$LrfF4v78K0G7DeW4cY74COr5fu1hcRmQpWbzoAzRaNQF4a/HAq3lq', 'Male', 'local', NULL, NULL, 0, 'active', '2026-01-21 12:25:00', 1, '2026-03-03 00:08:36', 17, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1594,7 +2603,8 @@ ALTER TABLE `job_applications`
 -- Indexes for table `job_attendances`
 --
 ALTER TABLE `job_attendances`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_attendance_pair` (`application_id`,`job_id`,`type`,`created_at`);
 
 --
 -- Indexes for table `job_extend_attendances`
@@ -1679,6 +2689,46 @@ ALTER TABLE `schedule_shifts`
 --
 ALTER TABLE `skills`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `training_days`
+--
+ALTER TABLE `training_days`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_day` (`training_plan_id`,`training_date`),
+  ADD KEY `idx_plan` (`training_plan_id`);
+
+--
+-- Indexes for table `training_participants`
+--
+ALTER TABLE `training_participants`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `training_plans`
+--
+ALTER TABLE `training_plans`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `training_revisions`
+--
+ALTER TABLE `training_revisions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `training_revision_participants`
+--
+ALTER TABLE `training_revision_participants`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `training_shifts`
+--
+ALTER TABLE `training_shifts`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_regular_per_day` (`training_day_id`,`user_id`,`shift_type`),
+  ADD KEY `idx_user` (`user_id`);
 
 --
 -- Indexes for table `users`
@@ -1798,19 +2848,19 @@ ALTER TABLE `hotels`
 -- AUTO_INCREMENT for table `hotel_transactions`
 --
 ALTER TABLE `hotel_transactions`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `invoice_items`
 --
 ALTER TABLE `invoice_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `invoice_payments`
@@ -1822,19 +2872,19 @@ ALTER TABLE `invoice_payments`
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `job_applications`
 --
 ALTER TABLE `job_applications`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `job_attendances`
 --
 ALTER TABLE `job_attendances`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1358;
 
 --
 -- AUTO_INCREMENT for table `job_extend_attendances`
@@ -1870,13 +2920,13 @@ ALTER TABLE `refresh_tokens`
 -- AUTO_INCREMENT for table `schedule_days`
 --
 ALTER TABLE `schedule_days`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `schedule_plans`
 --
 ALTER TABLE `schedule_plans`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `schedule_revisions`
@@ -1894,19 +2944,55 @@ ALTER TABLE `schedule_revision_shifts`
 -- AUTO_INCREMENT for table `schedule_shifts`
 --
 ALTER TABLE `schedule_shifts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `skills`
 --
 ALTER TABLE `skills`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+
+--
+-- AUTO_INCREMENT for table `training_days`
+--
+ALTER TABLE `training_days`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+
+--
+-- AUTO_INCREMENT for table `training_participants`
+--
+ALTER TABLE `training_participants`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `training_plans`
+--
+ALTER TABLE `training_plans`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `training_revisions`
+--
+ALTER TABLE `training_revisions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `training_revision_participants`
+--
+ALTER TABLE `training_revision_participants`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `training_shifts`
+--
+ALTER TABLE `training_shifts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `worker_child`
