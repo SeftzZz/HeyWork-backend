@@ -39,6 +39,29 @@
                             </li>
                         <?php endif; ?>
 
+                        <?php if (!in_array(session()->get('user_role'), ['worker'])) : ?>
+                        <li class="menu-item <?= ($uri=='manpowerreq'||$uri=='manpoweracc')?'active open':'' ?>">
+                            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons ti ti-user-plus"></i>
+                                <div data-i18n="Manpower">Manpower</div>
+                            </a>
+                            <ul class="menu-sub">
+                                <li class="menu-item <?= ($uri=='manpowerreq')?'active':'' ?>">
+                                    <a href="<?= base_url('admin/manpowerreq') ?>" class="menu-link">
+                                        <div data-i18n="Requests">Requests</div>
+                                    </a>
+                                </li>
+                                <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_gm'])) : ?>
+                                <li class="menu-item <?= ($uri=='manpoweracc')?'active':'' ?>">
+                                    <a href="<?= base_url('admin/manpoweracc') ?>" class="menu-link">
+                                        <div data-i18n="Approvals">Approvals</div>
+                                    </a>
+                                </li>
+                                <?php endif; ?>
+                            </ul>
+                        </li>
+                        <?php endif; ?>
+
                         <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production', 'hotel_gm'])) : ?>
                             <li class="menu-item <?= ($uri=='job-vacancies')?'active':'' ?>">
                                 <a href="<?= base_url('admin/job-vacancies') ?>" class="menu-link">

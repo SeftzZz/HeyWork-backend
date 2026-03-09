@@ -119,6 +119,19 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('training-approvals/reject-plan/(:num)', 'Admin\TrainingApprovals::rejectPlan/$1');
     $routes->post('training-approvals/approve-revision/(:num)', 'Admin\TrainingApprovals::approveRevision/$1');
     $routes->post('training-approvals/reject-revision/(:num)', 'Admin\TrainingApprovals::rejectRevision/$1');
+
+    $routes->get('manpowerreq', 'Admin\ManpowerReq::index', ['filter' => 'role:except,worker']);
+    $routes->post('manpowerreq/datatable', 'Admin\ManpowerReq::datatable', ['filter' => 'role:except,worker']);
+    $routes->post('manpowerreq/store', 'Admin\ManpowerReq::store', ['filter' => 'role:except,worker']);
+    $routes->post('manpowerreq/get', 'Admin\ManpowerReq::getById', ['filter' => 'role:except,worker']);
+    $routes->post('manpowerreq/update', 'Admin\ManpowerReq::update', ['filter' => 'role:except,worker']);
+    $routes->post('manpowerreq/delete', 'Admin\ManpowerReq::delete', ['filter' => 'role:except,worker']);
+    $routes->post('manpowerreq/submit', 'Admin\ManpowerReq::submit', ['filter' => 'role:except,worker']);
+
+    $routes->get('manpoweracc', 'Admin\Manpoweracc::index', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
+    $routes->post('manpoweracc/datatable', 'Admin\Manpoweracc::datatable', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
+    $routes->post('manpoweracc/get', 'Admin\Manpoweracc::getById', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
+    $routes->post('manpoweracc/acc', 'Admin\Manpoweracc::acc', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
 });
 
 $routes->group('api', function($routes) {
