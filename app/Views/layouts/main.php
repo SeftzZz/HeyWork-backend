@@ -115,5 +115,27 @@
         </script>
 
         <!-- Page JS -->
+        <script src="<?= base_url('assets/js/ui-popover.js') ?>"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                function initBootstrapUI(){
+                    // Tooltip
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el){
+                        new bootstrap.Tooltip(el);
+                    });
+                    // Popover
+                    document.querySelectorAll('[data-bs-toggle="popover"]').forEach(function(el){
+                        new bootstrap.Popover(el);
+                    });
+                }
+
+                // init pertama kali
+                initBootstrapUI();
+                // re-init saat DataTable redraw
+                $(document).on('draw.dt', function () {
+                    initBootstrapUI();
+                });
+            });
+            </script>
     </body>
 </html>

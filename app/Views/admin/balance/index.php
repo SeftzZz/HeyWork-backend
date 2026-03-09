@@ -32,8 +32,8 @@
                             <div class="container-xxl flex-grow-1 container-p-y">
                               <div class="row">
                                 <div class="col-lg-12 mb-4">
-                                  <button id="exportReportBtn" class="btn btn-success">
-                                    Export Full Report
+                                  <button id="exportReportBtn" class="btn btn-label-primary">
+                                    Export Full Report <i class="ti ti-chevron-down ms-1"></i>
                                   </button>
                                 </div>
 

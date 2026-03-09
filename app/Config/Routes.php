@@ -104,6 +104,20 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
 
     $routes->get('payments', 'Admin\Payments::index', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk']);
     $routes->post('payments/datatable', 'Admin\Payments::datatable');
+
+    $routes->get('manpowerreq', 'Admin\ManpowerReq::index', ['filter' => 'role:except,worker']);
+    $routes->post('manpowerreq/datatable', 'Admin\ManpowerReq::datatable', ['filter' => 'role:except,worker']);
+    $routes->post('manpowerreq/store', 'Admin\ManpowerReq::store', ['filter' => 'role:except,worker']);
+    $routes->post('manpowerreq/get', 'Admin\ManpowerReq::getById', ['filter' => 'role:except,worker']);
+    $routes->post('manpowerreq/update', 'Admin\ManpowerReq::update', ['filter' => 'role:except,worker']);
+    $routes->post('manpowerreq/delete', 'Admin\ManpowerReq::delete', ['filter' => 'role:except,worker']);
+    $routes->post('manpowerreq/submit', 'Admin\ManpowerReq::submit', ['filter' => 'role:except,worker']);
+
+    $routes->get('manpoweracc', 'Admin\Manpoweracc::index', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
+    $routes->post('manpoweracc/datatable', 'Admin\Manpoweracc::datatable', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
+    $routes->post('manpoweracc/store', 'Admin\Manpoweracc::store', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
+    $routes->post('manpoweracc/get', 'Admin\Manpoweracc::getById', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
+    $routes->post('manpoweracc/acc', 'Admin\Manpoweracc::acc', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
 });
 
 $routes->group('api', function($routes) {
