@@ -24,7 +24,7 @@ class Schedules extends BaseController
             ->select('u.id, u.name')
             ->where('u.hotel_id', $hotelId)
             ->where('u.role', 'worker')
-            ->where('u.is_active', 1);
+            ->where('u.is_active', 'active');
 
         if (!in_array($role, ['admin','hotel_hr'])) {
 

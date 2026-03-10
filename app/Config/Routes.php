@@ -188,6 +188,13 @@ $routes->group('api', ['filter' => 'jwt'], function($routes) {
     $routes->get('worker/ratings', 'Api\RatingController::myRatings');
 
     // =========================
+    // TRAINING
+    // =========================
+    $routes->get('worker/training-list', 'Api\WorkerController::trainingList');
+    $routes->get('worker/trainings', 'Api\WorkerController::trainings');
+    $routes->get('worker/training/(:num)', 'Api\WorkerController::trainingDetail/$1');
+
+    // =========================
     // JOB (PUBLIC DATA)
     // =========================
     $routes->get('worker/most-popular', 'Api\WorkerController::mostPopular');

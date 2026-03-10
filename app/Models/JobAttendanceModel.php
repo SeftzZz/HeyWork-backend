@@ -14,6 +14,7 @@ class JobAttendanceModel extends Model
     protected $allowedFields = [
         'job_id',
         'application_id',
+        'training_shift_id',
         'user_id',
         'type',
         'latitude',
@@ -31,15 +32,20 @@ class JobAttendanceModel extends Model
     protected $useTimestamps = false;
 
     // ============================
-    // VALIDATION (OPTIONAL)
+    // VALIDATION
     // ============================
     protected $validationRules = [
-        'job_id'         => 'required|integer',
-        'application_id' => 'required|integer',
         'user_id'        => 'required|integer',
         'type'           => 'required|in_list[checkin,checkout]',
         'latitude'       => 'required|decimal',
         'longitude'      => 'required|decimal',
+
+        // shift
+        'job_id'         => 'permit_empty|integer',
+        'application_id' => 'permit_empty|integer',
+
+        // training
+        'training_shift_id' => 'permit_empty|integer',
     ];
 
     protected $validationMessages = [
@@ -53,7 +59,7 @@ class JobAttendanceModel extends Model
     // ============================
 
     /**
-     * Check apakah user sudah check-in hari ini
+     * Check shift check-in hari ini
      */
     public function hasCheckinToday($userId, $jobId, $applicationId)
     {
@@ -66,7 +72,19 @@ class JobAttendanceModel extends Model
     }
 
     /**
-     * Check apakah user sudah check-out hari ini
+     * Check training check-in hari ini
+     */
+    public function hasTrainingCheckinToday($userId, $trainingShiftId)
+    {
+        return $this->where('user_id', $userId)
+            ->where('training_shift_id', $trainingShiftId)
+            ->where('type', 'checkin')
+            ->where('DATE(created_at)', date('Y-m-d'))
+            ->first();
+    }
+
+    /**
+     * Check shift checkout
      */
     public function hasCheckoutToday($userId, $jobId, $applicationId)
     {
@@ -79,7 +97,7 @@ class JobAttendanceModel extends Model
     }
 
     /**
-     * Ambil attendance harian user (untuk calendar)
+     * Attendance harian worker (calendar)
      */
     public function dailyAttendance($userId, $date)
     {
@@ -90,7 +108,7 @@ class JobAttendanceModel extends Model
                 jobs.job_date_end,
                 hotels.hotel_name
             ')
-            ->join('jobs', 'jobs.id = job_attendances.job_id')
+            ->join('jobs', 'jobs.id = job_attendances.job_id', 'left')
             ->join('hotels', 'hotels.id = jobs.hotel_id', 'left')
             ->where('job_attendances.user_id', $userId)
             ->where('DATE(job_attendances.created_at)', $date)
@@ -105,6 +123,17 @@ class JobAttendanceModel extends Model
     {
         return $this->where('user_id', $userId)
             ->where('job_id', $jobId)
+            ->orderBy('created_at', 'ASC')
+            ->findAll();
+    }
+
+    /**
+     * Attendance per training
+     */
+    public function attendanceByTraining($userId, $trainingShiftId)
+    {
+        return $this->where('user_id', $userId)
+            ->where('training_shift_id', $trainingShiftId)
             ->orderBy('created_at', 'ASC')
             ->findAll();
     }

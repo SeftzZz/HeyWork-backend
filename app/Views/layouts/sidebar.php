@@ -80,7 +80,7 @@
                             <li class="menu-item <?= ($uri=='trainings')?'active':'' ?>">
                                 <a href="<?= base_url('admin/trainings') ?>" class="menu-link">
                                     <i class="menu-icon tf-icons ti ti-school"></i>
-                                    <div>Training</div>
+                                    <div>Learn and Growth</div>
                                 </a>
                             </li>
 
@@ -97,7 +97,7 @@
                                 <li class="menu-item <?= ($uri=='training-approvals')?'active':'' ?>">
                                     <a href="<?= base_url('admin/training-approvals') ?>" class="menu-link">
                                         <i class="menu-icon tf-icons ti ti-checkup-list"></i>
-                                        <div>Training Approvals</div>
+                                        <div>Learn and Growth Approvals</div>
                                     </a>
                                 </li>
 

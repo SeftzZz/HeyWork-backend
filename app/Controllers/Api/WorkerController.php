@@ -764,13 +764,31 @@ class WorkerController extends BaseController
         $builder = $this->attendance
             ->select('
                 job_attendances.*,
+
                 jobs.position,
                 jobs.job_date_start,
                 jobs.job_date_end,
+
+                training_shifts.training_day_id,
+                training_days.training_date,
+                training_plans.title as training_title,
+
                 hotels.hotel_name
             ')
-            ->join('jobs', 'jobs.id = job_attendances.job_id')
-            ->join('hotels', 'hotels.id = jobs.hotel_id', 'left')
+            ->join('jobs', 'jobs.id = job_attendances.job_id', 'left')
+
+            // =========================
+            // TRAINING JOIN
+            // =========================
+            ->join('training_shifts', 'training_shifts.id = job_attendances.training_shift_id', 'left')
+            ->join('training_days', 'training_days.id = training_shifts.training_day_id', 'left')
+            ->join('training_plans', 'training_plans.id = training_days.training_plan_id', 'left')
+
+            // =========================
+            // HOTEL JOIN
+            // =========================
+            ->join('hotels', 'hotels.id = COALESCE(jobs.hotel_id, training_plans.hotel_id)', 'left')
+
             ->where('job_attendances.user_id', $user->id);
 
         if ($date) {
@@ -814,23 +832,53 @@ class WorkerController extends BaseController
         $user = $this->request->user;
         $data = $this->request->getPost();
 
-        // validasi minimal
-        foreach (['job_id','application_id','latitude','longitude'] as $f) {
-            if (empty($data[$f])) {
-                return $this->response
-                    ->setStatusCode(400)
-                    ->setJSON(['message' => "$f is required"]);
+        $isTraining = !empty($data['training_shift_id']);
+
+        // =========================
+        // VALIDATION
+        // =========================
+        if ($isTraining) {
+
+            foreach (['training_shift_id','latitude','longitude'] as $f) {
+                if (empty($data[$f])) {
+                    return $this->response
+                        ->setStatusCode(400)
+                        ->setJSON(['message' => "$f is required"]);
+                }
             }
+
+        } else {
+
+            foreach (['job_id','application_id','latitude','longitude'] as $f) {
+                if (empty($data[$f])) {
+                    return $this->response
+                        ->setStatusCode(400)
+                        ->setJSON(['message' => "$f is required"]);
+                }
+            }
+
         }
 
-        // ❌ cegah double check-in
-        $exists = $this->attendance
-            ->where('job_id', $data['job_id'])
-            ->where('application_id', $data['application_id'])
+        // =========================
+        // PREVENT DOUBLE CHECKIN
+        // =========================
+        $builder = $this->attendance
             ->where('user_id', $user->id)
             ->where('type', 'checkin')
-            ->where('DATE(created_at)', date('Y-m-d'))
-            ->first();
+            ->where('DATE(created_at)', date('Y-m-d'));
+
+        if ($isTraining) {
+
+            $builder->where('training_shift_id', $data['training_shift_id']);
+
+        } else {
+
+            $builder->where('job_id', $data['job_id'])
+                    ->where('application_id', $data['application_id']);
+
+        }
+
+        $exists = $builder->first();
 
         if ($exists) {
             return $this->response
@@ -838,10 +886,14 @@ class WorkerController extends BaseController
                 ->setJSON(['message' => 'Already checked-in today']);
         }
 
+        // =========================
+        // HANDLE SELFIE
+        // =========================
         $selfieBase64 = $data['selfie'] ?? null;
         $photoPath = null;
 
         if ($selfieBase64) {
+
             $imageData = base64_decode($selfieBase64);
 
             if ($imageData === false) {
@@ -850,12 +902,9 @@ class WorkerController extends BaseController
                     ->setJSON(['message' => 'Invalid selfie data']);
             }
 
-            $name = 'checkin_' . $data['job_id'] . '_' . $user->id . '_' . time() . '.jpg';
+            $name = 'checkin_' . $user->id . '_' . time() . '.jpg';
 
-            // 🔥 PATH FISIK (SERVER)
             $dir = FCPATH . 'uploads/attendance/';
-
-            // 🔥 PATH UNTUK DB (RELATIVE URL)
             $photoPath = 'uploads/attendance/' . $name;
 
             if (!is_dir($dir)) {
@@ -865,21 +914,37 @@ class WorkerController extends BaseController
             file_put_contents($dir . $name, $imageData);
         }
 
-        $this->attendance->insert([
-            'job_id'        => $data['job_id'],
-            'application_id'=> $data['application_id'],
+        // =========================
+        // INSERT ATTENDANCE
+        // =========================
+        $insert = [
             'user_id'       => $user->id,
             'type'          => 'checkin',
             'latitude'      => $data['latitude'],
             'longitude'     => $data['longitude'],
             'photo_path'    => $photoPath,
             'device_info'   => $this->request->getUserAgent()->getAgentString(),
-            'created_at'    => $data['device_time'],
+            'created_at'    => $data['device_time'] ?? date('Y-m-d H:i:s'),
             'created_by'    => $user->id
-        ]);
+        ];
+
+        if ($isTraining) {
+
+            $insert['training_shift_id'] = $data['training_shift_id'];
+
+        } else {
+
+            $insert['job_id'] = $data['job_id'];
+            $insert['application_id'] = $data['application_id'];
+
+        }
+
+        $this->attendance->insert($insert);
 
         return $this->response->setJSON([
-            'message' => 'Check-in success'
+            'message' => $isTraining
+                ? 'Training check-in success'
+                : 'Check-in success'
         ]);
     }
 
@@ -1026,6 +1091,95 @@ class WorkerController extends BaseController
                 'hotel_longitude'   => $row['longitude'],
                 'application_id'    => $row['application_id'],
                 'job_id'            => $row['job_id'],
+            ];
+        }
+
+        return $this->response->setJSON([
+            'status' => true,
+            'data'   => array_values($grouped)
+        ]);
+    }
+
+    public function trainingList()
+    {
+        $user = $this->request->user;
+
+        if (!$user || $user->role !== 'worker') {
+            return $this->response
+                ->setStatusCode(403)
+                ->setJSON([
+                    'status' => false,
+                    'message' => 'Access denied'
+                ]);
+        }
+
+        $db = \Config\Database::connect();
+
+        $rows = $db->table('training_shifts ts')
+            ->select('
+                ts.id,
+                td.training_date,
+                ts.start_time,
+                ts.end_time,
+                ts.shift_type,
+                ts.job_id,
+                ts.application_id,
+
+                tp.id as training_id,
+                tp.title,
+                tp.description,
+                tp.department,
+                tp.status,
+
+                h.id as hotel_id,
+                h.hotel_name,
+                h.latitude,
+                h.longitude
+            ')
+            ->join('training_days td', 'td.id = ts.training_day_id')
+            ->join('training_plans tp', 'tp.id = td.training_plan_id')
+            ->join('hotels h', 'h.id = tp.hotel_id', 'left')
+            ->where('ts.user_id', $user->id)
+            ->where('tp.status', 'approved')
+            ->orderBy('td.training_date','ASC')
+            ->orderBy('ts.start_time','ASC')
+            ->get()
+            ->getResultArray();
+
+        // ===============================
+        // GROUP BY DATE
+        // ===============================
+        $grouped = [];
+
+        foreach ($rows as $row) {
+
+            $date = $row['training_date'];
+
+            if (!isset($grouped[$date])) {
+                $grouped[$date] = [
+                    'training_date' => $date,
+                    'shifts'        => []
+                ];
+            }
+
+            $grouped[$date]['shifts'][] = [
+                'training_shift_id' => $row['id'],
+                'start_time'        => $row['start_time'],
+                'end_time'          => $row['end_time'],
+                'shift_type'        => $row['shift_type'],
+                
+                'job_id'            => $row['job_id'],
+                'application_id'    => $row['application_id'],
+
+                'training_id'       => $row['training_id'],
+                'title'             => $row['title'],
+                'description'       => $row['description'],
+                'department'        => $row['department'],
+
+                'hotel_id'          => $row['hotel_id'],
+                'hotel_name'        => $row['hotel_name'],
+                'hotel_latitude'    => $row['latitude'],
+                'hotel_longitude'   => $row['longitude'],
             ];
         }
 
