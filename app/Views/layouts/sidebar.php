@@ -30,11 +30,11 @@
                             </li>
                         <?php endif; ?>
 
-                        <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production', 'hotel_gm'])) : ?>
-                            <li class="menu-item <?= ($uri=='users')?'active':'' ?>">
-                                <a href="<?= base_url('admin/users') ?>" class="menu-link">
-                                  <i class="menu-icon tf-icons ti ti-users"></i>
-                                  <div data-i18n="Users">Users</div>
+                        <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_gm'])) : ?>
+                            <li class="menu-item <?= ($uri=='skills')?'active':'' ?>">
+                                <a href="<?= base_url('admin/skills') ?>" class="menu-link">
+                                  <i class="menu-icon tf-icons ti ti-brain"></i>
+                                  <div data-i18n="Skills">Skills</div>
                                 </a>
                             </li>
                         <?php endif; ?>
@@ -48,9 +48,42 @@
                             </li>
                         <?php endif; ?>
                         
+                        <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_gm'])) : ?>
+                            <li class="menu-item <?= ($uri=='users')?'active':'' ?>">
+                                <a href="<?= base_url('admin/users') ?>" class="menu-link">
+                                  <i class="menu-icon tf-icons ti ti-users"></i>
+                                  <div data-i18n="Users">Users</div>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+
                         <li class="menu-header small text-uppercase">
                           <span class="menu-header-text" data-i18n="Workers & Applications">Workers &amp; Applications</span>
                         </li>
+
+                        <?php if (!in_array(session()->get('user_role'), ['worker'])) : ?>
+                            <li class="menu-item <?= ($uri=='manpowerreq'||$uri=='manpoweracc')?'active open':'' ?>">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                    <i class="menu-icon tf-icons ti ti-user-plus"></i>
+                                    <div data-i18n="Manpower">Manpower</div>
+                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item <?= ($uri=='manpowerreq')?'active':'' ?>">
+                                        <a href="<?= base_url('admin/manpowerreq') ?>" class="menu-link">
+                                            <div data-i18n="Requests">Requests</div>
+                                        </a>
+                                    </li>
+                                    <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_gm'])) : ?>
+                                    <li class="menu-item <?= ($uri=='manpoweracc')?'active':'' ?>">
+                                        <a href="<?= base_url('admin/manpoweracc') ?>" class="menu-link">
+                                            <div data-i18n="Approvals">Approvals</div>
+                                        </a>
+                                    </li>
+                                    <?php endif; ?>
+                                </ul>
+                            </li>
+                        <?php endif; ?>
+
                         <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production', 'hotel_gm'])) : ?>
                             <li class="menu-item <?= ($uri=='application')?'active':'' ?>">
                                 <a href="<?= base_url('admin/application') ?>" class="menu-link">

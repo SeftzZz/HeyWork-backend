@@ -12,23 +12,7 @@ class RoleFilter implements FilterInterface
     {
         $role = session()->get('user_role');
 
-        if (!$role) {
-            return redirect()->to('/admin/dashboard');
-        }
-
-        // Jika pakai except
-        if ($arguments && $arguments[0] === 'except') {
-            $excludedRoles = array_slice($arguments, 1);
-
-            if (in_array($role, $excludedRoles)) {
-                return redirect()->to('/admin/dashboard');
-            }
-
-            return;
-        }
-
-        // Default whitelist
-        if (!in_array($role, $arguments)) {
+        if (!$role || !in_array($role, $arguments)) {
             return redirect()->to('/admin/dashboard');
         }
     }
