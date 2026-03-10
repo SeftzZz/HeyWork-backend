@@ -56,29 +56,40 @@
                             <?= session()->getFlashdata('error') ?>
                         </div>
                     <?php endif; ?>
-                    <form action="<?= base_url('login') ?>" method="post">
+                    <form action="<?= base_url('send-reset-link') ?>" method="post">
                         <?= csrf_field() ?>
-                        <h1>Welcome to Hey! Work</h1>
+                        <h1>Forgot Password</h1>
+                        <p style="color:#ffffff;">Enter your email and we'll send you instructions to reset your password</p>
+                        <p>&nbsp;</p>
                         <div class="formContainer">
                             <div class="formDiv" style="transition-delay: 0.2s">
-                                <p>EMAIL</p>
-                                <input type="text" required="" name="email" value="" id="email" autofocus="autofocus"/>
-                            </div>
-                            <div class="formDiv" style="transition-delay: 0.4s;margin-bottom:10px;">
-                                <p>PASSWORD</p>
-                                <input type="password" required="" name="password" value="" id="password"/>
+                                <p style="color:#ffffff;">EMAIL</p>
+                                <input type="text" required="" name="email" value="" id="email"/>
                                 <p>&nbsp;</p>
                                 <p style="text-align:right;">
-                                  <a href="<?= base_url('forgot-password') ?>" style="color: #ffffff;text-decoration: none;">Forgot Password</a>
+                                  <a href="<?= base_url('login') ?>" style="color: #ffffff;text-decoration: none;">Back to login</a>
                                 </p>
                             </div>
                             <div class="formDiv" style="transition-delay: 0.6s">
-                                <button type="submit" class="acceptBtn">Login</button>
+                                <button type="submit" class="acceptBtn">Send</button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
+
+            <?php if (session()->getFlashdata('success')): ?>
+                <script>
+                    window.onload = function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: '<?= session()->getFlashdata('success') ?>',
+                            confirmButtonText: "Close"
+                        });
+                    }
+                </script>
+            <?php endif; ?>
 
             <?php if (session()->getFlashdata('error')): ?>
                 <script>
