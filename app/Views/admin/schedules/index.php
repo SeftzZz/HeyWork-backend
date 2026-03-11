@@ -41,7 +41,7 @@
 
                         <?php $userRole = session()->get('user_role'); ?>
 
-                        <?php if(in_array($userRole, ['admin','hotel_hr'])): ?>
+                        <?php if(in_array($userRole, ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales','hotel_gm'])): ?>
                             <div class="mb-3">
                                 <label class="form-label">Department</label>
                                 <select name="department" class="form-select" required>

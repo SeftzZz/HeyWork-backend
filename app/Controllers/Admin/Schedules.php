@@ -77,7 +77,7 @@ class Schedules extends BaseController
         $totalQuery = $this->db->table('schedule_plans')
             ->where('hotel_id', $hotelId);
 
-        if (!in_array($userRole, ['admin','hotel_hr'])) {
+        if (!in_array($userRole, ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales','hotel_gm'])) {
             $department = $this->getDepartmentFromRole($userRole);
             $totalQuery->where('department', $department);
         }
@@ -93,7 +93,7 @@ class Schedules extends BaseController
             ->join('users', 'users.id = schedule_plans.requested_by', 'left')
             ->where('schedule_plans.hotel_id', $hotelId);
 
-        if (!in_array($userRole, ['admin','hotel_hr'])) {
+        if (!in_array($userRole, ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales','hotel_gm'])) {
             $department = $this->getDepartmentFromRole($userRole);
             $dataQuery->where('schedule_plans.department', $department);
         }
@@ -205,7 +205,7 @@ class Schedules extends BaseController
         $month = (int) $this->request->getPost('month');
         $year  = (int) $this->request->getPost('year');
 
-        $department = in_array($role, ['admin','hotel_hr'])
+        $department = in_array($role, ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales','hotel_gm'])
             ? trim($this->request->getPost('department'))
             : $this->getDepartmentFromRole($role);
 
@@ -584,7 +584,11 @@ class Schedules extends BaseController
             'hotel_fo'             => 'Front Office',
             'hotel_hk'             => 'Housekeeping',
             'hotel_fnb_service'    => 'Food & Beverage Service',
-            'hotel_fnb_production' => 'Kitchen / Culinary'
+            'hotel_fnb_production' => 'Kitchen / Culinary',
+            'hotel_fna'            => 'Finance',
+            'hotel_eng'            => 'Engineering',
+            'hotel_sales'          => 'Sales & Marketing',
+            'hotel_gm'             => 'Management'
         ];
 
         return $map[$role] ?? null;

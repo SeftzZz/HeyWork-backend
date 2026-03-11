@@ -20,14 +20,30 @@ class ScheduleApprovals extends BaseController
     public function index()
     {
         $hotelId = session()->get('hotel_id');
+        $role    = session()->get('user_role');
 
-        $plans = $this->db->table('schedule_plans')
-            ->where('hotel_id', $hotelId)
-            ->where('status', 'pending')
-            ->orderBy('created_at DESC')
-            ->get()
-            ->getResult();
+        $builder = $this->db->table('schedule_plans sp');
 
+        $builder->select('sp.*')
+            ->where('sp.hotel_id', $hotelId)
+            ->where('sp.status', 'pending')
+            ->orderBy('sp.created_at', 'DESC');
+
+        // Jika bukan HR atau admin → filter berdasarkan department
+        if (!in_array($role, ['admin','hotel_hr'])) {
+
+            $department = $this->getDepartmentFromRole($role);
+
+            $builder->join('schedule_shifts ss', 'ss.schedule_day_id = sp.id', 'left')
+                    ->join('job_applications ja', 'ja.id = ss.application_id', 'left')
+                    ->join('jobs j', 'j.id = ja.job_id', 'left')
+                    ->join('skills s', 's.name = j.position', 'left')
+                    ->where('s.category', $department);
+        }
+
+        $plans = $builder->get()->getResult();
+
+        // revisions
         $revisions = $this->db->table('schedule_revisions')
             ->where('status', 'pending')
             ->orderBy('created_at DESC')
@@ -81,7 +97,7 @@ class ScheduleApprovals extends BaseController
                 ->select('ja.id as application_id, j.id as job_id')
                 ->join('jobs j', 'j.id = ja.job_id')
                 ->where('ja.user_id', $shift['user_id'])
-                ->where('ja.status', 'completed')
+                ->where('ja.status', 'accepted')
                 ->where('j.job_date_start <=', $shift['shift_date'])
                 ->where('j.job_date_end >=', $shift['shift_date'])
                 ->orderBy('j.job_date_start', 'DESC')
@@ -153,5 +169,21 @@ class ScheduleApprovals extends BaseController
             ->update(['status' => 'rejected']);
 
         return redirect()->back()->with('error','Revision rejected');
+    }
+
+    private function getDepartmentFromRole($role)
+    {
+        $map = [
+            'hotel_fo'             => 'Front Office',
+            'hotel_hk'             => 'Housekeeping',
+            'hotel_fnb_service'    => 'Food & Beverage Service',
+            'hotel_fnb_production' => 'Kitchen / Culinary',
+            'hotel_fna'            => 'Finance',
+            'hotel_eng'            => 'Engineering',
+            'hotel_sales'          => 'Sales & Marketing',
+            'hotel_gm'             => 'Management'
+        ];
+
+        return $map[$role] ?? null;
     }
 }
