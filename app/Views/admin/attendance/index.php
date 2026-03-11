@@ -86,7 +86,21 @@
                                                     </tr>
                                                     <tr>
                                                         <th>Check Out</th>
-                                                        <td id="detail_checkout"></td>
+                                                        <td>
+                                                            <span id="detail_checkout"></span>
+
+                                                            <?php if (in_array(session('user_role'), [
+                                                                'admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service',
+                                                                'hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales','hotel_gm'
+                                                            ])): ?>
+
+                                                            <button id="btnEarlyCheckout"
+                                                                class="btn btn-sm btn-danger ms-2 d-none">
+                                                                <i class="ti ti-logout"></i> Early Checkout
+                                                            </button>
+
+                                                            <?php endif ?>
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <th>Duration</th>
@@ -116,7 +130,7 @@
                                             </div>
                                         </div>
 
-                                        <?php if (in_array(session('user_role'), ['hotel_hr', 'admin', 'hotel_fnb_service', 'hotel_fnb_production', 'hotel_fo', 'hotel_hk'])): ?>
+                                        <?php if (in_array(session('user_role'), ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales','hotel_gm'])): ?>
                                         <hr>
 
                                         <div id="extendRequestWrapper">
@@ -365,6 +379,8 @@
                             let mapDetail, markerDetail;
 
                             $(document).on('click', '.btn-detail', function () {
+                                $('#btnEarlyCheckout').hide();
+
                                 const user = $(this).data('user');
                                 const job  = $(this).data('job');
                                 const date = $(this).data('date');
@@ -385,6 +401,10 @@
                                     $('#detail_job').text(d.job);
                                     $('#detail_checkin').text(d.checkin_time ?? '-');
                                     $('#detail_checkout').text(d.checkout_time ?? '-');
+                                    $('#btnEarlyCheckout').toggleClass('d-none', d.status === 'Complete');
+                                    console.log('status:', d.status);
+                                    console.log('checkout_time:', d.checkout_time);
+                                    console.log('button visible before:', $('#btnEarlyCheckout').is(':visible'));
                                     $('#detail_duration').text(d.duration);
                                     $('#detail_status').html(
                                         `<span class="badge bg-label-${d.status === 'Complete' ? 'success' : 'warning'}">${d.status}</span>`
@@ -401,10 +421,13 @@
                                     $('#wr_job_id').val(d.job_id);
                                     $('#wr_date').val(d.date);
 
+                                    const role = "<?= session('user_role') ?>";
+
                                     if (d.existing_rating) {
 
                                         const r = d.existing_rating;
 
+                                        // isi nilai rating
                                         ['punctuality','apperance','knowledge','durability','ethics']
                                             .forEach(field => {
                                                 if (r[field]) {
@@ -413,21 +436,67 @@
                                                 }
                                             });
 
-                                        $('#formWorkerRating textarea[name="comments"]')
-                                            .val(r.comments);
+                                        $('#formWorkerRating textarea[name="comments"]').val(r.comments);
 
-                                        $('#formWorkerRating input, #formWorkerRating textarea')
-                                            .prop('disabled', true);
+                                        const managerRoles = [
+                                            'hotel_fo','hotel_hk','hotel_fnb_service',
+                                            'hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales'
+                                        ];
 
-                                        $('#formWorkerRating button[type=submit]')
-                                            .prop('disabled', true)
-                                            .removeClass('btn-primary')
-                                            .addClass('btn-secondary')
-                                            .html('<i class="ti ti-check"></i> Already Rated');
+                                        const hrRoles = ['admin','hotel_hr','hotel_gm'];
 
-                                    } else {
+                                        /*
+                                        ======================================
+                                        CASE 1
+                                        Rating dibuat MANAGER
+                                        HR / GM / ADMIN boleh override
+                                        ======================================
+                                        */
 
-                                        $('#formWorkerRating')[0].reset();
+                                        if (managerRoles.includes(r.created_by_role) && hrRoles.includes(role)) {
+
+                                            $('#formWorkerRating input, #formWorkerRating textarea')
+                                                .prop('disabled', false);
+
+                                            $('#formWorkerRating button[type=submit]')
+                                                .prop('disabled', false)
+                                                .removeClass('btn-secondary')
+                                                .addClass('btn-primary')
+                                                .html('<i class="ti ti-star"></i> Submit Final Rating');
+
+                                        }
+
+                                        /*
+                                        ======================================
+                                        CASE 2
+                                        Rating dibuat HR / GM / ADMIN
+                                        Semua harus disable
+                                        ======================================
+                                        */
+
+                                        else {
+
+                                            $('#formWorkerRating input, #formWorkerRating textarea')
+                                                .prop('disabled', true);
+
+                                            $('#formWorkerRating button[type=submit]')
+                                                .prop('disabled', true)
+                                                .removeClass('btn-primary')
+                                                .addClass('btn-secondary')
+                                                .html('<i class="ti ti-check"></i> Already Rated');
+
+                                        }
+
+                                    }
+
+                                    /*
+                                    ======================================
+                                    CASE 3
+                                    Belum ada rating sama sekali
+                                    ======================================
+                                    */
+
+                                    else {
 
                                         $('#formWorkerRating input, #formWorkerRating textarea')
                                             .prop('disabled', false);
@@ -437,6 +506,7 @@
                                             .removeClass('btn-secondary')
                                             .addClass('btn-primary')
                                             .html('<i class="ti ti-star"></i> Submit Rating');
+
                                     }
 
                                     $('#modalAttendanceDetail').modal('show');
@@ -455,6 +525,52 @@
                                     }, 300);
 
                                 }, 'json');
+                            });
+
+                            $(document).on('click','#btnEarlyCheckout',function(){
+
+                                if(!confirm('Early checkout worker now?')) return;
+
+                                const user = $('#wr_user_id').val();
+                                const job  = $('#wr_job_id').val();
+                                const date = $('#wr_date').val();
+
+                                $.post("<?= base_url('api/worker/attendance/checkout') ?>",{
+                                    user_id : user,
+                                    job_id  : job,
+                                    date    : date,
+                                    early   : 1,
+                                    '<?= csrf_token() ?>':'<?= csrf_hash() ?>'
+                                },function(res){
+
+                                    if(res.status){
+
+                                        $('#detail_checkout').text(res.checkout_time);
+
+                                        $('#btnEarlyCheckout')
+                                            .hide();
+
+                                        $('#detail_status')
+                                            .html('<span class="badge bg-label-success">Complete</span>');
+
+                                        Swal.fire({
+                                            icon:'success',
+                                            title:'Success',
+                                            text:'Worker checked out successfully'
+                                        });
+
+                                    }else{
+
+                                        Swal.fire({
+                                            icon:'error',
+                                            title:'Error',
+                                            text:res.message
+                                        });
+
+                                    }
+
+                                },'json');
+
                             });
                         </script>
 

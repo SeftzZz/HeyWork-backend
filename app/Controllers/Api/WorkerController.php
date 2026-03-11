@@ -956,8 +956,92 @@ class WorkerController extends BaseController
      */
     public function checkout()
     {
-        $user = $this->request->user;
         $data = $this->request->getPost();
+        $user = $this->request->user ?? null;
+
+        $db = \Config\Database::connect();
+
+        /*
+        ======================================
+        EARLY CHECKOUT BY MANAGER
+        ======================================
+        */
+
+        if (!empty($data['early'])) {
+
+            if (!in_array(session('user_role'), [
+                'admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service',
+                'hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales','hotel_gm'
+            ])) {
+                return $this->response->setJSON([
+                    'status' => false,
+                    'message' => 'Unauthorized'
+                ]);
+            }
+
+            foreach (['user_id','job_id','date'] as $f) {
+                if (empty($data[$f])) {
+                    return $this->response
+                        ->setStatusCode(400)
+                        ->setJSON(['message' => "$f is required"]);
+                }
+            }
+
+            // ambil checkin
+            $checkin = $this->attendance
+                ->where('job_id', $data['job_id'])
+                ->where('user_id', $data['user_id'])
+                ->where('type', 'checkin')
+                ->where('DATE(created_at)', $data['date'])
+                ->first();
+
+            if (!$checkin) {
+                return $this->response
+                    ->setJSON([
+                        'status' => false,
+                        'message' => 'Worker has not checked in'
+                    ]);
+            }
+
+            // cek sudah checkout
+            $checkout = $this->attendance
+                ->where('job_id', $data['job_id'])
+                ->where('user_id', $data['user_id'])
+                ->where('type', 'checkout')
+                ->where('DATE(created_at)', $data['date'])
+                ->first();
+
+            if ($checkout) {
+                return $this->response->setJSON([
+                    'status' => false,
+                    'message' => 'Worker already checkout'
+                ]);
+            }
+
+            $this->attendance->insert([
+                'job_id'         => $data['job_id'],
+                'application_id' => $checkin['application_id'],
+                'user_id'        => $data['user_id'],
+                'type'           => 'checkout',
+                'latitude'       => -6.6011188,
+                'longitude'      => 106.7941239,
+                'photo_path'     => null,
+                'device_info'    => 'EARLY CHECKOUT BY ' . session('user_role'),
+                'created_by'     => session('user_id')
+            ]);
+
+            return $this->response->setJSON([
+                'status' => true,
+                'checkout_time' => date('H:i:s'),
+                'message' => 'Early checkout success'
+            ]);
+        }
+
+        /*
+        ======================================
+        NORMAL CHECKOUT BY WORKER
+        ======================================
+        */
 
         foreach (['job_id','application_id','latitude','longitude'] as $f) {
             if (empty($data[$f])) {
@@ -967,7 +1051,7 @@ class WorkerController extends BaseController
             }
         }
 
-        // wajib sudah check-in
+        // wajib sudah checkin
         $checkin = $this->attendance
             ->where('job_id', $data['job_id'])
             ->where('application_id', $data['application_id'])
@@ -986,6 +1070,7 @@ class WorkerController extends BaseController
         $photoPath = null;
 
         if ($selfieBase64) {
+
             $imageData = base64_decode($selfieBase64);
 
             if ($imageData === false) {

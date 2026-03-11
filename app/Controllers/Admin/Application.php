@@ -52,6 +52,20 @@ class Application extends BaseAdminController
 
         $db = \Config\Database::connect();
 
+        $userRole = session()->get('user_role');
+        $userId   = session()->get('user_id');
+
+        $roleCategoryMap = [
+            'hotel_fo'             => 'Front Office',
+            'hotel_hk'             => 'Housekeeping',
+            'hotel_fnb_service'    => 'Food & Beverage Service',
+            'hotel_fnb_production' => 'Kitchen / Culinary',
+            'hotel_fna'            => 'Finance',
+            'hotel_eng'            => 'Engineering',
+            'hotel_sales'          => 'Sales & Marketing',
+            'hotel_gm'             => 'Management'
+        ];
+
         $baseBuilder = $db->table('job_applications')
             ->select("
                 job_applications.id,
@@ -65,8 +79,37 @@ class Application extends BaseAdminController
             ")
             ->join('users', 'users.id = job_applications.user_id AND users.deleted_at IS NULL', 'left')
             ->join('jobs', 'jobs.id = job_applications.job_id', 'left')
+            ->join(
+                'skills',
+                'LOWER(TRIM(skills.name)) = LOWER(TRIM(jobs.position))',
+                'left',
+                false
+            )
             ->where('jobs.hotel_id', session()->get('hotel_id'))
             ->where('job_applications.deleted_at IS NULL');
+
+        // ==========================
+        // ROLE BASED FILTER
+        // ==========================
+        if ($userRole === 'worker') {
+
+            // Worker hanya lihat dirinya sendiri
+            $baseBuilder->where('job_applications.user_id', $userId);
+
+        }
+        elseif ($userRole === 'admin' || $userRole === 'hotel_hr') {
+
+            // Admin & HR lihat semua (tetap terfilter hotel_id di atas)
+            // Tidak perlu filter tambahan
+
+        }
+        else {
+
+            // Manager department hanya lihat sesuai category
+            if (isset($roleCategoryMap[$userRole])) {
+                $baseBuilder->where('skills.category', $roleCategoryMap[$userRole]);
+            }
+        }
 
         // SEARCH
         if ($search) {

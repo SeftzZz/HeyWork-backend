@@ -56,11 +56,14 @@ class Attendance extends BaseAdminController
         $userId   = session()->get('user_id');
 
         $roleCategoryMap = [
-            'hotel_fo'              => 'Front Office',
-            'hotel_hk'              => 'Housekeeping',
-            'hotel_fnb_service'     => 'Food & Beverage Service',
-            'hotel_fnb_production'  => 'Kitchen / Culinary',
-            'hotel_hr'              => 'Human Resources'
+            'hotel_fo'             => 'Front Office',
+            'hotel_hk'             => 'Housekeeping',
+            'hotel_fnb_service'    => 'Food & Beverage Service',
+            'hotel_fnb_production' => 'Kitchen / Culinary',
+            'hotel_fna'            => 'Finance',
+            'hotel_eng'            => 'Engineering',
+            'hotel_sales'          => 'Sales & Marketing',
+            'hotel_gm'             => 'Management'
         ];
 
         $baseBuilder = $db->table('job_attendances')
@@ -132,7 +135,7 @@ class Attendance extends BaseAdminController
                     END
                 )
             ");
-
+        
         // ==========================
         // ROLE BASED FILTER
         // ==========================
@@ -301,7 +304,8 @@ class Attendance extends BaseAdminController
             ->join('hotels h', 'h.id = j.hotel_id', 'left')
             ->where('ja.user_id', $userId)
             ->where('ja.job_id', $jobId)
-            ->where('DATE(ja.created_at)', $date)
+            ->where('ja.created_at >=', $date . ' 00:00:00')
+            ->where('ja.created_at <=', date('Y-m-d H:i:s', strtotime($date . ' +36 hours')))
             ->where('(ja.deleted_at IS NULL OR ja.deleted_at = "0000-00-00 00:00:00")', null, false)
             ->orderBy('ja.created_at', 'ASC')
             ->get()
@@ -398,8 +402,16 @@ class Attendance extends BaseAdminController
 
     public function submitRating()
     {
-        // hanya hotel_hr & admin
-        if (!in_array(session('user_role'), ['hotel_hr', 'admin', 'hotel_fnb_service', 'hotel_fnb_production', 'hotel_fo', 'hotel_hk'])) {
+        $role = session('user_role');
+        $userIdSession = session('user_id');
+
+        // role yang boleh submit
+        $allowedRoles = [
+            'admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service',
+            'hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales','hotel_gm'
+        ];
+
+        if (!in_array($role, $allowedRoles)) {
             return $this->response->setJSON([
                 'status' => false,
                 'message' => 'Unauthorized'
@@ -418,11 +430,9 @@ class Attendance extends BaseAdminController
             'durability'  => (int) $req->getPost('durability'),
             'ethics'      => (int) $req->getPost('ethics'),
             'comments'    => $req->getPost('comments'),
-            'created_at'  => date('Y-m-d H:i:s'),
-            'created_by'  => session('user_id')
         ];
 
-        // validasi minimal
+        // validasi rating
         foreach (['punctuality','apperance','knowledge','durability','ethics'] as $f) {
             if ($data[$f] < 1 || $data[$f] > 5) {
                 return $this->response->setJSON([
@@ -434,20 +444,42 @@ class Attendance extends BaseAdminController
 
         $db = \Config\Database::connect();
 
-        // ❗ cegah rating dobel (user + job + date)
-        $exists = $db->table('worker_ratings')
+        // cek apakah sudah ada rating
+        $existing = $db->table('worker_ratings')
             ->where('user_id', $data['user_id'])
             ->where('job_id', $data['job_id'])
             ->where('date', $data['date'])
             ->where('deleted_at', null)
-            ->countAllResults();
+            ->get()
+            ->getRow();
 
-        if ($exists > 0) {
+        if ($existing) {
+
+            // hanya HR dan GM boleh update
+            if (!in_array($role, ['hotel_hr','hotel_gm'])) {
+                return $this->response->setJSON([
+                    'status' => false,
+                    'message' => 'This worker has already been rated'
+                ]);
+            }
+
+            // update rating
+            $data['updated_at'] = date('Y-m-d H:i:s');
+            $data['updated_by'] = $userIdSession;
+
+            $db->table('worker_ratings')
+                ->where('id', $existing->id)
+                ->update($data);
+
             return $this->response->setJSON([
-                'status' => false,
-                'message' => 'This worker has already been rated'
+                'status' => true,
+                'message' => 'Rating updated successfully'
             ]);
         }
+
+        // insert baru
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $data['created_by'] = $userIdSession;
 
         $db->table('worker_ratings')->insert($data);
 

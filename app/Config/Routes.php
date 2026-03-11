@@ -153,6 +153,7 @@ $routes->group('api', function($routes) {
     $routes->post('auth/facebook', 'Api\AuthController::facebook');
     $routes->post('auth/register', 'Api\AuthController::register');
     $routes->post('auth/refresh', 'Api\AuthController::refresh');
+    $routes->post('worker/attendance/checkout', 'Api\WorkerController::checkout');
 });
 
 $routes->group('api', ['filter' => 'jwt'], function($routes) {
@@ -205,7 +206,6 @@ $routes->group('api', ['filter' => 'jwt'], function($routes) {
 
     // check-in / check-out
     $routes->post('worker/attendance/checkin', 'Api\WorkerController::checkin');
-    $routes->post('worker/attendance/checkout', 'Api\WorkerController::checkout');
 
     // =========================
     // RATING
