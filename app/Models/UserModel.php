@@ -10,8 +10,7 @@ class UserModel extends Model
     protected $primaryKey = 'id';
 
     protected $allowedFields = [
-        'role','hotel_id','name','email','phone','password','provider','provider_id','photo','is_active','is_verified','created_at',
-        'created_by','updated_at','updated_by','deleted_at','deleted_by'
+        'role','hotel_id','name','email','phone','password','provider','provider_id','photo','is_active','is_verified','fcm_token','reset_token','reset_expired','created_at','created_by','updated_at','updated_by','deleted_at','deleted_by'
     ];
 
     protected $useTimestamps = true;
