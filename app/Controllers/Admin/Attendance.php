@@ -135,7 +135,7 @@ class Attendance extends BaseAdminController
                     END
                 )
             ");
-        
+
         // ==========================
         // ROLE BASED FILTER
         // ==========================
@@ -194,10 +194,33 @@ class Attendance extends BaseAdminController
 
         foreach ($rows as $row) {
 
+            if (!$row['checkin_time'] && $row['checkout_time']) {
+                continue;
+            }
+            
             $extendMinutes = 0; // FIX BUG RESET
 
             $checkin  = $row['checkin_time'];
             $checkout = $row['checkout_time'];
+
+            // fallback untuk early checkout (hari yang sama)
+            if ($checkin && !$checkout) {
+
+                $fallbackCheckout = $db->table('job_attendances')
+                    ->select('created_at')
+                    ->where('user_id', $row['user_id'])
+                    ->where('job_id', $row['job_id'])
+                    ->where('type', 'checkout')
+                    ->where('created_at >=', date('Y-m-d 00:00:00', strtotime($checkin)))
+                    ->where('created_at <=', date('Y-m-d 23:59:59', strtotime($checkin)))
+                    ->orderBy('created_at', 'DESC')
+                    ->get()
+                    ->getRow();
+
+                if ($fallbackCheckout) {
+                    $checkout = $fallbackCheckout->created_at;
+                }
+            }
 
             $duration      = '-';
             $tenMinutesCnt = '-';
