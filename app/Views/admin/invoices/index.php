@@ -233,7 +233,7 @@
           <div class="mb-3">
             <label for="invoice-message" class="form-label">Message</label>
             <textarea disabled class="form-control" name="invoice-message" id="invoice-message" cols="3" rows="8">
-Dear HeyWork,
+Dear <?= esc($invoice['hotel_name']) ?>,
 
 We have generated a new invoice in the amount of: Rp<?= number_format($invoice['amount'],0,',','.') ?>
 
@@ -245,7 +245,7 @@ Please find attached invoice for worker:
 Please process payment at your earliest convenience.
 
 Regards,
-<?= esc($invoice['hotel_name']) ?>
+HeyWork
             </textarea>
           </div>
 

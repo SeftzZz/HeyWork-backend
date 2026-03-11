@@ -235,4 +235,9 @@ $routes->group('api', ['filter' => 'jwt'], function($routes) {
     // COMPANY
     // =========================
     $routes->get('company/hotels', 'Api\CompanyController::index');
+
+    // =========================
+    // PUSH NOTIFICATION
+    // =========================
+    $routes->post('worker/push-notification/register', 'Api\WorkerController::pushNotificationRegister');
 });

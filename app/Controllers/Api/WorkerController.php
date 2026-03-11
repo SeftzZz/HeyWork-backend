@@ -1188,4 +1188,9 @@ class WorkerController extends BaseController
             'data'   => array_values($grouped)
         ]);
     }
+
+    public function pushNotificationRegister()
+    {
+        return;
+    }
 }
