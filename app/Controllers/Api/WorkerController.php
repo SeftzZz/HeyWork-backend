@@ -924,7 +924,7 @@ class WorkerController extends BaseController
             'longitude'     => $data['longitude'],
             'photo_path'    => $photoPath,
             'device_info'   => $this->request->getUserAgent()->getAgentString(),
-            'created_at'    => $data['device_time'] ?? date('Y-m-d H:i:s'),
+            'created_at'    => date('Y-m-d H:i:s'),
             'created_by'    => $user->id
         ];
 
