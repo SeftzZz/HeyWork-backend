@@ -14,26 +14,28 @@ class Schedules extends BaseController
         $this->db = Database::connect();
     }
 
-    public function index()
+   public function index()
     {
         $hotelId = session()->get('hotel_id');
         $role    = session()->get('user_role');
 
         $builder = $this->db->table('users u')
             ->distinct()
-            ->select('u.id, u.name')
+            ->select('u.id, u.name, u.role')
             ->where('u.hotel_id', $hotelId)
-            ->where('u.role', 'worker')
             ->where('u.is_active', 'active');
 
-        if (!in_array($role, ['admin','hotel_hr'])) {
+        if (!in_array($role, ['admin','hotel_hr','hotel_gm'])) {
 
             $department = $this->getDepartmentFromRole($role);
 
             $builder->join('job_attendances ja', 'ja.user_id = u.id', 'left')
                     ->join('jobs j', 'j.id = ja.job_id', 'left')
                     ->join('skills s', 's.name = j.position', 'left')
-                    ->where('s.category', $department);
+                    ->groupStart()
+                        ->where('s.category', $department) // worker dept
+                        ->orWhere('u.role', $role)         // manager sendiri
+                    ->groupEnd();
         }
 
         $workers = $builder

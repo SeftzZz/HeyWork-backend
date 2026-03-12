@@ -1120,14 +1120,13 @@ class WorkerController extends BaseController
             ]);
         }
 
-        // ===============================
-        // GET ALL APPROVED SHIFTS FOR USER
-        // ===============================
         $rows = $db->table('schedule_shifts ss')
             ->select('
                 ss.id as schedule_shift_id,
                 sd.shift_date,
-                ss.start_time,
+
+                TIME_FORMAT(DATE_SUB(ss.start_time, INTERVAL 30 MINUTE), "%H:%i:%s") as start_time,
+
                 ss.end_time,
                 ss.shift_type,
                 ss.application_id,
@@ -1141,7 +1140,7 @@ class WorkerController extends BaseController
             ')
             ->join('schedule_days sd', 'sd.id = ss.schedule_day_id')
             ->join('schedule_plans sp', 'sp.id = sd.schedule_plan_id')
-            ->join('hotels h', 'h.id = sp.hotel_id') // 🔥 TAMBAH INI
+            ->join('hotels h', 'h.id = sp.hotel_id')
             ->where('ss.user_id', $userId)
             ->where('sp.status', 'approved')
             ->orderBy('sd.shift_date', 'ASC')

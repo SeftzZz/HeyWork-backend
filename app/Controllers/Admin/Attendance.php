@@ -230,7 +230,14 @@ class Attendance extends BaseAdminController
 
             if ($checkin && $checkout) {
 
-                $secondsNormal = max(0, (strtotime($checkout) - strtotime($checkin)) - 3600);
+                $actualCheckin  = strtotime($checkin);
+                $scheduleStart  = strtotime($row['start_time']);
+
+                if ($actualCheckin < $scheduleStart) {
+                    $actualCheckin = $scheduleStart;
+                }
+
+                $secondsNormal = max(0, (strtotime($checkout) - $actualCheckin) - 3600);
                 $minutesNormal = floor($secondsNormal / 60);
 
                 if ($row['ex_checkin'] && $row['ex_checkout']) {
