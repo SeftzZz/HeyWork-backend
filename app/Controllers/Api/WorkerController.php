@@ -1275,6 +1275,40 @@ class WorkerController extends BaseController
 
     public function pushNotificationRegister()
     {
-        return;
+        $db = \Config\Database::connect();
+
+        // user dari JWT middleware
+        $user = $this->request->user ?? null;
+
+        if (!$user) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Unauthorized'
+            ]);
+        }
+
+        $data = $this->request->getJSON(true);
+
+        if (empty($data['fcm_token'])) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'FCM token required'
+            ]);
+        }
+
+        $fcmToken = $data['fcm_token'];
+
+        $db->table('users')
+            ->where('id', $user->id)
+            ->update([
+                'fcm_token'  => $fcmToken,
+                'updated_at' => date('Y-m-d H:i:s'),
+                'updated_by' => $user->id
+            ]);
+
+        return $this->response->setJSON([
+            'status'  => true,
+            'message' => 'FCM token registered'
+        ]);
     }
 }
