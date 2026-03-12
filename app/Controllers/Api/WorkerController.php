@@ -154,7 +154,7 @@ class WorkerController extends BaseController
     {
         $user = $this->request->user;
 
-        if ($user->role !== 'worker') {
+        if (!$user) {
             return $this->response
                 ->setStatusCode(403)
                 ->setJSON(['message' => 'Access denied']);
@@ -181,7 +181,7 @@ class WorkerController extends BaseController
         $user = $this->request->user;
         $data = $this->request->getJSON(true);
 
-        if ($user->role !== 'worker') {
+        if (!$user) {
             return $this->response
                 ->setStatusCode(403)
                 ->setJSON(['message' => 'Access denied']);
@@ -519,7 +519,7 @@ class WorkerController extends BaseController
     {
         $user = $this->request->user;
 
-        if (!$user || $user->role !== 'worker') {
+        if (!$user) {
             return $this->response
                 ->setStatusCode(403)
                 ->setJSON(['message' => 'Access denied']);
@@ -550,7 +550,7 @@ class WorkerController extends BaseController
     {
         $user = $this->request->user;
 
-        if (!$user || $user->role !== 'worker') {
+        if (!$user) {
             return $this->response
                 ->setStatusCode(403)
                 ->setJSON(['message' => 'Access denied']);
@@ -623,7 +623,7 @@ class WorkerController extends BaseController
     {
         $user = $this->request->user;
 
-        if (!$user || $user->role !== 'worker') {
+        if (!$user) {
             return $this->response
                 ->setStatusCode(403)
                 ->setJSON(['message' => 'Access denied']);
@@ -681,7 +681,7 @@ class WorkerController extends BaseController
     {
         $user = $this->request->user;
 
-        if (!$user || $user->role !== 'worker') {
+        if (!$user) {
             return $this->response
                 ->setStatusCode(403)
                 ->setJSON(['message' => 'Access denied']);
@@ -753,7 +753,7 @@ class WorkerController extends BaseController
     {
         $user = $this->request->user;
 
-        if ($user->role !== 'worker') {
+        if (!$user) {
             return $this->response
                 ->setStatusCode(403)
                 ->setJSON(['message' => 'Access denied']);
@@ -1188,7 +1188,7 @@ class WorkerController extends BaseController
     {
         $user = $this->request->user;
 
-        if (!$user || $user->role !== 'worker') {
+        if (!$user) {
             return $this->response
                 ->setStatusCode(403)
                 ->setJSON([
