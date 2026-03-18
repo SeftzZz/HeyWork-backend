@@ -5,7 +5,7 @@ const mysql = require('mysql2/promise');
 const db = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'Salam123!',
   database: 'heywork',
   waitForConnections: true,
   connectionLimit: 10
@@ -37,58 +37,65 @@ function broadcast(payload) {
 }
 
 async function autoCheckout() {
+
   try {
+
     console.log('⏱ Running auto checkout job...');
 
-    const [rows] = await db.query(`
-    SELECT 
-        ja.job_id,
-        ja.application_id,
-        ja.user_id,
-        ja.created_at,
+    /*
+    ==========================
+    SHIFT AUTO CHECKOUT
+    ==========================
+    */
 
-        CASE
-            WHEN ss.end_time < ss.start_time
-            THEN TIMESTAMP(DATE_ADD(d.shift_date, INTERVAL 1 DAY), ss.end_time)
-            ELSE TIMESTAMP(d.shift_date, ss.end_time)
-        END AS shift_end
+    const [shiftRows] = await db.query(`
+      SELECT 
+          ja.job_id,
+          ja.application_id,
+          ja.user_id,
+          ja.created_at,
 
-    FROM job_attendances ja
+          CASE
+              WHEN ss.end_time < ss.start_time
+              THEN TIMESTAMP(DATE_ADD(d.shift_date, INTERVAL 1 DAY), ss.end_time)
+              ELSE TIMESTAMP(d.shift_date, ss.end_time)
+          END AS shift_end
 
-    JOIN schedule_shifts ss
-      ON ss.job_id = ja.job_id
-      AND ss.user_id = ja.user_id
+      FROM job_attendances ja
 
-    JOIN schedule_days d
-      ON d.id = ss.schedule_day_id
+      JOIN schedule_shifts ss
+        ON ss.job_id = ja.job_id
+        AND ss.user_id = ja.user_id
 
-    LEFT JOIN job_attendances ja2
-      ON ja2.job_id = ja.job_id
-      AND ja2.application_id = ja.application_id
-      AND ja2.type = 'checkout'
-      AND ja2.created_at =
-        CASE
-            WHEN ss.end_time < ss.start_time
-            THEN TIMESTAMP(DATE_ADD(d.shift_date, INTERVAL 1 DAY), ss.end_time)
-            ELSE TIMESTAMP(d.shift_date, ss.end_time)
-        END
+      JOIN schedule_days d
+        ON d.id = ss.schedule_day_id
 
-    WHERE ja.type = 'checkin'
-    AND DATE(ja.created_at) = d.shift_date
-    AND ja2.id IS NULL
+      LEFT JOIN job_attendances ja2
+        ON ja2.job_id = ja.job_id
+        AND ja2.application_id = ja.application_id
+        AND ja2.type = 'checkout'
+        AND ja2.created_at =
+          CASE
+              WHEN ss.end_time < ss.start_time
+              THEN TIMESTAMP(DATE_ADD(d.shift_date, INTERVAL 1 DAY), ss.end_time)
+              ELSE TIMESTAMP(d.shift_date, ss.end_time)
+          END
 
-    AND NOW() >=
-    CASE
-        WHEN ss.end_time < ss.start_time
-        THEN TIMESTAMP(DATE_ADD(d.shift_date, INTERVAL 1 DAY), ss.end_time)
-        ELSE TIMESTAMP(d.shift_date, ss.end_time)
-    END
+      WHERE ja.type = 'checkin'
+      AND DATE(ja.created_at) = d.shift_date
+      AND ja2.id IS NULL
+
+      AND NOW() >=
+      CASE
+          WHEN ss.end_time < ss.start_time
+          THEN TIMESTAMP(DATE_ADD(d.shift_date, INTERVAL 1 DAY), ss.end_time)
+          ELSE TIMESTAMP(d.shift_date, ss.end_time)
+      END
     `);
 
-    console.log("AUTO CHECKOUT ROWS:", rows.length);
-    console.log(rows);
+    console.log("AUTO SHIFT CHECKOUT:", shiftRows.length);
 
-    for (const row of rows) {
+    for (const row of shiftRows) {
 
       await db.query(`
         INSERT INTO job_attendances
@@ -101,7 +108,7 @@ async function autoCheckout() {
         row.shift_end
       ]);
 
-      console.log(`✅ Auto checkout job ${row.job_id} user ${row.user_id} at ${row.shift_end}`);
+      console.log(`✅ Auto checkout job ${row.job_id} user ${row.user_id}`);
 
       broadcast({
         type: 'attendance_auto_checkout',
@@ -112,9 +119,75 @@ async function autoCheckout() {
 
     }
 
+
+    /*
+    ==========================
+    TRAINING AUTO CHECKOUT
+    ==========================
+    */
+
+    const [trainingRows] = await db.query(`
+      SELECT
+          ja.training_shift_id,
+          ja.user_id,
+          td.training_date,
+          ts.end_time,
+
+          TIMESTAMP(td.training_date, ts.end_time) AS training_end
+
+      FROM job_attendances ja
+
+      JOIN training_shifts ts
+        ON ts.id = ja.training_shift_id
+
+      JOIN training_days td
+        ON td.id = ts.training_day_id
+
+      LEFT JOIN job_attendances ja2
+        ON ja2.training_shift_id = ja.training_shift_id
+        AND ja2.user_id = ja.user_id
+        AND ja2.type = 'checkout'
+        AND ja2.created_at = TIMESTAMP(td.training_date, ts.end_time)
+
+      WHERE ja.type = 'checkin'
+      AND ja.training_shift_id IS NOT NULL
+      AND ja2.id IS NULL
+
+      AND NOW() >= TIMESTAMP(td.training_date, ts.end_time)
+    `);
+
+    console.log("AUTO TRAINING CHECKOUT:", trainingRows.length);
+
+    for (const row of trainingRows) {
+
+      await db.query(`
+        INSERT INTO job_attendances
+        (training_shift_id, user_id, type, latitude, longitude, photo_path, device_info, created_at, created_by)
+        VALUES (?, ?, 'checkout', 0, 0, 'system-auto-checkout', 'AUTO SYSTEM', ?, ?)
+      `, [
+        row.training_shift_id,
+        row.user_id,
+        row.training_end,
+        row.user_id
+      ]);
+
+      console.log(`🎓 Auto checkout training ${row.training_shift_id} user ${row.user_id}`);
+
+      broadcast({
+        type: 'attendance_training_auto_checkout',
+        training_shift_id: row.training_shift_id,
+        user_id: row.user_id,
+        checkout_time: row.training_end
+      });
+
+    }
+
   } catch (err) {
+
     console.error('❌ Auto checkout error:', err);
+
   }
+
 }
 
 async function autoCompleteApplications() {

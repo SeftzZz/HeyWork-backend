@@ -35,7 +35,7 @@
                 <form id="formAddTraining">
 
                     <div class="modal-header">
-                        <h5 class="modal-title">Create Learning and Growth Plan</h5>
+                        <h5 class="modal-title">Create Learn and Growth Plan</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
@@ -371,7 +371,7 @@
                         ]
                     },
                     {
-                        text: '<i class="ti ti-plus me-sm-1"></i> <span>Create Learning and Growth</span>',
+                        text: '<i class="ti ti-plus me-sm-1"></i> <span>Create Learn and Growth</span>',
                         className: 'btn btn-primary waves-effect waves-light',
                         action: function () {
                             $('#modalAddTraining').modal('show');
@@ -383,7 +383,7 @@
                         display: $.fn.dataTable.Responsive.display.modal({
                             header: function (row) {
                                 let data = row.data();
-                                return 'Learning and Growth Detail - ' + data.department;
+                                return 'Learn and Growth Detail - ' + data.department;
                             }
                         }),
                         type: 'column',
@@ -402,7 +402,7 @@
                 }
             });
 
-            $('div.head-label').html('<h5 class="card-title mb-0">Learning and Growth</h5>');
+            $('div.head-label').html('<h5 class="card-title mb-0">Learn and Growth</h5>');
         }
 
         function getShiftColor(type){

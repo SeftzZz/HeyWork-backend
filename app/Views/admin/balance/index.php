@@ -165,7 +165,7 @@
                                       <li class="nav-item">
                                         <button
                                           type="button"
-                                          class="nav-link active"
+                                          class="nav-link"
                                           role="tab"
                                           data-bs-toggle="tab"
                                           data-bs-target="#navs-pills-justified-home"
@@ -190,7 +190,7 @@
                                       <li class="nav-item">
                                         <button
                                           type="button"
-                                          class="nav-link"
+                                          class="nav-link active"
                                           role="tab"
                                           data-bs-toggle="tab"
                                           data-bs-target="#navs-pills-justified-messages"
@@ -201,7 +201,7 @@
                                       </li>
                                     </ul>
                                     <div class="tab-content">
-                                      <div class="tab-pane fade show active" id="navs-pills-justified-home" role="tabpanel">
+                                      <div class="tab-pane fade" id="navs-pills-justified-home" role="tabpanel">
                                         <div class="row">
                                           <!-- Last day attendances -->
                                           <div class="col-lg-8 mb-4">
@@ -441,7 +441,7 @@
                                           <!--/ Last day attendances -->
                                         </div>
                                       </div>
-                                      <div class="tab-pane fade" id="navs-pills-justified-messages" role="tabpanel">
+                                      <div class="tab-pane fade show active" id="navs-pills-justified-messages" role="tabpanel">
                                         <div class="row">
                                           <!-- Last day attendances -->
                                           <div class="col-lg-8 mb-4">
@@ -1460,7 +1460,7 @@
                             // ==========================
                             // INIT
                             // ==========================
-                            loadReport('daily_worker', selectedDate);
+                            loadReport('all', selectedDate);
 
                             $('[data-bs-target="#navs-pills-justified-home"]').on('click', function(){
                               loadReport('daily_worker', selectedDate);

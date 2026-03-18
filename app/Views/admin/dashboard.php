@@ -950,6 +950,9 @@
 
                               // GANTI domain jika beda server
                               const wsUrl = `${protocol}://${window.location.hostname}:3004`;
+                                                            
+                              // gunakan line ini untuk settingan server
+                              //const wsUrl = ${protocol}://${window.location.hostname}/ws/;
 
                               // gunakan line ini untuk settingan server
                               // const wsUrl = `${protocol}://${window.location.hostname}/ws/`;
