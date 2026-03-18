@@ -217,6 +217,7 @@
                                                     <option value="">-- Select Category --</option>
                                                     <option value="daily_worker">Daily Worker</option>
                                                     <option value="casual">Casual</option>
+                                                    <option value="corporate">Corporate</option>
                                                   </select>
                                                 </div>
 
@@ -227,25 +228,13 @@
                                                 <!-- START DATE -->
                                                 <div class="col-md-6 mb-3">
                                                   <label class="form-label">Job Start Date</label>
-                                                  <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="job_date_start"
-                                                    id="job_date_start"
-                                                    placeholder="dd-mm-yyyy"
-                                                    required>
+                                                  <input type="date" class="form-control" name="job_date_start" id="job_date_start" required>
                                                 </div>
 
                                                 <!-- END DATE -->
                                                 <div class="col-md-6 mb-3">
                                                   <label class="form-label">Job End Date</label>
-                                                  <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    name="job_date_end"
-                                                    id="job_date_end"
-                                                    placeholder="dd-mm-yyyy"
-                                                    required>
+                                                  <input type="date" class="form-control" name="job_date_end" id="job_date_end" required>
                                                 </div>
 
                                               </div>
@@ -816,8 +805,8 @@
 
                                 if (!modal.length) return;
 
-                                modal.find('input[name="job_date_start"]').val(date);
-                                modal.find('input[name="job_date_end"]').val(date);
+                                modal.find('input[name="job_date_start"]');
+                                modal.find('input[name="job_date_end"]');
 
                                 modal.modal('show');
                               });
@@ -871,13 +860,13 @@
                           document.addEventListener('DOMContentLoaded', function () {
 
                             flatpickr('#job_date_start', {
-                              dateFormat: 'd-m-Y',
+                              dateFormat: 'Y-m-d',
                               allowInput: true,
                               minDate: 'today'
                             });
 
                             flatpickr('#job_date_end', {
-                              dateFormat: 'd-m-Y',
+                              dateFormat: 'Y-m-d',
                               allowInput: true,
                               minDate: 'today'
                             });

@@ -199,40 +199,42 @@ async function autoCompleteApplications() {
         ja.id AS application_id,
         ja.user_id,
         j.id AS job_id,
+        j.category,
 
-        d.shift_date,
-        ss.start_time,
-        ss.end_time,
+        wc.end_date,
 
-        MAX(att.created_at) AS last_attendance,
-        MAX(CASE WHEN att.type = 'checkout' THEN 1 ELSE 0 END) AS has_checkout,
-
-        CASE
-          WHEN ss.end_time < ss.start_time
-          THEN TIMESTAMP(DATE_ADD(d.shift_date, INTERVAL 1 DAY), ss.end_time)
-          ELSE TIMESTAMP(d.shift_date, ss.end_time)
-        END AS shift_end_datetime
+        MAX(d.shift_date) AS last_shift_day
 
       FROM job_applications ja
 
       JOIN jobs j 
         ON j.id = ja.job_id
 
-      JOIN schedule_shifts ss
+      LEFT JOIN worker_contracts wc
+        ON wc.user_id = ja.user_id
+
+      LEFT JOIN schedule_shifts ss
         ON ss.application_id = ja.id
 
-      JOIN schedule_days d
+      LEFT JOIN schedule_days d
         ON d.id = ss.schedule_day_id
-
-      JOIN job_attendances att
-        ON att.application_id = ja.id
 
       WHERE ja.status != 'completed'
 
       GROUP BY ja.id
 
-      HAVING has_checkout = 1
-        AND NOW() >= shift_end_datetime
+      HAVING
+        (
+          j.category = 'corporate'
+          AND wc.end_date IS NOT NULL
+          AND NOW() >= wc.end_date
+        )
+        OR
+        (
+          j.category IN ('daily_worker','casual')
+          AND last_shift_day IS NOT NULL
+          AND CURDATE() > last_shift_day
+        )
     `);
 
     for (const row of rows) {

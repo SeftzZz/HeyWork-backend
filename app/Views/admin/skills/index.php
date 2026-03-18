@@ -29,21 +29,34 @@
 										        <div class="modal-body">
 										          	<div class="row">
 								                        <div class="col-md-6 mb-3">
-								                            <label class="form-label">Category</label>
-										            		<select
-															    name="kategori"
-															    id="add_category"
-															    class="form-select select2"
-															    data-placeholder="Select Category"
-															    style="width:100%" required>
-															    <option value=""></option>
-															    <?php foreach ($categories as $category): ?>
-															        <option value="<?= $category['name'] ?>">
-															            <?= esc($category['name']) ?>
-															        </option>
-															    <?php endforeach; ?>
-															</select>
-								                        </div>
+														    <label class="form-label">Category</label>
+
+														    <select
+														        name="kategori"
+														        id="add_category"
+														        class="form-select select2"
+														        data-placeholder="Select Category"
+														        style="width:100%">
+														        
+														        <option value=""></option>
+
+														        <?php foreach ($categories as $category): ?>
+														            <option value="<?= $category['name'] ?>">
+														                <?= esc($category['name']) ?>
+														            </option>
+														        <?php endforeach; ?>
+
+														        <option value="__new__">+ Add New Category</option>
+														    </select>
+
+														    <input
+														        type="text"
+														        name="kategori_manual"
+														        id="kategori_manual"
+														        class="form-control mt-2"
+														        placeholder="Input new category"
+														        style="display:none;">
+														</div>
 								                        <div class="col-md-6 mb-3">
 								                            <label class="form-label">Skill Name</label>
 								                        	<input type="text" class="form-control" name="namaskill" required>
@@ -445,6 +458,14 @@
 							            });
 							        }
 							    });
+							});
+
+							$('#add_category').on('change', function(){
+							    if($(this).val() === '__new__'){
+							        $('#kategori_manual').show().prop('required', true);
+							    } else {
+							        $('#kategori_manual').hide().prop('required', false);
+							    }
 							});
 						</script>
 						<?= $this->endSection() ?>
