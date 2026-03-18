@@ -941,17 +941,18 @@
 
                         <script>
                           (function () {
-
                             let ws;
                             let reconnectInterval = 3000;
                             let isManuallyClosed = false;
 
                             function connectWS() {
-
                               const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
 
                               // GANTI domain jika beda server
                               const wsUrl = `${protocol}://${window.location.hostname}:3004`;
+
+                              // gunakan line ini untuk settingan server
+                              // const wsUrl = `${protocol}://${window.location.hostname}/ws/`;
 
                               ws = new WebSocket(wsUrl);
 

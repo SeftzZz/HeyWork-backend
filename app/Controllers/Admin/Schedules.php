@@ -205,7 +205,7 @@ class Schedules extends BaseController
         $month = (int) $this->request->getPost('month');
         $year  = (int) $this->request->getPost('year');
 
-        $department = in_array($role, ['admin','hotel_hr'])
+        $department = in_array($role, ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales','hotel_gm'])
             ? trim($this->request->getPost('department'))
             : $this->getDepartmentFromRole($role);
 

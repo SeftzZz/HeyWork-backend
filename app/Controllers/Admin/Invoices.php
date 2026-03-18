@@ -382,4 +382,184 @@ class Invoices extends BaseAdminController
 
         return redirect()->back()->with('error', 'Invoice created but email failed');
     }
+
+    // ===================================================
+    // CREATE WEEKLY INVOICE
+    // ===================================================
+    public function createWeekly($weekKey)
+    {
+        $db = \Config\Database::connect();
+        $hotelId = session()->get('hotel_id');
+        $db->transStart();
+
+        // =====================================
+        // CEK INVOICE SUDAH ADA ATAU BELUM
+        // =====================================
+        $existing = $db->table('invoices')
+            ->where('hotel_id', $hotelId)
+            ->where('week_key', $weekKey)
+            ->get()
+            ->getRow();
+
+        if ($existing) {
+            return redirect()->back()->with('error','Invoice for this week already exists');
+        }
+
+        // =====================================
+        // AMBIL DATA ATTENDANCE
+        // =====================================
+        $rows = $db->table('job_attendances')
+            ->select("
+                job_attendances.application_id,
+                job_attendances.type,
+                job_attendances.created_at,
+                users.id as worker_id,
+                users.name AS worker_name,
+                jobs.position,
+                jobs.fee,
+                schedule_shifts.start_time,
+                schedule_shifts.end_time,
+                schedule_days.shift_date
+            ")
+            ->join('job_applications','job_applications.id = job_attendances.application_id','left')
+            ->join('users','users.id = job_applications.user_id','left')
+            ->join('jobs','jobs.id = job_applications.job_id','left')
+            ->join('schedule_shifts',
+                'schedule_shifts.application_id = job_attendances.application_id
+                 AND schedule_shifts.user_id = job_applications.user_id','left')
+            ->join('schedule_days','schedule_days.id = schedule_shifts.schedule_day_id','left')
+
+            ->where('jobs.hotel_id',$hotelId)
+            ->where('job_applications.status','completed')
+
+            ->where("YEARWEEK(schedule_days.shift_date,1)", $weekKey)
+
+            ->orderBy('job_attendances.application_id','ASC')
+            ->orderBy('job_attendances.created_at','ASC')
+
+            ->get()
+            ->getResultArray();
+
+
+        if(!$rows){
+            return redirect()->back()->with('error','No attendance data found');
+        }
+
+        // =====================================
+        // GROUPING DATA
+        // =====================================
+        $apps = [];
+        foreach($rows as $row){
+            $appId = $row['application_id'];
+            if(!isset($apps[$appId])){
+                $apps[$appId] = [
+                    'worker_id' => $row['worker_id'],
+                    'worker_name' => $row['worker_name'],
+                    'position' => $row['position'],
+                    'fee' => $row['fee'],
+                    'start_time' => $row['start_time'],
+                    'end_time' => $row['end_time'],
+                    'checkins' => [],
+                    'checkouts' => [],
+                    'minutes' => 0,
+                    'amount' => 0
+                ];
+            }
+
+            if($row['type'] === 'checkin'){
+                $apps[$appId]['checkins'][] = $row['created_at'];
+            }
+
+            if($row['type'] === 'checkout'){
+                $apps[$appId]['checkouts'][] = $row['created_at'];
+            }
+        }
+
+        // =====================================
+        // HITUNG JAM KERJA
+        // =====================================
+        $invoiceItems = [];
+        $totalAmount  = 0;
+
+        foreach($apps as $appId => &$app){
+            $count = min(count($app['checkins']),count($app['checkouts']));
+            for($i=0;$i<$count;$i++){
+                $seconds = max(
+                    0,
+                    (strtotime($app['checkouts'][$i]) - strtotime($app['checkins'][$i])) - 3600
+                );
+                $minutes = floor($seconds/60);
+                if($minutes <= 0){
+                    continue;
+                }
+                $app['minutes'] += $minutes;
+                $jobStart = strtotime($app['start_time']);
+                $jobEnd   = strtotime($app['end_time']);
+                $jobMinutes = ($jobEnd - $jobStart)/60;
+                $jobTenMin = floor($jobMinutes/10);
+                if($jobTenMin > 0 && $app['fee'] > 0){
+
+                    $ratePer10Min = $app['fee'] / $jobTenMin;
+
+                    $amount = round(
+                        floor($minutes/10) * $ratePer10Min
+                    );
+
+                    $app['amount'] += $amount;
+                }
+            }
+
+            if($app['amount'] <= 0){
+                continue;
+            }
+
+            $totalAmount += $app['amount'];
+            $invoiceItems[] = [
+                'application_id' => $appId,
+                'worker_id' => $app['worker_id'],
+                'minutes' => $app['minutes'],
+                'amount' => $app['amount']
+            ];
+        }
+
+        if(!$invoiceItems){
+            return redirect()->back()->with('error','No billable attendance found');
+        }
+
+        // =====================================
+        // GENERATE INVOICE NUMBER
+        // =====================================
+        $invoiceNumber = 'INV-'.$hotelId.'-'.$weekKey.'-'.time();
+
+        // =====================================
+        // INSERT INVOICE
+        // =====================================
+        $db->table('invoices')->insert([
+            'invoice_number' => $invoiceNumber,
+            'hotel_id' => $hotelId,
+            'week_key' => $weekKey,
+            'total_amount' => $totalAmount,
+            'status' => 'draft',
+            'created_at' => date('Y-m-d H:i:s'),
+            'created_by' => session()->get('user_id')
+        ]);
+
+        $invoiceId = $db->insertID();
+
+        // =====================================
+        // INSERT ITEMS
+        // =====================================
+        foreach($invoiceItems as $item){
+            $item['invoice_id'] = $invoiceId;
+            $db->table('invoice_items')->insert($item);
+        }
+
+        $db->transComplete();
+        if($db->transStatus() === false){
+            return redirect()->back()->with('error','Invoice creation failed');
+        }
+
+        return redirect()->to('/admin/invoices/view/'.$invoiceId)
+            ->with('success','Weekly invoice created successfully');
+    }
 }

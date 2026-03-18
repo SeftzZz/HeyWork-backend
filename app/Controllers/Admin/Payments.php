@@ -51,7 +51,7 @@ class Payments extends BaseAdminController
                 schedule_shifts.end_time,
                 schedule_days.shift_date,
                 jobs.fee,
-
+                YEARWEEK(schedule_days.shift_date,1) AS week_key,
                 (
                     SELECT invoices.status
                     FROM invoice_items
@@ -102,23 +102,26 @@ class Payments extends BaseAdminController
             $appId     = (int)$row['application_id'];
             $shiftDate = $row['shift_date'] ?? 'unknown';
 
-            $key = $appId.'_'.$shiftDate;
+            $week = $row['week_key'];
+            $key = $week;
 
             if (!isset($grouped[$key])) {
-
                 $grouped[$key] = [
-                    'application_id' => $appId,
-                    'worker_name'    => $row['worker_name'],
-                    'position'       => $row['position'],
-                    'start_time'     => $row['start_time'],
-                    'end_time'       => $row['end_time'],
-                    'fee'            => $row['fee'],
-                    'payment_status' => $row['payment_status'],
+                    'week_key'       => $week,
                     'total_amount'   => 0,
                     'total_minutes'  => 0,
                     'working_days'   => 0,
-                    'checkins'       => [],
-                    'checkouts'      => []
+                    'workers'        => []
+                ];
+
+                $grouped[$key]['workers'][$appId] = [
+                    'worker_name' => $row['worker_name'],
+                    'position'    => $row['position'],
+                    'checkins'    => [],
+                    'checkouts'   => [],
+                    'fee'         => $row['fee'],
+                    'start_time'  => $row['start_time'],
+                    'end_time'    => $row['end_time']
                 ];
             }
 
@@ -228,7 +231,7 @@ class Payments extends BaseAdminController
                             '</span>',
 
                 'action' => '
-                    <a href="'.base_url('admin/invoices/create/'.$appId).'"
+                    <a href="'.base_url('/admin/invoices/create-week/'.$g['week_key']).'"
                        class="btn btn-sm btn-primary">
                         Create Invoice
                     </a>'
