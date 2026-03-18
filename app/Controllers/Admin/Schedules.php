@@ -79,9 +79,11 @@ class Schedules extends BaseController
         $totalQuery = $this->db->table('schedule_plans')
             ->where('hotel_id', $hotelId);
 
-        if (!in_array($userRole, ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales','hotel_gm'])) {
+        if (!in_array($userRole, ['admin','hotel_hr','hotel_gm'])) {
             $department = $this->getDepartmentFromRole($userRole);
-            $totalQuery->where('department', $department);
+            if ($department) {
+                $totalQuery->where('department', $department);
+            }
         }
 
         $recordsTotal = $totalQuery->countAllResults();
@@ -95,9 +97,11 @@ class Schedules extends BaseController
             ->join('users', 'users.id = schedule_plans.requested_by', 'left')
             ->where('schedule_plans.hotel_id', $hotelId);
 
-        if (!in_array($userRole, ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales','hotel_gm'])) {
+        if (!in_array($userRole, ['admin','hotel_hr','hotel_gm'])) {
             $department = $this->getDepartmentFromRole($userRole);
-            $dataQuery->where('schedule_plans.department', $department);
+            if ($department) {
+                $dataQuery->where('schedule_plans.department', $department);
+            }
         }
 
         // =============================
