@@ -14,7 +14,7 @@ class Schedules extends BaseController
         $this->db = Database::connect();
     }
 
-   public function index()
+    public function index()
     {
         $hotelId = session()->get('hotel_id');
         $role    = session()->get('user_role');

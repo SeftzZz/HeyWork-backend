@@ -1201,13 +1201,14 @@ class WorkerController extends BaseController
             ]);
         }
 
+        // ===============================
+        // GET RAW DATA (NO TIME MANIPULATION DI SQL)
+        // ===============================
         $rows = $db->table('schedule_shifts ss')
             ->select('
                 ss.id as schedule_shift_id,
                 sd.shift_date,
-
-                TIME_FORMAT(DATE_SUB(ss.start_time, INTERVAL 30 MINUTE), "%H:%i:%s") as start_time,
-
+                ss.start_time,
                 ss.end_time,
                 ss.shift_type,
                 ss.application_id,
@@ -1230,12 +1231,34 @@ class WorkerController extends BaseController
             ->getResultArray();
 
         // ===============================
-        // GROUP BY DATE
+        // GROUP BY DATE + NORMALIZE TIME
         // ===============================
         $grouped = [];
 
         foreach ($rows as $row) {
-            $date = $row['shift_date'];
+
+            // ===============================
+            // BUILD DATETIME
+            // ===============================
+            $startDateTime = strtotime($row['shift_date'] . ' ' . $row['start_time']);
+            $endDateTime   = strtotime($row['shift_date'] . ' ' . $row['end_time']);
+
+            // ===============================
+            // HANDLE CROSS DAY (SHIFT MALAM)
+            // ===============================
+            if ($endDateTime <= $startDateTime) {
+                $endDateTime = strtotime('+1 day', $endDateTime);
+            }
+
+            // ===============================
+            // BUFFER 30 MENIT SEBELUM SHIFT
+            // ===============================
+            $startBuffered = strtotime('-30 minutes', $startDateTime);
+
+            // ===============================
+            // GROUP BY TANGGAL (BERDASARKAN START)
+            // ===============================
+            $date = date('Y-m-d', $startDateTime);
 
             if (!isset($grouped[$date])) {
                 $grouped[$date] = [
@@ -1246,8 +1269,16 @@ class WorkerController extends BaseController
 
             $grouped[$date]['shifts'][] = [
                 'schedule_shift_id' => $row['schedule_shift_id'],
-                'start_time'        => $row['start_time'],
-                'end_time'          => $row['end_time'],
+
+                // waktu display
+                'start_time' => date('H:i:s', $startBuffered),
+                'end_time'   => date('H:i:s', $endDateTime),
+
+                // full datetime (🔥 penting buat overlap check)
+                'start_datetime' => date('Y-m-d H:i:s', $startBuffered),
+                'end_datetime'   => date('Y-m-d H:i:s', $endDateTime),
+
+                // meta data
                 'shift_type'        => $row['shift_type'],
                 'department'        => $row['department'],
                 'hotel_id'          => $row['hotel_id'],
@@ -1259,6 +1290,9 @@ class WorkerController extends BaseController
             ];
         }
 
+        // ===============================
+        // RESPONSE
+        // ===============================
         return $this->response->setJSON([
             'status' => true,
             'data'   => array_values($grouped)
