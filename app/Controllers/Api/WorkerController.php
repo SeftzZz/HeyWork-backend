@@ -157,16 +157,85 @@ class WorkerController extends BaseController
         if (!$user) {
             return $this->response
                 ->setStatusCode(403)
-                ->setJSON(['message' => 'Access denied']);
+                ->setJSON([
+                    'status' => false,
+                    'message' => 'Access denied'
+                ]);
         }
 
+        $userId = $user->id;
+
+        // ===============================
+        // SKILLS
+        // ===============================
         $skills = $this->workerSkill
             ->select('skills.id, skills.name')
             ->join('skills', 'skills.id = worker_skills.skill_id')
-            ->where('worker_skills.user_id', $user->id)
+            ->where('worker_skills.user_id', $userId)
+            ->groupBy('skills.id')
             ->findAll();
 
+        // ===============================
+        // 🔥 TOTAL HOURS (COPY LOGIC)
+        // ===============================
+        $db = \Config\Database::connect();
+
+        $skills = $this->workerSkill
+            ->select('
+                skills.id,
+                skills.name
+            ')
+            ->join('skills', 'skills.id = worker_skills.skill_id')
+            ->where('worker_skills.user_id', $userId)
+            ->groupBy('skills.id')
+            ->findAll();
+
+        // ===============================
+        // 🔥 HITUNG HOURS PER SKILL
+        // ===============================
+        foreach ($skills as &$skill) {
+
+            $attendances = $db->table('job_attendances ja')
+                ->select('ja.type, ja.created_at')
+                ->join('jobs j', 'j.id = ja.job_id')
+                ->where('ja.user_id', $userId)
+                ->where('j.position', $skill['name']) // 🔥 FILTER PER SKILL
+                ->where('(ja.deleted_at IS NULL OR ja.deleted_at = "0000-00-00 00:00:00")', null, false)
+                ->orderBy('ja.created_at', 'ASC')
+                ->get()
+                ->getResultArray();
+
+            $totalSeconds = 0;
+            $lastCheckin  = null;
+
+            foreach ($attendances as $row) {
+
+                if ($row['type'] === 'checkin' && !$lastCheckin) {
+                    $lastCheckin = strtotime($row['created_at']);
+                }
+
+                if ($row['type'] === 'checkout' && $lastCheckin) {
+
+                    $checkout = strtotime($row['created_at']);
+
+                    if ($checkout > $lastCheckin) {
+                        $totalSeconds += ($checkout - $lastCheckin);
+                    }
+
+                    $lastCheckin = null;
+                }
+            }
+
+            $skill['total_hours'] = round($totalSeconds / 3600, 2);
+        }
+
+        // ===============================
+        // RESPONSE
+        // ===============================
         return $this->response->setJSON([
+            'status' => true,
+            'user_id' => $userId,
+            'total_skills' => count($skills),
             'data' => $skills
         ]);
     }
@@ -565,10 +634,20 @@ class WorkerController extends BaseController
             'rejected'  => 0
         ];
 
+        // untuk memastikan 1 application hanya dihitung sekali
+        $seen = [];
+
         foreach ($rows as $row) {
 
-            // pastikan hanya pakai 1 field konsisten
-            $status = $row['status'] ?? $row['application_status'] ?? null;
+            $appId = $row['application_id'];
+
+            if (isset($seen[$appId])) {
+                continue;
+            }
+
+            $seen[$appId] = true;
+
+            $status = $row['application_status'] ?? $row['status'] ?? null;
 
             if (isset($counts[$status])) {
                 $counts[$status]++;
@@ -663,9 +742,11 @@ class WorkerController extends BaseController
         // 3️⃣ Ambil jobs sesuai posisi dalam category itu
         // =========================
         $jobs = $this->job
-            ->whereIn('position', $allowedPositions)
-            ->where('status', 'open')
-            ->orderBy('job_date_start', 'DESC')
+            ->select('jobs.*, hotels.logo as hotel_logo, hotels.hotel_name')
+            ->join('hotels', 'hotels.id = jobs.hotel_id', 'left')
+            ->whereIn('jobs.position', $allowedPositions)
+            ->where('jobs.status', 'open')
+            ->orderBy('jobs.job_date_start', 'DESC')
             ->findAll();
 
         return $this->response->setJSON($jobs);
@@ -796,7 +877,7 @@ class WorkerController extends BaseController
         }
 
         $data = $builder
-            ->orderBy('job_attendances.created_at', 'ASC')
+            ->orderBy('job_attendances.created_at', 'DESC')
             ->findAll();
 
         return $this->response->setJSON($data);
@@ -1309,6 +1390,198 @@ class WorkerController extends BaseController
         return $this->response->setJSON([
             'status'  => true,
             'message' => 'FCM token registered'
+        ]);
+    }
+
+    public function walletDetail()
+    {
+        $db = \Config\Database::connect();
+
+        $hotelId = session()->get('hotel_id');
+        $user = $this->request->user ?? null;
+
+        if(!$user){
+            return $this->response->setJSON([
+                'status'=>false,
+                'message'=>'Unauthorized'
+            ]);
+        }
+
+        $type = $this->request->getGet('type') ?? 'all';
+
+        /*
+        |--------------------------------------------------------------------------
+        | GET USER DEPARTMENT FROM SKILL
+        |--------------------------------------------------------------------------
+        */
+
+        $skill = $db->table('worker_skills ws')
+            ->select('s.category')
+            ->join('skills s','s.id = ws.skill_id')
+            ->where('ws.user_id', $user->id)
+            ->limit(1)
+            ->get()
+            ->getRow();
+
+        if(!$skill){
+            return $this->response->setJSON([
+                'status'=>false,
+                'message'=>'User skill not found'
+            ]);
+        }
+
+        $department = $skill->category;
+
+        $attendanceDate = $this->request->getGet('date') ?? date('Y-m-d');
+
+        $todayStart = $attendanceDate.' 00:00:00';
+        $todayEnd   = $attendanceDate.' 23:59:59';
+
+        $daysInMonth = date('t',strtotime($attendanceDate));
+
+        /*
+        |--------------------------------------------------------------------------
+        | TODAY COST
+        |--------------------------------------------------------------------------
+        */
+
+        $todayRowsQuery = $db->table('job_attendances ja')
+            ->select('
+                u.id as user_id,
+                j.category as job_category,
+                j.fee,
+                wc.base_salary,
+                COUNT(DISTINCT DATE(ja.created_at)) as total_days
+            ')
+            ->join('users u','u.id = ja.user_id')
+            ->join('jobs j','j.id = ja.job_id')
+            ->join(
+                'worker_contracts wc',
+                'wc.user_id = ja.user_id AND wc.contract_type="corporate"',
+                'left'
+            )
+            ->where('ja.user_id', $user->id)
+            ->where('ja.type','checkout')
+            ->where('ja.created_at >=',$todayStart)
+            ->where('ja.created_at <=',$todayEnd);
+
+        if($type === 'daily_worker'){
+            $todayRowsQuery->groupStart()
+                ->where('j.category','daily_worker')
+                ->orWhere('j.category','casual')
+                ->groupEnd();
+        }
+        elseif($type === 'corporate'){
+            $todayRowsQuery->where('j.category','corporate');
+        }
+
+        $todayRows = $todayRowsQuery
+            ->groupBy('u.id')
+            ->get()
+            ->getResultArray();
+
+        $todayCost = 0;
+
+        foreach($todayRows as $row){
+
+            $jobCategory = strtolower(trim($row['job_category'] ?? ''));
+            $days = (int)$row['total_days'];
+
+            if(in_array($jobCategory,['daily_worker','casual'])){
+                $todayCost += $days * (float)$row['fee'];
+            }
+            elseif($jobCategory === 'corporate'){
+                $dailySalary = (float)$row['base_salary'] / $daysInMonth;
+                $todayCost += $days * $dailySalary;
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | DETAIL DATA
+        |--------------------------------------------------------------------------
+        */
+
+        $rowsQuery = $db->table('job_attendances ja')
+            ->select('
+                u.name,
+                j.position,
+                j.category as job_category,
+                j.fee,
+                wc.base_salary,
+                DATE(ja.created_at) as date,
+                MAX(ja.created_at) as checkout_time
+            ')
+            ->join('users u','u.id = ja.user_id')
+            ->join('jobs j','j.id = ja.job_id')
+            ->join(
+                'worker_contracts wc',
+                'wc.user_id = ja.user_id AND wc.contract_type="corporate"',
+                'left'
+            )
+            ->where('ja.user_id', $user->id)
+            ->where('ja.type','checkout')
+            ->groupBy('DATE(ja.created_at)')
+            ->orderBy('checkout_time','DESC');
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER TYPE
+        |--------------------------------------------------------------------------
+        */
+
+        if($type === 'daily_worker'){
+            $rowsQuery->groupStart()
+                ->where('j.category','daily_worker')
+                ->orWhere('j.category','casual')
+                ->groupEnd();
+        }
+        elseif($type === 'corporate'){
+            $rowsQuery->where('j.category','corporate');
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | EXECUTE QUERY
+        |--------------------------------------------------------------------------
+        */
+
+        $rows = $rowsQuery->get()->getResultArray();
+
+        $result = [];
+
+        foreach($rows as $row) {
+
+            $jobCategory = strtolower(trim($row['job_category'] ?? ''));
+
+            if(in_array($jobCategory,['daily_worker','casual'])) {
+                $cost = (float)$row['fee'];
+                $salary = (float)$row['fee'];
+            }
+            elseif($jobCategory === 'corporate') {
+                $dailySalary = (float)$row['base_salary'] / $daysInMonth;
+                $cost = $dailySalary;
+                $salary = (float)$row['base_salary'];
+            }
+            else {
+                $cost = 0;
+                $salary = 0;
+            }
+
+            $result[] = [
+                'name'     => $row['name'],
+                'position' => $row['position'],
+                'date'     => $row['date'],
+                'cost'     => round($cost,2)
+            ];
+        }
+
+        return $this->response->setJSON([
+            'status'=>true,
+            'department'=>$department,
+            'date'=>$attendanceDate,
+            'data'=>$result,
+            'total_cost'=>round($todayCost,2)
         ]);
     }
 }

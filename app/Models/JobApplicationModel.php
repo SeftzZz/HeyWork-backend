@@ -36,9 +36,9 @@ class JobApplicationModel extends Model
                 jobs.fee,
                 jobs.location,
 
-                schedule_days.shift_date,
-                schedule_shifts.start_time,
-                schedule_shifts.end_time,
+                MIN(schedule_days.shift_date) as shift_date,
+                MIN(schedule_shifts.start_time) as start_time,
+                MAX(schedule_shifts.end_time) as end_time,
 
                 (
                     SELECT MAX(created_at)
@@ -53,7 +53,6 @@ class JobApplicationModel extends Model
                     WHERE application_id = job_applications.id
                     AND type = 'checkout'
                 ) as last_checkout
-
             ")
 
             ->join('jobs', 'jobs.id = job_applications.job_id')
@@ -73,8 +72,9 @@ class JobApplicationModel extends Model
 
             ->where('job_applications.user_id', $userId)
 
-            ->orderBy('schedule_days.shift_date', 'DESC')
-            ->orderBy('schedule_shifts.start_time', 'DESC')
+            ->groupBy('job_applications.id')
+
+            ->orderBy('shift_date', 'DESC')
 
             ->get()
             ->getResultArray();

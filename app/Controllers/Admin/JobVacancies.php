@@ -22,11 +22,14 @@ class JobVacancies extends BaseAdminController
     }
 
     public function index()
-    {
+    {   
+        $hotelId  = session()->get('hotel_id');
+
         return view('admin/job-vacancies/index', [
             'title' => 'Job Vacancies',
             'skills' => $this->skills
                 ->where('deleted_at', null)
+                ->where('hotel_id', $hotelId)
                 ->orderBy('name', 'ASC')
                 ->findAll()
         ]);
@@ -384,7 +387,7 @@ class JobVacancies extends BaseAdminController
 
         $jobs = $db->table('jobs')
             ->select('id, position, job_date_start')
-            ->where('category', 'coorporate')
+            ->where('category', 'corporate')
             ->where('status', 'open')
             ->get()
             ->getResultArray();

@@ -8,7 +8,7 @@ class SkillModel extends Model
 {
     protected $table = 'skills';
     protected $allowedFields = [
-    	'name','category',
+    	'hotel_id','name','category',
     	'created_at','created_by','updated_at','updated_by','deleted_at','deleted_by'
     ];
     protected $useTimestamps = true;

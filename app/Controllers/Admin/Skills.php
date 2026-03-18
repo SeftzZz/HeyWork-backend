@@ -19,11 +19,15 @@ class Skills extends BaseAdminController
 
     public function index()
     {
+        $userRole = session()->get('user_role');
+        $hotelId  = session()->get('hotel_id');
+
         $data = [
             'title' => 'Skills',
             'categories' => $this->skillModel
                 ->select('category AS name')
                 ->where('deleted_at', null)
+                ->where('hotel_id', $hotelId)
                 ->groupBy('category')
                 ->orderBy('category','ASC')
                 ->findAll()
@@ -43,8 +47,12 @@ class Skills extends BaseAdminController
         $length = (int) $request->getPost('length');
         $start  = (int) $request->getPost('start');
 
+        $userRole = session()->get('user_role');
+        $hotelId  = session()->get('hotel_id');
+
         $builder = $this->skillModel
-            ->where('deleted_at', null);
+            ->where('deleted_at', null)
+            ->where('hotel_id', $hotelId);
 
         if ($searchValue) {
             $builder->groupStart()
@@ -103,12 +111,23 @@ class Skills extends BaseAdminController
             return $this->response->setStatusCode(404);
         }
 
-        $name     = trim($this->request->getPost('namaskill'));
-        $category = $this->request->getPost('kategori');
+        $name = trim($this->request->getPost('namaskill'));
+
+        $categorySelect = $this->request->getPost('kategori');
+        $categoryManual = $this->request->getPost('kategori_manual');
+
+        if ($categorySelect === '__new__') {
+            $category = trim($categoryManual);
+        } else {
+            $category = trim($categorySelect);
+        }
+
+        $hotelId  = session()->get('hotel_id');
 
         // cek apakah name sudah ada
         $exist = $this->skillModel
             ->where('name', $name)
+            ->where('hotel_id', $hotelId)
             ->where('deleted_at', null)
             ->first();
 
@@ -120,6 +139,7 @@ class Skills extends BaseAdminController
         }
 
         $data = [
+            'hotel_id'   => $hotelId,
             'name'       => $name,
             'category'   => $category,
             'created_by' => session()->get('user_id')

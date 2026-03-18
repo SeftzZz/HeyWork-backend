@@ -55,6 +55,7 @@ class Hotels extends BaseAdminController
          */
         $applyHotelFilter = function ($builder) use ($userRole, $hotelId) {
             $builder->where('deleted_at', null);
+            $builder->where('type', 'hotel'); // filter hanya hotel
 
             if ($userRole === 'hotel_hr') {
                 $builder->where('id', $hotelId);

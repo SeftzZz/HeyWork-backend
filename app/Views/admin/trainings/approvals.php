@@ -3,7 +3,7 @@
 
 <div class="container-xxl flex-grow-1 container-p-y">
 
-    <h4 class="fw-bold mb-4">Training Approvals</h4>
+    <h4 class="fw-bold mb-4">Learn and Growth Approvals</h4>
 
     <?php if(session()->getFlashdata('success')): ?>
         <div class="alert alert-success">
@@ -19,13 +19,13 @@
 
 
     <!-- ===================== -->
-    <!-- PENDING TRAINING PLANS -->
+    <!-- PENDING LEARN AND GROWTH PLANS -->
     <!-- ===================== -->
 
     <div class="card mb-4">
 
         <div class="card-header fw-bold">
-            Pending Training Plans
+            Pending Learn and Growth Plans
         </div>
 
         <div class="card-body table-responsive">
@@ -108,7 +108,7 @@
     <div class="card">
 
         <div class="card-header fw-bold">
-            Pending Training Revisions
+            Pending Learn and Growth Revisions
         </div>
 
         <div class="card-body table-responsive">
@@ -117,7 +117,7 @@
 
                 <thead class="table-light">
                     <tr>
-                        <th>Training Plan</th>
+                        <th>Learn and Growth Plan</th>
                         <th>Revision No</th>
                         <th>Requested By</th>
                         <th>Created At</th>

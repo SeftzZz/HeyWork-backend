@@ -38,6 +38,14 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('hotels/delete', 'Admin\Hotels::delete', ['filter' => 'role:admin']);
     $routes->post('hotels/get-total', 'Admin\Hotels::getTotalHotels');
 
+    $routes->get('business', 'Admin\Business::index', ['filter' => 'role:admin']);
+    $routes->post('business/datatable', 'Admin\Business::datatable', ['filter' => 'role:admin']);
+    $routes->post('business/store', 'Admin\Business::store', ['filter' => 'role:admin']);
+    $routes->post('business/get', 'Admin\Business::getById', ['filter' => 'role:admin']);
+    $routes->post('business/update', 'Admin\Business::update', ['filter' => 'role:admin']);
+    $routes->post('business/delete', 'Admin\Business::delete', ['filter' => 'role:admin']);
+    $routes->post('business/get-total', 'Admin\Business::getTotalHotels');
+
     $routes->get('attendance', 'Admin\Attendance::index', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk,hotel_gm,hotel_fna,hotel_eng,hotel_sales']);
     $routes->post('attendance/datatable', 'Admin\Attendance::datatable', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk,hotel_gm,hotel_fna,hotel_eng,hotel_sales']);
     $routes->post('attendance/detail', 'Admin\Attendance::detail', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk,hotel_gm,hotel_fna,hotel_eng,hotel_sales']);
@@ -240,4 +248,9 @@ $routes->group('api', ['filter' => 'jwt'], function($routes) {
     // PUSH NOTIFICATION
     // =========================
     $routes->post('worker/push-notification/register', 'Api\WorkerController::pushNotificationRegister');
+
+    // =========================
+    // WORKER / BALANCE
+    // =========================
+    $routes->get('worker/wallet-detail', 'Api\WorkerController::walletDetail');
 });
