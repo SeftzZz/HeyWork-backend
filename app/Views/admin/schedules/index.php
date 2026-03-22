@@ -29,33 +29,56 @@
     <div class="modal fade" id="modalAddSchedule" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
-
                 <form id="formAddSchedule">
-
                     <div class="modal-header">
                         <h5 class="modal-title">Create Schedule Plan</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
                     <div class="modal-body">
+                        <?php 
+                            $userRole = session()->get('user_role');
 
-                        <?php $userRole = session()->get('user_role'); ?>
+                            $allDepartments = [
+                                'Front Office',
+                                'Housekeeping',
+                                'Food & Beverage Service',
+                                'Kitchen / Culinary',
+                                'Human Resources',
+                                'Sales & Marketing',
+                                'Finance',
+                                'Engineering',
+                                'Management'
+                            ];
 
-                        <?php if(in_array($userRole, ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales','hotel_gm'])): ?>
+                            $roleDepartmentMap = [
+                                'hotel_fo'             => ['Front Office'],
+                                'hotel_hk'             => ['Housekeeping'],
+                                'hotel_fnb_service'    => ['Food & Beverage Service'],
+                                'hotel_fnb_production' => ['Kitchen / Culinary'],
+                                'hotel_fna'            => ['Finance'],
+                                'hotel_eng'            => ['Engineering'],
+                                'hotel_sales'          => ['Sales & Marketing'],
+                            ];
+
+                            if (in_array($userRole, ['admin','hotel_hr','hotel_gm'])) {
+                                $departments = $allDepartments;
+                            } else {
+                                $departments = $roleDepartmentMap[$userRole] ?? [];
+                            }
+                        ?>
+
+                        <?php if(!empty($departments)): ?>
                             <div class="mb-3">
                                 <label class="form-label">Department</label>
                                 <select name="department" class="form-select" required>
                                     <option value="">Select Department</option>
-                                    <option value="Front Office">Front Office</option>
-                                    <option value="Housekeeping">Housekeeping</option>
-                                    <option value="Food & Beverage Service">Food & Beverage Service</option>
-                                    <option value="Kitchen / Culinary">Kitchen / Culinary</option>
-                                    <option value="Human Resources">Human Resources</option>
-                                    <option value="Sales & Marketing">Sales & Marketing</option>
-                                    <option value="Finance">Finance</option>
-                                    <option value="Engineering">Engineering</option>
-                                    <option value="Information Technology">Information Technology</option>
-                                    <option value="Management">Management</option>
+                                    <?php foreach($departments as $dept): ?>
+                                        <option value="<?= esc($dept) ?>">
+                                            <?= esc($dept) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+
                                 </select>
                             </div>
                         <?php endif; ?>
