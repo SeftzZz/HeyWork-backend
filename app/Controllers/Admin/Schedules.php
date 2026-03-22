@@ -151,7 +151,6 @@ class Schedules extends BaseController
         $no = $start + 1;
 
         foreach ($data as $row) {
-
             $badge = match ($row['status']) {
                 'pending'  => '<span class="badge bg-label-warning">Pending</span>',
                 'approved' => '<span class="badge bg-label-success">Approved</span>',
@@ -322,7 +321,6 @@ class Schedules extends BaseController
     public function getDetail()
     {
         $id = $this->request->getPost('id');
-
         // ===============================
         // GET PLAN
         // ===============================
@@ -336,7 +334,6 @@ class Schedules extends BaseController
                 'status' => false
             ]);
         }
-
         // ===============================
         // GET DAYS + SHIFTS
         // ===============================
@@ -360,11 +357,8 @@ class Schedules extends BaseController
         // FORMAT BY DATE (GROUPING)
         // ===============================
         $grouped = [];
-
         foreach ($rows as $row) {
-
             $date = $row['shift_date'];
-
             if (!isset($grouped[$date])) {
                 $grouped[$date] = [
                     'shift_date' => $date,
@@ -384,7 +378,6 @@ class Schedules extends BaseController
         }
 
         $details = array_values($grouped);
-
         // ===============================
         // STATUS BADGE
         // ===============================
@@ -402,7 +395,8 @@ class Schedules extends BaseController
                 'department'   => $plan['department'],
                 'month_name'   => date('F', mktime(0,0,0,$plan['month'],1)),
                 'year'         => $plan['year'],
-                'status_badge' => $badge
+                'status_badge' => $badge,
+                'status_raw'   => $plan['status']
             ],
             'details' => $details
         ]);

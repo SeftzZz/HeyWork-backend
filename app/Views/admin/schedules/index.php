@@ -126,14 +126,12 @@
     <div class="modal fade" id="modalViewSchedule" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-
                 <div class="modal-header">
                     <h5 class="modal-title">Schedule Detail</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
-
                     <!-- HEADER INFO -->
                     <div class="row mb-3">
                         <div class="col-md-3">
@@ -481,21 +479,16 @@
         // VIEW SCHEDULE (AJAX)
         // ==========================
         $(document).on('click', '.btn-view', function () {
-
             let id = $(this).data('id');
-
             $('#modalViewSchedule').modal('show');
             $('#view_schedule_body').html(
                 '<tr><td colspan="3" class="text-center">Loading...</td></tr>'
             );
-
             $.post("<?= base_url('admin/schedules/get-detail') ?>", {
                 id: id,
                 '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
             }, function (res) {
-
                 if (res.status) {
-
                     // Header
                     $('#view_department').text(res.data.department);
                     $('#view_month').text(res.data.month_name);
@@ -503,35 +496,31 @@
                     $('#view_status').html(res.data.status_badge);
 
                     // Detail rows
+                    let isApproved = res.data.status_raw === 'approved';
                     let rows = '';
-
                     if (res.details.length > 0) {
-
                         res.details.forEach(function (day) {
-
                             // Tidak ada shift
                             if (!day.shifts || day.shifts.length === 0) {
-
                                 rows += `
                                 <tr>
                                     <td>${formatDate(day.shift_date)}</td>
                                     <td>-</td>
                                     <td>
-                                        <span class="badge bg-label-secondary">NO SHIFT</span>
+                                        ${!isApproved ? `<span class="badge bg-label-secondary">NO SHIFT</span>` : ''}
+                                        ${!isApproved ? `
                                         <button 
                                             class="btn btn-sm btn-primary ms-2 btn-assign"
                                             data-plan="${id}"
                                             data-date="${day.shift_date}">
                                             Assign
                                         </button>
+                                        ` : ''}
                                     </td>
                                 </tr>
                                 `;
-
                             } else {
-
                                 day.shifts.forEach(function (shift) {
-
                                     rows += `
                                     <tr>
                                         <td>${formatDate(day.shift_date)}</td>
@@ -543,34 +532,30 @@
                                             <div class="small text-muted">
                                                 ${shift.start_time} - ${shift.end_time}
                                             </div>
+                                            ${!isApproved ? `
                                             <button 
                                                 class="btn btn-sm btn-outline-primary ms-2 btn-assign"
                                                 data-plan="${id}"
                                                 data-date="${day.shift_date}">
                                                 + Add
                                             </button>
+                                            ` : ''}
                                         </td>
                                     </tr>
                                     `;
                                 });
-
                             }
-
                         });
 
                     } else {
-
                         rows = '<tr><td colspan="3" class="text-center">No schedule detail</td></tr>';
                     }
-
                     $('#view_schedule_body').html(rows);
-
                 } else {
                     $('#view_schedule_body').html(
                         '<tr><td colspan="3" class="text-center text-danger">Failed to load</td></tr>'
                     );
                 }
-
             }, 'json');
         });
 
