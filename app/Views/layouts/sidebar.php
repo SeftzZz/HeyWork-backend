@@ -117,14 +117,13 @@
                                     <div data-i18n="Scheduling">Scheduling</div>
                                 </a>
                                 <ul class="menu-sub">
+                                    <li class="menu-item <?= ($uri=='schedules')?'active':'' ?>">
+                                        <a href="<?= base_url('admin/schedules') ?>" class="menu-link">
+                                            <i class="menu-icon tf-icons ti ti-calendar"></i>
+                                            <div>Schedule List</div>
+                                        </a>
+                                    </li>
                                     <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_gm'])) : ?>
-
-                                        <li class="menu-item <?= ($uri=='schedules')?'active':'' ?>">
-                                            <a href="<?= base_url('admin/schedules') ?>" class="menu-link">
-                                                <i class="menu-icon tf-icons ti ti-calendar"></i>
-                                                <div>Schedule List</div>
-                                            </a>
-                                        </li>
                                         <li class="menu-item <?= ($uri=='schedule-approvals')?'active':'' ?>">
                                             <a href="<?= base_url('admin/schedule-approvals') ?>" class="menu-link">
                                                 <i class="menu-icon tf-icons ti ti-check"></i>
