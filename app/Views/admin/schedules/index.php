@@ -178,6 +178,7 @@
         </div>
     </div>
 
+    <!-- modal add Shift  -->
     <div class="modal fade" id="modalAssignShift">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -234,6 +235,57 @@
         </div>
       </div>
     </div>
+
+    <!-- modal edit Shift  -->
+    <div class="modal fade" id="modalEditShift">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="formEditShift">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Shift</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="hidden" name="shift_id" id="edit_shift_id">
+                        <div class="mb-3">
+                            <label>Worker</label>
+                            <select name="user_id" id="edit_user_id" class="form-control select2" required>
+                              <option value="">Select Worker</option>
+                                <?php foreach($workers as $w): ?>
+                                    <option value="<?= $w['id'] ?>">
+                                        <?= esc($w['name']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Start</label>
+                                <input type="time" name="start_time" id="edit_start_time" class="form-control" required>
+                            </div>
+                            <div class="col">
+                                <label>End</label>
+                                <input type="time" name="end_time" id="edit_end_time" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <label>Shift Type</label>
+                            <select name="shift_type" id="edit_shift_type" class="form-control">
+                                <option value="regular">Regular</option>
+                                <option value="overtime">Overtime</option>
+                                <option value="leave">Leave</option>
+                                <option value="off">Off</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">Update Shift</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <?= $this->endSection() ?>
@@ -252,12 +304,10 @@
     'use strict';
 
     $(function () {
-
+        let currentPlanId = null;
         let dt_table = $('.dtSchedule'),
             dt_schedule;
-
         if (dt_table.length) {
-
             dt_schedule = dt_table.DataTable({
                 processing: true,
                 serverSide: true,
@@ -434,12 +484,43 @@
         });
 
         // ==========================
+        // SUBMIT (AJAX)
+        // ==========================
+        $(document).on('click', '.btn-submit', function () {
+            let id = $(this).data('id');
+            Swal.fire({
+                title: 'Submit schedule?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, submit',
+                reverseButtons: true
+            }).then(result => {
+                if (result.isConfirmed) {
+                    $.post("<?= base_url('admin/schedules/submit-schedule') ?>", {
+                        id: id,
+                        '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
+                    }, function (res) {
+                        if (res.status) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Schedule Submitted',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                            dt_schedule.ajax.reload(null, false);
+                        } else {
+                            Swal.fire('Failed', res.message, 'error');
+                        }
+                    }, 'json');
+                }
+            });
+        });
+
+        // ==========================
         // REQUEST REVISION (AJAX)
         // ==========================
         $(document).on('click', '.btn-revision', function () {
-
             let id = $(this).data('id');
-
             Swal.fire({
                 title: 'Request revision?',
                 icon: 'warning',
@@ -447,25 +528,19 @@
                 confirmButtonText: 'Yes, submit',
                 reverseButtons: true
             }).then(result => {
-
                 if (result.isConfirmed) {
-
                     $.post("<?= base_url('admin/schedules/request-revision') ?>", {
                         id: id,
                         '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
                     }, function (res) {
-
                         if (res.status) {
-
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Revision Submitted',
                                 timer: 1500,
                                 showConfirmButton: false
                             });
-
                             dt_schedule.ajax.reload(null, false);
-
                         } else {
                             Swal.fire('Failed', res.message, 'error');
                         }
@@ -480,27 +555,29 @@
         // ==========================
         $(document).on('click', '.btn-view', function () {
             let id = $(this).data('id');
+            currentPlanId = id;
             $('#modalViewSchedule').modal('show');
+            loadScheduleDetail(id);
+        });
+
+        function loadScheduleDetail(id){
             $('#view_schedule_body').html(
                 '<tr><td colspan="3" class="text-center">Loading...</td></tr>'
             );
+
             $.post("<?= base_url('admin/schedules/get-detail') ?>", {
                 id: id,
                 '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
             }, function (res) {
                 if (res.status) {
-                    // Header
                     $('#view_department').text(res.data.department);
                     $('#view_month').text(res.data.month_name);
                     $('#view_year').text(res.data.year);
                     $('#view_status').html(res.data.status_badge);
-
-                    // Detail rows
                     let isApproved = res.data.status_raw === 'approved';
                     let rows = '';
                     if (res.details.length > 0) {
                         res.details.forEach(function (day) {
-                            // Tidak ada shift
                             if (!day.shifts || day.shifts.length === 0) {
                                 rows += `
                                 <tr>
@@ -509,16 +586,13 @@
                                     <td>
                                         ${!isApproved ? `<span class="badge bg-label-secondary">NO SHIFT</span>` : ''}
                                         ${!isApproved ? `
-                                        <button 
-                                            class="btn btn-sm btn-primary ms-2 btn-assign"
+                                        <button class="btn btn-sm btn-primary ms-2 btn-assign"
                                             data-plan="${id}"
                                             data-date="${day.shift_date}">
                                             Assign
-                                        </button>
-                                        ` : ''}
+                                        </button>` : ''}
                                     </td>
-                                </tr>
-                                `;
+                                </tr>`;
                             } else {
                                 day.shifts.forEach(function (shift) {
                                     rows += `
@@ -532,17 +606,29 @@
                                             <div class="small text-muted">
                                                 ${shift.start_time} - ${shift.end_time}
                                             </div>
+
                                             ${!isApproved ? `
-                                            <button 
-                                                class="btn btn-sm btn-outline-primary ms-2 btn-assign"
-                                                data-plan="${id}"
-                                                data-date="${day.shift_date}">
-                                                + Add
+                                            <button class="btn btn-xs btn-outline-primary ms-2 btn-assign"
+                                                data-plan="${id}" data-date="${day.shift_date}">
+                                                <i class="ti ti-plus"></i>
+                                            </button>
+
+                                            <button class="btn btn-xs btn-outline-warning ms-2 btn-edit-shift"
+                                                data-id="${shift.id}"
+                                                data-user="${shift.user_id}"
+                                                data-start="${shift.start_time}"
+                                                data-end="${shift.end_time}"
+                                                data-type="${shift.shift_type}">
+                                                <i class="ti ti-pencil"></i>
+                                            </button>
+
+                                            <button class="btn btn-xs btn-outline-danger ms-2 btn-delete-shift"
+                                                data-id="${shift.id}">
+                                                <i class="ti ti-trash"></i>
                                             </button>
                                             ` : ''}
                                         </td>
-                                    </tr>
-                                    `;
+                                    </tr>`;
                                 });
                             }
                         });
@@ -557,47 +643,102 @@
                     );
                 }
             }, 'json');
-        });
+        }
 
         $(document).on('click', '.btn-assign', function(){
-
             let planId = $(this).data('plan');
             let date   = $(this).data('date');
-
             $('#assign_plan_id').val(planId);
             $('#assign_shift_date').val(date);
-
             $('#modalAssignShift').modal('show');
         });
 
         $('#formAssignShift').on('submit', function(e){
-
             e.preventDefault();
-
             let formData = $(this).serialize();
-
             $.post("<?= base_url('admin/schedules/assign-shift') ?>",
                 formData + '&<?= csrf_token() ?>=<?= csrf_hash() ?>',
                 function(res){
-
                     if(res.status){
-
                         $('#modalAssignShift').modal('hide');
-
                         Swal.fire({
                             icon: 'success',
                             title: 'Shift Assigned',
                             timer: 1200,
                             showConfirmButton: false
                         });
-
                         $('.btn-view[data-id="'+$('#assign_plan_id').val()+'"]').click();
-
                     } else {
                         Swal.fire('Error', res.message, 'error');
                     }
-
                 }, 'json');
+        });
+
+        // OPEN EDIT MODAL
+        $(document).on('click', '.btn-edit-shift', function(){
+            $('#edit_shift_id').val($(this).data('id'));
+            $('#edit_user_id').val($(this).data('user')).trigger('change');
+            $('#edit_start_time').val($(this).data('start'));
+            $('#edit_end_time').val($(this).data('end'));
+            $('#edit_shift_type').val($(this).data('type'));
+            $('#modalEditShift').modal('show');
+        });
+
+        // SUBMIT EDIT
+        $('#formEditShift').on('submit', function(e){
+            e.preventDefault();
+            let formData = $(this).serialize();
+            $.post("<?= base_url('admin/schedules/update-shift') ?>",
+            formData + '&<?= csrf_token() ?>=<?= csrf_hash() ?>',
+            function(res){
+                if(res.status){
+                    $('#modalEditShift').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Shift Updated',
+                        timer: 1200,
+                        showConfirmButton: false
+                    });
+                    if(currentPlanId){
+                        loadScheduleDetail(currentPlanId);
+                    }
+                } else {
+                    Swal.fire('Error', res.message, 'error');
+                }
+            }, 'json');
+        });
+
+        // OPEN DELETE MODAL
+        $(document).on('click', '.btn-delete-shift', function(){
+            let id = $(this).data('id');
+            Swal.fire({
+                title: 'Delete this shift?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete',
+                reverseButtons: true
+            }).then(result => {
+                if(result.isConfirmed){
+                    $.post("<?= base_url('admin/schedules/delete-shift') ?>", {
+                        id: id,
+                        '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
+                    }, function(res){
+                        if(res.status){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Shift Deleted',
+                                timer: 1200,
+                                showConfirmButton: false
+                            });
+                            if(currentPlanId){
+                                loadScheduleDetail(currentPlanId);
+                            }
+                        } else {
+                            Swal.fire('Error', res.message, 'error');
+                        }
+                    }, 'json');
+                }
+            });
         });
     });
 </script>

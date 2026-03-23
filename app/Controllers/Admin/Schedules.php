@@ -162,18 +162,37 @@ class Schedules extends BaseController
             $actionBtn = '
                 <div class="d-flex gap-2">
                     <a href="javascript:void(0)"
-                       class="btn btn-sm btn-icon btn-primary btn-view"
-                       data-id="'.$row['id'].'"
-                       title="View">
+                        class="btn btn-sm btn-icon btn-primary btn-view"
+                        data-id="'.$row['id'].'"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top" 
+                        data-bs-custom-class="tooltip-primary"
+                        title="View">
                         <i class="ti ti-eye"></i>
                     </a>
             ';
+
+            if ($row['status'] === 'draft') {
+                $actionBtn .= '
+                    <button class="btn btn-sm btn-icon btn-success btn-submit"
+                            data-id="'.$row['id'].'"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top" 
+                            data-bs-custom-class="tooltip-success"
+                            title="Submit">
+                        <i class="ti ti-send"></i>
+                    </button>
+                ';
+            }
 
             if ($row['status'] === 'approved') {
                 $actionBtn .= '
                     <button class="btn btn-sm btn-icon btn-warning btn-revision"
                             data-id="'.$row['id'].'"
-                            title="Request Revision">
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top" 
+                            data-bs-custom-class="tooltip-warning"
+                            title="Edit">
                         <i class="ti ti-edit"></i>
                     </button>
                 ';
@@ -260,7 +279,7 @@ class Schedules extends BaseController
             'department'   => $department,
             'month'        => $month,
             'year'         => $year,
-            'status'       => 'pending',
+            'status'       => 'draft',
             'requested_by' => $userId,
             'created_at'   => date('Y-m-d H:i:s')
         ];
@@ -339,6 +358,7 @@ class Schedules extends BaseController
         // ===============================
         $rows = $this->db->table('schedule_days d')
             ->select('
+                s.id,
                 d.shift_date,
                 s.user_id,
                 s.start_time,
@@ -368,6 +388,7 @@ class Schedules extends BaseController
 
             if ($row['user_id']) {
                 $grouped[$date]['shifts'][] = [
+                    'id'          => $row['id'],
                     'user_id'     => $row['user_id'],
                     'worker_name' => $row['worker_name'],
                     'start_time'  => $row['start_time'],
@@ -561,21 +582,62 @@ class Schedules extends BaseController
         ]);
     }
 
+    public function updateShift()
+    {
+        $id = $this->request->getPost('shift_id');
+        $data = [
+            'user_id'    => $this->request->getPost('user_id'),
+            'start_time' => $this->request->getPost('start_time'),
+            'end_time'   => $this->request->getPost('end_time'),
+            'shift_type' => $this->request->getPost('shift_type')
+        ];
+
+        $this->db->table('schedule_shifts')->where('id', $id)->update($data);
+        return $this->response->setJSON(['status' => true]);
+    }
+
+    public function deleteShift()
+    {
+        $id = $this->request->getPost('id');
+        $this->db->table('schedule_shifts')->delete(['id' => $id]);
+        return $this->response->setJSON(['status' => true]);
+    }
+
+    public function submitSchedule()
+    {
+        $userId = session()->get('user_id');
+        $id = $this->request->getPost('id');
+
+        $Data = [
+            'requested_by'     => $userId,
+            'status'           => 'pending',
+            'updated_at'       => date('Y-m-d H:i:s')
+        ];
+
+        $this->db->table('schedule_plans')->where('id', $id)->update($Data);
+        return $this->response->setJSON([
+            'status' => true,
+            'message' => 'Schedule Submitted'
+        ]);
+    }
+
     public function requestRevision()
     {
         $userId = session()->get('user_id');
         $id = $this->request->getPost('id');
 
         $revisionData = [
-            'schedule_plan_id' => $id,
-            'revision_number'  => $this->getNextRevisionNumber($id),
             'requested_by'     => $userId,
-            'status'           => 'pending'
+            'status'           => 'draft',
+            'approved_by'      => null,
+            'updated_at'       => date('Y-m-d H:i:s')
         ];
 
-        $this->db->table('schedule_revisions')->insert($revisionData);
-
-        return redirect()->back()->with('success','Revision submitted for approval');
+        $this->db->table('schedule_plans')->where('id', $id)->update($revisionData);
+        return $this->response->setJSON([
+            'status' => true,
+            'message' => 'Revision submitted'
+        ]);
     }
 
     private function getDepartmentFromRole($role)

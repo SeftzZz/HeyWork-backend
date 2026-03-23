@@ -104,6 +104,9 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('schedules/get-detail', 'Admin\Schedules::getDetail');
     $routes->post('schedules/assign-shift', 'Admin\Schedules::assignShift');
     $routes->post('schedules/request-revision', 'Admin\Schedules::requestRevision');
+    $routes->post('schedules/update-shift', 'Admin\Schedules::updateShift');
+    $routes->post('schedules/delete-shift', 'Admin\Schedules::deleteShift');
+    $routes->post('schedules/submit-schedule', 'Admin\Schedules::submitSchedule');
 
     $routes->get('schedule-approvals', 'Admin\ScheduleApprovals::index', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk,hotel_gm,hotel_fna,hotel_eng,hotel_sales']);
     $routes->post('schedule-approvals/approve-plan/(:num)', 'Admin\ScheduleApprovals::approvePlan/$1');

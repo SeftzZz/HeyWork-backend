@@ -136,7 +136,18 @@
                 $(document).on('draw.dt', function () {
                     initBootstrapUI();
                 });
+
+                function initTooltip(){
+                     // Tooltip
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el){
+                        new bootstrap.Tooltip(el);
+                    });
+                    // Popover
+                    document.querySelectorAll('[data-bs-toggle="popover"]').forEach(function(el){
+                        new bootstrap.Popover(el);
+                    });
+                }
             });
-            </script>
+        </script>
     </body>
 </html>

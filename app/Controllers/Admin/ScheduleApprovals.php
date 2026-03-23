@@ -24,17 +24,17 @@ class ScheduleApprovals extends BaseController
 
         $builder = $this->db->table('schedule_plans sp');
 
-        $builder->select('sp.*')
+        $builder->select('sp.*, u.name as requester_name')
+            ->join('users u', 'u.id = sp.requested_by', 'left')
             ->where('sp.hotel_id', $hotelId)
             ->where('sp.status', 'pending')
             ->orderBy('sp.created_at', 'DESC');
 
         // Jika bukan HR atau admin → filter berdasarkan department
-        if (!in_array($role, ['admin','hotel_hr'])) {
-
+        if (!in_array($role, ['admin','hotel_hr','hotel_gm'])) {
             $department = $this->getDepartmentFromRole($role);
-
-            $builder->join('schedule_shifts ss', 'ss.schedule_day_id = sp.id', 'left')
+            $builder->join('schedule_days sd', 'sd.schedule_plan_id = sp.id', 'left')
+                    ->join('schedule_shifts ss', 'ss.schedule_day_id = sd.id', 'left')
                     ->join('job_applications ja', 'ja.id = ss.application_id', 'left')
                     ->join('jobs j', 'j.id = ja.job_id', 'left')
                     ->join('skills s', 's.name = j.position', 'left')
@@ -89,7 +89,6 @@ class ScheduleApprovals extends BaseController
             ->getResultArray();
 
         foreach ($shifts as $shift) {
-
             // =========================
             // FIND JOB + APPLICATION
             // =========================
@@ -97,7 +96,6 @@ class ScheduleApprovals extends BaseController
                 ->select('ja.id as application_id, j.id as job_id')
                 ->join('jobs j', 'j.id = ja.job_id')
                 ->where('ja.user_id', $shift['user_id'])
-                ->where('ja.status', 'accepted')
                 ->where('j.job_date_start <=', $shift['shift_date'])
                 ->where('j.job_date_end >=', $shift['shift_date'])
                 ->orderBy('j.job_date_start', 'DESC')
