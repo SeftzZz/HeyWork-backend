@@ -29,7 +29,6 @@ class JobVacancies extends BaseAdminController
             'title' => 'Job Vacancies',
             'skills' => $this->skills
                 ->where('deleted_at', null)
-                ->where('hotel_id', $hotelId)
                 ->orderBy('name', 'ASC')
                 ->findAll()
         ]);

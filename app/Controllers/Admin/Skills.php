@@ -27,7 +27,6 @@ class Skills extends BaseAdminController
             'categories' => $this->skillModel
                 ->select('category AS name')
                 ->where('deleted_at', null)
-                ->where('hotel_id', $hotelId)
                 ->groupBy('category')
                 ->orderBy('category','ASC')
                 ->findAll()
@@ -51,8 +50,7 @@ class Skills extends BaseAdminController
         $hotelId  = session()->get('hotel_id');
 
         $builder = $this->skillModel
-            ->where('deleted_at', null)
-            ->where('hotel_id', $hotelId);
+            ->where('deleted_at', null);
 
         if ($searchValue) {
             $builder->groupStart()
