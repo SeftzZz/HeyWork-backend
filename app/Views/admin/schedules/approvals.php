@@ -62,7 +62,7 @@
                             <!-- ===================== -->
                             <!-- PENDING REVISIONS -->
                             <!-- ===================== -->
-                            <div class="card">
+                            <!-- <div class="card">
                                 <div class="card-header fw-bold">Pending Schedule Revisions</div>
                                 <div class="card-body table-responsive">
                                     <table class="table table-bordered table-hover" id="revisionTable">
@@ -106,7 +106,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                         <?= $this->endSection() ?>
