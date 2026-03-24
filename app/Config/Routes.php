@@ -118,6 +118,8 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->get('invoices/print/(:num)', 'Admin\Invoices::print/$1', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk,hotel_gm,hotel_fna,hotel_eng,hotel_sales']);
     $routes->get('invoices/send/(:num)', 'Admin\Invoices::sendEmail/$1', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk,hotel_gm,hotel_fna,hotel_eng,hotel_sales']);
     $routes->get('invoices/create/(:num)', 'Admin\Invoices::create/$1', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk,hotel_gm,hotel_fna,hotel_eng,hotel_sales']);
+    $routes->get('invoices/create-week/(:num)', 'Admin\Invoices::createWeekly/$1');
+    $routes->get('invoices/view/(:num)', 'Admin\Invoices::view/$1');
 
     $routes->get('payments', 'Admin\Payments::index', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk,hotel_gm,hotel_fna,hotel_eng,hotel_sales']);
     $routes->post('payments/datatable', 'Admin\Payments::datatable');

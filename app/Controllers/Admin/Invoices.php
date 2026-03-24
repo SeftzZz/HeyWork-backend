@@ -164,9 +164,9 @@ class Invoices extends BaseAdminController
                 'amount'      => 'Rp ' . number_format($row['amount'], 0, ',', '.'),
                 'description' => esc($row['description']),
                 'action'      => '
-                    <a href="' . base_url('admin/invoices/view/' . $row['id']) . '" 
-                       class="btn btn-sm btn-primary">
-                        View
+                    <a href="'.base_url('admin/invoices/create-week/'.$g['week_key']).'"
+                        class="btn btn-sm btn-primary">
+                        Create Weekly Invoice
                     </a>
                 '
             ];
@@ -554,6 +554,12 @@ class Invoices extends BaseAdminController
             $db->table('invoice_items')->insert($item);
         }
 
+        $applicationIds = array_column($invoiceItems,'application_id');
+
+        $db->table('job_attendances')
+           ->whereIn('application_id', $applicationIds)
+           ->update(['billed' => 1]);
+
         $db->transComplete();
         if($db->transStatus() === false){
             return redirect()->back()->with('error','Invoice creation failed');
@@ -561,5 +567,49 @@ class Invoices extends BaseAdminController
 
         return redirect()->to('/admin/invoices/view/'.$invoiceId)
             ->with('success','Weekly invoice created successfully');
+    }
+
+    public function view($id)
+    {
+        $db = \Config\Database::connect();
+
+        // =========================
+        // GET INVOICE
+        // =========================
+        $invoice = $db->table('invoices')
+            ->select('invoices.*, hotels.hotel_name, hotels.email as hotel_email')
+            ->join('hotels', 'hotels.id = invoices.hotel_id')
+            ->where('invoices.id', $id)
+            ->where('invoices.hotel_id', session()->get('hotel_id')) // security
+            ->get()
+            ->getRowArray();
+
+        // jika invoice tidak ditemukan
+        if (!$invoice) {
+            return redirect()->to('/admin/invoices')
+                ->with('error', 'Invoice not found');
+        }
+
+        // =========================
+        // GET INVOICE ITEMS
+        // =========================
+        $items = $db->table('invoice_items')
+            ->select('invoice_items.*, users.name as worker_name, jobs.position')
+            ->join('users', 'users.id = invoice_items.worker_id')
+            ->join('job_applications', 'job_applications.id = invoice_items.application_id')
+            ->join('jobs', 'jobs.id = job_applications.job_id')
+            ->where('invoice_items.invoice_id', $id)
+            ->where('jobs.hotel_id', session()->get('hotel_id'))
+            ->get()
+            ->getResultArray();
+
+        // =========================
+        // RETURN VIEW
+        // =========================
+        return view('admin/invoices/view', [
+            'title'   => 'Invoice Detail',
+            'invoice' => $invoice,
+            'items'   => $items
+        ]);
     }
 }

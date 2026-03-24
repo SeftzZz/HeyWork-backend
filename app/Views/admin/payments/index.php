@@ -10,7 +10,7 @@
 						            <th></th>
 						            <th>No.</th>
 						            <th>Worker</th>
-						            <th>Job</th>
+						            <th>Weeks</th>
 						            <th>Working Days</th>
 						            <th>Duration (Hours)</th>
 						            <th>Amount</th>
