@@ -9,12 +9,12 @@
 						          <tr>
 						            <th></th>
 						            <th>No.</th>
+						            <th>Hotels</th>
 						            <th>Worker</th>
 						            <th>Weeks</th>
 						            <th>Working Days</th>
 						            <th>Duration (Hours)</th>
 						            <th>Amount</th>
-						            <th>Status</th>
 						            <th>Action</th>
 						          </tr>
 						        </thead>
@@ -57,12 +57,12 @@
 						            columns: [
 						                { data: null },
 									    { data: 'no' },
+									    { data: 'hotel' },
 									    { data: 'worker' },
 									    { data: 'job' },
 									    { data: 'working_days' },
 									    { data: 'duration' },
 									    { data: 'amount' },
-									    { data: 'status' },
 									    { data: 'action' }
 						            ],
 						            columnDefs: [

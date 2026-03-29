@@ -85,7 +85,7 @@
                                                 Balance: <strong>Rp.0</strong>
                                             </span> -->
 
-                                            <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr'])) : ?>
+                                            <?php if (in_array(session()->get('user_role'), ['hotel_hr','hotel_gm'])) : ?>
                                                 <span class="amount-item active">
                                                     <i class="ti ti-cash ti-md me-1"></i>
                                                     Usage Amt: <strong id="usage-amount">Rp.0</strong>
@@ -247,6 +247,10 @@
                                       'hotel_hk'             => 'User HK',
                                       'hotel_fnb_service'    => 'User FnBS',
                                       'hotel_fnb_production' => 'User FnBP',
+                                      'hotel_fna'            => 'User FnA',
+                                      'hotel_eng'            => 'User Eng',
+                                      'hotel_sales'          => 'User SnM',
+                                      'hotel_gm'             => 'User GM',
                                   ];
 
                                   $roleLabel = $roleMap[$userRole] ?? ucfirst($userRole);
@@ -316,21 +320,20 @@
                                 <i class="ti ti-x ti-sm search-toggler cursor-pointer"></i>
                         </div>
                     </nav>
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function () {
 
-                            fetch("<?= base_url('admin/transactions/last-payroll') ?>")
-                                .then(response => response.json())
-                                .then(data => {
-                                    const amount = data.amount || 0;
-
-                                    const formatted = new Intl.NumberFormat('id-ID').format(amount);
-
-                                    document.getElementById('usage-amount').innerText = "Rp." + formatted;
-                                })
-                                .catch(error => {
-                                    console.error('Failed to load payroll:', error);
-                                });
-
-                        });
-                    </script>
+                    <?php if ((int) session()->get('hotel_id') !== 0 && !in_array(session()->get('user_role'), ['hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales'])): ?>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                fetch("<?= base_url('admin/transactions/last-payroll') ?>")
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const amount = data.amount || 0;
+                                        const formatted = new Intl.NumberFormat('id-ID').format(amount);
+                                        document.getElementById('usage-amount').innerText = "Rp." + formatted;
+                                    })
+                                    .catch(error => {
+                                        console.error('Failed to load payroll:', error);
+                                    });
+                            });
+                        </script>
+                    <?php endif; ?>

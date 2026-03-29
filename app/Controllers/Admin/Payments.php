@@ -51,120 +51,128 @@ class Payments extends BaseAdminController
                 schedule_shifts.end_time,
                 schedule_days.shift_date,
                 jobs.fee,
-                YEARWEEK(schedule_days.shift_date,1) AS week_key,
-                (
-                    SELECT invoices.status
-                    FROM invoice_items
-                    JOIN invoices ON invoices.id = invoice_items.invoice_id
-                    WHERE invoice_items.application_id = job_attendances.application_id
-                    ORDER BY invoices.id DESC
-                    LIMIT 1
-                ) AS payment_status
+                jobs.hotel_id,
+                hotels.hotel_name,
+                YEARWEEK(job_attendances.created_at,1) AS week_key
             ")
             ->join('job_applications', 'job_applications.id = job_attendances.application_id', 'left')
             ->join('users', 'users.id = job_applications.user_id', 'left')
             ->join('jobs', 'jobs.id = job_applications.job_id', 'left')
+            ->join('hotels', 'hotels.id = jobs.hotel_id', 'left')
             ->join(
                 'schedule_shifts',
                 'schedule_shifts.application_id = job_attendances.application_id
                  AND schedule_shifts.user_id = job_applications.user_id',
                 'left'
             )
-
             ->join(
                 'schedule_days',
                 'schedule_days.id = schedule_shifts.schedule_day_id',
                 'left'
             )
-            ->where('jobs.hotel_id', session()->get('hotel_id'))
             ->whereIn('jobs.category', ['daily_worker','casual'])
             ->where('job_applications.status', 'completed')
             ->where('job_attendances.billed', 0)
-
             ->orderBy('job_attendances.application_id', 'ASC')
             ->orderBy('job_attendances.created_at', 'ASC');
 
+        // =========================
+        // SEARCH
+        // =========================
         if ($search) {
             $builder->groupStart()
                 ->like('users.name', $search)
-                ->orLike('jobs.position', $search)
+                ->orLike('hotels.hotel_name', $search)
             ->groupEnd();
         }
 
         $rows = $builder->get()->getResultArray();
 
         // =========================
-        // GROUP PER APPLICATION
+        // GROUPING
         // =========================
         $grouped = [];
 
         foreach ($rows as $row) {
-            $appId     = (int)$row['application_id'];
-            $shiftDate = $row['shift_date'] ?? 'unknown';
 
-            $week = $row['week_key'];
-            $key = $week;
+            if (!$row['week_key']) continue;
 
+            $appId = (int)$row['application_id'];
+            $week  = $row['week_key'];
+            $hotel = $row['hotel_name'] ?? 'Unknown';
+            $key = $week . '_' . $row['hotel_id'];
+
+            // init group
             if (!isset($grouped[$key])) {
                 $grouped[$key] = [
-                    'week_key'       => $week,
-                    'total_amount'   => 0,
-                    'total_minutes'  => 0,
-                    'working_days'   => 0,
-                    'workers'        => []
+                    'week_key'      => $week,
+                    'hotel_id'      => $row['hotel_id'],
+                    'hotel_name'    => $hotel,
+                    'total_amount'  => 0,
+                    'total_minutes' => 0,
+                    'working_days'  => 0,
+                    'workers'       => []
                 ];
             }
 
+            // init worker
             if (!isset($grouped[$key]['workers'][$appId])) {
                 $grouped[$key]['workers'][$appId] = [
                     'worker_name' => $row['worker_name'],
                     'position'    => $row['position'],
-                    'checkins'    => [],
-                    'checkouts'   => [],
-                    'fee'         => $row['fee'],
+                    'fee'         => (float)$row['fee'],
                     'start_time'  => $row['start_time'],
-                    'end_time'    => $row['end_time']
+                    'end_time'    => $row['end_time'],
+                    'checkins'    => [],
+                    'checkouts'   => []
                 ];
             }
 
+            // normalize by date (ANTI DUPLICATE)
+            $date = date('Y-m-d', strtotime($row['created_at']));
+
             if ($row['type'] === 'checkin') {
-                $grouped[$key]['workers'][$appId]['checkins'][] = $row['created_at'];
+                $grouped[$key]['workers'][$appId]['checkins'][$date] = $row['created_at'];
             }
 
             if ($row['type'] === 'checkout') {
-                $grouped[$key]['workers'][$appId]['checkouts'][] = $row['created_at'];
+                $grouped[$key]['workers'][$appId]['checkouts'][$date] = $row['created_at'];
             }
         }
 
         // =========================
-        // HITUNG TOTAL
+        // CALCULATION
         // =========================
         foreach ($grouped as &$g) {
             foreach ($g['workers'] as $worker) {
-                $count = min(count($worker['checkins']), count($worker['checkouts']));
-                for ($i=0; $i<$count; $i++) {
+                // skip invalid shift
+                if (!$worker['start_time'] || !$worker['end_time']) continue;
+                $jobStart = strtotime($worker['start_time']);
+                $jobEnd   = strtotime($worker['end_time']);
+                if (!$jobStart || !$jobEnd) continue;
+                // potong 1 jam untuk istirahat
+                $jobMinutes = (($jobEnd - $jobStart) / 60) - 60;
+                if ($jobMinutes <= 0) continue;
+                $jobTenMin  = floor($jobMinutes / 10);
+                if ($jobTenMin <= 0 || $worker['fee'] <= 0) continue;
+                $ratePer10Min = $worker['fee'] / $jobTenMin;
+                foreach ($worker['checkins'] as $date => $checkin) {
+                    if (!isset($worker['checkouts'][$date])) continue;
+                    $checkout = $worker['checkouts'][$date];
                     $seconds = max(
                         0,
-                        (strtotime($worker['checkouts'][$i]) - strtotime($worker['checkins'][$i])) - 3600
+                        (strtotime($checkout) - strtotime($checkin)) - 3600 // break 1 jam
                     );
+
                     $minutes = floor($seconds / 60);
                     if ($minutes <= 0) continue;
 
                     $g['working_days']++;
                     $g['total_minutes'] += $minutes;
 
-                    $jobStart = strtotime($worker['start_time']);
-                    $jobEnd   = strtotime($worker['end_time']);
-
-                    $jobMinutes = ($jobEnd - $jobStart) / 60;
-                    $jobTenMin  = floor($jobMinutes / 10);
-
-                    if ($jobTenMin > 0 && $worker['fee'] > 0) {
-                        $ratePer10Min = $worker['fee'] / $jobTenMin;
-                        $g['total_amount'] += round(
-                            floor($minutes / 10) * $ratePer10Min
-                        );
-                    }
+                    $g['total_amount'] += round(
+                        floor($minutes / 10) * $ratePer10Min
+                    );
                 }
             }
         }
@@ -178,7 +186,7 @@ class Payments extends BaseAdminController
         $grouped = array_values($grouped);
 
         $paged = ($length != -1)
-            ? array_slice($grouped,$start,$length)
+            ? array_slice($grouped, $start, $length)
             : $grouped;
 
         // =========================
@@ -191,40 +199,36 @@ class Payments extends BaseAdminController
             $year = substr($g['week_key'], 0, 4);
             $week = substr($g['week_key'], 4);
 
-            $hours   = floor($g['total_minutes']/60);
-            $minutes = $g['total_minutes']%60;
-
-            $paymentStatus = strtolower($g['payment_status'] ?? 'unbilled');
-
-            $badgeClass = match($paymentStatus){
-                'paid'      => 'bg-success',
-                'partial'   => 'bg-warning',
-                'sent'      => 'bg-info',
-                'draft'     => 'bg-secondary',
-                'overdue'   => 'bg-danger',
-                default     => 'bg-warning'
-            };
+            $hours   = floor($g['total_minutes'] / 60);
+            $minutes = $g['total_minutes'] % 60;
 
             $workerCount = count($g['workers']);
 
+            // safe truncate hotel name
+            $name  = $g['hotel_name'];
+            $short = mb_strlen($name) > 13 ? mb_substr($name, 0, 13) . '...' : $name;
+
             $data[] = [
-                'no' => $no++.'.',
-                'worker' => $workerCount.' Workers',
-                'job' => 'Week '.$week.' / '.$year,
-                'working_days' => $g['working_days'].' Days',
-                'duration' => $hours.'h '.$minutes.'m',
-                'amount' => 'Rp '.number_format($g['total_amount'],0,',','.'),
-                'status' => '<span class="badge bg-warning">UNBILLED</span>',
+                'no' => $no++ . '.',
+                'hotel' => '<span 
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="bottom"
+                                title="' . esc($name) . '"
+                            >' . esc($short) . '</span>',
+                'worker' => $workerCount,
+                'job' => 'Week ' . $week . ' / ' . $year,
+                'working_days' => $g['working_days'] . ' Days',
+                'duration' => $hours . 'h ' . $minutes . 'm',
+                'amount' => 'Rp ' . number_format($g['total_amount'], 0, ',', '.'),
                 'action' => '
-                    <a href="'.base_url('/admin/invoices/create-week/'.$g['week_key']).'"
+                    <a href="' . base_url('/admin/invoices/create-week/' . $g['week_key'] . '/' . $g['hotel_id']) . '" 
                        class="btn btn-sm btn-primary">
-                        Create Invoice
+                       Create Invoice
                     </a>'
             ];
         }
 
         return $this->response->setJSON([
-
             'draw'            => $draw,
             'recordsTotal'    => $recordsTotal,
             'recordsFiltered' => $recordsTotal,
