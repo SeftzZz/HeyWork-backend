@@ -16,7 +16,7 @@ class GenerateWeeklyInvoices extends BaseCommand
     {
         $db = \Config\Database::connect();
 
-        $weekKey = date('oW', strtotime('-3 week'));
+        $weekKey = date('oW', strtotime('-1 week'));
 
         CLI::write("Generate Invoice Week: ".$weekKey,'yellow');
 
