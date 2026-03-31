@@ -82,7 +82,6 @@ class InvoiceService
         $totalAmount = 0;
 
         foreach($rows as $row){
-
             $shiftMinutes = (int)$row['shift_minutes'];
             $overtimeMinutes = (int)$row['overtime_minutes'];
 
@@ -129,7 +128,7 @@ class InvoiceService
                 ->where('invoice_id',$invoiceId)
                 ->delete();
         }else{
-            $invoiceNumber = 'INV-'.$hotelId.'-'.$weekKey;
+            $invoiceNumber = 'INV-'.$hotelId.'-'.$weekKey.'-'.time();
 
             $db->table('invoices')->insert([
                 'invoice_number'=>$invoiceNumber,
