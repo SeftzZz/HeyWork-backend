@@ -310,4 +310,30 @@
                         });
                     });
                 </script>
+
+                <?php if (session()->getFlashdata('success')) : ?>
+                    <script>
+                    $(document).ready(function(){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: '<?= session()->getFlashdata('success') ?>',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    });
+                    </script>
+                <?php endif; ?>
+
+                <?php if (session()->getFlashdata('error')) : ?>
+                    <script>
+                    $(document).ready(function(){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: '<?= session()->getFlashdata('error') ?>'
+                        });
+                    });
+                    </script>
+                <?php endif; ?>
             <?= $this->endSection() ?>

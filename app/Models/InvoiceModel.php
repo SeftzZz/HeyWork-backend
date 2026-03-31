@@ -18,6 +18,8 @@ class InvoiceModel extends Model
         'total_amount',
         'status',
         'created_at',
-        'created_by'
+        'created_by',
+        'updated_at',
+        'updated_by'
     ];
 }

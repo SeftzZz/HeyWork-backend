@@ -183,195 +183,150 @@ class Invoices extends BaseAdminController
         $db = \Config\Database::connect();
         $db->transStart();
 
-        // =====================================
-        // CEK DUPLIKAT INVOICE
-        // =====================================
+        // CEK DUPLIKAT
         $existing = $db->table('invoices')
             ->where('hotel_id', $hotelId)
             ->where('week_key', $weekKey)
             ->get()
             ->getRow();
 
-        if ($existing) {
-            return redirect()->back()->with('error','Invoice for this week already exists');
+        // VALIDASI STATUS PAID
+        if ($existing && $existing->status === 'paid') {
+            return redirect()->to('/admin/invoices')
+                ->with('error', 'Invoice already PAID and cannot be regenerated.');
         }
 
-        // =====================================
-        // AMBIL DATA (SAMA SEPERTI DATATABLE)
-        // =====================================
-        $rows = $db->table('job_attendances')
+        // OVERTIME SUBQUERY
+        $overtimeSub = "
+            SELECT
+                application_id,
+                TIMESTAMPDIFF(
+                    MINUTE,
+                    MIN(CASE WHEN type='checkin' THEN created_at END),
+                    MAX(CASE WHEN type='checkout' THEN created_at END)
+                ) AS overtime_minutes
+            FROM job_extend_attendances
+            GROUP BY application_id
+        ";
+
+        // AMBIL DATA SHIFT
+        $rows = $db->table('schedule_shifts ss')
             ->select("
-                job_attendances.application_id,
-                job_attendances.type,
-                job_attendances.created_at,
-                users.id as worker_id,
-                users.name AS worker_name,
-                jobs.position,
-                jobs.fee,
-                jobs.hotel_id,
-                schedule_shifts.start_time,
-                schedule_shifts.end_time
+                ss.application_id,
+                ss.user_id as worker_id,
+                u.name as worker_name,
+                j.position,
+                j.fee,
+
+                GREATEST(
+                    TIMESTAMPDIFF(
+                        MINUTE,
+                        CONCAT(sd.shift_date,' ',ss.start_time),
+                        CONCAT(sd.shift_date,' ',ss.end_time)
+                    ) - 60,
+                    0
+                ) AS shift_minutes,
+
+                IFNULL(ot.overtime_minutes,0) AS overtime_minutes
             ")
-            ->join('job_applications','job_applications.id = job_attendances.application_id','left')
-            ->join('users','users.id = job_applications.user_id','left')
-            ->join('jobs','jobs.id = job_applications.job_id','left')
-            ->join(
-                'schedule_shifts',
-                'schedule_shifts.application_id = job_attendances.application_id
-                 AND schedule_shifts.user_id = job_applications.user_id',
-                'left'
-            )
+            ->join('schedule_days sd','sd.id = ss.schedule_day_id','left')
+            ->join('job_applications ja','ja.id = ss.application_id','left')
+            ->join('users u','u.id = ss.user_id','left')
+            ->join('jobs j','j.id = ja.job_id','left')
+            ->join("($overtimeSub) ot",'ot.application_id = ss.application_id','left')
 
-            ->where('jobs.hotel_id',$hotelId)
-            ->whereIn('jobs.category',['daily_worker','casual'])
-            ->where('job_applications.status','completed')
-            ->where('job_attendances.billed',0)
-
-            // 🔥 SAMA DENGAN DATATABLE
-            ->where("YEARWEEK(job_attendances.created_at,1)", $weekKey)
-
-            ->orderBy('job_attendances.application_id','ASC')
-            ->orderBy('job_attendances.created_at','ASC')
+            ->where('j.hotel_id',$hotelId)
+            ->whereIn('j.category',['daily_worker','casual'])
+            ->whereIn('ss.shift_type',['regular','overtime'])
+            ->where("YEARWEEK(sd.shift_date,1)",$weekKey)
 
             ->get()
             ->getResultArray();
 
         if(!$rows){
-            return redirect()->back()->with('error','No attendance data found');
+            return redirect()->back()->with('error','No shift data found');
         }
 
-        // =====================================
-        // GROUPING (ANTI DUPLICATE - BY DATE)
-        // =====================================
-        $apps = [];
+        // CALCULATION
+        $invoiceItems = [];
+        $totalAmount = 0;
 
         foreach($rows as $row){
+            $shiftMinutes = (int)$row['shift_minutes'];
+            $overtimeMinutes = (int)$row['overtime_minutes'];
 
-            $appId = $row['application_id'];
+            if($shiftMinutes <= 0) continue;
 
-            if(!isset($apps[$appId])){
-                $apps[$appId] = [
-                    'worker_id' => $row['worker_id'],
-                    'worker_name' => $row['worker_name'],
-                    'position' => $row['position'],
-                    'fee' => (float)$row['fee'],
-                    'start_time' => $row['start_time'],
-                    'end_time' => $row['end_time'],
-                    'checkins' => [],
-                    'checkouts' => [],
-                    'minutes' => 0,
-                    'amount' => 0
-                ];
-            }
+            $fee = (float)$row['fee'];
 
-            $date = date('Y-m-d', strtotime($row['created_at']));
+            // rate per minute
+            $rate = $fee / $shiftMinutes;
 
-            if($row['type'] === 'checkin'){
-                $apps[$appId]['checkins'][$date] = $row['created_at'];
-            }
+            // worker fee
+            $amountWorker = $fee + ($overtimeMinutes * $rate);
 
-            if($row['type'] === 'checkout'){
-                $apps[$appId]['checkouts'][$date] = $row['created_at'];
-            }
-        }
+            // platform fee 10%
+            $platformFee = $amountWorker * 0.10;
 
-        // =====================================
-        // CALCULATION (SAMA PERSIS DENGAN DATATABLE)
-        // =====================================
-        $invoiceItems = [];
-        $totalAmount  = 0;
+            // total
+            $amount = $amountWorker + $platformFee;
 
-        foreach($apps as $appId => &$app){
+            $totalMinutes = $shiftMinutes + $overtimeMinutes;
 
-            if (!$app['start_time'] || !$app['end_time']) continue;
-
-            $jobStart = strtotime($app['start_time']);
-            $jobEnd   = strtotime($app['end_time']);
-
-            if (!$jobStart || !$jobEnd) continue;
-
-            // 🔥 POTONG 1 JAM (WAJIB SAMA)
-            $jobMinutes = (($jobEnd - $jobStart) / 60) - 60;
-
-            if ($jobMinutes <= 0) continue;
-
-            $jobTenMin = floor($jobMinutes / 10);
-
-            if ($jobTenMin <= 0 || $app['fee'] <= 0) continue;
-
-            $ratePer10Min = $app['fee'] / $jobTenMin;
-
-            foreach($app['checkins'] as $date => $checkin){
-
-                if(!isset($app['checkouts'][$date])) continue;
-
-                $checkout = $app['checkouts'][$date];
-
-                $seconds = max(
-                    0,
-                    (strtotime($checkout) - strtotime($checkin)) - 3600
-                );
-
-                $minutes = floor($seconds / 60);
-
-                if($minutes <= 0) continue;
-
-                $app['minutes'] += $minutes;
-
-                $amount = round(
-                    floor($minutes / 10) * $ratePer10Min
-                );
-
-                $app['amount'] += $amount;
-            }
-
-            if($app['amount'] <= 0) continue;
-
-            $totalAmount += $app['amount'];
+            $totalAmount += $amount;
 
             $invoiceItems[] = [
-                'application_id' => $appId,
-                'worker_id' => $app['worker_id'],
-                'minutes' => $app['minutes'],
-                'amount' => $app['amount']
+                'application_id' => $row['application_id'],
+                'worker_id' => $row['worker_id'],
+                'minutes' => $totalMinutes,
+                'worker_fee' => $amountWorker,
+                'platform_fee' => $platformFee
             ];
         }
 
         if(!$invoiceItems){
-            return redirect()->back()->with('error','No billable attendance found');
+            return redirect()->back()->with('error','No billable shifts');
         }
 
-        // =====================================
-        // INSERT INVOICE
-        // =====================================
-        $invoiceNumber = 'INV-'.$hotelId.'-'.$weekKey.'-'.time();
+        /*
+        ==============================
+        INSERT ATAU UPDATE INVOICE
+        ==============================
+        */
+        if($existing){
+            $invoiceId = $existing->id;
+            // UPDATE INVOICE
+            $db->table('invoices')
+                ->where('id',$invoiceId)
+                ->update([
+                    'total_amount' => $totalAmount,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'updated_by' => session()->get('user_id')
+                ]);
 
-        $db->table('invoices')->insert([
-            'invoice_number' => $invoiceNumber,
-            'hotel_id' => $hotelId,
-            'week_key' => $weekKey,
-            'total_amount' => $totalAmount,
-            'status' => 'unpaid',
-            'created_at' => date('Y-m-d H:i:s'),
-            'created_by' => session()->get('user_id')
-        ]);
+            // HAPUS ITEM LAMA
+            $db->table('invoice_items')
+                ->where('invoice_id',$invoiceId)
+                ->delete();
+        }else{
+            $invoiceNumber = 'INV-'.$hotelId.'-'.$weekKey.'-'.time();
+            $db->table('invoices')->insert([
+                'invoice_number' => $invoiceNumber,
+                'hotel_id' => $hotelId,
+                'week_key' => $weekKey,
+                'total_amount' => $totalAmount,
+                'status' => 'unpaid',
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => session()->get('user_id')
+            ]);
+            $invoiceId = $db->insertID();
+        }
 
-        $invoiceId = $db->insertID();
-
+        // INSERT ITEM BARU
         foreach($invoiceItems as $item){
             $item['invoice_id'] = $invoiceId;
             $db->table('invoice_items')->insert($item);
         }
-
-        // =====================================
-        // UPDATE BILLED
-        // =====================================
-        $applicationIds = array_column($invoiceItems,'application_id');
-
-        $db->table('job_attendances')
-           ->whereIn('application_id', $applicationIds)
-           ->update(['billed' => 1]);
-
         $db->transComplete();
 
         if($db->transStatus() === false){
@@ -379,7 +334,7 @@ class Invoices extends BaseAdminController
         }
 
         return redirect()->to('/admin/invoices')
-            ->with('success','Weekly invoice created successfully');
+            ->with('success','Invoice generated successfully');
     }
 
     public function view($id)

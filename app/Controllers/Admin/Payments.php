@@ -37,191 +37,123 @@ class Payments extends BaseAdminController
 
         $db = \Config\Database::connect();
 
-        // =========================
-        // BASE QUERY
-        // =========================
-        $builder = $db->table('job_attendances')
-            ->select("
-                job_attendances.application_id,
-                job_attendances.type,
-                job_attendances.created_at,
-                users.name AS worker_name,
-                jobs.position,
-                schedule_shifts.start_time,
-                schedule_shifts.end_time,
-                schedule_days.shift_date,
-                jobs.fee,
-                jobs.hotel_id,
-                hotels.hotel_name,
-                YEARWEEK(job_attendances.created_at,1) AS week_key
-            ")
-            ->join('job_applications', 'job_applications.id = job_attendances.application_id', 'left')
-            ->join('users', 'users.id = job_applications.user_id', 'left')
-            ->join('jobs', 'jobs.id = job_applications.job_id', 'left')
-            ->join('hotels', 'hotels.id = jobs.hotel_id', 'left')
-            ->join(
-                'schedule_shifts',
-                'schedule_shifts.application_id = job_attendances.application_id
-                 AND schedule_shifts.user_id = job_applications.user_id',
-                'left'
-            )
-            ->join(
-                'schedule_days',
-                'schedule_days.id = schedule_shifts.schedule_day_id',
-                'left'
-            )
-            ->whereIn('jobs.category', ['daily_worker','casual'])
-            ->where('job_applications.status', 'completed')
-            ->where('job_attendances.billed', 0)
-            ->orderBy('job_attendances.application_id', 'ASC')
-            ->orderBy('job_attendances.created_at', 'ASC');
+        // Subquery overtime
+        $overtimeSub = "
+            SELECT
+                application_id,
+                TIMESTAMPDIFF(
+                    MINUTE,
+                    MIN(CASE WHEN type='checkin' THEN created_at END),
+                    MAX(CASE WHEN type='checkout' THEN created_at END)
+                ) AS overtime_minutes
+            FROM job_extend_attendances
+            GROUP BY application_id
+        ";
 
-        // =========================
-        // SEARCH
-        // =========================
+        $builder = $db->table('schedule_shifts ss')
+            ->select("
+                YEARWEEK(sd.shift_date,1) AS week_key,
+                j.hotel_id,
+                h.hotel_name,
+
+                COUNT(DISTINCT ss.application_id) AS workers,
+                COUNT(DISTINCT sd.shift_date) AS working_days,
+
+                SUM(
+                    GREATEST(
+                        TIMESTAMPDIFF(
+                            MINUTE,
+                            CONCAT(sd.shift_date,' ',ss.start_time),
+                            CONCAT(sd.shift_date,' ',ss.end_time)
+                        ) - 60,
+                        0
+                    )
+                ) 
+                +
+                SUM(IFNULL(ot.overtime_minutes,0))
+                AS total_minutes,
+
+                SUM(
+                    j.fee
+                    +
+                    (
+                        IFNULL(ot.overtime_minutes,0)
+                        *
+                        (
+                            j.fee /
+                            GREATEST(
+                                TIMESTAMPDIFF(
+                                    MINUTE,
+                                    CONCAT(sd.shift_date,' ',ss.start_time),
+                                    CONCAT(sd.shift_date,' ',ss.end_time)
+                                ) - 60,
+                                1
+                            )
+                        )
+                    )
+                ) AS total_amount
+            ")
+
+            ->join('schedule_days sd','sd.id = ss.schedule_day_id','left')
+            ->join('job_applications ja','ja.id = ss.application_id','left')
+            ->join('jobs j','j.id = ja.job_id','left')
+            ->join('hotels h','h.id = j.hotel_id','left')
+            ->join("($overtimeSub) ot",'ot.application_id = ss.application_id','left')
+
+            ->whereIn('ss.shift_type',['regular','overtime'])
+            ->whereIn('j.category',['daily_worker','casual'])
+
+            ->groupBy('week_key, j.hotel_id')
+            ->orderBy('week_key','DESC');
+
+        // Search
         if ($search) {
             $builder->groupStart()
-                ->like('users.name', $search)
-                ->orLike('hotels.hotel_name', $search)
+                ->like('h.hotel_name',$search)
             ->groupEnd();
+        }
+
+        // Total records
+        $recordsTotal = $builder->countAllResults(false);
+
+        // Pagination SQL (lebih cepat)
+        if ($length != -1) {
+            $builder->limit($length,$start);
         }
 
         $rows = $builder->get()->getResultArray();
 
-        // =========================
-        // GROUPING
-        // =========================
-        $grouped = [];
-
-        foreach ($rows as $row) {
-
-            if (!$row['week_key']) continue;
-
-            $appId = (int)$row['application_id'];
-            $week  = $row['week_key'];
-            $hotel = $row['hotel_name'] ?? 'Unknown';
-            $key = $week . '_' . $row['hotel_id'];
-
-            // init group
-            if (!isset($grouped[$key])) {
-                $grouped[$key] = [
-                    'week_key'      => $week,
-                    'hotel_id'      => $row['hotel_id'],
-                    'hotel_name'    => $hotel,
-                    'total_amount'  => 0,
-                    'total_minutes' => 0,
-                    'working_days'  => 0,
-                    'workers'       => []
-                ];
-            }
-
-            // init worker
-            if (!isset($grouped[$key]['workers'][$appId])) {
-                $grouped[$key]['workers'][$appId] = [
-                    'worker_name' => $row['worker_name'],
-                    'position'    => $row['position'],
-                    'fee'         => (float)$row['fee'],
-                    'start_time'  => $row['start_time'],
-                    'end_time'    => $row['end_time'],
-                    'checkins'    => [],
-                    'checkouts'   => []
-                ];
-            }
-
-            // normalize by date (ANTI DUPLICATE)
-            $date = date('Y-m-d', strtotime($row['created_at']));
-
-            if ($row['type'] === 'checkin') {
-                $grouped[$key]['workers'][$appId]['checkins'][$date] = $row['created_at'];
-            }
-
-            if ($row['type'] === 'checkout') {
-                $grouped[$key]['workers'][$appId]['checkouts'][$date] = $row['created_at'];
-            }
-        }
-
-        // =========================
-        // CALCULATION
-        // =========================
-        foreach ($grouped as &$g) {
-            foreach ($g['workers'] as $worker) {
-                // skip invalid shift
-                if (!$worker['start_time'] || !$worker['end_time']) continue;
-                $jobStart = strtotime($worker['start_time']);
-                $jobEnd   = strtotime($worker['end_time']);
-                if (!$jobStart || !$jobEnd) continue;
-                // potong 1 jam untuk istirahat
-                $jobMinutes = (($jobEnd - $jobStart) / 60) - 60;
-                if ($jobMinutes <= 0) continue;
-                $jobTenMin  = floor($jobMinutes / 10);
-                if ($jobTenMin <= 0 || $worker['fee'] <= 0) continue;
-                $ratePer10Min = $worker['fee'] / $jobTenMin;
-                foreach ($worker['checkins'] as $date => $checkin) {
-                    if (!isset($worker['checkouts'][$date])) continue;
-                    $checkout = $worker['checkouts'][$date];
-                    $seconds = max(
-                        0,
-                        (strtotime($checkout) - strtotime($checkin)) - 3600 // break 1 jam
-                    );
-
-                    $minutes = floor($seconds / 60);
-                    if ($minutes <= 0) continue;
-
-                    $g['working_days']++;
-                    $g['total_minutes'] += $minutes;
-
-                    $g['total_amount'] += round(
-                        floor($minutes / 10) * $ratePer10Min
-                    );
-                }
-            }
-        }
-        unset($g);
-
-        // =========================
-        // PAGINATION
-        // =========================
-        $recordsTotal = count($grouped);
-
-        $grouped = array_values($grouped);
-
-        $paged = ($length != -1)
-            ? array_slice($grouped, $start, $length)
-            : $grouped;
-
-        // =========================
-        // FORMAT OUTPUT
-        // =========================
+        // Format Output
         $data = [];
-        $no   = $start + 1;
+        $no = $start + 1;
 
-        foreach ($paged as $g) {
-            $year = substr($g['week_key'], 0, 4);
-            $week = substr($g['week_key'], 4);
+        foreach ($rows as $r) {
 
-            $hours   = floor($g['total_minutes'] / 60);
-            $minutes = $g['total_minutes'] % 60;
+            $year = substr($r['week_key'],0,4);
+            $week = substr($r['week_key'],4);
 
-            $workerCount = count($g['workers']);
+            $hours = floor($r['total_minutes'] / 60);
+            $minutes = $r['total_minutes'] % 60;
 
-            // safe truncate hotel name
-            $name  = $g['hotel_name'];
-            $short = mb_strlen($name) > 13 ? mb_substr($name, 0, 13) . '...' : $name;
+            $platformFee = $r['total_amount'] * 0.10;
+            $grandTotal  = $r['total_amount'] + $platformFee;
+
+            $name  = $r['hotel_name'];
+            $short = mb_strlen($name) > 13
+                ? mb_substr($name,0,13).'...'
+                : $name;
 
             $data[] = [
-                'no' => $no++ . '.',
-                'hotel' => '<span 
-                                data-bs-toggle="tooltip"
-                                data-bs-placement="bottom"
-                                title="' . esc($name) . '"
+                'no' => $no++.'.',
+                'hotel' => '<span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="tooltip-primary" title="' . esc($name) . '"
                             >' . esc($short) . '</span>',
-                'worker' => $workerCount,
-                'job' => 'Week ' . $week . ' / ' . $year,
-                'working_days' => $g['working_days'] . ' Days',
-                'duration' => $hours . 'h ' . $minutes . 'm',
-                'amount' => 'Rp ' . number_format($g['total_amount'], 0, ',', '.'),
+                'worker' => $r['workers'],
+                'job' => 'Week '.$week.' / '.$year,
+                'working_days' => $r['working_days'].' Days',
+                'duration' => $hours.'h '.$minutes.'m',
+                'amount' => 'Rp '.number_format($grandTotal,0,',','.'),
                 'action' => '
-                    <a href="' . base_url('/admin/invoices/create-week/' . $g['week_key'] . '/' . $g['hotel_id']) . '" 
+                    <a href="'.base_url('/admin/invoices/create-week/'.$r['week_key'].'/'.$r['hotel_id']).'"
                        class="btn btn-sm btn-primary">
                        Create Invoice
                     </a>'
@@ -229,10 +161,10 @@ class Payments extends BaseAdminController
         }
 
         return $this->response->setJSON([
-            'draw'            => $draw,
-            'recordsTotal'    => $recordsTotal,
-            'recordsFiltered' => $recordsTotal,
-            'data'            => $data
+            'draw'=>$draw,
+            'recordsTotal'=>$recordsTotal,
+            'recordsFiltered'=>$recordsTotal,
+            'data'=>$data
         ]);
     }
 }
