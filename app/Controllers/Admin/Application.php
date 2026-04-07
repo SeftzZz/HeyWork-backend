@@ -282,6 +282,7 @@ class Application extends BaseAdminController
         $id     = (int) $this->request->getPost('application_id');
         $status = strtolower($this->request->getPost('status'));
         $adminId = session()->get('user_id');
+        $hotelId  = session()->get('hotel_id');
 
         if (!in_array($status, ['accepted', 'rejected'])) {
             return $this->response->setJSON([
@@ -311,7 +312,7 @@ class Application extends BaseAdminController
             ]);
         }
 
-        // DATA UPDATE
+        // UPDATE TABEL APPLICATIONS
         $update = [
             'status' => $status
         ];
@@ -330,6 +331,17 @@ class Application extends BaseAdminController
             ->where('id', $id)
             ->update($update);
 
+        // UPDATE TABEL USERS
+        if ($status === 'accepted' && $hotelId) {
+            $db->table('users')
+                ->where('id', $current['user_id'])
+                ->update([
+                    'hotel_id'   => $hotelId,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'updated_by' => $adminId
+                ]);
+        }
+
         $db->transComplete();
 
         if ($db->transStatus() === false) {
@@ -341,7 +353,7 @@ class Application extends BaseAdminController
 
         /**
          * ============================
-         * 🔢 HITUNG ULANG COUNT WORKER
+         * HITUNG ULANG COUNT WORKER
          * ============================
          */
         $counts = [

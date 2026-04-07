@@ -28,7 +28,6 @@
                         <div class="modal fade" id="modalWorkerDetail" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                                 <div class="modal-content">
-
                                     <div class="modal-header position-relative">
 
                                         <!-- Title (kiri) -->
