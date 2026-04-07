@@ -41,7 +41,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Job Position</label>
                                                 <select
-                                                    id="add_job_position" name="position" class="form-select select2"
+                                                    id="add_job_position" name="position" multiple class="form-select select2"
                                                     data-placeholder="Select Job Position" style="width:100%">
                                                     <option value=""></option>
                                                     <?php foreach ($skills as $skill): ?>
