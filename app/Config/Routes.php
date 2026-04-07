@@ -114,14 +114,18 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('schedule-approvals/approve-revision/(:num)', 'Admin\ScheduleApprovals::approveRevision/$1');
     $routes->post('schedule-approvals/reject-revision/(:num)', 'Admin\ScheduleApprovals::rejectRevision/$1');
 
-    $routes->get('invoices', 'Admin\Invoices::index', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk,hotel_gm,hotel_fna,hotel_eng,hotel_sales']);
-    $routes->get('invoices/print/(:num)', 'Admin\Invoices::print/$1', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk,hotel_gm,hotel_fna,hotel_eng,hotel_sales']);
-    $routes->get('invoices/send/(:num)', 'Admin\Invoices::sendEmail/$1', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk,hotel_gm,hotel_fna,hotel_eng,hotel_sales']);
-    $routes->get('invoices/create/(:num)', 'Admin\Invoices::create/$1', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk,hotel_gm,hotel_fna,hotel_eng,hotel_sales']);
-    $routes->get('invoices/create-week/(:num)', 'Admin\Invoices::createWeekly/$1');
-    $routes->get('invoices/view/(:num)', 'Admin\Invoices::view/$1');
+    $routes->get('invoices', 'Admin\Invoices::index', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
+    $routes->post('invoices/datatable', 'Admin\Invoices::datatable', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
+    $routes->get('invoices/print/(:num)', 'Admin\Invoices::print/$1', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
+    $routes->get('invoices/printview/(:num)', 'Admin\Invoices::printView/$1', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
+    $routes->get('invoices/send/(:num)', 'Admin\Invoices::sendEmail/$1', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
+    $routes->get('invoices/create/(:num)', 'Admin\Invoices::create/$1', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
+    $routes->get('invoices/create-week/(:num)/(:num)', 'Admin\Invoices::createWeekly/$1/$2', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
+    $routes->get('invoices/view/(:num)', 'Admin\Invoices::view/$1', ['filter' => 'role:admin,hotel_hr,hotel_gm']);
+    $routes->post('invoices/get', 'Admin\Invoices::getById', ['filter' => 'role:admin']);
+    $routes->post('invoices/update', 'Admin\Invoices::update', ['filter' => 'role:admin']);
 
-    $routes->get('payments', 'Admin\Payments::index', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk,hotel_gm,hotel_fna,hotel_eng,hotel_sales']);
+    $routes->get('payments', 'Admin\Payments::index', ['filter' => 'role:admin']);
     $routes->post('payments/datatable', 'Admin\Payments::datatable');
 
     $routes->get('trainings', 'Admin\Trainings::index', ['filter' => 'role:admin,hotel_hr,hotel_fnb_service,hotel_fnb_production,hotel_fo,hotel_hk,hotel_gm,hotel_fna,hotel_eng,hotel_sales']);

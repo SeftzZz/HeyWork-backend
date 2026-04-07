@@ -1,296 +1,339 @@
-<?= $this->extend('layouts/main') ?>
-<?= $this->section('content') ?>
+            <?= $this->extend('layouts/main') ?>
+            <?= $this->section('content') ?>
+            <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="card">
+                    <div class="card-datatable table-responsive pt-0">
+                        <table class="dtInvoice table table-striped">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>No.</th>
+                                    <th>Invoice</th>
+                                    <th>Hotel</th>
+                                    <th>Week</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
 
-<div class="content-wrapper">
-  <div class="container-xxl flex-grow-1 container-p-y">
+                    <!-- modal view -->
+                    <div class="modal fade" id="modalInvoice" tabindex="-1">
+                        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                            <div class="modal-content" id="modalInvoiceContent"></div>
+                        </div>
+                    </div>
 
-    <div class="row invoice-preview">
+                    <!-- edit modal form -->
+                    <div class="modal fade" id="modalEditInv" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                                <form id="formEditInv" enctype="multipart/form-data">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Edit Invoice</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
 
-      <!-- ================== INVOICE ================== -->
-      <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-4">
-        <div class="card invoice-preview-card">
+                                    <div class="modal-body">
+                                        <input type="hidden" name="id" id="edit_id">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Invoice</label>
+                                                <input type="text" class="form-control" name="noinvoice" id="edit_noinv" disabled>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Hotel</label>
+                                                <input type="text" class="form-control" name="hotel" id="edit_hotel" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Week</label>
+                                                <input type="text" class="form-control" name="week" id="edit_week" disabled>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Amount</label>
+                                                <input type="text" class="form-control" name="amount" id="edit_amount" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 mb-3">
+                                                <label class="form-label" for="edit_status">Status</label>
+                                                <select name="status" id="edit_status" class="form-control required">
+                                                    <option value="unpaid">Unpaid</option>
+                                                    <option value="paid">Paid</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
 
-          <!-- HEADER -->
-          <div class="card-body">
-            <div class="d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column m-sm-3 m-0">
-
-              <!-- LEFT (HOTEL SENDER) -->
-              <div class="mb-xl-0 mb-4">
-                <div class="d-flex svg-illustration mb-4 gap-2 align-items-center">
-                  <span class="fw-bold fs-4">Hey Work</span>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <p class="mb-2">Hospitality Workforce System</p>
-                <p class="mb-2">Indonesia</p>
-                <p class="mb-0">finance@heywork.id</p>
-              </div>
-
-              <!-- RIGHT -->
-              <div>
-                <h4 class="fw-medium mb-2">
-                  INVOICE #INV-<?= str_pad($invoice['id'], 6, '0', STR_PAD_LEFT) ?>
-                </h4>
-
-                <div class="mb-2 pt-1">
-                  <span>Date Issued:</span>
-                  <span class="fw-medium">
-                    <?= date('F d, Y', strtotime($invoice['created_at'])) ?>
-                  </span>
-                </div>
-
-                <div class="pt-1">
-                  <span>Status:</span>
-                  <span class="badge bg-label-warning">UNBILLED</span>
-                </div>
-              </div>
-
             </div>
-          </div>
+            <?= $this->endSection() ?>
 
-          <hr class="my-0" />
+            <?= $this->section('scripts') ?>
+                <!-- DataTables -->
+                <link rel="stylesheet" href="<?= base_url('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') ?>" />
+                <link rel="stylesheet" href="<?= base_url('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') ?>" />
+                <link rel="stylesheet" href="<?= base_url('assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') ?>" />
+                <link rel="stylesheet" href="<?= base_url('assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') ?>" />
 
-          <!-- BILL SECTION -->
-          <div class="card-body">
-            <div class="row p-sm-3 p-0">
+                <script src="<?= base_url('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') ?>"></script>
 
-              <!-- Invoice To -->
-              <div class="col-xl-6 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-4 mb-sm-0 mb-4">
-                <h6 class="mb-3">Invoice To:</h6>
-                <p class="mb-1 fw-medium"><?= esc($invoice['hotel_name']) ?></p>
-                <p class="mb-1">Hotel Finance Department</p>
-                <p class="mb-0">finance@hotel.internal</p>
-              </div>
+                <script>
+                    'use strict';
+                    $(function () {
+                        let dt_tableInvoice = $('.dtInvoice'),
+                        dt_invoice;
+                        if (dt_tableInvoice.length) {
+                            dt_invoice = dt_tableInvoice.DataTable({
+                                processing: true,
+                                serverSide: true,
+                                responsive: true,
+                                ajax: {
+                                    url: "<?= base_url('admin/invoices/datatable') ?>",
+                                    type: "POST",
+                                    data: d => {
+                                        d['<?= csrf_token() ?>'] = '<?= csrf_hash() ?>';
+                                    }
+                                },
+                                columns: [
+                                    { data: null },
+                                    { data: 'no_urut' },
+                                    { data: 'invoice_number' },
+                                    { data: 'hotel' },
+                                    { data: 'week' },
+                                    { data: 'amount' },
+                                    { data: 'status' },
+                                    { data: 'created_at' },
+                                    { data: 'action' }
+                                ],
+                                columnDefs: [
+                                    {
+                                        className: 'control',
+                                        orderable: false,
+                                        searchable: false,
+                                        responsivePriority: 2,
+                                        targets: 0,
+                                        render: function () {
+                                            return '';
+                                        }
+                                    },
+                                    {
+                                        targets: 1,
+                                        orderable: false,
+                                        searchable: false
+                                    },
+                                    {
+                                        targets: 2,
+                                        responsivePriority: 1
+                                    },
+                                    {
+                                        targets: -1,
+                                        title: 'Actions',
+                                        orderable: false,
+                                        searchable: false
+                                    }
+                                ],
+                                order: [[7, 'desc']],
+                                dom:
+                                    '<"card-header flex-column flex-md-row"' +
+                                        '<"head-label text-center">' +
+                                        '<"dt-action-buttons text-end pt-3 pt-md-0"B>' +
+                                    '>' +
+                                    '<"row"' +
+                                        '<"col-sm-12 col-md-6"l>' +
+                                        '<"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>' +
+                                    '>' +
+                                    't' +
+                                    '<"row"' +
+                                        '<"col-sm-12 col-md-6"i>' +
+                                        '<"col-sm-12 col-md-6"p>' +
+                                    '>',
+                                displayLength: 10,
+                                lengthMenu: [10, 25, 50, 100],
+                                buttons: [
+                                    {
+                                        extend: 'collection',
+                                        className: 'btn btn-label-primary dropdown-toggle me-2 waves-effect waves-light',
+                                        text: '<i class="ti ti-file-export me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span>',
+                                        buttons: [
+                                            {
+                                                extend: 'print',
+                                                text: '<i class="ti ti-printer me-1"></i>Print',
+                                                className: 'dropdown-item',
+                                                exportOptions: { columns: [1,2,3,4,5,6] }
+                                            },
+                                            {
+                                                extend: 'csv',
+                                                text: '<i class="ti ti-file-text me-1"></i>Csv',
+                                                className: 'dropdown-item',
+                                                exportOptions: { columns: [1,2,3,4,5,6] }
+                                            },
+                                            {
+                                                extend: 'pdf',
+                                                text: '<i class="ti ti-file-description me-1"></i>Pdf',
+                                                className: 'dropdown-item',
+                                                exportOptions: { columns: [1,2,3,4,5,6] }
+                                            }
+                                        ]
+                                    }
+                                ],
+                                responsive: {
+                                    details: {
+                                        display: $.fn.dataTable.Responsive.display.modal({
+                                            header: function (row) {
+                                                let data = row.data();
+                                                return 'Invoice ' + data.invoice_number;
+                                            }
+                                        }),
+                                        type: 'column',
 
-              <!-- Bill To -->
-              <div class="col-xl-6 col-md-12 col-sm-7 col-12">
-                <h6 class="mb-4">Bill Summary:</h6>
-                <table>
-                  <tbody>
-                    <tr>
-                      <td class="pe-4">Total Due:</td>
-                      <td class="fw-medium">
-                        Rp<?= number_format($invoice['amount'], 0, ',', '.') ?>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="pe-4">Payment Method:</td>
-                      <td>Bank Transfer</td>
-                    </tr>
-                    <tr>
-                      <td class="pe-4">Currency:</td>
-                      <td>IDR</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+                                        renderer: function (api, rowIdx, columns) {
+                                            let data = $.map(columns, function (col) {
+                                                return col.title !== ''
+                                                    ? '<tr>' +
+                                                        '<td>' + col.title + ':</td>' +
+                                                        '<td>' + col.data + '</td>' +
+                                                      '</tr>'
+                                                    : '';
+                                            }).join('');
+                                            return data
+                                                ? $('<table class="table"><tbody /></table>').append(data)
+                                                : false;
+                                        }
+                                    }
+                                }
+                            });
+                            $('div.head-label').html('<h5 class="card-title mb-0">Invoices List</h5>');
+                        }
+                    });
 
-            </div>
-          </div>
+                    $(document).on('click','.btn-view-invoice',function(){
+                        let id = $(this).data('id');
+                        $('#modalInvoiceContent').html(`
+                            <div class="modal-body text-center p-5">
+                                <div class="spinner-border"></div>
+                            </div>
+                        `);
 
-          <!-- ITEM TABLE -->
-          <div class="table-responsive border-top">
-            <table class="table m-0">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Description</th>
-                  <th>Cost</th>
-                  <th>Price</th>
-                </tr>
-              </thead>
-              <tbody>
+                        $('#modalInvoice').modal('show');
 
-                <tr>
-                  <td class="text-nowrap">Operational Expense</td>
-                  <td class="text-nowrap"><?= esc($invoice['description']) ?></td>
-                  <td>
-                    Rp<?= number_format($invoice['amount'], 0, ',', '.') ?>
-                  </td>
-                  <td>
-                    Rp<?= number_format($invoice['amount'], 0, ',', '.') ?>
-                  </td>
-                </tr>
+                        $.get("<?= base_url('admin/invoices/view') ?>/" + id, function(res){
+                            $('#modalInvoiceContent').html(res);
+                        });
+                    });
 
-                <!-- SUMMARY ROW -->
-                <tr>
-                  <td colspan="2" class="align-top px-4 py-4">
-                    <p class="mb-2">
-                      <span class="me-1 fw-medium">Generated By:</span>
-                      <span><?= esc($invoice['hotel_name']) ?></span>
-                    </p>
-                    <span>This invoice is submitted for reimbursement.</span>
-                  </td>
+                    $('#modalEditInv').on('hidden.bs.modal', function () {
+                        // reset form
+                        $('#formEditInv')[0].reset();
+                    });
 
-                  <td class="text-end pe-3 py-4">
-                    <p class="mb-2 pt-3">Subtotal:</p>
-                    <p class="mb-2">Discount:</p>
-                    <p class="mb-2">Tax:</p>
-                    <p class="mb-0 pb-3 fw-bold">Total:</p>
-                  </td>
+                    // Submit form edit data
+                    $(document).on('click', '.btn-edit', function () {
+                        const id = $(this).data('id');
+                        $.post("<?= base_url('admin/invoices/get') ?>", {
+                            id: id,
+                            '<?= csrf_token() ?>': '<?= csrf_hash() ?>'
+                        }, function (res) {
+                            if (!res.status) {
+                                Swal.fire('Error', res.message, 'error');
+                                return;
+                            }
 
-                  <td class="ps-2 py-4">
-                    <p class="fw-medium mb-2 pt-3">
-                      Rp<?= number_format($invoice['amount'], 0, ',', '.') ?>
-                    </p>
-                    <p class="fw-medium mb-2">Rp0</p>
-                    <p class="fw-medium mb-2">Rp0</p>
-                    <p class="fw-bold mb-0 pb-3">
-                      Rp<?= number_format($invoice['amount'], 0, ',', '.') ?>
-                    </p>
-                  </td>
-                </tr>
+                            const d = res.data;
+                            $('#modalEditInv').modal('show');
+                            setTimeout(function () {
+                                $('#edit_id').val(d.id);
+                                $('#edit_noinv').val(d.invoice_number);
+                                $('#edit_hotel').val(d.hotel_name);
+                                $('#edit_week').val(d.week_key);
+                                $('#edit_amount').val(d.total_amount);
+                                $('#edit_status').val(d.status);
+                            }, 200);
+                        }, 'json');
+                    });
 
-              </tbody>
-            </table>
-          </div>
+                    $('#formEditInv').on('submit', function (e) {
+                        e.preventDefault();
+                        let formData = new FormData(this);
+                        formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            icon: 'question',
+                            showCancelButton: true,
+                            showDenyButton: false,
+                            confirmButtonText: 'Yes, update',
+                            cancelButtonText: 'No',
+                            reverseButtons: true
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: "<?= base_url('admin/invoices/update') ?>",
+                                    type: "POST",
+                                    data: formData,
+                                    processData: false,
+                                    contentType: false,
+                                    dataType: 'json',
+                                    success: function (res) {
+                                        if (res.status) {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Succeed',
+                                                text: res.message,
+                                                timer: 1500,
+                                                showConfirmButton: false
+                                            });
 
-          <!-- NOTE -->
-          <div class="card-body mx-3">
-            <div class="row">
-              <div class="col-12">
-                <span class="fw-medium">Note:</span>
-                <span>
-                  This invoice is generated automatically from debit transaction record in HeyWork system.
-                </span>
-              </div>
-            </div>
-          </div>
+                                            $('#modalEditInv').modal('hide');
+                                            $('.dtInvoice').DataTable().ajax.reload(null, false);
+                                        } else {
+                                            Swal.fire('Failed', res.message, 'error');
+                                        }
+                                    },
+                                    error: function () {
+                                        Swal.fire('Error', 'Server error', 'error');
+                                    }
+                                });
+                            }
+                        });
+                    });
+                </script>
 
-        </div>
-      </div>
-      <!-- ================== /INVOICE ================== -->
+                <?php if (session()->getFlashdata('success')) : ?>
+                    <script>
+                    $(document).ready(function(){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: '<?= session()->getFlashdata('success') ?>',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    });
+                    </script>
+                <?php endif; ?>
 
-
-      <!-- ================== ACTIONS ================== -->
-      <div class="col-xl-3 col-md-4 col-12 invoice-actions">
-        <div class="card">
-          <div class="card-body">
-
-            <button
-              class="btn btn-primary d-grid w-100 mb-2"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#sendInvoiceOffcanvas">
-              <span class="d-flex align-items-center justify-content-center text-nowrap"
-                ><i class="ti ti-send ti-xs me-2"></i>Send Invoice</span
-              >
-            </button>
-
-            <button class="btn btn-label-secondary d-grid w-100 mb-2">
-              Download
-            </button>
-
-            <a href="<?= base_url('admin/invoices/print/'.$invoice['id']) ?>" 
-               target="_blank"
-               class="btn btn-primary w-100 mb-2">
-               Print Invoice
-            </a>
-
-            <a href="<?= base_url('admin/invoices') ?>"
-               class="btn btn-label-secondary d-grid w-100">
-              Back
-            </a>
-
-          </div>
-        </div>
-      </div>
-      <!-- ================== /ACTIONS ================== -->
-
-    </div>
-
-    <!-- Send Invoice Sidebar -->
-    <div class="offcanvas offcanvas-end" id="sendInvoiceOffcanvas" tabindex="-1">
-      <div class="offcanvas-header my-1">
-        <h5 class="offcanvas-title">Send Invoice</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
-      </div>
-
-      <div class="offcanvas-body pt-0 flex-grow-1">
-        <form id="sendInvoiceForm">
-
-          <div class="mb-3">
-            <label class="form-label">From</label>
-            <input type="text"
-                   class="form-control"
-                   value="<?= esc($invoice['hotel_email']) ?>"
-                   readonly />
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">To</label>
-            <input type="email"
-                   class="form-control"
-                   id="invoice_to"
-                   value="finance@heywork.id" 
-                   placeholder="hotel@email.com" />
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Subject</label>
-            <input type="text"
-                   class="form-control"
-                   value="Invoice #INV-<?= str_pad($invoice['id'], 6, '0', STR_PAD_LEFT) ?>" />
-          </div>
-
-          <div class="mb-3">
-            <label for="invoice-message" class="form-label">Message</label>
-            <textarea disabled class="form-control" name="invoice-message" id="invoice-message" cols="3" rows="8">
-Dear <?= esc($invoice['hotel_name']) ?>,
-
-We have generated a new invoice in the amount of: Rp<?= number_format($invoice['amount'],0,',','.') ?>
-
-
-Please find attached invoice for worker:
-<?= esc($invoice['description']) ?>
-
-
-Please process payment at your earliest convenience.
-
-Regards,
-HeyWork
-            </textarea>
-          </div>
-
-          <div class="mb-4">
-            <span class="badge bg-label-primary">
-              <i class="ti ti-link ti-xs"></i>
-              <span class="align-middle">Invoice Attached</span>
-            </span>
-          </div>
-
-          <div class="d-flex">
-            <a href="<?= base_url('admin/invoices/send/'.$invoice['id']) ?>" 
-               class="btn btn-primary me-3">
-               Send Invoice Email
-            </a>
-            
-            <button type="button"
-                    class="btn btn-label-secondary"
-                    data-bs-dismiss="offcanvas">
-              Cancel
-            </button>
-          </div>
-
-        </form>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<script>
-function sendInvoice() {
-
-    const email = document.getElementById('invoice_to').value;
-
-    if (!email) {
-        alert('Please enter recipient email');
-        return;
-    }
-
-    alert('Invoice sent successfully to ' + email);
-
-    const offcanvasEl = document.getElementById('sendInvoiceOffcanvas');
-    const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
-    offcanvas.hide();
-}
-</script>
-<?= $this->endSection() ?>
+                <?php if (session()->getFlashdata('error')) : ?>
+                    <script>
+                    $(document).ready(function(){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: '<?= session()->getFlashdata('error') ?>'
+                        });
+                    });
+                    </script>
+                <?php endif; ?>
+            <?= $this->endSection() ?>
