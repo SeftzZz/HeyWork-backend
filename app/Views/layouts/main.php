@@ -149,5 +149,21 @@
                 }
             });
         </script>
+        <script>
+            window.jwtToken = "<?= session('jwt_token') ?>";
+            window.userId = "<?= session('user_id') ?>";
+            window.userEmail = "<?= session('user_email') ?>";
+            window.hotelId = "<?= session('hotel_id') ?>";
+            window.hotelName = "<?= session('hotel_name') ?>";
+            window.userEmail = "<?= session('user_email') ?>";
+            window.userName = "<?= session('user_name') ?>";
+            window.userRole = "<?= session('role') ?>";
+            $.ajaxSetup({
+                headers: {
+                    Authorization: 'Bearer ' + window.jwtToken
+                }
+            });
+            window.urlApi = 'http://ledgera.local'
+        </script>
     </body>
 </html>

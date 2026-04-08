@@ -56,7 +56,7 @@
                             <?= session()->getFlashdata('error') ?>
                         </div>
                     <?php endif; ?>
-                    <form action="<?= base_url('login') ?>" method="post">
+                    <form id="loginForm">
                         <?= csrf_field() ?>
                         <h1>Welcome to Hey! Work</h1>
                         <div class="formContainer">
@@ -97,5 +97,56 @@
         <script  src="<?= base_url('assets/login/js.js') ?>"></script>
         <!-- SweetAlert2 -->
         <script src="<?= base_url('assets/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
+        <script>
+            $('#loginForm').on('submit', async function(e) {
+                e.preventDefault();
+
+                const email = $('#email').val();
+                const password = $('#password').val();
+
+                try {
+
+                    const res = await fetch('<?= base_url('api/auth/login') ?>', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            password: password
+                        })
+                    });
+
+                    const json = await res.json();
+
+                    if (!res.ok) {
+                        throw new Error(json.message || 'Login gagal');
+                    }
+
+                    // =========================
+                    // 🔥 SAVE TOKEN
+                    // =========================
+                    localStorage.setItem('access_token', json.access_token);
+                    localStorage.setItem('refresh_token', json.refresh_token);
+
+                    // optional (biar gampang dipakai global)
+                    window.jwtToken = json.access_token;
+
+                    // =========================
+                    // 🔥 REDIRECT
+                    // =========================
+                    window.location.href = "<?= base_url('admin/dashboard') ?>";
+
+                } catch (err) {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Login Failed',
+                        text: err.message
+                    });
+
+                }
+            });
+        </script>
     </body>
 </html>

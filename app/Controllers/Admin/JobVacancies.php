@@ -181,17 +181,7 @@ class JobVacancies extends BaseAdminController
         }
 
         // =========================
-        // VALIDASI TIME
-        // =========================
-        // if (strtotime($data['end_time']) <= strtotime($data['start_time'])) {
-        //     return $this->response->setJSON([
-        //         'status'  => false,
-        //         'message' => 'End time must be greater than start time'
-        //     ]);
-        // }
-
-        // =========================
-        // VALIDASI POSITION (MULTI)
+        // VALIDASI POSITION
         // =========================
         if (empty($data['position'])) {
             return $this->response->setJSON([
@@ -200,17 +190,51 @@ class JobVacancies extends BaseAdminController
             ]);
         }
 
+        // =========================
+        // VALIDASI CATEGORY (🔥 PENTING)
+        // =========================
+        if (empty($data['category'])) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Category required'
+            ]);
+        }
+
+        // =========================
+        // VALIDASI WORKER & FEE
+        // =========================
+        $worker = (int) ($data['worker'] ?? 0);
+        $fee    = (float) ($data['fee'] ?? 0);
+
+        if ($worker <= 0) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Worker harus lebih dari 0'
+            ]);
+        }
+
+        if ($fee < 0) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Fee tidak valid'
+            ]);
+        }
+
         $db = \Config\Database::connect();
         $builder = $db->table('jobs');
 
         $now     = date('Y-m-d H:i:s');
-        $userId = session()->get('user_id');
+        $userId  = session()->get('user_id');
         $hotelId = session()->get('hotel_id');
 
         // =========================
         // AMBIL LOCATION DARI HOTEL
         // =========================
-        $hotel = $db->table('hotels')->select('location')->where('id', $hotelId)->get()->getRowArray();
+        $hotel = $db->table('hotels')
+            ->select('location')
+            ->where('id', $hotelId)
+            ->get()
+            ->getRowArray();
 
         if (!$hotel) {
             return $this->response->setJSON([
@@ -219,15 +243,36 @@ class JobVacancies extends BaseAdminController
             ]);
         }
 
+        // =========================
+        // 🔥 AMBIL CATEGORY DARI SKILLS
+        // =========================
+        $skill = $db->table('skills')
+            ->select('category')
+            ->where('name', $data['position'])
+            ->where('deleted_at', null)
+            ->get()
+            ->getRowArray();
+
+        if (!$skill) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Position tidak ditemukan di master skills'
+            ]);
+        }
+
+        $skillCategory = $skill['category'];
+
+        // =========================
+        // INSERT JOB
+        // =========================
         $insert = [
             'hotel_id'       => $hotelId,
             'position'       => $data['position'],
             'category'       => $data['category'],
             'job_date_start' => $jobDateStart,
             'job_date_end'   => $jobDateEnd,
-            // 'start_time'     => $data['start_time'],
-            // 'end_time'       => $data['end_time'],
-            'fee'            => $data['fee'],
+            'fee'            => $fee,
+            'worker'         => $worker,
             'location'       => $hotel['location'],
             'description'    => $data['description'] ?? null,
             'status'         => 'open',
@@ -237,9 +282,25 @@ class JobVacancies extends BaseAdminController
 
         $builder->insert($insert);
 
+        $jobId = $db->insertID();
+
+        // =========================
+        // 🔥 RESPONSE UNTUK LEDGERA FLOW
+        // =========================
         return $this->response->setJSON([
             'status'  => true,
-            'message' => 'Job(s) have been successfully created'
+            'message' => 'Job(s) have been successfully created',
+
+            // 🔥 INI YANG DIPAKAI CART
+            'data' => [
+                'job_id'         => $jobId,
+                'category'       => $data['category'], // daily_worker / casual
+                'worker'         => $worker,
+                'job_date_start' => $jobDateStart,
+                'job_date_end'   => $jobDateEnd,
+                'fee'            => $fee,
+                'skill_category' => $skillCategory
+            ]
         ]);
     }
 

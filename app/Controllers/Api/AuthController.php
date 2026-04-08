@@ -4,6 +4,7 @@ namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
 use App\Models\UserModel;
+use App\Models\HotelModel;
 use App\Models\RefreshTokenModel;
 use App\Libraries\JwtService;
 use Google\Client as GoogleClient;
@@ -36,25 +37,28 @@ class AuthController extends BaseController
             'created_at' => date('Y-m-d H:i:s')
         ]);
 
+        $hotelModel = new HotelModel();
+        $hotel = $hotelModel->find($user['hotel_id']);
+
+        session()->set([
+            'jwt_token'      => $accessToken,
+            'user_id'        => $user['id'],
+            'hotel_id'       => $user['hotel_id'],
+            'hotel_name'     => $hotel['hotel_name'] ?? null,
+            'hotel_email'    => $hotel['email'] ?? null,
+            'user_name'      => $user['name'],
+            'user_role'      => $user['role'],
+            'user_email'     => $user['email'],
+            'user_photo'     => $user['photo'],
+            'isLoggedIn'     => true
+        ]);
+
         return $this->response->setJSON([
             'access_token'  => $accessToken,
             'refresh_token' => $refreshToken,
             'expires_in'    => config('JWT')->accessTokenTTL,
             'user'          => $user
         ]);
-    }
-
-    public function register()
-    {
-        $data = $this->request->getJSON(true);
-
-        $this->user->insert([
-            'name'     => $data['name'],
-            'email'    => $data['email'],
-            'password' => password_hash($data['password'], PASSWORD_DEFAULT),
-        ]);
-
-        return $this->response->setJSON(['message' => 'Register success']);
     }
 
     public function login()
@@ -69,6 +73,19 @@ class AuthController extends BaseController
         }
 
         return $this->issueToken($user);
+    }
+
+    public function register()
+    {
+        $data = $this->request->getJSON(true);
+
+        $this->user->insert([
+            'name'     => $data['name'],
+            'email'    => $data['email'],
+            'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+        ]);
+
+        return $this->response->setJSON(['message' => 'Register success']);
     }
 
     public function google()

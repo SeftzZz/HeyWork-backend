@@ -84,9 +84,15 @@
                                           <div class="row">
 
                                             <!-- FEE -->
-                                            <div class="col-md-12 mb-3">
+                                            <div class="col-md-6 mb-3">
                                               <label class="form-label">Fee</label>
                                               <input type="number" class="form-control" name="fee" required>
+                                            </div>
+
+                                            <!-- WORKER -->
+                                            <div class="col-md-6 mb-3">
+                                              <label class="form-label">Workers</label>
+                                              <input type="number" class="form-control" name="worker" required>
                                             </div>
 
                                           </div>
@@ -172,9 +178,18 @@
                                             </div>
                                           </div>
 
-                                          <div class="mb-3">
-                                            <label class="form-label">Fee</label>
-                                            <input type="number" class="form-control" name="fee" id="edit_fee">
+                                          <div class="row">
+                                            <!-- FEE -->
+                                            <div class="col-md-6 mb-3">
+                                              <label class="form-label">Fee</label>
+                                              <input type="number" class="form-control" name="fee" id="edit_fee">
+                                            </div>
+
+                                            <!-- WORKER -->
+                                            <div class="col-md-6 mb-3">
+                                              <label class="form-label">Workers</label>
+                                              <input type="number" class="form-control" name="worker" id="edit_worker">
+                                            </div>
                                           </div>
 
                                           <div class="mb-3">
@@ -349,36 +364,203 @@
                                     btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Saving...');
 
                                     $.ajax({
-                                        url: "<?= base_url('admin/job-vacancies/store') ?>",
-                                        type: "POST",
-                                        data: form.serialize(),
-                                        dataType: "json",
+                                      url: "<?= base_url('admin/job-vacancies/store') ?>",
+                                      type: "POST",
+                                      data: form.serialize(),
+                                      dataType: "json",
 
-                                        success: function (res) {
-                                            Swal.fire({
-                                                icon: res.status ? 'success' : 'error',
-                                                title: res.status ? 'Success' : 'Failed',
-                                                text: res.message
-                                            });
+                                      success: async function (res) {
 
-                                            if (res.status) {
-                                                $('#modalAddJob').modal('hide');
-                                                form[0].reset();
-                                                $('.dtJobVacancies').DataTable().ajax.reload(null, false);
-                                            }
-                                        },
+                                        Swal.fire({
+                                          icon: res.status ? 'success' : 'error',
+                                          title: res.status ? 'Success' : 'Failed',
+                                          text: res.message
+                                        });
 
-                                        error: function (xhr) {
-                                            let msg = 'Server error';
-                                            if (xhr.responseJSON && xhr.responseJSON.message) {
-                                                msg = xhr.responseJSON.message;
-                                            }
-                                            // toastr.error(msg);
-                                        },
+                                        if (!res.status) return;
 
-                                        complete: function () {
-                                            btn.prop('disabled', false).html('Save Job');
+                                        try {
+
+                                          if (!res.data || !res.data.category) {
+                                            throw new Error('Invalid job response (category missing)');
+                                          }
+
+                                          const jobPosition = $('#add_job_position').val();
+
+                                          const startDate = new Date(res.data.job_date_start + 'T00:00:00');
+                                          const endDate   = new Date(res.data.job_date_end + 'T00:00:00');
+
+                                          // hitung selisih hari (inclusive)
+                                          const diffTime = endDate - startDate;
+                                          const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+                                          // validasi
+                                          if (diffDays <= 0) {
+                                            throw new Error('Invalid job duration');
+                                          }
+
+                                          const feePerDay = Number(res.data.fee);
+                                          const totalWorker = Number(res.data.worker);
+
+                                          const totalPrice = feePerDay * totalWorker * diffDays;
+
+                                          let payload = {
+                                            company_id: 1,
+                                            branch_name: window.hotelName,
+                                            trx_date: new Date().toISOString().slice(0,10),
+                                            trx_type: 'expense_payroll',
+                                            reference_no: 'HW-' + Date.now(),
+                                            amount: totalPrice,
+                                            payment_account_id: 1,
+                                            tax_code_id: 8
+                                          }
+
+                                          const transactionRes = await fetch(window.urlApi + '/api/transactions', {
+                                            method: 'POST',
+                                            headers: {
+                                              'Content-Type': 'application/json',
+                                              Authorization: 'Bearer ' + window.jwtToken
+                                            },
+                                            body: JSON.stringify(payload)
+                                          });
+
+                                          const json = await transactionRes.json();
+
+                                          if (!json.status) {
+                                            throw new Error(json.message || 'Gagal simpan PO');
+                                          }
+
+                                          // // =========================
+                                          // // 🔥 1. CREATE CART
+                                          // // =========================
+                                          // const cartRes = await fetch(window.urlApi + '/api/cart/create', {
+                                          //   method: 'POST',
+                                          //   headers: {
+                                          //     'Content-Type': 'application/json',
+                                          //     Authorization: 'Bearer ' + window.jwtToken
+                                          //   },
+                                          //   body: JSON.stringify({
+                                          //     hotel_id: window.hotelId,
+                                          //     name: window.userName,
+                                          //     phone: '-',
+                                          //     email: window.userEmail,
+                                          //     category: res.data.skill_category
+                                          //   })
+                                          // });
+
+                                          // const cartJson = await cartRes.json();
+
+                                          // if (!cartJson.status) {
+                                          //   throw new Error(cartJson.message || 'Cart create failed');
+                                          // }
+
+                                          // const cartId = cartJson.data.cart_id;
+
+                                          // // =========================
+                                          // // 🔥 2. ADD ITEM
+                                          // // =========================
+
+                                          // const addRes = await fetch(window.urlApi + '/api/cart/add', {
+                                          //   method: 'POST',
+                                          //   headers: {
+                                          //     'Content-Type': 'application/json',
+                                          //     Authorization: 'Bearer ' + window.jwtToken
+                                          //   },
+                                          //   body: JSON.stringify({
+                                          //     cart_id: cartId,
+                                          //     category: res.data.category,
+                                          //     quantity: totalWorker,
+                                          //     price: totalPrice,
+                                          //     date: new Date().toISOString().slice(0,10)
+                                          //   })
+                                          // });
+
+                                          // const addJson = await addRes.json();
+
+                                          // if (!addJson.status) {
+                                          //   throw new Error(addJson.message || 'Add item failed');
+                                          // }
+
+                                          // // =========================
+                                          // // 🔥 3. CHECKOUT
+                                          // // =========================
+                                          // const orderRes = await fetch(window.urlApi + '/api/orders/checkout', {
+                                          //   method: 'POST',
+                                          //   headers: {
+                                          //     'Content-Type': 'application/json',
+                                          //     Authorization: 'Bearer ' + window.jwtToken
+                                          //   },
+                                          //   body: JSON.stringify({
+                                          //     cart_id: cartId,
+                                          //     order_number: 'HW-' + Date.now(),
+                                          //     payment_method: 'cash'
+                                          //   })
+                                          // });
+
+                                          // const orderJson = await orderRes.json();
+
+                                          // if (!orderJson.status) {
+                                          //   throw new Error(orderJson.message || 'Checkout failed');
+                                          // }
+
+                                          // const orderId = orderJson.data.order_id;
+
+                                          // if (!orderId) {
+                                          //   throw new Error('order_id not returned from API');
+                                          // }
+
+                                          // // =========================
+                                          // // 🔥 4. PAYMENT (NO trxType)
+                                          // // =========================
+                                          // const payRes = await fetch(window.urlApi + '/api/orders/pay', {
+                                          //   method: 'POST',
+                                          //   headers: {
+                                          //     'Content-Type': 'application/json',
+                                          //     Authorization: 'Bearer ' + window.jwtToken
+                                          //   },
+                                          //   body: JSON.stringify({
+                                          //     order_id: orderId,
+                                          //     deposit: 0,
+                                          //     status: 'paid'
+                                          //   })
+                                          // });
+
+                                          // const payJson = await payRes.json();
+
+                                          // if (!payJson.status) {
+                                          //   throw new Error(payJson.message || 'Payment failed');
+                                          // }
+
+                                          // =========================
+                                          // SUCCESS
+                                          // =========================
+                                          $('#modalAddJob').modal('hide');
+                                          form[0].reset();
+                                          $('.dtJobVacancies').DataTable().ajax.reload(null, false);
+
+                                        } catch (err) {
+
+                                          console.error(err);
+
+                                          Swal.fire({
+                                            icon: 'error',
+                                            title: 'Process Failed',
+                                            text: err.message
+                                          });
+
                                         }
+                                      },
+
+                                      error: function (xhr) {
+                                        let msg = 'Server error';
+                                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                                          msg = xhr.responseJSON.message;
+                                        }
+                                      },
+
+                                      complete: function () {
+                                        btn.prop('disabled', false).html('Save Job');
+                                      }
                                     });
                                 });
 
@@ -436,6 +618,7 @@
                                             $('#edit_start_time').val(res.data.start_time);
                                             $('#edit_end_time').val(res.data.end_time);
                                             $('#edit_fee').val(res.data.fee);
+                                            $('#edit_worker').val(res.data.worker);
                                             $('#edit_description').val(res.data.description);
 
                                             // SET POSITION
