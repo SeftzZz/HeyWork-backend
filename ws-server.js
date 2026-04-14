@@ -2,24 +2,24 @@ const WebSocket = require('ws');
 const express = require('express');
 const mysql = require('mysql2/promise');
 
-// const db = mysql.createPool({
-//   host: 'localhost',
-//   user: 'root',
-//   password: 'Salam123!',
-//   database: 'heywork',
-//   waitForConnections: true,
-//   connectionLimit: 10
-// });
-
-//local FPP
 const db = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'Salam123!',
   database: 'heywork',
   waitForConnections: true,
   connectionLimit: 10
 });
+
+//local FPP
+// const db = mysql.createPool({
+//   host: 'localhost',
+//   user: 'root',
+//   password: '',
+//   database: 'heywork',
+//   waitForConnections: true,
+//   connectionLimit: 10
+// });
 
 const app = express();
 app.use(express.json());
