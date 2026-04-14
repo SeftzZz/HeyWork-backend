@@ -2,10 +2,20 @@ const WebSocket = require('ws');
 const express = require('express');
 const mysql = require('mysql2/promise');
 
+// const db = mysql.createPool({
+//   host: 'localhost',
+//   user: 'root',
+//   password: 'Salam123!',
+//   database: 'heywork',
+//   waitForConnections: true,
+//   connectionLimit: 10
+// });
+
+//local FPP
 const db = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'Salam123!',
+  password: '',
   database: 'heywork',
   waitForConnections: true,
   connectionLimit: 10
@@ -260,6 +270,44 @@ async function autoCompleteApplications() {
   }
 }
 
+async function autoCloseJobs() {
+  try {
+    console.log('Checking expired jobs...');
+
+    const [rows] = await db.query(`
+      SELECT id, job_date_end
+      FROM jobs
+      WHERE status = 'open'
+      AND deleted_at IS NULL
+      AND job_date_end < CURDATE()
+    `);
+
+    console.log("AUTO CLOSE JOBS:", rows.length);
+
+    for (const row of rows) {
+      await db.query(`
+        UPDATE jobs
+        SET status = 'closed',
+            updated_at = NOW()
+        WHERE id = ?
+      `, [row.id]);
+
+      console.log(`Auto closed job ${row.id}`);
+
+      // broadcast ke client (optional tapi bagus untuk realtime UI)
+      broadcast({
+        type: 'job_auto_closed',
+        job_id: row.id,
+        job_date_end: row.job_date_end
+      });
+
+    }
+
+  } catch (err) {
+    console.error('Auto close jobs error:', err);
+  }
+}
+
 /**
  * =========================
  * WS CONNECTION
@@ -297,5 +345,6 @@ app.listen(3005, () => {
   setInterval(() => {
     autoCheckout();
     autoCompleteApplications();
+    autoCloseJobs();
   }, 1 * 60 * 1000);
 });
