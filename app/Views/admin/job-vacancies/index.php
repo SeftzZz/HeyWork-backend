@@ -415,23 +415,25 @@
                                             tax_code_id: 8
                                           }
 
-                                          const transactionRes = await fetch(window.urlApi + '/api/transactions', {
-                                            method: 'POST',
-                                            headers: {
-                                              'Content-Type': 'application/json',
-                                              Authorization: 'Bearer ' + window.jwtToken
-                                            },
-                                            body: JSON.stringify(payload)
-                                          });
+                                          // ==== disable dulu sampai heycord production ====
+                                          // const transactionRes = await fetch(window.urlApi + '/api/transactions', {
+                                          //   method: 'POST',
+                                          //   headers: {
+                                          //     'Content-Type': 'application/json',
+                                          //     Authorization: 'Bearer ' + window.jwtToken
+                                          //   },
+                                          //   body: JSON.stringify(payload)
+                                          // });
 
-                                          const json = await transactionRes.json();
+                                          // const json = await transactionRes.json();
 
-                                          if (!json.status) {
-                                            throw new Error(json.message || 'Gagal simpan PO');
-                                          }
+                                          // if (!json.status) {
+                                          //   throw new Error(json.message || 'Gagal simpan PO');
+                                          // }
+                                          // ================================================
 
                                           // // =========================
-                                          // // 🔥 1. CREATE CART
+                                          // // 1. CREATE CART
                                           // // =========================
                                           // const cartRes = await fetch(window.urlApi + '/api/cart/create', {
                                           //   method: 'POST',
