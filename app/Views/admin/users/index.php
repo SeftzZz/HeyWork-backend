@@ -238,11 +238,8 @@
 									                    </div>
 									                    <div class="row">
 									                        <div class="col-md-6 mb-3">
-									                            <label class="form-label" for="edit_status_user">Status</label>
-									                            <select name="status_user" id="edit_status_user" class="form-control required">
-								                                    <option value="active">Active</option>
-								                                    <option value="inactive">Inactive</option>
-								                                </select>
+									                            <label class="form-label" for="edit_skill_user">Skill</label>
+									                            <select name="skill_user[]" id="edit_skill_user" class="select2 form-select" multiple></select>
 									                        </div>
 									                        <div class="col-md-6 mb-3">
 									                            <label class="form-label" for="edit_pass_user">Password</label>
@@ -252,16 +249,25 @@
 															    </small>
 									                        </div>
 									                    </div>
-									                    <div class="mb-3">
-														    <label class="form-label" for="edit_foto">Photo</label>
-														    <div class="mb-2">
-														        <img id="preview_foto" src="" class="img-thumbnail" style="max-height:120px">
-														    </div>
-														    <input type="file" class="form-control" name="foto" id="edit_foto" accept="image/*">
-														    <small class="text-muted">
-														        Leave blank if you don't want to change
-														    </small>
-														</div>
+									                    <div class="row">
+									                    	<div class="col-md-6 mb-3">
+															    <label class="form-label" for="edit_foto">Photo</label>
+															    <div>
+															        <img id="preview_foto" src="" class="img-thumbnail" style="max-height:120px">
+															    </div>
+															    <input type="file" class="form-control" name="foto" id="edit_foto" accept="image/*">
+															    <small class="text-muted">
+															        Leave blank if you don't want to change
+															    </small>
+															</div>
+									                        <div class="col-md-6 mb-3">
+									                            <label class="form-label" for="edit_status_user">Status</label>
+									                            <select name="status_user" id="edit_status_user" class="form-control required">
+								                                    <option value="active">Active</option>
+								                                    <option value="inactive">Inactive</option>
+								                                </select>
+									                        </div>
+									                    </div>
 											        </div>
 
 											        <div class="modal-footer">
@@ -286,6 +292,7 @@
 		                <!-- select2 -->
 		                <link rel="stylesheet" href="<?= base_url('assets/vendor/libs/select2/select2.css') ?>" />
 		                <script src="<?= base_url('assets/vendor/libs/select2/select2.js') ?>"></script>
+		                <script src="<?= base_url('assets/js/forms-selects.js') ?>"></script>
 
 		                <script>
 						    // DataTables Users
@@ -561,6 +568,9 @@
 								    // clear preview foto
 								    $('#preview_foto').attr('src', '').hide();
 
+								    // clear select2 skill
+								    $('#edit_skill_user').val(null).trigger('change');
+
 								    // hapus validation error jika ada
 								    $form.find('.is-invalid').removeClass('is-invalid');
 								    $form.find('.invalid-feedback').remove();
@@ -631,6 +641,21 @@
 							                $('#preview_foto').hide();
 							            }
 
+							            initSkillSelect2($('#modalEditUser'));
+
+							            if (res.skills) {
+								            const skillSelect = $('#edit_skill_user');
+
+								            skillSelect.empty();
+
+								            res.skills.forEach(skill => {
+											    const option = new Option(skill.text, skill.id, true, true);
+											    skillSelect.append(option);
+											});
+
+								            skillSelect.trigger('change');
+								        }
+
 							            sessionRole === 'hotel_hr'
 							                ? lockEditHotel()
 							                : unlockEditHotel();
@@ -649,7 +674,6 @@
 
 							    // INIT JOB SELECT2
 								function initJobSelect2(modal) {
-
 								    if ($('#add_job_id').hasClass('select2-hidden-accessible')) {
 								        $('#add_job_id').select2('destroy');
 								    }
@@ -674,9 +698,34 @@
 								    });
 								}
 
+								// INIT SKILL SELECT2
+								function initSkillSelect2(modal) {
+								    if ($('#edit_skill_user').hasClass('select2-hidden-accessible')) {
+								        $('#edit_skill_user').select2('destroy');
+								    }
+
+								    $('#edit_skill_user').select2({
+								        placeholder: 'Select Skill',
+								        dropdownParent: modal,
+								        ajax: {
+								            url: "<?= base_url('admin/users/skills') ?>",
+								            type: "POST",
+								            dataType: 'json',
+								            delay: 250,
+								            processResults: function (data) {
+								                return {
+								                    results: data.map(s => ({
+								                        id: s.id,
+								                        text: s.name
+								                    }))
+								                };
+								            }
+								        }
+								    });
+								}
+
 								// Role Change
 								$('#modalAddUser select[name="role_user"]').on('change', function () {
-
 								    const role = $(this).val();
 
 								    if (role === 'worker') {
@@ -699,9 +748,7 @@
 
 									    $('#add_job_id').val(null).trigger('change');
 									}
-
 								});
-
 							});
 
 							// Submit form insert data
