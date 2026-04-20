@@ -261,13 +261,22 @@ class Users extends BaseAdminController
         $this->userModel->insert($data);
         $userId = $this->userModel->getInsertID();
 
-        /**
-         * ===============================
-         * AUTO INSERT APPLICATION IF WORKER
-         * ===============================
-         */
-        if ($role === 'worker') {
+        // INSERT SKILLS
+        $skills = $this->request->getPost('skill_user');
 
+        if (!empty($skills)) {
+            $insertSkills = [];
+            foreach ($skills as $skillId) {
+                $insertSkills[] = [
+                    'user_id'  => $userId,
+                    'skill_id' => $skillId
+                ];
+            }
+            $db->table('worker_skills')->insertBatch($insertSkills);
+        }
+
+        // AUTO INSERT APPLICATION IF WORKER
+        if ($role === 'worker') {
             $jobId = $this->request->getPost('job_id');
 
             if ($jobId) {
@@ -300,8 +309,9 @@ class Users extends BaseAdminController
                 'created_at'    => date('Y-m-d H:i:s'),
                 'created_by'    => session()->get('user_id')
             ]);
-
         }
+
+
 
         $db->transComplete();
 

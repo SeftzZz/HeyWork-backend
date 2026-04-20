@@ -71,6 +71,10 @@
 									                        </div>
 									                    </div>
 									                    <div class="row">
+									                    	<div class="col-md-4 mb-3">
+									                            <label class="form-label">Skill</label>
+									                            <select name="skill_user[]" id="add_skill_user" class="select2 form-select" multiple></select>
+									                        </div>
 									                        <div class="col-md-4 mb-3">
 									                            <label class="form-label">Role</label>
 									                            <select name="role_user" class="form-control required">
@@ -476,7 +480,7 @@
 							    const sessionRole = "<?= session()->get('user_role') ?>";
 							    const sessionHotel = "<?= session()->get('hotel_id') ?>";
 
-							    // INIT SELECT2 
+							    // INIT SELECT2 HOTEL
 							    function initHotelSelect2(selector, modal) {
 							        if ($(selector).hasClass('select2-hidden-accessible')) {
 							            $(selector).select2('destroy');
@@ -487,6 +491,32 @@
 							            dropdownParent: modal
 							        });
 							    }
+
+							    // INIT SELECT2 SKILL 
+							    function initAddSkillSelect2(modal) {
+								    if ($('#add_skill_user').hasClass('select2-hidden-accessible')) {
+								        $('#add_skill_user').select2('destroy');
+								    }
+
+								    $('#add_skill_user').select2({
+								        placeholder: 'Select Skill',
+								        dropdownParent: modal,
+								        ajax: {
+								            url: "<?= base_url('admin/users/skills') ?>",
+								            type: "POST",
+								            dataType: 'json',
+								            delay: 250,
+								            processResults: function (data) {
+								                return {
+								                    results: data.map(s => ({
+								                        id: s.id,
+								                        text: s.name
+								                    }))
+								                };
+								            }
+								        }
+								    });
+								}
 
 							    const allowedRolesHR = [
 							        'worker',
@@ -532,6 +562,9 @@
 							            $hotelSelect.val('').trigger('change');
 							        }
 
+							        // reset skill select2
+							        $('#add_skill_user').val(null).trigger('change');
+
 							        // unlock hotel select (untuk admin)
 							        unlockAddHotel();
 
@@ -546,6 +579,7 @@
 
 							    $('#modalAddUser').on('shown.bs.modal', function () {
 							        initHotelSelect2('#add_hotel_user', $(this));
+							        initAddSkillSelect2($(this));
 							        if (sessionRole === 'hotel_hr') lockAddHotel();
 							        filterRoleOptions('#modalAddUser select[name="role_user"]');
 							    });
