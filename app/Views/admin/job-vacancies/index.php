@@ -36,11 +36,11 @@
 
                                         <div class="modal-body">
                                           <div class="row">
-
+                                            <div id="budget_limit_info"></div>
                                             <!-- JOB POSITION -->
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Job Position</label>
-                                                <select id="add_job_position" name="position" multiple class="form-select select2"
+                                                <select id="add_job_position" name="position" class="form-select select2"
                                                     data-placeholder="Select Job Position" style="width:100%">
                                                     <option value=""></option>
 
@@ -107,6 +107,13 @@
                                             <textarea class="form-control" name="description" rows="3"></textarea>
                                           </div>
 
+                                          <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                              <label class="form-label">Total Estimasi</label>
+                                              <input type="text" id="total_estimation" class="form-control" readonly>
+                                            </div>
+                                          </div>
+
                                           <!-- STATUS (hidden, default open) -->
                                           <input type="hidden" name="status" value="open">
 
@@ -116,7 +123,7 @@
                                           <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
                                             Cancel
                                           </button>
-                                          <button type="submit" class="btn btn-primary">
+                                          <button id="btnSubmitJob" type="submit" class="btn btn-primary">
                                             Save & Publish
                                           </button>
                                         </div>
@@ -429,22 +436,20 @@
                                             tax_code_id: 8
                                           }
 
-                                          // ==== disable dulu sampai heycord production ====
-                                          // const transactionRes = await fetch(window.urlApi + '/api/transactions', {
-                                          //   method: 'POST',
-                                          //   headers: {
-                                          //     'Content-Type': 'application/json',
-                                          //     Authorization: 'Bearer ' + window.jwtToken
-                                          //   },
-                                          //   body: JSON.stringify(payload)
-                                          // });
+                                          const transactionRes = await fetch(window.urlApi + '/api/transactions', {
+                                            method: 'POST',
+                                            headers: {
+                                              'Content-Type': 'application/json',
+                                              Authorization: 'Bearer ' + window.jwtToken
+                                            },
+                                            body: JSON.stringify(payload)
+                                          });
 
-                                          // const json = await transactionRes.json();
+                                          const json = await transactionRes.json();
 
-                                          // if (!json.status) {
-                                          //   throw new Error(json.message || 'Gagal simpan PO');
-                                          // }
-                                          // ================================================
+                                          if (!json.status) {
+                                            throw new Error(json.message || 'Gagal simpan Job');
+                                          }
 
                                           // =========================
                                           // SUCCESS
@@ -560,7 +565,7 @@
                                     $(selector).select2({
                                         placeholder: 'Select Job Position',
                                         allowClear: true,
-                                        closeOnSelect: false, // 🔥 penting untuk multi select
+                                        closeOnSelect: false,
                                         dropdownParent: modal
                                     });
                                 }
@@ -620,6 +625,183 @@
                                             }
                                         }
                                     });
+                                }
+
+                                $('#add_job_position').on('change', async function () {
+
+                                  const position = $(this).val();
+
+                                  if (!position) return;
+
+                                  const selected = $('#add_job_position option:selected');
+                                  const category = selected.data('category');
+
+                                  try {
+
+                                    let payload = {
+                                      company_id: 1,
+                                      branch_name: window.hotelName,
+                                      department: category,
+                                    }
+
+                                    const res = await fetch(window.urlApi + '/api/budget-limit', {
+                                      method: 'POST',
+                                      headers: {
+                                        'Content-Type': 'application/json',
+                                        Authorization: 'Bearer ' + window.jwtToken
+                                      },
+                                      body: JSON.stringify(payload)
+                                    });
+
+                                    if (!res.ok) {
+                                      throw new Error('HTTP ' + res.status);
+                                    }
+
+                                    const json = await res.json();
+
+                                    console.log('Budget Limit:', json);
+
+                                    if (!json.status) {
+                                      throw new Error(json.message || 'Gagal mendapatkan limit');
+                                    }
+
+                                    // =========================
+                                    // 🔥 SIMPAN KE GLOBAL / UI
+                                    // =========================
+                                    window.budgetLimitData = json.data;
+
+                                    // OPTIONAL: tampilkan ke UI
+                                    if (json.data) {
+                                      const limit = Number(json.data.limit_worker || 0);
+                                      const used  = Number(json.data.workforce || 0);
+
+                                      // console.log('Limit:', limit);
+                                      // console.log('Used:', used);
+                                      const percent = limit > 0 ? (used / limit) * 100 : 0;
+
+                                      const alertClass =
+                                        used > limit ? 'alert-danger' :
+                                        percent >= 70 ? 'alert-warning' :
+                                        'alert-success';
+
+                                      $('#budget_limit_info').html(`
+                                        <div class="alert ${alertClass} d-flex justify-content-between align-items-center mb-3 py-2">
+                                          
+                                          <div>
+                                            <small class="fw-semibold">Limit</small><br>
+                                            <span>Rp ${limit.toLocaleString()}</span>
+                                          </div>
+
+                                          <div class="text-end">
+                                            <small class="fw-semibold">Used (${percent.toFixed(2)}%)</small><br>
+                                            <span>Rp ${used.toLocaleString()}</span>
+                                          </div>
+
+                                        </div>
+                                      `);
+                                    }
+
+                                  } catch (err) {
+
+                                    console.error(err);
+
+                                    Swal.fire({
+                                      icon: 'error',
+                                      title: 'Budget Error',
+                                      text: err.message
+                                    });
+
+                                  }
+
+                                });
+
+                                $(document).on('input change', `
+                                  input[name="fee"],
+                                  input[name="worker"],
+                                  input[name="job_date_start"],
+                                  input[name="job_date_end"]
+                                `, function () {
+                                  calculateTotalJob();
+                                });
+
+                                function calculateTotalJob() {
+
+                                  const fee = Number($('input[name="fee"]').val()) || 0;
+                                  const worker = Number($('input[name="worker"]').val()) || 0;
+
+                                  const start = $('input[name="job_date_start"]').val();
+                                  const end   = $('input[name="job_date_end"]').val();
+
+                                  if (!start || !end) {
+                                    $('#total_estimation').val('Rp 0');
+                                    return;
+                                  }
+
+                                  const startDate = new Date(start + 'T00:00:00');
+                                  const endDate   = new Date(end + 'T00:00:00');
+
+                                  const diffTime = endDate - startDate;
+                                  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+                                  if (diffDays <= 0) {
+                                    $('#total_estimation').val('Invalid date');
+                                    return;
+                                  }
+
+                                  const total = fee * worker * diffDays;
+
+                                  // =========================
+                                  // 🔥 TAMPILKAN TOTAL
+                                  // =========================
+                                  $('#total_estimation').val('Rp ' + total.toLocaleString());
+
+                                  // =========================
+                                  // 🔥 UPDATE USED (REALTIME)
+                                  // =========================
+                                  if (!window.budgetLimitData) return;
+
+                                  const baseUsed = Number(window.budgetLimitData.workforce || 0);
+                                  const limit    = Number(window.budgetLimitData.limit_worker || 0);
+
+                                  const newUsed = baseUsed + total;
+
+                                  const percent = limit > 0 ? (newUsed / limit) * 100 : 0;
+
+                                  const alertClass =
+                                    newUsed > limit ? 'alert-danger' :
+                                    percent >= 70 ? 'alert-warning' :
+                                    'alert-success';
+
+                                  $('#budget_limit_info').html(`
+                                    <div class="alert ${alertClass} d-flex justify-content-between align-items-center mb-3 py-2">
+                                      
+                                      <div>
+                                        <small class="fw-semibold">Limit</small><br>
+                                        <span>Rp ${limit.toLocaleString()}</span>
+                                      </div>
+
+                                      <div class="text-end">
+                                        <small class="fw-semibold">Used (${percent.toFixed(2)}%)</small><br>
+                                        <span>Rp ${newUsed.toLocaleString()}</span>
+                                      </div>
+
+                                    </div>
+                                  `);
+
+                                  // =========================
+                                  // 🔥 DISABLE BUTTON
+                                  // =========================
+                                  const btn = $('#btnSubmitJob');
+
+                                  if (newUsed > limit) {
+                                    btn.prop('disabled', true)
+                                       .removeClass('btn-primary')
+                                       .addClass('btn-danger');
+                                  } else {
+                                    btn.prop('disabled', false)
+                                       .removeClass('btn-danger')
+                                       .addClass('btn-primary');
+                                  }
                                 }
 
                             });
