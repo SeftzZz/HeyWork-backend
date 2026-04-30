@@ -40,15 +40,19 @@
                                             <!-- JOB POSITION -->
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Job Position</label>
-                                                <select
-                                                    id="add_job_position" name="position" multiple class="form-select select2"
+                                                <select id="add_job_position" name="position" multiple class="form-select select2"
                                                     data-placeholder="Select Job Position" style="width:100%">
                                                     <option value=""></option>
+
                                                     <?php foreach ($skills as $skill): ?>
-                                                        <option value="<?= $skill['name'] ?>">
+                                                        <option 
+                                                            value="<?= esc($skill['name']) ?>"
+                                                            data-category="<?= $skill['category'] ?>"
+                                                        >
                                                             <?= esc($skill['name']) ?>
                                                         </option>
                                                     <?php endforeach; ?>
+
                                                 </select>
                                             </div>
 
@@ -144,12 +148,17 @@
                                             <!-- POSITION -->
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Job Position</label>
-                                                <select id="edit_job_position" name="position" class="form-select select2" style="width:100%">
+                                                <select id="edit_job_position" name="position" class="form-select select2">
+
                                                     <?php foreach ($skills as $skill): ?>
-                                                        <option value="<?= esc($skill['name']) ?>">
-                                                            <?= esc($skill['name']) ?>
+                                                        <option 
+                                                            value="<?= esc($skill['name']) ?>"
+                                                            data-category="<?= $skill['category'] ?>"
+                                                        >
+                                                            <?= esc($skill['name']) ?> - <?= esc($skill['category']) ?>
                                                         </option>
                                                     <?php endforeach; ?>
+
                                                 </select>
                                             </div>
 
@@ -386,6 +395,10 @@
                                           }
 
                                           const jobPosition = $('#add_job_position').val();
+                                          const selected = $('#add_job_position option:selected');
+
+                                          const category = selected.data('category');
+                                          const position   = selected.val();
 
                                           const startDate = new Date(res.data.job_date_start + 'T00:00:00');
                                           const endDate   = new Date(res.data.job_date_end + 'T00:00:00');
@@ -409,6 +422,7 @@
                                             branch_name: window.hotelName,
                                             trx_date: new Date().toISOString().slice(0,10),
                                             trx_type: 'expense_payroll',
+                                            department: category,
                                             reference_no: 'HW-' + Date.now(),
                                             amount: totalPrice,
                                             payment_account_id: 1,
@@ -429,107 +443,6 @@
                                           if (!json.status) {
                                             throw new Error(json.message || 'Gagal simpan PO');
                                           }
-
-                                          // // =========================
-                                          // // 🔥 1. CREATE CART
-                                          // // =========================
-                                          // const cartRes = await fetch(window.urlApi + '/api/cart/create', {
-                                          //   method: 'POST',
-                                          //   headers: {
-                                          //     'Content-Type': 'application/json',
-                                          //     Authorization: 'Bearer ' + window.jwtToken
-                                          //   },
-                                          //   body: JSON.stringify({
-                                          //     hotel_id: window.hotelId,
-                                          //     name: window.userName,
-                                          //     phone: '-',
-                                          //     email: window.userEmail,
-                                          //     category: res.data.skill_category
-                                          //   })
-                                          // });
-
-                                          // const cartJson = await cartRes.json();
-
-                                          // if (!cartJson.status) {
-                                          //   throw new Error(cartJson.message || 'Cart create failed');
-                                          // }
-
-                                          // const cartId = cartJson.data.cart_id;
-
-                                          // // =========================
-                                          // // 🔥 2. ADD ITEM
-                                          // // =========================
-
-                                          // const addRes = await fetch(window.urlApi + '/api/cart/add', {
-                                          //   method: 'POST',
-                                          //   headers: {
-                                          //     'Content-Type': 'application/json',
-                                          //     Authorization: 'Bearer ' + window.jwtToken
-                                          //   },
-                                          //   body: JSON.stringify({
-                                          //     cart_id: cartId,
-                                          //     category: res.data.category,
-                                          //     quantity: totalWorker,
-                                          //     price: totalPrice,
-                                          //     date: new Date().toISOString().slice(0,10)
-                                          //   })
-                                          // });
-
-                                          // const addJson = await addRes.json();
-
-                                          // if (!addJson.status) {
-                                          //   throw new Error(addJson.message || 'Add item failed');
-                                          // }
-
-                                          // // =========================
-                                          // // 🔥 3. CHECKOUT
-                                          // // =========================
-                                          // const orderRes = await fetch(window.urlApi + '/api/orders/checkout', {
-                                          //   method: 'POST',
-                                          //   headers: {
-                                          //     'Content-Type': 'application/json',
-                                          //     Authorization: 'Bearer ' + window.jwtToken
-                                          //   },
-                                          //   body: JSON.stringify({
-                                          //     cart_id: cartId,
-                                          //     order_number: 'HW-' + Date.now(),
-                                          //     payment_method: 'cash'
-                                          //   })
-                                          // });
-
-                                          // const orderJson = await orderRes.json();
-
-                                          // if (!orderJson.status) {
-                                          //   throw new Error(orderJson.message || 'Checkout failed');
-                                          // }
-
-                                          // const orderId = orderJson.data.order_id;
-
-                                          // if (!orderId) {
-                                          //   throw new Error('order_id not returned from API');
-                                          // }
-
-                                          // // =========================
-                                          // // 🔥 4. PAYMENT (NO trxType)
-                                          // // =========================
-                                          // const payRes = await fetch(window.urlApi + '/api/orders/pay', {
-                                          //   method: 'POST',
-                                          //   headers: {
-                                          //     'Content-Type': 'application/json',
-                                          //     Authorization: 'Bearer ' + window.jwtToken
-                                          //   },
-                                          //   body: JSON.stringify({
-                                          //     order_id: orderId,
-                                          //     deposit: 0,
-                                          //     status: 'paid'
-                                          //   })
-                                          // });
-
-                                          // const payJson = await payRes.json();
-
-                                          // if (!payJson.status) {
-                                          //   throw new Error(payJson.message || 'Payment failed');
-                                          // }
 
                                           // =========================
                                           // SUCCESS
