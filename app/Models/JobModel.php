@@ -22,6 +22,7 @@ class JobModel extends Model
         'description',
         'requirement_skill',
         'status',
+        'worker',
         'created_at',
         'created_by',
         'updated_at',

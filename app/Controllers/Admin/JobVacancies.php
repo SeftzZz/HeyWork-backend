@@ -191,7 +191,7 @@ class JobVacancies extends BaseAdminController
         }
 
         // =========================
-        // VALIDASI CATEGORY (🔥 PENTING)
+        // VALIDASI CATEGORY (PENTING)
         // =========================
         if (empty($data['category'])) {
             return $this->response->setJSON([
@@ -244,7 +244,7 @@ class JobVacancies extends BaseAdminController
         }
 
         // =========================
-        // 🔥 AMBIL CATEGORY DARI SKILLS
+        // AMBIL CATEGORY DARI SKILLS
         // =========================
         $skill = $db->table('skills')
             ->select('category')
@@ -285,13 +285,13 @@ class JobVacancies extends BaseAdminController
         $jobId = $db->insertID();
 
         // =========================
-        // 🔥 RESPONSE UNTUK LEDGERA FLOW
+        // RESPONSE UNTUK LEDGERA FLOW
         // =========================
         return $this->response->setJSON([
             'status'  => true,
             'message' => 'Job(s) have been successfully created',
 
-            // 🔥 INI YANG DIPAKAI CART
+            // INI YANG DIPAKAI CART
             'data' => [
                 'job_id'         => $jobId,
                 'category'       => $data['category'], // daily_worker / casual
@@ -395,6 +395,7 @@ class JobVacancies extends BaseAdminController
             'fee'            => $data['fee'],
             'location'       => $hotel['location'], // AUTO FROM HOTEL ID di Session
             'description'    => $data['description'] ?? null,
+            'worker'         => $data['worker'],
             'updated_at'     => date('Y-m-d H:i:s'),
             'updated_by'     => session()->get('user_id')
         ];

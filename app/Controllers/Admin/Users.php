@@ -261,13 +261,22 @@ class Users extends BaseAdminController
         $this->userModel->insert($data);
         $userId = $this->userModel->getInsertID();
 
-        /**
-         * ===============================
-         * AUTO INSERT APPLICATION IF WORKER
-         * ===============================
-         */
-        if ($role === 'worker') {
+        // INSERT SKILLS
+        $skills = $this->request->getPost('skill_user');
 
+        if (!empty($skills)) {
+            $insertSkills = [];
+            foreach ($skills as $skillId) {
+                $insertSkills[] = [
+                    'user_id'  => $userId,
+                    'skill_id' => $skillId
+                ];
+            }
+            $db->table('worker_skills')->insertBatch($insertSkills);
+        }
+
+        // AUTO INSERT APPLICATION IF WORKER
+        if ($role === 'worker') {
             $jobId = $this->request->getPost('job_id');
 
             if ($jobId) {
@@ -300,8 +309,9 @@ class Users extends BaseAdminController
                 'created_at'    => date('Y-m-d H:i:s'),
                 'created_by'    => session()->get('user_id')
             ]);
-
         }
+
+
 
         $db->transComplete();
 
@@ -335,10 +345,36 @@ class Users extends BaseAdminController
             ]);
         }
 
+        // ambil skill user
+        $db = \Config\Database::connect();
+        $skills = $db->table('worker_skills ws')
+            ->select('s.id, s.name as text')
+            ->join('skills s', 's.id = ws.skill_id')
+            ->where('ws.user_id', $id)
+            ->get()
+            ->getResultArray();
+
         return $this->response->setJSON([
             'status' => true,
-            'data'   => $user
+            'data'   => $user,
+            'skills' => $skills
         ]);
+    }
+
+    public function getSkills()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(404);
+        }
+
+        $skills = db_connect()
+            ->table('skills')
+            ->select('id, name')
+            ->orderBy('name', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON($skills);
     }
 
     public function update()
@@ -405,6 +441,30 @@ class Users extends BaseAdminController
 
             // SIMPAN DENGAN PATH
             $data['photo'] = 'uploads/profiles/' . $newName;
+        }
+
+        // UPDATE SKILLS
+        $skills = $this->request->getPost('skill_user');
+
+        $db = db_connect();
+
+        // hapus lama
+        $db->table('worker_skills')
+            ->where('user_id', $id)
+            ->delete();
+
+        // insert baru
+        if (!empty($skills)) {
+            $insertData = [];
+
+            foreach ($skills as $skillId) {
+                $insertData[] = [
+                    'user_id' => $id,
+                    'skill_id' => $skillId
+                ];
+            }
+
+            $db->table('worker_skills')->insertBatch($insertData);
         }
 
         if ($this->userModel->update($id, $data)) {
