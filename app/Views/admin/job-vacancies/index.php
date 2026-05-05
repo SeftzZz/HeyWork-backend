@@ -59,7 +59,7 @@
                                             <!-- CATEGORY -->
                                             <div class="col-md-6 mb-3">
                                               <label class="form-label">Category</label>
-                                              <select class="form-select" name="category" required>
+                                              <select id="add_job_category" class="form-select" name="category" required>
                                                 <option value="">-- Select Category --</option>
                                                 <option value="daily_worker">Daily Worker</option>
                                                 <option value="casual">Casual</option>
@@ -634,14 +634,14 @@
                                   if (!position) return;
 
                                   const selected = $('#add_job_position option:selected');
-                                  const category = selected.data('category');
+                                  const department = selected.data('category');
 
                                   try {
 
                                     let payload = {
                                       company_id: 1,
                                       branch_name: window.hotelName,
-                                      department: category,
+                                      department: department,
                                     }
 
                                     const res = await fetch(window.urlApi + '/api/budget-limit', {
@@ -672,8 +672,8 @@
 
                                     // OPTIONAL: tampilkan ke UI
                                     if (json.data) {
-                                      const limit = Number(json.data.limit_worker || 0);
-                                      const used  = Number(json.data.workforce || 0);
+                                      const limit = Number(json.data.limit_dw || 0);
+                                      const used  = Number(json.data.daily_worker || 0);
 
                                       // console.log('Limit:', limit);
                                       // console.log('Used:', used);
