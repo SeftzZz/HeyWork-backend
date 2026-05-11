@@ -285,54 +285,23 @@ class JobVacancies extends BaseAdminController
         $jobId = $db->insertID();
 
         // =========================
-        // AMBIL ISHEYCORP DARI HOTEL
-        // =========================
-        $hotel = $db->table('hotels')
-            ->select('isheycorp')
-            ->where('id', $hotelId)
-            ->get()
-            ->getRowArray();
-
-        if ($hotel['isheycorp'] == 1) {
-            // =========================
-            // RESPONSE UNTUK LEDGERA FLOW
-            // =========================
-            return $this->response->setJSON([
-                'status'  => true,
-                'message' => 'Job(s) have been successfully created',
-
-                // INI YANG DIPAKAI CART
-                'data' => [
-                    'job_id'         => $jobId,
-                    'category'       => $data['category'], // daily_worker / casual
-                    'worker'         => $worker,
-                    'job_date_start' => $jobDateStart,
-                    'job_date_end'   => $jobDateEnd,
-                    'fee'            => $fee,
-                    'skill_category' => $skillCategory
-                ]
-            ]);
-        }
-        
-
-        // =========================
         // RESPONSE UNTUK LEDGERA FLOW
         // =========================
-        // return $this->response->setJSON([
-        //     'status'  => true,
-        //     'message' => 'Job(s) have been successfully created',
+        return $this->response->setJSON([
+            'status'  => true,
+            'message' => 'Job(s) have been successfully created',
 
-        //     // INI YANG DIPAKAI CART
-        //     'data' => [
-        //         'job_id'         => $jobId,
-        //         'category'       => $data['category'], // daily_worker / casual
-        //         'worker'         => $worker,
-        //         'job_date_start' => $jobDateStart,
-        //         'job_date_end'   => $jobDateEnd,
-        //         'fee'            => $fee,
-        //         'skill_category' => $skillCategory
-        //     ]
-        // ]);
+            // INI YANG DIPAKAI CART
+            'data' => [
+                'job_id'         => $jobId,
+                'category'       => $data['category'], // daily_worker / casual
+                'worker'         => $worker,
+                'job_date_start' => $jobDateStart,
+                'job_date_end'   => $jobDateEnd,
+                'fee'            => $fee,
+                'skill_category' => $skillCategory
+            ]
+        ]);
     }
 
     public function get()

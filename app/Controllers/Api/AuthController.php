@@ -45,6 +45,7 @@ class AuthController extends BaseController
             'user_id'        => $user['id'],
             'hotel_id'       => $user['hotel_id'],
             'hotel_name'     => $hotel['hotel_name'] ?? null,
+            'hotel_isheycorp'=> $hotel['isheycorp'] ?? null,
             'hotel_email'    => $hotel['email'] ?? null,
             'user_name'      => $user['name'],
             'user_role'      => $user['role'],
