@@ -50,15 +50,16 @@ class Login extends BaseController
         $hotel = $hotelModel->find($user['hotel_id']);
 
         session()->set([
-            'user_id'        => $user['id'],
-            'hotel_id'       => $user['hotel_id'],
-            'hotel_name'     => $hotel['hotel_name'] ?? null,
-            'hotel_email'    => $hotel['email'] ?? null,
-            'user_name'      => $user['name'],
-            'user_role'      => $user['role'],
-            'user_email'     => $user['email'],
-            'user_photo'     => $user['photo'],
-            'isLoggedIn'     => true
+            'user_id'         => $user['id'],
+            'hotel_id'        => $user['hotel_id'],
+            'hotel_name'      => $hotel['hotel_name'] ?? null,
+            'hotel_email'     => $hotel['email'] ?? null,
+            'hotel_isheycorp' => $hotel['isheycorp'] ?? null,
+            'user_name'       => $user['name'],
+            'user_role'       => $user['role'],
+            'user_email'      => $user['email'],
+            'user_photo'      => $user['photo'],
+            'isLoggedIn'      => true
         ]);
 
         return redirect()->to('/admin/dashboard');

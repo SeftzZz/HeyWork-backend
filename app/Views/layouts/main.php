@@ -155,9 +155,11 @@
             window.userEmail = "<?= session('user_email') ?>";
             window.hotelId = "<?= session('hotel_id') ?>";
             window.hotelName = "<?= session('hotel_name') ?>";
+            window.hotelEmail = "<?= session('hotel_email') ?>";
             window.userEmail = "<?= session('user_email') ?>";
             window.userName = "<?= session('user_name') ?>";
             window.userRole = "<?= session('role') ?>";
+            window.hotelIsHeycorp = "<?= session('hotel_isheycorp') ?>";
             $.ajaxSetup({
                 headers: {
                     Authorization: 'Bearer ' + window.jwtToken

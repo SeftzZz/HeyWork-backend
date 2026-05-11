@@ -386,7 +386,6 @@
                                       dataType: "json",
 
                                       success: async function (res) {
-
                                         Swal.fire({
                                           icon: res.status ? 'success' : 'error',
                                           title: res.status ? 'Success' : 'Failed',
@@ -423,7 +422,10 @@
                                           const totalWorker = Number(res.data.worker);
 
                                           const totalPrice = feePerDay * totalWorker * diffDays;
-
+                                          
+                                          // =========================
+                                          // RESPONSE UNTUK LEDGERA
+                                          // =========================
                                           let payload = {
                                             company_id: 1,
                                             branch_name: window.hotelName,
