@@ -632,93 +632,89 @@
                                 }
 
                                 $('#add_job_position').on('change', async function () {
+                                    const position = $(this).val();
 
-                                  const position = $(this).val();
+                                    if (!position) return;
 
-                                  if (!position) return;
-
-                                  const selected = $('#add_job_position option:selected');
-                                  const department = selected.data('category');
-
-                                  try {
-
-                                    let payload = {
-                                      company_id: 1,
-                                      branch_name: window.hotelName,
-                                      department: department,
-                                    }
+                                    const selected = $('#add_job_position option:selected');
+                                    const department = selected.data('category');
 
                                     if(window.hotelIsHeycorp === '1') {
-                                      const res = await fetch(window.urlApi + '/api/budget-limit', {
-                                        method: 'POST',
-                                        headers: {
-                                          'Content-Type': 'application/json',
-                                          Authorization: 'Bearer ' + window.jwtToken
-                                        },
-                                        body: JSON.stringify(payload)
-                                      });
+                                        try {
+                                          let payload = {
+                                            company_id: 1,
+                                            branch_name: window.hotelName,
+                                            department: department,
+                                          }
 
-                                      if (!res.ok) {
-                                        throw new Error('HTTP ' + res.status);
-                                      }
+                                          if(window.hotelIsHeycorp === '1') {
+                                            const res = await fetch(window.urlApi + '/api/budget-limit', {
+                                              method: 'POST',
+                                              headers: {
+                                                'Content-Type': 'application/json',
+                                                Authorization: 'Bearer ' + window.jwtToken
+                                              },
+                                              body: JSON.stringify(payload)
+                                            });
 
-                                      const json = await res.json();
+                                            if (!res.ok) {
+                                              throw new Error('HTTP ' + res.status);
+                                            }
 
-                                      console.log('Budget Limit:', json);
+                                            const json = await res.json();
 
-                                      if (!json.status) {
-                                        throw new Error(json.message || 'Gagal mendapatkan limit');
-                                      }
+                                            console.log('Budget Limit:', json);
+
+                                            if (!json.status) {
+                                              throw new Error(json.message || 'Gagal mendapatkan limit');
+                                            }
+                                          }
+
+                                          // =========================
+                                          // 🔥 SIMPAN KE GLOBAL / UI
+                                          // =========================
+                                          window.budgetLimitData = json.data;
+
+                                          // OPTIONAL: tampilkan ke UI
+                                          if (json.data) {
+                                            const limit = Number(json.data.limit_dw || 0);
+                                            const used  = Number(json.data.daily_worker || 0);
+
+                                            // console.log('Limit:', limit);
+                                            // console.log('Used:', used);
+                                            const percent = limit > 0 ? (used / limit) * 100 : 0;
+
+                                            const alertClass =
+                                              used > limit ? 'alert-danger' :
+                                              percent >= 70 ? 'alert-warning' :
+                                              'alert-success';
+
+                                            $('#budget_limit_info').html(`
+                                              <div class="alert ${alertClass} d-flex justify-content-between align-items-center mb-3 py-2">
+                                                
+                                                <div>
+                                                  <small class="fw-semibold">Limit</small><br>
+                                                  <span>Rp ${limit.toLocaleString()}</span>
+                                                </div>
+
+                                                <div class="text-end">
+                                                  <small class="fw-semibold">Used (${percent.toFixed(2)}%)</small><br>
+                                                  <span>Rp ${used.toLocaleString()}</span>
+                                                </div>
+
+                                              </div>
+                                            `);
+                                          }
+                                        } catch (err) {
+                                          console.error(err);
+
+                                          Swal.fire({
+                                            icon: 'error',
+                                            title: 'Budget Error',
+                                            text: err.message
+                                          });
+                                        }
                                     }
-
-                                    // =========================
-                                    // 🔥 SIMPAN KE GLOBAL / UI
-                                    // =========================
-                                    window.budgetLimitData = json.data;
-
-                                    // OPTIONAL: tampilkan ke UI
-                                    if (json.data) {
-                                      const limit = Number(json.data.limit_dw || 0);
-                                      const used  = Number(json.data.daily_worker || 0);
-
-                                      // console.log('Limit:', limit);
-                                      // console.log('Used:', used);
-                                      const percent = limit > 0 ? (used / limit) * 100 : 0;
-
-                                      const alertClass =
-                                        used > limit ? 'alert-danger' :
-                                        percent >= 70 ? 'alert-warning' :
-                                        'alert-success';
-
-                                      $('#budget_limit_info').html(`
-                                        <div class="alert ${alertClass} d-flex justify-content-between align-items-center mb-3 py-2">
-                                          
-                                          <div>
-                                            <small class="fw-semibold">Limit</small><br>
-                                            <span>Rp ${limit.toLocaleString()}</span>
-                                          </div>
-
-                                          <div class="text-end">
-                                            <small class="fw-semibold">Used (${percent.toFixed(2)}%)</small><br>
-                                            <span>Rp ${used.toLocaleString()}</span>
-                                          </div>
-
-                                        </div>
-                                      `);
-                                    }
-
-                                  } catch (err) {
-
-                                    console.error(err);
-
-                                    Swal.fire({
-                                      icon: 'error',
-                                      title: 'Budget Error',
-                                      text: err.message
-                                    });
-
-                                  }
-
                                 });
 
                                 $(document).on('input change', `
