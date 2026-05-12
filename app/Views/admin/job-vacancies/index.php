@@ -648,25 +648,27 @@
                                       department: department,
                                     }
 
-                                    const res = await fetch(window.urlApi + '/api/budget-limit', {
-                                      method: 'POST',
-                                      headers: {
-                                        'Content-Type': 'application/json',
-                                        Authorization: 'Bearer ' + window.jwtToken
-                                      },
-                                      body: JSON.stringify(payload)
-                                    });
+                                    if(window.hotelIsHeycorp === '1') {
+                                      const res = await fetch(window.urlApi + '/api/budget-limit', {
+                                        method: 'POST',
+                                        headers: {
+                                          'Content-Type': 'application/json',
+                                          Authorization: 'Bearer ' + window.jwtToken
+                                        },
+                                        body: JSON.stringify(payload)
+                                      });
 
-                                    if (!res.ok) {
-                                      throw new Error('HTTP ' + res.status);
-                                    }
+                                      if (!res.ok) {
+                                        throw new Error('HTTP ' + res.status);
+                                      }
 
-                                    const json = await res.json();
+                                      const json = await res.json();
 
-                                    console.log('Budget Limit:', json);
+                                      console.log('Budget Limit:', json);
 
-                                    if (!json.status) {
-                                      throw new Error(json.message || 'Gagal mendapatkan limit');
+                                      if (!json.status) {
+                                        throw new Error(json.message || 'Gagal mendapatkan limit');
+                                      }
                                     }
 
                                     // =========================
