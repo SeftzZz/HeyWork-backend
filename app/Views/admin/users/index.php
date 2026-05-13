@@ -81,6 +81,7 @@
 									                            	<option value="">Select Role</option>
 								                                    <option value="admin">Admin HW</option>
 								                                    <option value="worker">Mitra</option>
+								                                    <option value="hotel_gm">User GM</option>
 								                                    <option value="hotel_hr">User HR</option>
 								                                    <option value="hotel_fo">User FO</option>
 								                                    <option value="hotel_hk">User HK</option>
@@ -232,6 +233,7 @@
 									                            <select name="role_user" id="edit_role_user" class="form-control required">
 								                                    <option value="admin">Admin HW</option>
 								                                    <option value="worker">Mitra</option>
+								                                    <option value="hotel_gm">User GM</option>
 								                                    <option value="hotel_hr">User HR</option>
 								                                    <option value="hotel_fo">User FO</option>
 								                                    <option value="hotel_hk">User HK</option>
