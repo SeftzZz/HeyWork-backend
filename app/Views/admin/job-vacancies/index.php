@@ -424,7 +424,7 @@
                                           const totalPrice = feePerDay * totalWorker * diffDays;
                                           
                                           let payload = {
-                                            company_id: 1,
+                                            company_id: 7,
                                             branch_name: window.hotelName,
                                             trx_date: new Date().toISOString().slice(0,10),
                                             trx_type: 'expense_payroll',
@@ -642,7 +642,7 @@
                                     if(window.hotelIsHeycorp === '1') {
                                         try {
                                           let payload = {
-                                            company_id: 1,
+                                            company_id: 7,
                                             branch_name: window.hotelName,
                                             department: department,
                                           }
@@ -762,8 +762,8 @@
                                   // =========================
                                   if (!window.budgetLimitData) return;
 
-                                  const baseUsed = Number(window.budgetLimitData.workforce || 0);
-                                  const limit    = Number(window.budgetLimitData.limit_worker || 0);
+                                  const baseUsed = Number(window.budgetLimitData.daily_worker || 0);
+                                  const limit    = Number(window.budgetLimitData.limit_dw || 0);
 
                                   const newUsed = baseUsed + total;
 
