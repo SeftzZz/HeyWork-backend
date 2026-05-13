@@ -668,42 +668,42 @@
                                             if (!json.status) {
                                               throw new Error(json.message || 'Gagal mendapatkan limit');
                                             }
-                                          }
 
-                                          // =========================
-                                          // 🔥 SIMPAN KE GLOBAL / UI
-                                          // =========================
-                                          window.budgetLimitData = json.data;
+                                            // =========================
+                                            // 🔥 SIMPAN KE GLOBAL / UI
+                                            // =========================
+                                            window.budgetLimitData = json.data;
 
-                                          // OPTIONAL: tampilkan ke UI
-                                          if (json.data) {
-                                            const limit = Number(json.data.limit_dw || 0);
-                                            const used  = Number(json.data.daily_worker || 0);
+                                            // OPTIONAL: tampilkan ke UI
+                                            if (json.data) {
+                                              const limit = Number(json.data.limit_dw || 0);
+                                              const used  = Number(json.data.daily_worker || 0);
 
-                                            // console.log('Limit:', limit);
-                                            // console.log('Used:', used);
-                                            const percent = limit > 0 ? (used / limit) * 100 : 0;
+                                              // console.log('Limit:', limit);
+                                              // console.log('Used:', used);
+                                              const percent = limit > 0 ? (used / limit) * 100 : 0;
 
-                                            const alertClass =
-                                              used > limit ? 'alert-danger' :
-                                              percent >= 70 ? 'alert-warning' :
-                                              'alert-success';
+                                              const alertClass =
+                                                used > limit ? 'alert-danger' :
+                                                percent >= 70 ? 'alert-warning' :
+                                                'alert-success';
 
-                                            $('#budget_limit_info').html(`
-                                              <div class="alert ${alertClass} d-flex justify-content-between align-items-center mb-3 py-2">
-                                                
-                                                <div>
-                                                  <small class="fw-semibold">Limit</small><br>
-                                                  <span>Rp ${limit.toLocaleString()}</span>
+                                              $('#budget_limit_info').html(`
+                                                <div class="alert ${alertClass} d-flex justify-content-between align-items-center mb-3 py-2">
+                                                  
+                                                  <div>
+                                                    <small class="fw-semibold">Limit</small><br>
+                                                    <span>Rp ${limit.toLocaleString()}</span>
+                                                  </div>
+
+                                                  <div class="text-end">
+                                                    <small class="fw-semibold">Used (${percent.toFixed(2)}%)</small><br>
+                                                    <span>Rp ${used.toLocaleString()}</span>
+                                                  </div>
+
                                                 </div>
-
-                                                <div class="text-end">
-                                                  <small class="fw-semibold">Used (${percent.toFixed(2)}%)</small><br>
-                                                  <span>Rp ${used.toLocaleString()}</span>
-                                                </div>
-
-                                              </div>
-                                            `);
+                                              `);
+                                            }
                                           }
                                         } catch (err) {
                                           console.error(err);
