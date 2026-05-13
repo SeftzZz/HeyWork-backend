@@ -169,6 +169,7 @@ class Hotels extends BaseAdminController
             'latitude'   => $this->request->getPost('latitude'),
             'longitude'  => $this->request->getPost('longitude'),
             'website'    => $this->request->getPost('website'),
+            'isheycorp'  => $this->request->getPost('subscription'),
             'description'=> $this->request->getPost('desc'),
             'created_by' => session()->get('user_id'),
             'updated_by' => session()->get('user_id')
@@ -234,6 +235,7 @@ class Hotels extends BaseAdminController
             'latitude'   => $this->request->getPost('latitude'),
             'longitude'  => $this->request->getPost('longitude'),
             'website'    => $this->request->getPost('website'),
+            'isheycorp'  => $this->request->getPost('subscription'),
             'description'=> $this->request->getPost('desc'),
             'updated_by' => session()->get('user_id')
         ];

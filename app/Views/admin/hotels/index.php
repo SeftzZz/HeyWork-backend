@@ -66,9 +66,20 @@
 									                    </div>
 									                    <!-- Map insert hotel-->
 									                    <div id="mapAddHotel" style="height:300px" class="mb-3 rounded"></div>
-									                    <div class="mb-3">
-									                        <label class="form-label">Website</label>
-									                        <input type="text" class="form-control" name="website">
+									                    <div class="row">
+									                    	<div class="col-md-6 mb-3">
+										                        <label class="form-label">Website</label>
+										                        <input type="text" class="form-control" name="website">
+										                    </div>
+										                    <div class="col-md-6 mb-3">
+										                        <label class="form-label">Subscription</label>
+										                        <select name="subscription" class="form-control required">
+									                            	<option value="">Select Subscription</option>
+								                                    <option value="0">Basic</option>
+								                                    <option value="1">Pro</option>
+								                                    <option value="2">Pro Plus</option>
+								                                </select>
+										                    </div>
 									                    </div>
 									                    <div class="mb-3">
 									                        <label class="form-label">Description</label>
@@ -135,10 +146,20 @@
 														    <div id="mapEditHotel" style="height: 350px; border-radius: 8px;"></div>
 														</div>
 
-											        	<div class="mb-3">
-											            	<label class="form-label" for="edit_website">Website</label>
-											            	<input type="text" class="form-control" name="website" id="edit_website">
-											          	</div>
+														<div class="row">
+															<div class="col-md-6 mb-3">
+												            	<label class="form-label" for="edit_website">Website</label>
+												            	<input type="text" class="form-control" name="website" id="edit_website">
+												          	</div>
+												          	<div class="col-md-6 mb-3">
+										                        <label class="form-label">Subscription</label>
+										                        <select name="subscription" id="edit_subscription" class="form-control required">
+								                                    <option value="0">Basic</option>
+								                                    <option value="1">Pro</option>
+								                                    <option value="2">Pro Plus</option>
+								                                </select>
+										                    </div>
+														</div>
 
 											          	<div class="mb-3">
 									                        <label class="form-label" for="edit_desc">Description</label>
@@ -744,6 +765,7 @@
 							            $('#edit_latitude').val(res.data.latitude);
 							            $('#edit_longitude').val(res.data.longitude);
 							            $('#edit_website').val(res.data.website);
+							            $('#edit_subscription').val(res.data.isheycorp);
 							            $('#edit_desc').val(res.data.description);
 							            if (res.data.logo) {
 										  	$('#preview_logo')
