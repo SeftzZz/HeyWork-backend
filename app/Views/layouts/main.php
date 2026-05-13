@@ -165,7 +165,7 @@
                     Authorization: 'Bearer ' + window.jwtToken
                 }
             });
-            window.urlApi = 'http://ledgera.local'
+            window.urlApi = 'http://ledgerahotel.fpp'
         </script>
     </body>
 </html>
