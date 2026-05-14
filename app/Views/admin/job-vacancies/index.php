@@ -422,9 +422,31 @@
                                           const totalWorker = Number(res.data.worker);
 
                                           const totalPrice = feePerDay * totalWorker * diffDays;
+
+                                          // GET COMPANY ID FROM API BRANCHES NAME
+                                          const branchRes = await fetch(
+                                              window.urlApi + '/api/branches-name/' + encodeURIComponent(window.hotelName),
+                                              {
+                                                  method: 'GET',
+                                                  headers: {
+                                                      'Content-Type': 'application/json',
+                                                      Authorization: 'Bearer ' + window.jwtToken
+                                                  }
+                                              }
+                                          );
+
+                                          const branchData = await branchRes.json();
+
+                                          // cek response API
+                                          if (!branchData.status) {
+                                              throw new Error(branchData.message || 'Branch tidak ditemukan');
+                                          }
+
+                                          // ambil company_id dari API
+                                          const companyId = branchData.data.company_id;
                                           
                                           let payload = {
-                                            company_id: 7,
+                                            company_id: companyId,
                                             branch_name: window.hotelName,
                                             trx_date: new Date().toISOString().slice(0,10),
                                             trx_type: 'expense_payroll',
@@ -641,78 +663,98 @@
 
                                     if(window.hotelIsHeycorp === '1') {
                                         try {
-                                          let payload = {
-                                            company_id: 7,
-                                            branch_name: window.hotelName,
-                                            department: department,
-                                          }
+                                            // GET COMPANY ID FROM API BRANCHES NAME
+                                            const branchRes = await fetch(
+                                                window.urlApi + '/api/branches-name/' + encodeURIComponent(window.hotelName),
+                                                {
+                                                    method: 'GET',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        Authorization: 'Bearer ' + window.jwtToken
+                                                    }
+                                                }
+                                            );
 
-                                          if(window.hotelIsHeycorp === '1') {
-                                            const res = await fetch(window.urlApi + '/api/budget-limit', {
-                                              method: 'POST',
-                                              headers: {
-                                                'Content-Type': 'application/json',
-                                                Authorization: 'Bearer ' + window.jwtToken
-                                              },
-                                              body: JSON.stringify(payload)
-                                            });
+                                            const branchData = await branchRes.json();
 
-                                            if (!res.ok) {
-                                              throw new Error('HTTP ' + res.status);
+                                            // cek response API
+                                            if (!branchData.status) {
+                                                throw new Error(branchData.message || 'Branch tidak ditemukan');
                                             }
 
-                                            const json = await res.json();
+                                            // ambil company_id dari API
+                                            const companyId = branchData.data.company_id;
 
-                                            console.log('Budget Limit:', json);
-
-                                            if (!json.status) {
-                                              throw new Error(json.message || 'Gagal mendapatkan limit');
+                                            let payload = {
+                                              company_id: companyId,
+                                              branch_name: window.hotelName,
+                                              department: department,
                                             }
 
-                                            // =========================
-                                            // 🔥 SIMPAN KE GLOBAL / UI
-                                            // =========================
-                                            window.budgetLimitData = json.data;
+                                            if(window.hotelIsHeycorp === '1') {
+                                                const res = await fetch(window.urlApi + '/api/budget-limit', {
+                                                  method: 'POST',
+                                                  headers: {
+                                                    'Content-Type': 'application/json',
+                                                    Authorization: 'Bearer ' + window.jwtToken
+                                                  },
+                                                  body: JSON.stringify(payload)
+                                                });
 
-                                            // OPTIONAL: tampilkan ke UI
-                                            if (json.data) {
-                                              const limit = Number(json.data.limit_dw || 0);
-                                              const used  = Number(json.data.daily_worker || 0);
+                                                if (!res.ok) {
+                                                  throw new Error('HTTP ' + res.status);
+                                                }
 
-                                              // console.log('Limit:', limit);
-                                              // console.log('Used:', used);
-                                              const percent = limit > 0 ? (used / limit) * 100 : 0;
+                                                const json = await res.json();
 
-                                              const alertClass =
-                                                used > limit ? 'alert-danger' :
-                                                percent >= 70 ? 'alert-warning' :
-                                                'alert-success';
+                                                console.log('Budget Limit:', json);
 
-                                              $('#budget_limit_info').html(`
-                                                <div class="alert ${alertClass} d-flex justify-content-between align-items-center mb-3 py-2">
-                                                  
-                                                  <div>
-                                                    <small class="fw-semibold">Limit</small><br>
-                                                    <span>Rp ${limit.toLocaleString()}</span>
+                                                if (!json.status) {
+                                                  throw new Error(json.message || 'Gagal mendapatkan limit');
+                                                }
+
+                                                // SIMPAN KE GLOBAL / UI
+                                                window.budgetLimitData = json.data;
+
+                                              // OPTIONAL: tampilkan ke UI
+                                              if (json.data) {
+                                                const limit = Number(json.data.limit_dw || 0);
+                                                const used  = Number(json.data.daily_worker || 0);
+
+                                                // console.log('Limit:', limit);
+                                                // console.log('Used:', used);
+                                                const percent = limit > 0 ? (used / limit) * 100 : 0;
+
+                                                const alertClass =
+                                                  used > limit ? 'alert-danger' :
+                                                  percent >= 70 ? 'alert-warning' :
+                                                  'alert-success';
+
+                                                $('#budget_limit_info').html(`
+                                                  <div class="alert ${alertClass} d-flex justify-content-between align-items-center mb-3 py-2">
+                                                    
+                                                    <div>
+                                                      <small class="fw-semibold">Limit</small><br>
+                                                      <span>Rp ${limit.toLocaleString()}</span>
+                                                    </div>
+
+                                                    <div class="text-end">
+                                                      <small class="fw-semibold">Used (${percent.toFixed(2)}%)</small><br>
+                                                      <span>Rp ${used.toLocaleString()}</span>
+                                                    </div>
+
                                                   </div>
-
-                                                  <div class="text-end">
-                                                    <small class="fw-semibold">Used (${percent.toFixed(2)}%)</small><br>
-                                                    <span>Rp ${used.toLocaleString()}</span>
-                                                  </div>
-
-                                                </div>
-                                              `);
+                                                `);
+                                              }
                                             }
-                                          }
                                         } catch (err) {
-                                          console.error(err);
+                                            console.error(err);
 
-                                          Swal.fire({
-                                            icon: 'error',
-                                            title: 'Budget Error',
-                                            text: err.message
-                                          });
+                                            Swal.fire({
+                                              icon: 'error',
+                                              title: 'Budget Error',
+                                              text: err.message
+                                            });
                                         }
                                     }
                                 });

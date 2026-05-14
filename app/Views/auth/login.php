@@ -105,7 +105,6 @@
                 const password = $('#password').val();
 
                 try {
-
                     const res = await fetch('<?= base_url('api/auth/login') ?>', {
                         method: 'POST',
                         headers: {
@@ -124,7 +123,7 @@
                     }
 
                     // =========================
-                    // 🔥 SAVE TOKEN
+                    // SAVE TOKEN
                     // =========================
                     localStorage.setItem('access_token', json.access_token);
                     localStorage.setItem('refresh_token', json.refresh_token);
@@ -133,18 +132,15 @@
                     window.jwtToken = json.access_token;
 
                     // =========================
-                    // 🔥 REDIRECT
+                    // REDIRECT
                     // =========================
                     window.location.href = "<?= base_url('admin/dashboard') ?>";
-
                 } catch (err) {
-
                     Swal.fire({
                         icon: 'error',
                         title: 'Login Failed',
                         text: err.message
                     });
-
                 }
             });
         </script>
