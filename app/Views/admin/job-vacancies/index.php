@@ -369,7 +369,6 @@
                         <script>
                             'use strict';
                             $(function () {
-
                                 // SUBMIT ADD JOB
                                 $('#formAddJob').on('submit', function (e) {
                                     e.preventDefault();
@@ -423,44 +422,46 @@
 
                                           const totalPrice = feePerDay * totalWorker * diffDays;
 
-                                          // GET COMPANY ID FROM API BRANCHES NAME
-                                          const branchRes = await fetch(
-                                              window.urlApi + '/api/branches-name/' + encodeURIComponent(window.hotelName),
-                                              {
-                                                  method: 'GET',
-                                                  headers: {
-                                                      'Content-Type': 'application/json',
-                                                      Authorization: 'Bearer ' + window.jwtToken
-                                                  }
-                                              }
-                                          );
+                                          if(window.hotelIsHeycorp === '2') {
+                                            // GET COMPANY ID FROM API BRANCHES NAME
+                                            const branchRes = await fetch(
+                                                window.urlApi + '/api/branches-name/' + encodeURIComponent(window.hotelName),
+                                                {
+                                                    method: 'GET',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        Authorization: 'Bearer ' + window.jwtToken
+                                                    }
+                                                }
+                                            );
 
-                                          const branchData = await branchRes.json();
+                                            const branchData = await branchRes.json();
 
-                                          // cek response API
-                                          if (!branchData.status) {
-                                              throw new Error(branchData.message || 'Branch tidak ditemukan');
-                                          }
+                                            // cek response API
+                                            if (!branchData.status) {
+                                                throw new Error(branchData.message || 'Branch tidak ditemukan');
+                                            }
 
-                                          // ambil company_id dari API
-                                          const companyId = branchData.data.company_id;
-                                          
-                                          let payload = {
-                                            company_id: companyId,
-                                            branch_name: window.hotelName,
-                                            trx_date: new Date().toISOString().slice(0,10),
-                                            trx_type: 'expense_payroll',
-                                            department: category,
-                                            reference_no: 'HW-' + Date.now(),
-                                            amount: totalPrice,
-                                            payment_account_id: 1,
-                                            tax_code_id: 8
+                                            // ambil company_id dari API
+                                            const companyId = branchData.data.company_id;
+                                            
+                                            let payload = {
+                                              company_id: companyId,
+                                              branch_name: window.hotelName,
+                                              trx_date: new Date().toISOString().slice(0,10),
+                                              trx_type: 'expense_payroll',
+                                              department: category,
+                                              reference_no: 'HW-' + Date.now(),
+                                              amount: totalPrice,
+                                              payment_account_id: 1,
+                                              tax_code_id: 8
+                                            }
                                           }
 
                                           // =========================
                                           // RESPONSE UNTUK LEDGERA
                                           // =========================
-                                          if(window.hotelIsHeycorp === '1') {
+                                          if(window.hotelIsHeycorp === '2') {
                                             const transactionRes = await fetch(window.urlApi + '/api/transactions', {
                                               method: 'POST',
                                               headers: {
@@ -661,7 +662,7 @@
                                     const selected = $('#add_job_position option:selected');
                                     const department = selected.data('category');
 
-                                    if(window.hotelIsHeycorp === '1') {
+                                    if(window.hotelIsHeycorp === '2') {
                                         try {
                                             // GET COMPANY ID FROM API BRANCHES NAME
                                             const branchRes = await fetch(
@@ -691,7 +692,7 @@
                                               department: department,
                                             }
 
-                                            if(window.hotelIsHeycorp === '1') {
+                                            if(window.hotelIsHeycorp === '2') {
                                                 const res = await fetch(window.urlApi + '/api/budget-limit', {
                                                   method: 'POST',
                                                   headers: {

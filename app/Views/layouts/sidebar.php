@@ -176,30 +176,32 @@
                         <?php endif; ?>
 
                         <?php if (in_array(session()->get('user_role'), ['admin','hotel_hr','hotel_fo','hotel_hk','hotel_fnb_service','hotel_fnb_production','hotel_fna','hotel_eng','hotel_sales','hotel_gm'])) : ?>
-                            <li class="menu-header small text-uppercase">
-                              <span class="menu-header-text">Finance</span>
-                            </li>
+                            <?php if (session()->get('hotel_isheycorp') != 0) : ?>
+                                <li class="menu-header small text-uppercase">
+                                  <span class="menu-header-text">Finance</span>
+                                </li>
 
-                            <li class="menu-item <?= ($uri=='balance')?'active':'' ?>">
-                                <a href="<?= base_url('admin/balance') ?>" class="menu-link">
-                                  <i class="menu-icon tf-icons ti ti-wallet"></i>
-                                  <div>Productivity Ratio</div>
-                                </a>
-                            </li>
+                                <li class="menu-item <?= ($uri=='balance')?'active':'' ?>">
+                                    <a href="<?= base_url('admin/balance') ?>" class="menu-link">
+                                      <i class="menu-icon tf-icons ti ti-wallet"></i>
+                                      <div>Productivity Ratio</div>
+                                    </a>
+                                </li>
 
-                            <li class="menu-item <?= ($uri=='transactions')?'active':'' ?>">
-                                <a href="<?= base_url('admin/transactions') ?>" class="menu-link">
-                                  <i class="menu-icon tf-icons ti ti-history"></i>
-                                  <div data-i18n="Transactions">Transactions</div>
-                                </a>
-                            </li>
+                                <li class="menu-item <?= ($uri=='transactions')?'active':'' ?>">
+                                    <a href="<?= base_url('admin/transactions') ?>" class="menu-link">
+                                      <i class="menu-icon tf-icons ti ti-history"></i>
+                                      <div data-i18n="Transactions">Transactions</div>
+                                    </a>
+                                </li>
 
-                            <!-- <li class="menu-item <?= ($uri=='invoices')?'active':'' ?>">
-                                <a href="<?= base_url('admin/invoices') ?>" class="menu-link">
-                                  <i class="menu-icon tf-icons ti ti-file-invoice"></i>
-                                  <div data-i18n="Invoices">Invoices</div>
-                                </a>
-                            </li> -->
+                                <!-- <li class="menu-item <?= ($uri=='invoices')?'active':'' ?>">
+                                    <a href="<?= base_url('admin/invoices') ?>" class="menu-link">
+                                      <i class="menu-icon tf-icons ti ti-file-invoice"></i>
+                                      <div data-i18n="Invoices">Invoices</div>
+                                    </a>
+                                </li> -->
+                            <?php endif; ?>
                         <?php endif; ?>
 
                         <li class="menu-item">
