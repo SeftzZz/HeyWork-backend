@@ -171,6 +171,8 @@ class Hotels extends BaseAdminController
             'website'    => $this->request->getPost('website'),
             'isheycorp'  => $this->request->getPost('subscription'),
             'description'=> $this->request->getPost('desc'),
+            'founded'    => $this->request->getPost('founded'),
+            'size'       => $this->request->getPost('tot_employees'),
             'created_by' => session()->get('user_id'),
             'updated_by' => session()->get('user_id')
         ];
@@ -237,6 +239,8 @@ class Hotels extends BaseAdminController
             'website'    => $this->request->getPost('website'),
             'isheycorp'  => $this->request->getPost('subscription'),
             'description'=> $this->request->getPost('desc'),
+            'founded'    => $this->request->getPost('founded'),
+            'size'       => $this->request->getPost('tot_employees'),
             'updated_by' => session()->get('user_id')
         ];
 
